@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="db">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="EmpTable" minOccurs="0" nillable="false">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="emp" maxOccurs="unbounded" minOccurs="0" nillable="false">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="name" nillable="false" type="xs:string"/>
+                                        <xs:element name="dept" nillable="false" type="xs:string"/>
+                                        <xs:element name="salary" nillable="false" type="xs:string"/>
+                                        <xs:element name="manager" nillable="false" type="xs:string"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
