@@ -9,10 +9,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/../Speedy/core" />
+            <option value="$PROJECT_DIR$/../Speedy/jep" />
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/Users/dario/ricerca/galois/code/Speedy/jep" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/speedy" />
           </set>
         </option>
       </GradleProjectSettings>
