@@ -18,6 +18,9 @@ dependencies {
     implementation("org.jdom:jdom2:2.0.6.1")
     implementation("jaxen:jaxen:2.0.0")
 
+    implementation("dev.langchain4j:langchain4j:0.27.1")
+    implementation("dev.langchain4j:langchain4j-ollama:0.27.1")
+
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
