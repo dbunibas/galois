@@ -6,12 +6,14 @@ import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Scan;
 import speedy.model.database.TableAlias;
 
-public class ScanParser implements INodeParser {
+public class ScanParser extends AbstractNodeParser {
+
     @Override
     public IAlgebraOperator parse(Element node) {
         String tableName = node.getChild("Relation-Name", node.getNamespace()).getText();
         String alias = node.getChild("Alias", node.getNamespace()).getText();
         TableAlias tableAlias = new TableAlias(tableName, alias);
+        setTableAlias(tableAlias);
         return new LLMScan(tableAlias);
 //        return new Scan(tableAlias);
     }

@@ -3,13 +3,15 @@ package galois.parser.postgresql;
 import galois.parser.ParserException;
 import galois.parser.postgresql.nodeparsers.INodeParser;
 import galois.parser.postgresql.nodeparsers.ScanParser;
+import galois.parser.postgresql.nodeparsers.SortParser;
 import org.jdom2.Element;
 
 import java.util.Map;
 
 public class NodeParserFactory {
     private static final Map<String, INodeParserGenerator> parserMap = Map.ofEntries(
-            Map.entry("Seq Scan", ScanParser::new)
+            Map.entry("Seq Scan", ScanParser::new),
+            Map.entry("Sort", SortParser::new)
     );
 
     public static INodeParser getParserForNode(Element node) {

@@ -25,6 +25,10 @@ public class LLMScan extends AbstractOperator {
         this.tableAlias = tableAlias;
     }
 
+    public TableAlias getTableAlias() {
+        return tableAlias;
+    }
+
     @Override
     public String getName() {
         return "SCAN_LLM(" + tableAlias + ")";

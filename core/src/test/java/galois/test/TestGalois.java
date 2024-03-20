@@ -56,6 +56,22 @@ public class TestGalois {
         toTupleStream(iterator).map(Tuple::toString).forEach(logger::info);
     }
 
+    @Test
+    public void testSimpleOrderBy() {
+        String sql = "select * from target.actor a order by a.name";
+
+        IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
+        Document queryPlan = planner.planFrom(sql);
+
+        IQueryPlanParser<Document> parser = new PostgresXMLParser();
+        IAlgebraOperator operator = parser.parse(queryPlan);
+
+        IDatabase llm = new LLMDB(accessConfiguration);
+        ITupleIterator iterator = operator.execute(llm, null);
+
+        toTupleStream(iterator).map(Tuple::toString).forEach(logger::info);
+    }
+
     private Stream<Tuple> toTupleStream(ITupleIterator iterator) {
         Iterable<Tuple> iterable = () -> iterator;
         return StreamSupport.stream(iterable.spliterator(), false);
