@@ -1,5 +1,6 @@
 package galois.parser.postgresql.nodeparsers;
 
+import galois.llm.algebra.LLMScan;
 import org.jdom2.Element;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Scan;
@@ -11,6 +12,7 @@ public class ScanParser implements INodeParser {
         String tableName = node.getChild("Relation-Name", node.getNamespace()).getText();
         String alias = node.getChild("Alias", node.getNamespace()).getText();
         TableAlias tableAlias = new TableAlias(tableName, alias);
-        return new Scan(tableAlias);
+        return new LLMScan(tableAlias);
+//        return new Scan(tableAlias);
     }
 }
