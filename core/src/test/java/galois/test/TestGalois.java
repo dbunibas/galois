@@ -5,6 +5,7 @@ import galois.parser.IQueryPlanParser;
 import galois.parser.postgresql.PostgresXMLParser;
 import galois.planner.IQueryPlanner;
 import galois.planner.postgresql.xml.PostgresXMLPlanner;
+import galois.test.experiments.json.parser.OperatorsConfigurationParser;
 import org.jdom2.Document;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ public class TestGalois {
         Document queryPlan = planner.planFrom(sql);
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan);
+        IAlgebraOperator operator = parser.parse(queryPlan, OperatorsConfigurationParser.parseJSON(null));
 
         IDatabase llm = new LLMDB(accessConfiguration);
         ITupleIterator iterator = operator.execute(llm, null);
@@ -64,7 +65,7 @@ public class TestGalois {
         Document queryPlan = planner.planFrom(sql);
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan);
+        IAlgebraOperator operator = parser.parse(queryPlan, OperatorsConfigurationParser.parseJSON(null));
 
         IDatabase llm = new LLMDB(accessConfiguration);
         ITupleIterator iterator = operator.execute(llm, null);

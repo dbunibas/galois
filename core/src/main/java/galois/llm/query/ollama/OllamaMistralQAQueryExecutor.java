@@ -22,15 +22,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OllamaMistralQueryExecutor implements IQueryExecutor {
-    private static final Logger logger = LoggerFactory.getLogger(OllamaMistralQueryExecutor.class);
-
-    private final ChatLanguageModel model;
+public class OllamaMistralQAQueryExecutor implements IQueryExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(OllamaMistralQAQueryExecutor.class);
 
     private final Chain<String, String> chain;
 
-    public OllamaMistralQueryExecutor() {
-        this.model = OllamaChatModel.builder()
+    public OllamaMistralQAQueryExecutor() {
+        ChatLanguageModel model = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")
                 .modelName("mistral")
                 .build();
@@ -72,6 +70,7 @@ public class OllamaMistralQueryExecutor implements IQueryExecutor {
                 .filter(a -> !a.getName().equals("oid"))
                 .toList();
         String[] cells = answer.trim().split("\\|");
+        logger.info("cells: {}", (Object) cells);
         if (cells.length != attributes.size()) {
             logger.error("Cells length is inconsistent! Cells {} - Attributes {}", cells.length, attributes.size());
             throw new RuntimeException("Cells length is inconsistent!");
@@ -112,7 +111,8 @@ public class OllamaMistralQueryExecutor implements IQueryExecutor {
                 new QAPair("How many squigs are in a bonk?", toStructuredAnswer("Unknown", "The question is nonsense")),
                 new QAPair("Which party was founded by Gramsci?", toStructuredAnswer("Comunista", "Antonio Gramsci was one of the founders of the Partito Comunista Italiano in 1921")),
                 new QAPair("What is the population of Italy?", toStructuredAnswer("~ 60 million", "The population of Italy is estimated to be around 60 million people")),
-                new QAPair("List some coaches of the Italian national soccer team. For each of them return name|sex", toStructuredAnswer("Cesare Prandelli|male, Antonio Conte|male, Gian Piero Ventura|male, Luigi Di Biagio|male, Roberto Mancini|male, Luciano Spalletti|male", "Those are the last six coaches of the Italian national soccer team"))
+                new QAPair("List some coaches of the Italian national soccer team. For each of them return name|sex", toStructuredAnswer("Cesare Prandelli|male, Antonio Conte|male, Gian Piero Ventura|male, Luigi Di Biagio|male, Roberto Mancini|male, Luciano Spalletti|male", "Those are the last six coaches of the Italian national soccer team")),
+                new QAPair("List some italian regions. For each of them return name|population", toStructuredAnswer("Lombardia|9.976.509, Lazio|5.720.536, Campania|5.609.536, Veneto|4.849.553, Sicilia|4.814.016, Emilia-Romagna|4.437.578, Piemonte|4.251.351, Puglia|3.907.683, Toscana|3.661.981, Calabria|1.846.610, Sardegna|1.578.146, Liguria|1.507.636, Marche|1.484.298, Abruzzo|1.272.627, Friuli Venezia Giulia|1.194.248, Trentino-Alto Adige|1.077.143, Umbria|856.407, Basilicata|537.577, Molise|290.636, Valle d'Aosta|123.130", "Those are some italian regions with respective population"))
         );
         return qsWithStructure.stream()
                 .map(qa -> List.of(new UserMessage(qa.question), new AiMessage(qa.answer)))

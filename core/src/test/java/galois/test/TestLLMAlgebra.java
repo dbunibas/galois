@@ -2,6 +2,7 @@ package galois.test;
 
 import galois.llm.algebra.LLMScan;
 import galois.llm.database.LLMDB;
+import galois.llm.query.ollama.OllamaMistralTableQueryExecutor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class TestLLMAlgebra {
     public void testLLMScan() {
         // Query: SELECT * FROM actor
         TableAlias tableAlias = new TableAlias("actor");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor());
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         toTupleStream(tuples).map(Tuple::toString).forEach(logger::info);
     }
@@ -55,7 +56,7 @@ public class TestLLMAlgebra {
     public void testLLMScanOrderBy() {
         // Query: SELECT name, sex FROM actor WHERE sex = "female" ORDER BY name
         TableAlias tableAlias = new TableAlias("actor");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor());
 
         Expression exp = new Expression("sex == \"female\"");
         exp.setVariableDescription("sex", new AttributeRef(tableAlias, "sex"));

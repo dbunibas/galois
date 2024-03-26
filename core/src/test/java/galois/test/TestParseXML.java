@@ -2,6 +2,7 @@ package galois.test;
 
 import galois.llm.algebra.LLMScan;
 import galois.parser.postgresql.PostgresXMLParser;
+import galois.test.experiments.json.parser.OperatorsConfigurationParser;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -56,7 +57,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan);
+        IAlgebraOperator operator = parser.parse(queryPlan, OperatorsConfigurationParser.parseJSON(null));
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof LLMScan);
@@ -98,7 +99,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan);
+        IAlgebraOperator operator = parser.parse(queryPlan, OperatorsConfigurationParser.parseJSON(null));
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Select);
@@ -141,7 +142,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan);
+        IAlgebraOperator operator = parser.parse(queryPlan, OperatorsConfigurationParser.parseJSON(null));
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof OrderBy);

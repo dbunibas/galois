@@ -3,7 +3,7 @@ package galois.llm.algebra;
 import galois.llm.database.LLMDB;
 import galois.llm.database.LLMTable;
 import galois.llm.query.IQueryExecutor;
-import galois.llm.query.ollama.OllamaMistralQueryExecutor;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import speedy.model.algebra.AbstractOperator;
@@ -19,14 +19,13 @@ public class LLMScan extends AbstractOperator {
 
     private static final Logger logger = LoggerFactory.getLogger(LLMScan.class);
 
+    @Getter
     private final TableAlias tableAlias;
+    private final IQueryExecutor queryExecutor;
 
-    public LLMScan(TableAlias tableAlias) {
+    public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor) {
         this.tableAlias = tableAlias;
-    }
-
-    public TableAlias getTableAlias() {
-        return tableAlias;
+        this.queryExecutor = queryExecutor;
     }
 
     @Override
@@ -43,7 +42,7 @@ public class LLMScan extends AbstractOperator {
     public ITupleIterator execute(IDatabase source, IDatabase target) {
         checkSourceTarget(source, target);
         LLMTable table = (LLMTable) source.getTable(tableAlias.getTableName());
-        return new LLMScanTupleIterator(table);
+        return new LLMScanTupleIterator(table, queryExecutor);
     }
 
     @Override
@@ -67,14 +66,14 @@ public class LLMScan extends AbstractOperator {
     private class LLMScanTupleIterator implements ITupleIterator {
 
         private final LLMTable table;
+        private final IQueryExecutor queryExecutor;
 
-        public LLMScanTupleIterator(LLMTable table) {
+        public LLMScanTupleIterator(LLMTable table, IQueryExecutor queryExecutor) {
             this.table = table;
+            this.queryExecutor = queryExecutor;
         }
 
-        private static final int MAX_TRIES = 2;
-
-        private final IQueryExecutor queryExecutor = new OllamaMistralQueryExecutor();
+        private static final int MAX_TRIES = 1;
 
         private int currentTry = 0;
         private List<Tuple> currentResult = new ArrayList<>();
@@ -107,6 +106,7 @@ public class LLMScan extends AbstractOperator {
 
         private String getInitialPrompt() {
             // TODO: Implement
+            logger.info("**** getInitialPrompt enum is ignored...");
             StringBuilder prompt = new StringBuilder();
             prompt.append("List some ").append(table.getName()).append("s. ");
             prompt.append("For each of them return ");

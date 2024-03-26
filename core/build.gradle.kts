@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("io.freefair.lombok") version "8.6"
 }
 
 version = "0.0.1"
@@ -20,6 +21,10 @@ dependencies {
 
     implementation("dev.langchain4j:langchain4j:0.27.1")
     implementation("dev.langchain4j:langchain4j-ollama:0.27.1")
+
+    implementation("com.fasterxml.jackson.core:jackson-core:2.17.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.0")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")

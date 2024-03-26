@@ -1,0 +1,45 @@
+{
+  "name": "Dummy Experiment",
+  "metrics": [
+    "DummyMetric"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "OllamaMistralTableQueryExecutor"
+    }
+  },
+  "query": {
+    "sql": "select * from target.continent c order by c.name",
+    "schema": {
+      "name": "dummy_continents",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "continent",
+          "attributes": [
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "area",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "population",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/dummy-continents/continent"
+  }
+}

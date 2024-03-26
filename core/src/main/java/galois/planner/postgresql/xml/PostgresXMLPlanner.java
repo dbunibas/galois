@@ -13,6 +13,7 @@ import speedy.persistence.relational.QueryManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -38,6 +39,15 @@ public class PostgresXMLPlanner implements IQueryPlanner<Document> {
             return buildDOMFromString(xmlString);
         } catch (SQLException ex) {
             throw new PlannerException(ex);
+        } finally {
+            Connection connection = QueryManager.getConnection(accessConfiguration);
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    logger.error("Cannot close non-null connection! {}", connection);
+                }
+            }
         }
     }
 

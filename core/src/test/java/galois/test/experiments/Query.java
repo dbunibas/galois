@@ -1,13 +1,17 @@
 package galois.test.experiments;
 
+import lombok.Data;
 import speedy.model.database.IDatabase;
 import speedy.model.database.Tuple;
+import speedy.persistence.relational.AccessConfiguration;
 
 import java.util.List;
 
+@Data
 public class Query {
-    private String sql;
-    private IDatabase database;
-    private List<Tuple> results;
+    private final String sql;
+    private final AccessConfiguration accessConfiguration;
+    private final IDatabase database;
+    private final List<Tuple> results;
 }
 
