@@ -1,7 +1,8 @@
 {
   "name": "Dummy Experiment",
   "metrics": [
-    "DummyMetric"
+    "DummyMetric",
+    "TupleCardinalityMetric"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
