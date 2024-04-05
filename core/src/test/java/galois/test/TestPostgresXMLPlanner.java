@@ -12,14 +12,12 @@ import org.slf4j.LoggerFactory;
 import speedy.persistence.relational.AccessConfiguration;
 
 public class TestPostgresXMLPlanner {
-    private static final Logger logger = LoggerFactory.getLogger(TestPostgresXMLPlanner.class);
-
     private static AccessConfiguration accessConfiguration;
 
     @BeforeAll
     public static void beforeAll() {
         String driver = "org.postgresql.Driver";
-        String uri = "jdbc:postgresql:speedy_dummy_actors";
+        String uri = "jdbc:postgresql:speedy_llm_actors";
         String schemaName = "target";
         String username = "pguser";
         String password = "pguser";

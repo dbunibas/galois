@@ -17,8 +17,7 @@ public class TestUtils {
         IDatabase mainMemoryDB = dao.loadCSVDatabase(csv, ',', null, false, header);
         return toTupleList(mainMemoryDB.getFirstTable().getTupleIterator());
     }
-
-    // TODO: Use TestUtils in test classes
+    
     public static Stream<Tuple> toTupleStream(ITupleIterator iterator) {
         Iterable<Tuple> iterable = () -> iterator;
         return StreamSupport.stream(iterable.spliterator(), false);

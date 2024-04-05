@@ -3,6 +3,7 @@ package galois.test;
 import galois.llm.algebra.LLMScan;
 import galois.parser.postgresql.PostgresXMLParser;
 import galois.test.experiments.json.parser.OperatorsConfigurationParser;
+import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -10,24 +11,16 @@ import org.jdom2.input.sax.XMLReaders;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import speedy.exceptions.DAOException;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.OrderBy;
-import speedy.model.algebra.Scan;
 import speedy.model.algebra.Select;
-import speedy.persistence.xml.DAOXmlUtility;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+@Slf4j
 public class TestParseXML {
-
-    private static final Logger logger = LoggerFactory.getLogger(TestParseXML.class);
-
-    private final DAOXmlUtility daoUtility = new DAOXmlUtility();
-
     @Test
     public void testSimpleSelect() {
         // SQL: select * from city c
@@ -148,7 +141,7 @@ public class TestParseXML {
         Assertions.assertTrue(operator instanceof OrderBy);
 
         Assertions.assertEquals(operator.getChildren().size(), 1);
-        logger.info("{}", operator.getChildren().get(0).getName());
+        log.info("{}", operator.getChildren().get(0).getName());
         Assertions.assertTrue(operator.getChildren().get(0) instanceof LLMScan);
     }
 
@@ -163,7 +156,7 @@ public class TestParseXML {
             document = builder.build(new ByteArrayInputStream(content.getBytes()));
             return document;
         } catch (JDOMException | IOException ex) {
-            logger.error(ex.toString());
+            log.error(ex.toString());
             throw new DAOException(ex.getMessage());
         }
     }

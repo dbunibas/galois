@@ -14,7 +14,7 @@ public class TestCreateDB {
     @Test
     public void testCreateDummyActorsDB() {
         String driver = "org.postgresql.Driver";
-        String uri = "jdbc:postgresql:speedy_dummy_actors";
+        String uri = "jdbc:postgresql:speedy_llm_actors";
         String schemaName = "target";
         String username = "pguser";
         String password = "pguser";
