@@ -31,6 +31,7 @@ public class OllamaMistralQAQueryExecutor implements IQueryExecutor {
         ChatLanguageModel model = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")
                 .modelName("mistral")
+                .temperature(0.0)
                 .build();
 
         ChatMemory memory = new MessageWindowChatMemory.Builder().maxMessages(15).build();

@@ -20,6 +20,7 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
         this.model = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")
                 .modelName("mistral")
+                .temperature(0.0)
                 .build();
     }
 
@@ -71,6 +72,7 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
                 .toList();
 
         if (cells.size() != attributes.size()) {
+            // TODO: Delete exception
             throw new RuntimeException("Cells length is inconsistent!");
         }
 
