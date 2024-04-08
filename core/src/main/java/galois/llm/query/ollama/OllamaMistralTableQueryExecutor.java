@@ -3,6 +3,7 @@ package galois.llm.query.ollama;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import galois.llm.query.IQueryExecutor;
+import lombok.extern.slf4j.Slf4j;
 import speedy.SpeedyConstants;
 import speedy.model.database.*;
 import speedy.model.database.mainmemory.datasource.IntegerOIDGenerator;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
 
     private final ChatLanguageModel model;
@@ -72,17 +74,18 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
                 .toList();
 
         if (cells.size() != attributes.size()) {
-            // TODO: Delete exception
-            throw new RuntimeException("Cells length is inconsistent!");
+            log.warn("Cells size ({}) is different from attributes size ({})", cells.size(), attributes.size());
         }
 
-        for (int i = 0; i < cells.size(); i++) {
-            String cellValue = cells.get(i);
+        for (int i = 0; i < attributes.size(); i++) {
+            IValue cellValue = cells.size() > i ?
+                    new ConstantValue(cells.get(i)) :
+                    new NullValue(SpeedyConstants.NULL_VALUE);
             Attribute attribute = attributes.get(i);
             Cell currentCell = new Cell(
                     mockOID,
                     new AttributeRef(table.getName(), attribute.getName()),
-                    new ConstantValue(cellValue)
+                    cellValue
             );
             tuple.addCell(currentCell);
         }
