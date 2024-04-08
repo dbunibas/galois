@@ -34,7 +34,8 @@ public class TestCreateDB {
         String tableName = "actor";
         List<Attribute> attributes = List.of(
                 new Attribute(tableName, "name", "string"),
-                new Attribute(tableName, "sex", "string")
+                new Attribute(tableName, "gender", "string"),
+                new Attribute(tableName, "birth_year", "integer")
         );
 
         ICreateTable tableGenerator = new SQLCreateTable();

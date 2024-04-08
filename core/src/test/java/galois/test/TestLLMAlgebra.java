@@ -51,12 +51,12 @@ public class TestLLMAlgebra {
 
     @Test
     public void testLLMScanOrderBy() {
-        // Query: SELECT name, sex FROM actor WHERE sex = "female" ORDER BY name
+        // Query: SELECT name, gender FROM actor WHERE gender = "female" ORDER BY name
         TableAlias tableAlias = new TableAlias("actor");
         IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor());
 
-        Expression exp = new Expression("sex == \"female\"");
-        exp.setVariableDescription("sex", new AttributeRef(tableAlias, "sex"));
+        Expression exp = new Expression("gender == \"Female\"");
+        exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
         Select select = new Select(exp);
         select.addChild(llmScan);
 
