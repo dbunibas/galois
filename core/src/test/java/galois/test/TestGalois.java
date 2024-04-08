@@ -41,13 +41,14 @@ public class TestGalois {
     public void testSimpleSelect() {
         String sql = "select * from target.actor a";
 
+        IDatabase llm = new LLMDB(accessConfiguration);
+
         IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
         Document queryPlan = planner.planFrom(sql);
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.parseJSON(null));
 
-        IDatabase llm = new LLMDB(accessConfiguration);
         ITupleIterator iterator = operator.execute(llm, null);
 
         TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
@@ -57,13 +58,14 @@ public class TestGalois {
     public void testSimpleOrderBy() {
         String sql = "select * from target.actor a order by a.name";
 
+        IDatabase llm = new LLMDB(accessConfiguration);
+
         IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
         Document queryPlan = planner.planFrom(sql);
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.parseJSON(null));
 
-        IDatabase llm = new LLMDB(accessConfiguration);
         ITupleIterator iterator = operator.execute(llm, null);
 
         TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);

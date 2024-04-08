@@ -6,14 +6,15 @@ import org.jdom2.Element;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.OrderBy;
 import speedy.model.database.AttributeRef;
+import speedy.model.database.IDatabase;
 import speedy.model.database.TableAlias;
 
 import java.util.List;
 
 public class SortParser extends AbstractNodeParser {
     @Override
-    public IAlgebraOperator parse(Element node, OperatorsConfiguration configuration) {
-        IAlgebraOperator subTree = parseSubtree(node, configuration);
+    public IAlgebraOperator parse(Element node, IDatabase database, OperatorsConfiguration configuration) {
+        IAlgebraOperator subTree = parseSubtree(node, database, configuration);
 
         // TODO: Handle more than one key / handle order
         Element sortKeyElement = node.getChild("Sort-Key", node.getNamespace());
@@ -25,13 +26,13 @@ public class SortParser extends AbstractNodeParser {
         return orderBy;
     }
 
-    private IAlgebraOperator parseSubtree(Element node, OperatorsConfiguration configuration) {
+    private IAlgebraOperator parseSubtree(Element node, IDatabase database, OperatorsConfiguration configuration) {
         Element plans = node.getChild("Plans", node.getNamespace());
         // TODO: Does the plans node have always one and only one plan child?
         Element subPlan = plans.getChild("Plan", plans.getNamespace());
         INodeParser parser = NodeParserFactory.getParserForNode(subPlan);
 
-        IAlgebraOperator subTree = parser.parse(subPlan, configuration);
+        IAlgebraOperator subTree = parser.parse(subPlan, database, configuration);
         TableAlias tableAlias = parser.getTableAlias();
         setTableAlias(tableAlias);
 

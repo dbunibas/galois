@@ -6,13 +6,14 @@ import galois.parser.ParserException;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import speedy.model.algebra.IAlgebraOperator;
+import speedy.model.database.IDatabase;
 
 public class PostgresXMLParser implements IQueryPlanParser<Document> {
     @Override
-    public IAlgebraOperator parse(Document queryPlan, OperatorsConfiguration configuration) {
+    public IAlgebraOperator parse(Document queryPlan, IDatabase database, OperatorsConfiguration configuration) {
         if (queryPlan == null) throw new ParserException("Query plan cannot be null!");
         Element root = parseRoot(queryPlan);
-        return NodeParserFactory.getParserForNode(root).parse(root, configuration);
+        return NodeParserFactory.getParserForNode(root).parse(root, database, configuration);
     }
 
     private Element parseRoot(Document queryPlan) {

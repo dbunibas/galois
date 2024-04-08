@@ -28,7 +28,7 @@ public final class Experiment {
         IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
 
         Document queryPlan = planner.planFrom(query.getSql());
-        IAlgebraOperator operator = parser.parse(queryPlan, operatorsConfiguration);
+        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration);
 
         ITupleIterator iterator = operator.execute(query.getDatabase(), null);
 
