@@ -51,8 +51,8 @@ public class TestLLMAlgebra {
 
     @Test
     public void testLLMScanOrderBy() {
-        // Query: SELECT name, gender FROM actor WHERE gender = "female" ORDER BY name
-        TableAlias tableAlias = new TableAlias("actor");
+        // Query: SELECT a.name FROM actor a WHERE gender = "Female" ORDER BY name
+        TableAlias tableAlias = new TableAlias("actor", "a");
         IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor());
 
         Expression exp = new Expression("gender == \"Female\"");

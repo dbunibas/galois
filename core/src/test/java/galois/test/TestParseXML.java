@@ -19,10 +19,12 @@ import speedy.model.algebra.OrderBy;
 import speedy.model.algebra.Project;
 import speedy.model.algebra.Select;
 import speedy.model.database.IDatabase;
+import speedy.model.expressions.Expression;
 import speedy.persistence.relational.AccessConfiguration;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 public class TestParseXML {
@@ -63,7 +65,7 @@ public class TestParseXML {
                       <Output>
                         <Item>oid</Item>
                         <Item>name</Item>
-                        <Item>sex</Item>
+                        <Item>gender</Item>
                       </Output>
                     </Plan>
                   </Query>
@@ -198,6 +200,51 @@ public class TestParseXML {
 
         Assertions.assertEquals(operator.getChildren().size(), 1);
         Assertions.assertTrue(operator.getChildren().get(0) instanceof LLMScan);
+    }
+
+    @Test
+    public void testWhere() {
+        // SQL: select * from actor a where a.gender = 'Female'
+        String xml = """
+                  <explain xmlns="http://www.postgresql.org/2009/explain">
+                    <Query>
+                      <Plan>
+                        <Node-Type>Seq Scan</Node-Type>
+                        <Parallel-Aware>false</Parallel-Aware>
+                        <Relation-Name>actor</Relation-Name>
+                        <Schema>target</Schema>
+                        <Alias>a</Alias>
+                        <Startup-Cost>0.00</Startup-Cost>
+                        <Total-Cost>19.75</Total-Cost>
+                        <Plan-Rows>4</Plan-Rows>
+                        <Plan-Width>76</Plan-Width>
+                        <Output>
+                          <Item>oid</Item>
+                          <Item>name</Item>
+                          <Item>gender</Item>
+                          <Item>birth_year</Item>
+                        </Output>
+                        <Filter>(a.gender = 'Female'::text)</Filter>
+                      </Plan>
+                    </Query>
+                  </explain>
+                """;
+
+        Document queryPlan = buildDOMFromString(xml);
+
+        PostgresXMLParser parser = new PostgresXMLParser();
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+
+        Assertions.assertNotNull(operator, "Operator is null!");
+        Assertions.assertTrue(operator instanceof Select, operator.getName());
+
+        Select select = (Select) operator;
+        List<Expression> selections = select.getSelections();
+        Assertions.assertEquals(1, selections.size());
+
+        Expression expression = selections.get(0);
+        Assertions.assertEquals(1, expression.getVariables().size());
+        Assertions.assertEquals("actor_a.gender", expression.getVariables().get(0));
     }
 
     private Document buildDOMFromString(String content) throws DAOException {

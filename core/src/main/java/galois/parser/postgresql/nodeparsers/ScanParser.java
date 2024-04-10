@@ -16,17 +16,24 @@ public class ScanParser extends AbstractNodeParser {
         TableAlias tableAlias = new TableAlias(tableName, alias);
         setTableAlias(tableAlias);
 //        IAlgebraOperator scan = new Scan(tableAlias);
-        IAlgebraOperator scan = new LLMScan(tableAlias, configuration.getScan().getQueryExecutor());
+        IAlgebraOperator root = new LLMScan(tableAlias, configuration.getScan().getQueryExecutor());
+
+        if (node.getChild("Filter", node.getNamespace()) != null) {
+            FilterParser filterParser = new FilterParser();
+            IAlgebraOperator filter = filterParser.parse(node, database, configuration);
+            filter.addChild(root);
+            root = filter;
+        }
 
         ProjectParser projectParser = new ProjectParser();
         Element output = node.getChild("Output", node.getNamespace());
         ITable table = database.getTable(tableName);
         if (projectParser.shouldParseNode(output, table)) {
             IAlgebraOperator select = projectParser.parse(node, database, configuration);
-            select.addChild(scan);
-            return select;
+            select.addChild(root);
+            root = select;
         }
 
-        return scan;
+        return root;
     }
 }

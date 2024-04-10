@@ -70,4 +70,38 @@ public class TestGalois {
 
         TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
     }
+
+    @Test
+    public void testSimpleFilter() {
+        String sql = "select * from target.actor a where a.gender = 'Female'";
+
+        IDatabase llm = new LLMDB(accessConfiguration);
+
+        IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
+        Document queryPlan = planner.planFrom(sql);
+
+        IQueryPlanParser<Document> parser = new PostgresXMLParser();
+        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.parseJSON(null));
+
+        ITupleIterator iterator = operator.execute(llm, null);
+
+        TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testSimpleFilterWithProjection() {
+        String sql = "select a.name, a.birth_year from target.actor a where a.birth_year > 1960 order by a.birth_year";
+
+        IDatabase llm = new LLMDB(accessConfiguration);
+
+        IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
+        Document queryPlan = planner.planFrom(sql);
+
+        IQueryPlanParser<Document> parser = new PostgresXMLParser();
+        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.parseJSON(null));
+
+        ITupleIterator iterator = operator.execute(llm, null);
+
+        TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
+    }
 }

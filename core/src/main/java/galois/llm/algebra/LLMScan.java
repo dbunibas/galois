@@ -9,7 +9,10 @@ import org.slf4j.LoggerFactory;
 import speedy.model.algebra.AbstractOperator;
 import speedy.model.algebra.operators.IAlgebraTreeVisitor;
 import speedy.model.algebra.operators.ITupleIterator;
-import speedy.model.database.*;
+import speedy.model.database.AttributeRef;
+import speedy.model.database.IDatabase;
+import speedy.model.database.TableAlias;
+import speedy.model.database.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,40 +100,10 @@ public class LLMScan extends AbstractOperator {
         public Tuple next() {
             if (!currentResult.isEmpty()) return currentResult.remove(0);
 
-            String prompt = currentTry == 0 ? getInitialPrompt() : getNextPrompt();
-            currentResult = queryExecutor.execute(prompt, table);
+            currentResult = queryExecutor.execute(table, tableAlias);
             currentTry++;
 
             return currentResult.remove(0);
         }
-
-        private String getInitialPrompt() {
-            // TODO: Implement
-            logger.info("**** getInitialPrompt enum is ignored...");
-            StringBuilder prompt = new StringBuilder();
-            prompt.append("List some ").append(table.getName()).append("s. ");
-            prompt.append("For each of them return ");
-            String attributes = table.getAttributes().stream()
-                    .map(Attribute::getName)
-                    .filter(name -> !name.equals("oid"))
-                    .collect(Collectors.joining("|"));
-            prompt.append(attributes);
-            return prompt.toString();
-        }
-
-        private String getNextPrompt() {
-            // TODO: Implement
-            StringBuilder prompt = new StringBuilder();
-            prompt.append("List some other ").append(table.getName()).append("s. ");
-            prompt.append("For each of them return ");
-            String attributes = table.getAttributes().stream()
-                    .map(Attribute::getName)
-                    .filter(name -> !name.equals("oid"))
-                    .collect(Collectors.joining("|"));
-            prompt.append(attributes);
-            return prompt.toString();
-        }
-
-
     }
 }

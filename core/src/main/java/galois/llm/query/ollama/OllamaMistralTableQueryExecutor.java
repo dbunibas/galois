@@ -27,12 +27,12 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
     }
 
     @Override
-    public List<Tuple> execute(String query, ITable table) {
+    public List<Tuple> execute(ITable table, TableAlias tableAlias) {
         String response = model.generate(getInitialPrompt(table));
         return new ArrayList<>(
                 Arrays.stream(response.split("\n"))
                         .skip(2)
-                        .map(row -> toTuple(row, table))
+                        .map(row -> toTuple(row, table, tableAlias))
                         .toList()
         );
     }
@@ -54,12 +54,12 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
         return prompt.toString();
     }
 
-    private Tuple toTuple(String answer, ITable table) {
+    private Tuple toTuple(String answer, ITable table, TableAlias tableAlias) {
         TupleOID mockOID = new TupleOID(IntegerOIDGenerator.getNextOID());
         Tuple tuple = new Tuple(mockOID);
         Cell oidCell = new Cell(
                 mockOID,
-                new AttributeRef(table.getName(), SpeedyConstants.OID),
+                new AttributeRef(tableAlias, SpeedyConstants.OID),
                 new ConstantValue(mockOID)
         );
         tuple.addCell(oidCell);
@@ -84,7 +84,7 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
             Attribute attribute = attributes.get(i);
             Cell currentCell = new Cell(
                     mockOID,
-                    new AttributeRef(table.getName(), attribute.getName()),
+                    new AttributeRef(tableAlias, attribute.getName()),
                     cellValue
             );
             tuple.addCell(currentCell);

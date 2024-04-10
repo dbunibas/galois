@@ -42,8 +42,9 @@ public class OllamaMistralQAQueryExecutor implements IQueryExecutor {
     }
 
     @Override
-    public List<Tuple> execute(String query, ITable table) {
-        String response = chain.execute(query);
+    public List<Tuple> execute(ITable table, TableAlias tableAlias) {
+        // TODO: Implement
+        String response = chain.execute("");
 
         String answers = response
                 .replaceAll("(reasoning:).*", "")
