@@ -80,10 +80,11 @@ public class LLMScan extends AbstractOperator {
 
         private int currentTry = 0;
         private List<Tuple> currentResult = new ArrayList<>();
+        private int currentIndex = 0;
 
         @Override
         public void reset() {
-            throw new UnsupportedOperationException("Unimplemented");
+            currentIndex = 0;
         }
 
         @Override
@@ -93,17 +94,23 @@ public class LLMScan extends AbstractOperator {
 
         @Override
         public boolean hasNext() {
-            return !currentResult.isEmpty() || currentTry < MAX_TRIES;
+            return currentIndex < currentResult.size() || currentTry < MAX_TRIES;
         }
 
         @Override
         public Tuple next() {
-            if (!currentResult.isEmpty()) return currentResult.remove(0);
+            if (!currentResult.isEmpty()) {
+                Tuple result = currentResult.get(currentIndex);
+                currentIndex++;
+                return result;
+            }
 
             currentResult = queryExecutor.execute(table, tableAlias);
             currentTry++;
 
-            return currentResult.remove(0);
+            Tuple result = currentResult.get(0);
+            currentIndex++;
+            return result;
         }
     }
 }
