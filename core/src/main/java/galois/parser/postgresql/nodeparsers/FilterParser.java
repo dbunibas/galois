@@ -17,12 +17,20 @@ import java.util.Map;
 
 @Slf4j
 public class FilterParser extends AbstractNodeParser {
+    private static final List<String> SYMBOLS = List.of(
+            ">=",
+            "<=",
+            ">",
+            "<",
+            "="
+    );
+
     private static final Map<String, String> SYMBOL_MAP = Map.ofEntries(
-            Map.entry("=", "=="),
-            Map.entry(">", ">"),
             Map.entry(">=", ">="),
+            Map.entry("<=", "<="),
+            Map.entry(">", ">"),
             Map.entry("<", "<"),
-            Map.entry("<=", "<=")
+            Map.entry("=", "==")
     );
 
     @Override
@@ -42,7 +50,7 @@ public class FilterParser extends AbstractNodeParser {
 
     private Expression parseExpression(String text) {
         // TODO: Handle boolean operations. This method can parse a SINGLE expression (ex. a > b)!
-        String symbol = SYMBOL_MAP.keySet().stream()
+        String symbol = SYMBOLS.stream()
                 .filter(text::contains)
                 .findFirst()
                 .orElseThrow(ParserException::new);

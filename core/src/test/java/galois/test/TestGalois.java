@@ -40,58 +40,44 @@ public class TestGalois {
     @Test
     public void testSimpleSelect() {
         String sql = "select * from target.actor a";
-
-        IDatabase llm = new LLMDB(accessConfiguration);
-
-        IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
-        Document queryPlan = planner.planFrom(sql);
-
-        IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.parseJSON(null));
-
-        ITupleIterator iterator = operator.execute(llm, null);
-
-        TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
+        executeQuery(sql);
     }
 
     @Test
     public void testSimpleOrderBy() {
         String sql = "select * from target.actor a order by a.name";
-
-        IDatabase llm = new LLMDB(accessConfiguration);
-
-        IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
-        Document queryPlan = planner.planFrom(sql);
-
-        IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.parseJSON(null));
-
-        ITupleIterator iterator = operator.execute(llm, null);
-
-        TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
+        executeQuery(sql);
     }
 
     @Test
     public void testSimpleFilter() {
         String sql = "select * from target.actor a where a.gender = 'Female'";
-
-        IDatabase llm = new LLMDB(accessConfiguration);
-
-        IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
-        Document queryPlan = planner.planFrom(sql);
-
-        IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.parseJSON(null));
-
-        ITupleIterator iterator = operator.execute(llm, null);
-
-        TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
+        executeQuery(sql);
     }
 
     @Test
     public void testSimpleFilterWithProjection() {
         String sql = "select a.name, a.birth_year from target.actor a where a.birth_year > 1960 order by a.birth_year";
+        executeQuery(sql);
+    }
 
+    @Test
+    public void testSimpleJoin() {
+        String sql = "select * from target.film f join target.film_director fd on f.director = fd.name";
+        executeQuery(sql);
+    }
+
+    @Test
+    public void testSimpleJoinWithFilter() {
+        String sql = """
+                select *
+                from target.film f join target.film_director fd on f.director = fd.name
+                where f.year > 2008
+                """;
+        executeQuery(sql);
+    }
+
+    private void executeQuery(String sql) {
         IDatabase llm = new LLMDB(accessConfiguration);
 
         IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);

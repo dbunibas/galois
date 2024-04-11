@@ -1,6 +1,7 @@
 package galois.test;
 
 import galois.test.utils.TestUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,10 @@ import speedy.model.expressions.Expression;
 import speedy.persistence.DAOMainMemoryDatabase;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
+@Slf4j
 public class TestSpeedyAlgebra {
     private static final String TABLE_NAME = "EmpTable";
 
@@ -118,4 +121,22 @@ public class TestSpeedyAlgebra {
         Assertions.assertEquals(47, stream.count());
     }
 
+    @Test
+    public void testJoin() {
+        // SQL: SELECT * FORM table t1 JOIN table t2 on t1.name = t2.manager
+        TableAlias t1 = new TableAlias(TABLE_NAME, "t1");
+        TableAlias t2 = new TableAlias(TABLE_NAME, "t2");
+        Scan scan1 = new Scan(t1);
+        Scan scan2 = new Scan(t2);
+
+        List<AttributeRef> leftAttributes = List.of(new AttributeRef(t1, "name"));
+        List<AttributeRef> rightAttributes = List.of(new AttributeRef(t2, "manager"));
+        Join join = new Join(leftAttributes, rightAttributes);
+        join.addChild(scan1);
+        join.addChild(scan2);
+
+        ITupleIterator iterator = join.execute(null, database);
+        Stream<Tuple> stream = TestUtils.toTupleStream(iterator);
+        Assertions.assertEquals(2, stream.count());
+    }
 }

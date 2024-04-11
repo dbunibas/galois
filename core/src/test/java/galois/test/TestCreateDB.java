@@ -9,6 +9,7 @@ import speedy.model.database.dbms.DBMSDB;
 import speedy.persistence.relational.AccessConfiguration;
 
 import java.util.List;
+import java.util.Set;
 
 public class TestCreateDB {
     @Test
@@ -31,17 +32,36 @@ public class TestCreateDB {
         db.getInitDBConfiguration().setInitDBScript(createSchema(schemaName));
         db.initDBMS();
 
-        String tableName = "actor";
-        List<Attribute> attributes = List.of(
-                new Attribute(tableName, "name", "string"),
-                new Attribute(tableName, "gender", "string"),
-                new Attribute(tableName, "birth_year", "integer")
+        String actorTableName = "actor";
+        List<Attribute> actorAttributes = List.of(
+                new Attribute(actorTableName, "name", "string"),
+                new Attribute(actorTableName, "gender", "string"),
+                new Attribute(actorTableName, "birth_year", "integer")
         );
+        Set<String> actorPrimaryKeys = Set.of("name");
+
+        String filmTableName = "film";
+        List<Attribute> filmAttributes = List.of(
+                new Attribute(filmTableName, "name", "string"),
+                new Attribute(filmTableName, "director", "string"),
+                new Attribute(filmTableName, "year", "integer")
+        );
+        Set<String> filmPrimaryKeys = Set.of("name");
+
+        String directorTableName = "film_director";
+        List<Attribute> directorAttributes = List.of(
+                new Attribute(directorTableName, "name", "string"),
+                new Attribute(directorTableName, "gender", "string"),
+                new Attribute(directorTableName, "birth_year", "integer")
+        );
+        Set<String> directorPrimaryKeys = Set.of("name");
 
         ICreateTable tableGenerator = new SQLCreateTable();
-        tableGenerator.createTable(tableName, attributes, db);
+        tableGenerator.createTable(actorTableName, actorAttributes, actorPrimaryKeys, db);
+        tableGenerator.createTable(filmTableName, filmAttributes, filmPrimaryKeys, db);
+        tableGenerator.createTable(directorTableName, directorAttributes, directorPrimaryKeys, db);
 
-        Assertions.assertEquals(db.getTableNames().size(), 1);
+        Assertions.assertEquals(db.getTableNames().size(), 3);
     }
 
     private String createSchema(String schemaName) {
