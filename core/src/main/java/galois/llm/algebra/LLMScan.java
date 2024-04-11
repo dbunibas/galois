@@ -44,8 +44,7 @@ public class LLMScan extends AbstractOperator {
     @Override
     public ITupleIterator execute(IDatabase source, IDatabase target) {
         checkSourceTarget(source, target);
-        LLMTable table = (LLMTable) source.getTable(tableAlias.getTableName());
-        return new LLMScanTupleIterator(table, queryExecutor);
+        return new LLMScanTupleIterator(source, queryExecutor);
     }
 
     @Override
@@ -60,6 +59,7 @@ public class LLMScan extends AbstractOperator {
     }
 
     private void checkSourceTarget(IDatabase source, IDatabase target) {
+        // TODO: Switch source and target?
         if (target != null) logger.warn("Target database is ignored when using LLM algebra...");
 
         if (!(source instanceof LLMDB))
@@ -68,11 +68,11 @@ public class LLMScan extends AbstractOperator {
 
     private class LLMScanTupleIterator implements ITupleIterator {
 
-        private final LLMTable table;
+        private final IDatabase database;
         private final IQueryExecutor queryExecutor;
 
-        public LLMScanTupleIterator(LLMTable table, IQueryExecutor queryExecutor) {
-            this.table = table;
+        public LLMScanTupleIterator(IDatabase database, IQueryExecutor queryExecutor) {
+            this.database = database;
             this.queryExecutor = queryExecutor;
         }
 
@@ -105,7 +105,7 @@ public class LLMScan extends AbstractOperator {
                 return result;
             }
 
-            currentResult = queryExecutor.execute(table, tableAlias);
+            currentResult = queryExecutor.execute(database, tableAlias);
             currentTry++;
 
             Tuple result = currentResult.get(0);

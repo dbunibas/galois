@@ -42,18 +42,18 @@ public class OllamaMistralQAQueryExecutor implements IQueryExecutor {
     }
 
     @Override
-    public List<Tuple> execute(ITable table, TableAlias tableAlias) {
-        // TODO: Implement
-        String response = chain.execute("");
-
-        String answers = response
-                .replaceAll("(reasoning:).*", "")
-                .replaceAll("answer:", "")
-                .trim();
-
-        return Arrays.stream(answers.split(","))
-                .map(a -> toTuple(a, table))
-                .collect(Collectors.toCollection(ArrayList::new));
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+        throw new UnsupportedOperationException("OllamaMistralQAQuery Executor is not currently supported");
+//        String response = chain.execute("");
+//
+//        String answers = response
+//                .replaceAll("(reasoning:).*", "")
+//                .replaceAll("answer:", "")
+//                .trim();
+//
+//        return Arrays.stream(answers.split(","))
+//                .map(a -> toTuple(a, table))
+//                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private Tuple toTuple(String answer, ITable table) {

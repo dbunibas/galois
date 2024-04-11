@@ -27,7 +27,8 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
     }
 
     @Override
-    public List<Tuple> execute(ITable table, TableAlias tableAlias) {
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+        ITable table = database.getTable(tableAlias.getTableName());
         String response = model.generate(getInitialPrompt(table));
         return new ArrayList<>(
                 Arrays.stream(response.split("\n"))
