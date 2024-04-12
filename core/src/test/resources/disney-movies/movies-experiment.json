@@ -18,36 +18,42 @@
     }
   },
   "query": {
-    "sql": "select * from target.continent c order by c.name",
+    "sql": "select * from target.disney_movie m order by m.movie_title",
     "schema": {
-      "name": "dummy_continents",
+      "name": "disney_movies",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "continent",
+          "tableName": "disney_movie",
           "attributes": [
             {
-              "name": "name",
+              "name": "movie_title",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "area",
+              "name": "genre",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "total_gross",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "population",
-              "type": "STRING",
+              "name": "release_year",
+              "type": "INTEGER",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/dummy-continents/continent"
+    "results": "/disney-movies/movie"
   }
 }

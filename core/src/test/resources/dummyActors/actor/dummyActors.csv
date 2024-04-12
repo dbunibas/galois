@@ -1,14 +1,14 @@
-name, sex
-Angelina Jolie, female
-Cate Blanchett, female
-Daniel Day-Lewis, male
-Denzel Washington, male
-Emma Watson, female
-Johnny Depp, male
-Leonardo DiCaprio, male
-Marlon Brando, male
-Meryl Streep, female
-Natalie Portman, female
-Robert Downey Jr., male
-Scarlett Johansson, female
-Tom Cruise, male
+name, sex, birth_year
+Angelina Jolie, female, 1975
+Cate Blanchett, female, 1969
+Daniel Day-Lewis, male, 1957
+Denzel Washington, male, 1954
+Emma Watson, female, 1990
+Johnny Depp, male, 1963
+Leonardo DiCaprio, male, 1974
+Marlon Brando, male, 1924
+Meryl Streep, female, 1949
+Natalie Portman, female, 1981
+Robert Downey Jr., male, 1965
+Scarlett Johansson, female, 1984
+Tom Cruise, male, 1962

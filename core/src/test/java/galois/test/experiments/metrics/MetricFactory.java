@@ -5,7 +5,14 @@ import java.util.Map;
 public class MetricFactory {
     private static final Map<String, IMetricGenerator> metricsMap = Map.ofEntries(
             Map.entry("DummyMetric", DummyMetric::new),
-            Map.entry("TupleCardinalityMetric", TupleCardinalityMetric::new)
+            Map.entry("TupleCardinalityMetric", TupleCardinalityMetric::new),
+            Map.entry("F1ScoreMetric", F1ScoreMetric::new),
+            Map.entry("EditDistance", EditDistance::new),
+            Map.entry("CellRecall", CellRecall::new),
+            Map.entry("CellPrecision", CellPrecision::new),
+            Map.entry("TupleCardinality", TupleCardinality::new),
+            Map.entry("TupleConstraint", TupleConstraint::new),
+            Map.entry("TupleOrder", TupleOrder::new)
             // To add a new metric simply add the entry:
             // Map.entry("MetricName", MetricClass::new)
     );

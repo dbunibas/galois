@@ -16,4 +16,18 @@ public class TestRunLLMSelect {
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }
+
+    @Test
+    public void testActorExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/dummyActors/actors-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testDisneyMovieExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/disney-movies/movies-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
 }

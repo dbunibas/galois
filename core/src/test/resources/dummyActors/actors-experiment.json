@@ -1,5 +1,5 @@
 {
-  "name": "Dummy Experiment",
+  "name": "Actors Experiment",
   "metrics": [
     "DummyMetric",
     "TupleCardinalityMetric",
@@ -18,15 +18,15 @@
     }
   },
   "query": {
-    "sql": "select * from target.continent c order by c.name",
+    "sql": "select * from target.actor a order by a.name",
     "schema": {
-      "name": "dummy_continents",
+      "name": "dummy_actors",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "continent",
+          "tableName": "actor",
           "attributes": [
             {
               "name": "name",
@@ -35,19 +35,19 @@
               "key": true
             },
             {
-              "name": "area",
+              "name": "gender",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "population",
-              "type": "STRING",
+              "name": "birth_year",
+              "type": "INTEGER",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/dummy-continents/continent"
+    "results": "/dummyActors/actor"
   }
 }
