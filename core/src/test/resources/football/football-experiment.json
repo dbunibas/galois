@@ -1,0 +1,86 @@
+{
+  "name": "Football Experiment",
+  "metrics": [
+    "TupleCardinalityMetric",
+    "CellRecall",
+    "CellPrecision",
+    "F1ScoreMetric",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleOrder",
+    "CellSimilarityRecall",
+    "CellSimilarityPrecision"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "OllamaMistralTableQueryExecutor"
+    }
+  },
+  "query": {
+    "sql": "select year, home_team, away_team from target.international_football_match ifm order by ifm.year",
+    "schema": {
+      "name": "international_football_matches",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "international_football_match",
+          "attributes": [
+            {
+              "name": "year",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "home_team",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "away_team",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "home_score",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "away_score",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "tournament",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "city",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "country",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "neutral",
+              "type": "BOOLEAN",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/football/international-football"
+  }
+}

@@ -30,4 +30,11 @@ public class TestRunLLMSelect {
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }
+
+    @Test
+    public void testInternationalFootballExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/football/football-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
 }

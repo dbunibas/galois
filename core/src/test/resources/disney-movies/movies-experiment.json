@@ -1,5 +1,5 @@
 {
-  "name": "Dummy Experiment",
+  "name": "Movies Experiment",
   "metrics": [
     "DummyMetric",
     "TupleCardinalityMetric",
@@ -39,8 +39,7 @@
             {
               "name": "genre",
               "type": "STRING",
-              "nullable": false,
-              "key": true
+              "nullable": false
             },
             {
               "name": "total_gross",
