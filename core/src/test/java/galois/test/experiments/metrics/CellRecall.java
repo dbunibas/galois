@@ -7,6 +7,8 @@ import speedy.model.database.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.HashSet;
 
 public class CellRecall implements IMetric {
 
@@ -20,16 +22,16 @@ public class CellRecall implements IMetric {
 
         CellNormalizer cellNormalizer = new CellNormalizer();
 
-        List<String> expectedCells = expected.stream()
+        Set<String> expectedCells = expected.stream()
                 .flatMap(tuple -> tuple.getCells().stream())
                 .filter(cell -> !cell.isOID())
                 .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
-                .toList();
+                .collect(Collectors.toSet());
 
-        List<String> resultCells = result.stream().flatMap(tuple -> tuple.getCells().stream())
+        Set<String> resultCells = result.stream().flatMap(tuple -> tuple.getCells().stream())
                 .filter(cell -> !cell.isOID())
                 .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
-                .toList();
+                .collect(Collectors.toSet());
 
         double count = 0.0;
         double totCells = expectedCells.size(); // exclude the OIDs

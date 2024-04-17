@@ -9,7 +9,9 @@
     "TupleCardinality",
     "TupleConstraint",
     "EditDistance",
-    "TupleOrder"
+    "TupleOrder",
+    "CellSimilarityPrecision",
+    "CellSimilarityRecall"
   ],
   "dbms": "postgres",
   "operatorsConfig": {

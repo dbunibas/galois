@@ -87,7 +87,7 @@ public class EditDistance implements IMetric{
     }
 
     // Calculates the score for the given expected and result cells and threshold
-    private boolean getScoreForCells(String expected, String result, double threshold) {
+    public boolean getScoreForCells(String expected, String result, double threshold) {
 
         // Regular expression to check if string contains only numbers
         String containsOnlyNumbers = "^[0-9]+$";
@@ -108,7 +108,7 @@ public class EditDistance implements IMetric{
     }
 
     // Calculates the edit distance between the given strings
-    private int editDistance(String str1, String str2)
+    public int editDistance(String str1, String str2)
     {
         // Get the lengths of the two input strings.
         int m = str1.length();
