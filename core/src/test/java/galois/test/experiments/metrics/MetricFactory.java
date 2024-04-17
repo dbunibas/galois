@@ -7,7 +7,6 @@ public class MetricFactory {
             Map.entry("DummyMetric", DummyMetric::new),
             Map.entry("TupleCardinalityMetric", TupleCardinalityMetric::new),
             Map.entry("F1ScoreMetric", F1ScoreMetric::new),
-            Map.entry("EditDistance", EditDistance::new),
             Map.entry("CellRecall", CellRecall::new),
             Map.entry("CellPrecision", CellPrecision::new),
             Map.entry("TupleCardinality", TupleCardinality::new),

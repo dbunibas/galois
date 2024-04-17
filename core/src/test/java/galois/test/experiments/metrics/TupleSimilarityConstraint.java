@@ -5,6 +5,8 @@ import speedy.model.database.Tuple;
 
 import java.util.*;
 
+import speedy.model.database.Cell;
+
 public class TupleSimilarityConstraint implements  IMetric{
     @Override
     public String getName() {
@@ -15,7 +17,6 @@ public class TupleSimilarityConstraint implements  IMetric{
     public Double getScore(IDatabase database, List<Tuple> expected, List<Tuple> result) {
 
         CellNormalizer cellNormalizer = new CellNormalizer();
-        EditDistance editDist= new EditDistance();
 
         List<Tuple> expectedSorted = expected.stream()
                 .sorted(Comparator.comparing(tuple -> tuple.getCells().get(1).getValue().toString()))
@@ -37,29 +38,47 @@ public class TupleSimilarityConstraint implements  IMetric{
                         .toList())
                 .toList();
 
-        double similaritySum = 0.0;
-        int totalComparisons = 0;
-        double countSimilarity = 0.0;
+        HashMap<List<String>, Integer> expectedCellCount = new HashMap<>();
+        HashMap<List<String>, Integer> resultCellCount = new HashMap<>();
 
-        // iterate over corresponding cells in the expected and result tuples
-        for (int i = 0; i < expectedCells.size(); i++) {
-            List<String> expectedTuple = expectedCells.get(i);
-            List<String> resultTuple = resultCells.get(i);
-            for (int j = 0; j < expectedTuple.size(); j++) {
-                String expectedCell = expectedTuple.get(j);
-                String resultCell = resultTuple.get(j);
-                double threshold = expectedCell.length() * 0.1;
-                EditDistance editDistance = new EditDistance();
-                if(editDistance.getScoreForCells(expectedCell, resultCell, threshold)){
-                    similaritySum++;
+        for (List<String> expectedCell : expectedCells) {
+            expectedCellCount.put(expectedCell, expectedCellCount.getOrDefault(expectedCell, 0) + 1);
+        }
+
+        for (List<String> resultCell : resultCells) {
+            resultCellCount.put(resultCell, resultCellCount.getOrDefault(resultCell, 0) + 1);
+        }
+
+        List<Boolean> cardinality = new ArrayList<>();
+        EditDistance editDistance = new EditDistance();
+        int count = 0;
+
+        for (List<String> exp : expectedCellCount.keySet()) {
+
+            for(List<String> res : resultCellCount.keySet()){
+
+                for(int i = 0; i < exp.size(); i++){
+
+                    if(editDistance.getScoreForCells(exp.get(i), res.get(i), 0.1 * exp.get(i).length())){
+                        count++;
+                    }
+
                 }
-                totalComparisons++;
-            }
-            if(similaritySum == expectedTuple.size()){
-                countSimilarity++;
+
+                if(count == exp.size()){
+
+                    if(Objects.equals(expectedCellCount.get(exp), resultCellCount.get(res))){
+                        cardinality.add(true);
+                    }
+                    break;
+                }
+
+
+                count = 0;
             }
         }
-        // Calculate average similarity
-        return countSimilarity / expectedCells.size();
+
+        //return the sum of true values over cardinality over the length of cardinality
+        return cardinality.stream().mapToDouble( value -> value ? 1 : 0).sum() / (double) expectedCellCount.size();
     }
 }

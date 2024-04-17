@@ -44,8 +44,8 @@ public class CellSimilarityRecall implements IMetric {
                 }
             }
         }
-        System.out.println("Count: "+count);
-        System.out.println("Total Cells: "+totCells);
+        //System.out.println("Count: "+count);
+        //System.out.println("Total Cells: "+totCells);
 
         return count / totCells;
     }

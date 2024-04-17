@@ -8,8 +8,8 @@
     "F1ScoreMetric",
     "TupleCardinality",
     "TupleConstraint",
-    "EditDistance",
     "TupleOrder",
+    "TupleSimilarityConstraint",
     "CellSimilarityPrecision",
     "CellSimilarityRecall"
   ],
