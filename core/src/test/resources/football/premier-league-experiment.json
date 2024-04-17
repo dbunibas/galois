@@ -58,7 +58,7 @@
               "nullable": false
             },
             {
-              "name": "referee",
+              "name": "referee_surname",
               "type": "STRING",
               "nullable": false
             }

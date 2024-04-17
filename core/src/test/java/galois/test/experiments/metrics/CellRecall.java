@@ -59,12 +59,12 @@ public class CellRecall implements IMetric {
         String containsOnlyNumbers = "^[0-9]+$";
 
         // Check if both strings start with a letter or a number
-        if ((expected.matches(containsOnlyNumbers) && result.matches(containsOnlyNumbers))) {
+        /*if ((expected.matches(containsOnlyNumbers) && result.matches(containsOnlyNumbers))) {
             double expectedValue = Double.parseDouble(expected);
             double resultValue = Double.parseDouble(result);
 
             return expectedValue >= (resultValue - resultValue * (0.1)) && expectedValue <= (resultValue + resultValue * (0.1));
-        }
+        }*/
 
         return expected.equals(result);
     }

@@ -56,7 +56,7 @@ public class CellPrecision implements IMetric {
         // Regular expression to check if string starts with a letter
         // String startsWithLetter = "^[a-zA-Z].*";
         // Regular expression to check if string contains only numbers
-        String containsOnlyNumbers = "^[0-9]+$";
+        /*String containsOnlyNumbers = "^[0-9]+$";
 
         // Check if both strings start with a letter or a number
         if ((expected.matches(containsOnlyNumbers) && result.matches(containsOnlyNumbers))) {
@@ -64,7 +64,7 @@ public class CellPrecision implements IMetric {
             double resultValue = Double.parseDouble(result);
 
             return expectedValue >= (resultValue - resultValue * (0.1)) && expectedValue <= (resultValue + resultValue * (0.1));
-        }
+        }*/
 
         return expected.equals(result);
     }

@@ -19,7 +19,7 @@
     }
   },
   "query": {
-    "sql": "select year, home_team, away_team from target.international_football_match ifm order by ifm.year",
+    "sql": "select * from target.international_football_match ifm order by ifm.year",
     "schema": {
       "name": "international_football_matches",
       "schema": "target",
