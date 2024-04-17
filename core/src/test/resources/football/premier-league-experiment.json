@@ -1,5 +1,5 @@
 {
-  "name": "Football Experiment",
+  "name": "Premier League Experiment",
   "metrics": [
     "TupleCardinalityMetric",
     "CellRecall",
@@ -19,15 +19,15 @@
     }
   },
   "query": {
-    "sql": "select year, home_team, away_team from target.international_football_match ifm order by ifm.year",
+    "sql": "select * from target.premier_league_2018_2019 pl order by pl.year",
     "schema": {
-      "name": "international_football_matches",
+      "name": "premier_league_matches_2018_2019",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "international_football_match",
+          "tableName": "premier_league_2018_2019",
           "attributes": [
             {
               "name": "year",
@@ -48,40 +48,24 @@
               "key": true
             },
             {
-              "name": "home_score",
+              "name": "FTHG",
               "type": "INTEGER",
               "nullable": false
             },
             {
-              "name": "away_score",
+              "name": "FTAG",
               "type": "INTEGER",
               "nullable": false
             },
             {
-              "name": "tournament",
+              "name": "referee",
               "type": "STRING",
-              "nullable": false,
-              "key": true
-            },
-            {
-              "name": "city",
-              "type": "STRING",
-              "nullable": false
-            },
-            {
-              "name": "country",
-              "type": "STRING",
-              "nullable": false
-            },
-            {
-              "name": "neutral",
-              "type": "BOOLEAN",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/football/international-football"
+    "results": "/football/premier-league"
   }
 }
