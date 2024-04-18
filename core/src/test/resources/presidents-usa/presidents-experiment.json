@@ -1,5 +1,5 @@
 {
-  "name": "Tokyo Olympics Experiment",
+  "name": "USA Presidents Experiment",
   "metrics": [
     "TupleCardinalityMetric",
     "CellRecall",
@@ -19,51 +19,41 @@
     }
   },
   "query": {
-    "sql": "select * from target.olympics_tokyo o order by o.rank",
+    "sql": "select * from target.usa_president p order by p.Number",
     "schema": {
-      "name": "olympics_tokyo_2021_medal",
+      "name": "usa_presidents",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "olympics_tokyo",
+          "tableName": "usa_president",
           "attributes": [
             {
-              "name": "country",
+              "name": "Name",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "gold_medal",
-              "type": "INTEGER",
+              "name": "Years_In_Office",
+              "type": "STRING",
               "nullable": false
             },
             {
-              "name": "silver_medal",
-              "type": "INTEGER",
+              "name": "Number",
+              "type": "STRING",
               "nullable": false
             },
             {
-              "name": "bronze_medal",
-              "type": "INTEGER",
-              "nullable": false
-            },
-            {
-              "name": "total",
-              "type": "INTEGER",
-              "nullable": false
-            },
-            {
-              "name": "rank",
-              "type": "INTEGER",
+              "name": "Party",
+              "type": "STRING",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/olympics-tokyo/olympics"
+    "results": "/presidents-usa/presidents-data"
   }
 }
