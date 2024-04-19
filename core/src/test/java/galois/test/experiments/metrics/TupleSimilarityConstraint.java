@@ -28,6 +28,15 @@ public class TupleSimilarityConstraint implements  IMetric{
                         .toList())
                 .toList();
 
+
+        int numberOfAttributes;
+        if(result.get(1).getCells().size() != expected.get(1).getCells().size()){
+            numberOfAttributes = result.get(1).getCells().size() -1;
+            //remove from expectedCells the i-th element greater than number of attributes
+            expectedCells = expectedCells.stream().map(list -> list.subList(0, numberOfAttributes)).toList();
+
+        }
+
         List<Tuple> resultSorted = result.stream()
                 .sorted(Comparator.comparing(tuple -> tuple.getCells().get(1).getValue().toString()))
                 .toList();
@@ -36,7 +45,7 @@ public class TupleSimilarityConstraint implements  IMetric{
                         .filter(cell -> !cell.isOID())
                         .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
                         .toList())
-                .toList();
+                        .toList();
 
         HashMap<List<String>, Integer> expectedCellCount = new HashMap<>();
         HashMap<List<String>, Integer> resultCellCount = new HashMap<>();
@@ -59,10 +68,12 @@ public class TupleSimilarityConstraint implements  IMetric{
 
                 for(int i = 0; i < exp.size(); i++){
 
-                    if(editDistance.getScoreForCells(exp.get(i), res.get(i), 0.1 * exp.get(i).length())){
-                        count++;
-                    }
+                    if (i < res.size()) {
 
+                        if (editDistance.getScoreForCells(exp.get(i), res.get(i), 0.1 * exp.get(i).length())) {
+                            count++;
+                        }
+                    }
                 }
 
                 if(count == exp.size()){

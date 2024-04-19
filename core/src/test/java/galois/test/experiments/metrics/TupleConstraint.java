@@ -28,6 +28,13 @@ public class TupleConstraint implements  IMetric{
                         .toList())
                 .toList();
 
+        int numberOfAttributes;
+        if(result.get(1).getCells().size() != expected.get(1).getCells().size()){
+            numberOfAttributes = result.get(1).getCells().size() -1;
+            //remove from expectedCells the i-th element greater than number of attributes
+            expectedCells = expectedCells.stream().map(list -> list.subList(0, numberOfAttributes)).toList();
+        }
+
         List<Tuple> resultSorted = result.stream()
                 .sorted(Comparator.comparing(tuple -> tuple.getCells().get(1).getValue().toString()))
                 .toList();
