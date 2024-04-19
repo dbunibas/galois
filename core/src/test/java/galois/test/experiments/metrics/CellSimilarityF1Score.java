@@ -11,10 +11,10 @@ Assumes:
 - expected size equals to result size;
 - attributes from both tuples in the same order;
 */
-public class F1ScoreSimilarityMetric implements IMetric {
+public class CellSimilarityF1Score implements IMetric {
     @Override
     public String getName() {
-        return "F1ScoreSimilarityMetric";
+        return "CellSimilarityF1Score";
     }
 
     @Override

@@ -8,8 +8,8 @@
     "TupleCardinality",
     "TupleConstraint",
     "TupleOrder",
-    "CellSimilarityRecall",
     "CellSimilarityPrecision",
+    "CellSimilarityRecall",
     "CellSimilarityF1Score",
     "TupleSimilarityConstraint"
   ],
@@ -20,7 +20,7 @@
     }
   },
   "query": {
-    "sql": "select ifm.year,ifm.home_team,ifm.away_team,ifm.tournament from target.international_football_match ifm order by ifm.year",
+    "sql": "select * from target.international_football_match ifm order by ifm.year",
     "schema": {
       "name": "international_football_matches",
       "schema": "target",
