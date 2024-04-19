@@ -2,14 +2,15 @@
   "name": "Tokyo Olympics Experiment",
   "metrics": [
     "TupleCardinalityMetric",
-    "CellRecall",
     "CellPrecision",
+    "CellRecall",
     "F1ScoreMetric",
     "TupleCardinality",
     "TupleConstraint",
     "TupleOrder",
     "CellSimilarityRecall",
     "CellSimilarityPrecision",
+    "CellSimilarityF1Score",
     "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",

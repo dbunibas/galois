@@ -3,15 +3,16 @@
   "metrics": [
     "DummyMetric",
     "TupleCardinalityMetric",
-    "CellRecall",
     "CellPrecision",
+    "CellRecall",
     "F1ScoreMetric",
     "TupleCardinality",
     "TupleConstraint",
     "TupleOrder",
     "TupleSimilarityConstraint",
     "CellSimilarityPrecision",
-    "CellSimilarityRecall"
+    "CellSimilarityRecall",
+    "CellSimilarityF1Score"
   ],
   "dbms": "postgres",
   "operatorsConfig": {

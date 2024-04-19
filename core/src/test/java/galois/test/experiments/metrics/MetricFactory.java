@@ -14,7 +14,8 @@ public class MetricFactory {
             Map.entry("TupleOrder", TupleOrder::new),
             Map.entry("TupleSimilarityConstraint", TupleSimilarityConstraint::new),
             Map.entry("CellSimilarityPrecision", CellSimilarityPrecision::new),
-            Map.entry("CellSimilarityRecall", CellSimilarityRecall::new)
+            Map.entry("CellSimilarityRecall", CellSimilarityRecall::new),
+            Map.entry("F1ScoreSimilarityMetric", F1ScoreSimilarityMetric::new)
             // To add a new metric simply add the entry:
             // Map.entry("MetricName", MetricClass::new)
     );
