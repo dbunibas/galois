@@ -1,8 +1,10 @@
 package galois.test.experiments.metrics;
 
+import speedy.model.database.Cell;
 import speedy.model.database.IDatabase;
 import speedy.model.database.Tuple;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,31 +21,40 @@ public class CellSimilarityRecall implements IMetric {
 
         CellNormalizer cellNormalizer = new CellNormalizer();
 
-        Set<String> expectedCells = expected.stream()
-                .flatMap(tuple -> tuple.getCells().stream())
-                .filter(cell -> !cell.isOID())
-                .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
-                .collect(Collectors.toSet());
+        Set<String> expectedCells = new HashSet<>();
+        for (Tuple tuple : expected) {
+            for (Cell cell : tuple.getCells()) {
+                if (!cell.isOID()) {
+                    expectedCells.add(cellNormalizer.normalize(cell.getValue().toString()));
+                }
+            }
+        }
 
-        Set<String> resultCells = result.stream().flatMap(tuple -> tuple.getCells().stream())
-                .filter(cell -> !cell.isOID())
-                .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
-                .collect(Collectors.toSet());
+        Set<String> resultCells = new HashSet<>();
+        for (Tuple tuple : result) {
+            for (Cell cell : tuple.getCells()) {
+                if (!cell.isOID()) {
+                    resultCells.add(cellNormalizer.normalize(cell.getValue().toString()));
+                }
+            }
+        }
 
         double count = 0.0;
         double totCells = expectedCells.size(); // exclude the OIDs
+        double threshold;
 
         EditDistance editDist = new EditDistance();
 
         for (String expectedCell : expectedCells) {
             for (String resultCell : resultCells) {
-                double threshold = expectedCell.length() * 0.1;
+                threshold = expectedCell.length() * 0.1;
                 if (editDist.getScoreForCells(expectedCell, resultCell, threshold)) {
                     count++;
                     break;
                 }
             }
         }
+
         //System.out.println("Count: "+count);
         //System.out.println("Total Cells: "+totCells);
 

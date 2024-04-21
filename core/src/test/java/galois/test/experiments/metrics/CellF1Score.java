@@ -1,18 +1,11 @@
 package galois.test.experiments.metrics;
 
-import speedy.model.database.Cell;
 import speedy.model.database.IDatabase;
 import speedy.model.database.Tuple;
 
 import java.util.List;
 
-/*
-Dummy metric.
-Assumes:
-- expected size equals to result size;
-- attributes from both tuples in the same order;
-*/
-public class F1ScoreMetric implements IMetric {
+public class CellF1Score implements IMetric {
     @Override
     public String getName() {
         return "F1ScoreMetric";

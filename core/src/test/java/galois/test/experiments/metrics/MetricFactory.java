@@ -6,7 +6,7 @@ public class MetricFactory {
     private static final Map<String, IMetricGenerator> metricsMap = Map.ofEntries(
             Map.entry("DummyMetric", DummyMetric::new),
             Map.entry("TupleCardinalityMetric", TupleCardinalityMetric::new),
-            Map.entry("F1ScoreMetric", F1ScoreMetric::new),
+            Map.entry("CellF1Score", CellF1Score::new),
             Map.entry("CellRecall", CellRecall::new),
             Map.entry("CellPrecision", CellPrecision::new),
             Map.entry("TupleCardinality", TupleCardinality::new),

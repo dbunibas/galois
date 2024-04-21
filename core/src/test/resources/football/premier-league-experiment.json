@@ -4,7 +4,7 @@
     "TupleCardinalityMetric",
     "CellPrecision",
     "CellRecall",
-    "F1ScoreMetric",
+    "CellF1Score",
     "TupleCardinality",
     "TupleConstraint",
     "TupleOrder",
@@ -20,7 +20,7 @@
     }
   },
   "query": {
-    "sql": "select pl.year, pl.home_team, pl.away_team from target.premier_league_2018_2019 pl order by pl.year",
+    "sql": "select * from target.premier_league_2018_2019 pl order by pl.year",
     "schema": {
       "name": "premier_league_matches_2018_2019",
       "schema": "target",

@@ -4,9 +4,7 @@ import speedy.model.database.Cell;
 import speedy.model.database.IDatabase;
 import speedy.model.database.Tuple;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -22,51 +20,31 @@ public class CellRecall implements IMetric {
 
         CellNormalizer cellNormalizer = new CellNormalizer();
 
-        Set<String> expectedCells = expected.stream()
-                .flatMap(tuple -> tuple.getCells().stream())
-                .filter(cell -> !cell.isOID())
-                .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
-                .collect(Collectors.toSet());
-
-        Set<String> resultCells = result.stream().flatMap(tuple -> tuple.getCells().stream())
-                .filter(cell -> !cell.isOID())
-                .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
-                .collect(Collectors.toSet());
-
-        double count = 0.0;
-        double totCells = expectedCells.size(); // exclude the OIDs
-
-        for (String expectedCell : expectedCells) {
-
-            if(resultCells.stream().anyMatch(resultCell -> checkCell(expectedCell, resultCell))){
-                count++;
-                //System.out.println("Found: "+expectedCell);
+        Set<String> expectedCells = new HashSet<>();
+        for (Tuple tuple : expected) {
+            for (Cell cell : tuple.getCells()) {
+                if (!cell.isOID()) {
+                    expectedCells.add(cellNormalizer.normalize(cell.getValue().toString()));
+                }
             }
-
         }
-        //System.out.println("Count: "+count);
-        //System.out.println("Total Cells: "+totCells);
 
-        return count / totCells;
+        Set<String> resultCells = new HashSet<>();
+        for (Tuple tuple : result) {
+            for (Cell cell : tuple.getCells()) {
+                if (!cell.isOID()) {
+                    resultCells.add(cellNormalizer.normalize(cell.getValue().toString()));
+                }
+            }
+        }
+
+        // Calculate the intersection size directly
+        Set<String> commonCells = new HashSet<>(expectedCells);
+        commonCells.retainAll(resultCells);
+
+        double count = commonCells.size(); // Number of common cells
+        double totalExpectedCells = expectedCells.size(); // Exclude the OIDs
+
+        return count / totalExpectedCells;
     }
-
-
-    private boolean checkCell(String expected, String result){
-
-        // Regular expression to check if string starts with a letter
-        // String startsWithLetter = "^[a-zA-Z].*";
-        // Regular expression to check if string contains only numbers
-        String containsOnlyNumbers = "^[0-9]+$";
-
-        // Check if both strings start with a letter or a number
-        /*if ((expected.matches(containsOnlyNumbers) && result.matches(containsOnlyNumbers))) {
-            double expectedValue = Double.parseDouble(expected);
-            double resultValue = Double.parseDouble(result);
-
-            return expectedValue >= (resultValue - resultValue * (0.1)) && expectedValue <= (resultValue + resultValue * (0.1));
-        }*/
-
-        return expected.equals(result);
-    }
-
 }

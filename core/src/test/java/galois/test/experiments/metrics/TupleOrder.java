@@ -1,5 +1,6 @@
 package galois.test.experiments.metrics;
 
+
 import speedy.model.database.IDatabase;
 import speedy.model.database.Tuple;
 
@@ -17,47 +18,36 @@ public class TupleOrder implements IMetric {
         CellNormalizer cellNormalizer = new CellNormalizer();
 
         List<String> expectedCells = expected.stream()
-                .map(tuple -> tuple.getCells().get(1))
-                .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
+                .map(tuple -> tuple.getCells().get(1).getValue().toString())
+                .map(cellNormalizer::normalize)
+                .distinct()
                 .toList();
 
         List<String> resultCells = result.stream()
-                .map(tuple -> tuple.getCells().get(1))
-                .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
+                .map(tuple -> tuple.getCells().get(1).getValue().toString())
+                .map(cellNormalizer::normalize)
+                .distinct()
                 .toList();
 
-        // remove duplicates mantaining the order
-        List<String> newExpected = new ArrayList<>();
-        for (String cell : expectedCells) {
-            if (!newExpected.contains(cell)) {
-                newExpected.add(cell);
-            }
-        }
-        List<String> newResult = new ArrayList<>();
-        for (String cell : resultCells) {
-            if (!newResult.contains(cell)) {
-                newResult.add(cell);
-            }
-        }
-        if (newExpected.isEmpty()) {
+        if (expectedCells.isEmpty()) {
             return 0.0;
         }
 
         double rho;
-        int n = newExpected.size() > 1 ? newExpected.size() : 2;
-        double[] targetRanks = new double[newExpected.size()];
-        double[] predRanks = new double[newExpected.size()];
+        int n = Math.max(expectedCells.size(), 2);
+        double[] targetRanks = new double[expectedCells.size()];
+        double[] predRanks = new double[expectedCells.size()];
 
         // Calculate ranks
-        for (int i = 0; i < newExpected.size(); i++) {
-            String cell = newExpected.get(i);
+        for (int i = 0; i < expectedCells.size(); i++) {
+            String cell = expectedCells.get(i);
             targetRanks[i] = i;
-            predRanks[i] = newResult.indexOf(cell);
+            predRanks[i] = resultCells.indexOf(cell);
         }
 
-        // compute similarity based on the Spearman rank correlation coeff
+        // Compute similarity based on the Spearman rank correlation coefficient
         double sumDiffRankSquared = 0;
-        for (int i = 0; i < newExpected.size(); i++) {
+        for (int i = 0; i < expectedCells.size(); i++) {
             sumDiffRankSquared += Math.pow(targetRanks[i] - predRanks[i], 2);
         }
 
