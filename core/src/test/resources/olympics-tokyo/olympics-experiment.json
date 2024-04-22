@@ -20,7 +20,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.olympics_tokyo o order by o.rank",
+    "sql": "select * from target.olympics_tokyo_2021 o order by o.rank",
     "schema": {
       "name": "olympics_tokyo_2021_medal",
       "schema": "target",
@@ -28,7 +28,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "olympics_tokyo",
+          "tableName": "olympics_tokyo_2021",
           "attributes": [
             {
               "name": "country",

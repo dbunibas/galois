@@ -21,7 +21,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.actor a order by a.name",
+    "sql": "select * from target.actors a order by a.name",
     "schema": {
       "name": "dummy_actors",
       "schema": "target",
@@ -29,7 +29,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "actor",
+          "tableName": "actors",
           "attributes": [
             {
               "name": "name",

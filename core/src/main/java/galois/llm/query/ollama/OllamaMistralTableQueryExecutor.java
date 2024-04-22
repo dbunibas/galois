@@ -8,6 +8,7 @@ import speedy.SpeedyConstants;
 import speedy.model.database.*;
 import speedy.model.database.mainmemory.datasource.IntegerOIDGenerator;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,7 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
     public OllamaMistralTableQueryExecutor() {
         this.model = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")
+                .timeout(Duration.ofMinutes(3))
                 .modelName("mistral")
                 .temperature(0.0)
                 .build();

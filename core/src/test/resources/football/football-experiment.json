@@ -20,7 +20,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.international_football_match ifm order by ifm.year",
+    "sql": "select * from target.international_football ifm order by ifm.year",
     "schema": {
       "name": "international_football_matches",
       "schema": "target",
@@ -28,7 +28,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "international_football_match",
+          "tableName": "international_football",
           "attributes": [
             {
               "name": "year",

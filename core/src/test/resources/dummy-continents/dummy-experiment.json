@@ -21,7 +21,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.continent c order by c.name",
+    "sql": "select * from target.continents c order by c.name",
     "schema": {
       "name": "dummy_continents",
       "schema": "target",
@@ -29,7 +29,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "continent",
+          "tableName": "continents",
           "attributes": [
             {
               "name": "name",
