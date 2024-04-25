@@ -1,0 +1,70 @@
+{
+  "name": "Tokyo Olympics Experiment",
+  "metrics": [
+    "TupleCardinalityMetric",
+    "CellPrecision",
+    "CellRecall",
+    "F1ScoreMetric",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleOrder",
+    "CellSimilarityRecall",
+    "CellSimilarityPrecision",
+    "CellSimilarityF1Score",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "OllamaLlama3TableQueryExecutor"
+    }
+  },
+  "query": {
+    "sql": "select * from target.olympics_tokyo o order by o.rank",
+    "schema": {
+      "name": "olympics_tokyo_2021_medal",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "olympics_tokyo",
+          "attributes": [
+            {
+              "name": "country",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "gold_medal",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "silver_medal",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "bronze_medal",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "total",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "rank",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/olympics-tokyo/olympics"
+  }
+}

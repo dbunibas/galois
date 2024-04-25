@@ -1,0 +1,60 @@
+{
+  "name": "USA Presidents Experiment",
+  "metrics": [
+    "TupleCardinalityMetric",
+    "CellPrecision",
+    "CellRecall",
+    "F1ScoreMetric",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleOrder",
+    "CellSimilarityRecall",
+    "CellSimilarityPrecision",
+    "CellSimilarityF1Score",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "OllamaLLama3KeyAttributesQueryExecutor"
+    }
+  },
+  "query": {
+    "sql": "select * from target.usa_president p order by p.Number",
+    "schema": {
+      "name": "usa_presidents",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "usa_president",
+          "attributes": [
+            {
+              "name": "Name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "Years_In_Office",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Number",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Party",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/presidents-usa/presidents-data"
+  }
+}

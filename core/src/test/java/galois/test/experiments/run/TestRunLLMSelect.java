@@ -53,8 +53,22 @@ public class TestRunLLMSelect {
     }
 
     @Test
+    public void testOlympicsExperimentLlama3() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/olympics-tokyo/olympics-llama3-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
     public void testPresidentsExperiment() throws IOException {
         Experiment experiment = ExperimentParser.loadAndParseJSON("/presidents-usa/presidents-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testPresidentsExperimentLlama3() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/presidents-usa/presidents-llama3-experiment.json");
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }
