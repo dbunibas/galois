@@ -7,5 +7,5 @@ import speedy.model.database.Tuple;
 import java.util.List;
 
 public interface IQueryExecutor {
-    List<Tuple> execute(IDatabase table, TableAlias tableAlias);
+    List<Tuple> execute(IDatabase database, TableAlias tableAlias);
 }
