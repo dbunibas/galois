@@ -11,6 +11,7 @@ import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.LLMQueryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import speedy.SpeedyConstants;
@@ -75,7 +76,7 @@ public class OllamaMistralQAQueryExecutor implements IQueryExecutor {
         logger.info("cells: {}", (Object) cells);
         if (cells.length != attributes.size()) {
             logger.error("Cells length is inconsistent! Cells {} - Attributes {}", cells.length, attributes.size());
-            throw new RuntimeException("Cells length is inconsistent!");
+            throw new LLMQueryException("Cells length is inconsistent!");
         }
 
         for (int i = 0; i < cells.length; i++) {
