@@ -42,11 +42,11 @@ public class TestCreateDB {
 
         String filmTableName = "film";
         List<Attribute> filmAttributes = List.of(
-                new Attribute(filmTableName, "name", "string"),
+                new Attribute(filmTableName, "title", "string"),
                 new Attribute(filmTableName, "director", "string"),
-                new Attribute(filmTableName, "year", "integer")
+                new Attribute(filmTableName, "release_year", "integer")
         );
-        Set<String> filmPrimaryKeys = Set.of("name");
+        Set<String> filmPrimaryKeys = Set.of("title");
 
         String directorTableName = "film_director";
         List<Attribute> directorAttributes = List.of(

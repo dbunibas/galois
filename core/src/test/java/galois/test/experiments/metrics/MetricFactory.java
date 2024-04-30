@@ -22,7 +22,7 @@ public class MetricFactory {
 
     public static IMetric getMetricByName(String name) {
         if (name == null || name.isEmpty() || !metricsMap.containsKey(name))
-            throw new IllegalArgumentException("Invalid metric name!");
+            throw new IllegalArgumentException("Invalid metric name: " + name + "!");
 
         IMetricGenerator metricGenerator = metricsMap.get(name);
         return metricGenerator.create();

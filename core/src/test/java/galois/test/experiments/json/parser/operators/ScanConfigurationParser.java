@@ -28,7 +28,7 @@ public class ScanConfigurationParser {
 
     private static IQueryExecutor getExecutor(String name) {
         if (name == null || name.isEmpty() || !parserMap.containsKey(name))
-            throw new IllegalArgumentException("Invalid executor name!");
+            throw new IllegalArgumentException("Invalid executor name: " + name + "!");
 
         IQueryExecutorGenerator generator = parserMap.get(name);
         return generator.create();
