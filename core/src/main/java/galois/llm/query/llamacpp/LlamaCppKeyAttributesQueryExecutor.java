@@ -1,9 +1,10 @@
-package galois.llm.query.outlines;
+package galois.llm.query.llamacpp;
 
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.http.payloads.JSONPayload;
 import galois.llm.query.http.payloads.RegexPayload;
-import galois.llm.query.http.services.OutlinesService;
+import galois.llm.query.http.payloads.TextPayload;
+import galois.llm.query.http.services.LlamaCppService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -23,16 +24,16 @@ import static galois.llm.query.http.HTTPUtils.executeSyncRequest;
 import static galois.utils.Mapper.fromJSON;
 
 @Slf4j
-public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
+public class LlamaCppKeyAttributesQueryExecutor implements IQueryExecutor {
 //    private static final String MODEL_NAME = "mistral-7b-instruct-v0.2.Q4_K_M.gguf";
     private static final String MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_K_M.gguf";
 
-    private final OutlinesService outlinesService;
+    private final LlamaCppService llamaCppService;
 
-    private final int maxKeyIterations = 10;
+    private final int maxKeyIterations = 1;
     private int currentKeyIteration = 0;
 
-    public OutlinesKeyAttributesQueryExecutor() {
+    public LlamaCppKeyAttributesQueryExecutor() {
         OkHttpClient client = new OkHttpClient.Builder()
                 .readTimeout(5, TimeUnit.MINUTES)
                 .build();
@@ -42,7 +43,7 @@ public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
-        outlinesService = retrofit.create(OutlinesService.class);
+        llamaCppService = retrofit.create(LlamaCppService.class);
     }
 
     @Override
@@ -78,8 +79,8 @@ public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
                     getKeyPrompt(table, key) :
                     getIterativeKeyPrompt(table, key, lastKeys);
 
-            RegexPayload payload = new RegexPayload(MODEL_NAME, prompt, keyRegex);
-            Call<String> call = outlinesService.regex(payload);
+            TextPayload payload = new TextPayload(MODEL_NAME, prompt);
+            Call<String> call = llamaCppService.text(payload);
             // TODO: Delete replaceAll?
             String response = executeSyncRequest(call).replaceAll("\"", "");
             lastKeys = Arrays.stream(response.split(",")).map(String::trim).collect(Collectors.toUnmodifiableSet());
@@ -118,7 +119,7 @@ public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
         String schema = generateJsonSchemaFromAttributes(table, attributes);
         JSONPayload payload = new JSONPayload(MODEL_NAME, prompt, schema);
 
-        Call<String> call = outlinesService.json(payload);
+        Call<String> call = llamaCppService.json(payload);
         String response = executeSyncRequest(call);
         Map<String, Object> jsonMap = fromJSON(response);
 

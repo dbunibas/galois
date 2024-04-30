@@ -26,7 +26,9 @@ import static galois.utils.Mapper.fromJSON;
 
 @Slf4j
 public class OutlinesKeyValueQueryExecutor implements IQueryExecutor {
-    OutlinesService outlinesService;
+    private static final String MODEL_NAME = "mistral-7b-instruct-v0.2.Q4_K_M.gguf";
+
+    private final OutlinesService outlinesService;
 
     public OutlinesKeyValueQueryExecutor() {
         OkHttpClient client = new OkHttpClient.Builder()
@@ -60,7 +62,7 @@ public class OutlinesKeyValueQueryExecutor implements IQueryExecutor {
     }
 
     private List<String> generateKeyValues(ITable table, Key primaryKey) {
-        TextPayload payload = new TextPayload(getKeyPrompt(table, primaryKey));
+        TextPayload payload = new TextPayload(MODEL_NAME, getKeyPrompt(table, primaryKey));
 
         Call<String> call = outlinesService.text(payload);
         // TODO: Delete replaceAll?
@@ -94,7 +96,7 @@ public class OutlinesKeyValueQueryExecutor implements IQueryExecutor {
     private void addValueFromAttribute(ITable table, TableAlias tableAlias, Attribute attribute, Tuple tuple, String key) {
         String prompt = getAttributePrompt(table, attribute, key);
         String schema = generateJsonSchemaFromAttribute(table, attribute);
-        JSONPayload payload = new JSONPayload(prompt, schema);
+        JSONPayload payload = new JSONPayload(MODEL_NAME, prompt, schema);
 
         Call<String> call = outlinesService.json(payload);
         String response = executeSyncRequest(call);
