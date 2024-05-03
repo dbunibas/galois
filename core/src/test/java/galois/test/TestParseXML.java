@@ -6,14 +6,10 @@ import galois.parser.postgresql.PostgresXMLParser;
 import galois.test.experiments.json.parser.OperatorsConfigurationParser;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.input.sax.XMLReaders;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import speedy.exceptions.DAOException;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.OrderBy;
 import speedy.model.algebra.Project;
@@ -22,9 +18,9 @@ import speedy.model.database.IDatabase;
 import speedy.model.expressions.Expression;
 import speedy.persistence.relational.AccessConfiguration;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.List;
+
+import static galois.test.utils.TestUtils.buildDOMFromString;
 
 @Slf4j
 public class TestParseXML {
@@ -59,17 +55,19 @@ public class TestParseXML {
                       <Schema>target</Schema>
                       <Alias>a</Alias>
                       <Startup-Cost>0.00</Startup-Cost>
-                      <Total-Cost>18.50</Total-Cost>
-                      <Plan-Rows>850</Plan-Rows>
-                      <Plan-Width>68</Plan-Width>
+                      <Total-Cost>17.80</Total-Cost>
+                      <Plan-Rows>780</Plan-Rows>
+                      <Plan-Width>76</Plan-Width>
                       <Output>
                         <Item>oid</Item>
                         <Item>name</Item>
                         <Item>gender</Item>
+                        <Item>birth_year</Item>
                       </Output>
                     </Plan>
                   </Query>
-                </explain>""";
+                </explain>
+                """;
 
         Document queryPlan = buildDOMFromString(xml);
 
@@ -83,40 +81,6 @@ public class TestParseXML {
         Assertions.assertTrue(scan.getChildren().isEmpty());
         Assertions.assertEquals(scan.getTableAlias().getAlias(), "a");
         Assertions.assertEquals(scan.getTableAlias().getTableName(), "actor");
-    }
-
-    @Test
-    @Disabled
-    public void testSelectWhere() {
-        // SQL: select c.city_name from city c where c.population > 50000
-        String xml = """
-                <explain xmlns="http://www.postgresql.org/2009/explain">
-                  <Query>
-                    <Plan>
-                      <Node-Type>Seq Scan</Node-Type>
-                      <Parallel-Aware>false</Parallel-Aware>
-                      <Relation-Name>city</Relation-Name>
-                      <Schema>public</Schema>
-                      <Alias>c</Alias>
-                      <Startup-Cost>0.00</Startup-Cost>
-                      <Total-Cost>7.83</Total-Cost>
-                      <Plan-Rows>383</Plan-Rows>
-                      <Plan-Width>9</Plan-Width>
-                      <Output>
-                        <Item>city_name</Item>
-                      </Output>
-                      <Filter>(c.population &gt; 50000)</Filter>
-                    </Plan>
-                  </Query>
-                </explain>""";
-
-        Document queryPlan = buildDOMFromString(xml);
-
-        PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
-
-        Assertions.assertNotNull(operator, "Operator is null!");
-        Assertions.assertTrue(operator instanceof Select);
     }
 
     @Test
@@ -247,20 +211,148 @@ public class TestParseXML {
         Assertions.assertEquals("actor_a.gender", expression.getVariables().get(0));
     }
 
-    private Document buildDOMFromString(String content) throws DAOException {
-        if (content == null || content.isEmpty()) {
-            throw new DAOException("Unable to load xml from empty content.");
-        }
-        SAXBuilder builder = new SAXBuilder();
-        builder.setXMLReaderFactory(XMLReaders.NONVALIDATING); // builder.setValidation(false); is deprecated
-        Document document = null;
-        try {
-            document = builder.build(new ByteArrayInputStream(content.getBytes()));
-            return document;
-        } catch (JDOMException | IOException ex) {
-            log.error(ex.toString());
-            throw new DAOException(ex.getMessage());
-        }
+    @Test
+    public void testWhereWithBooleanOperations() {
+        // SQL: select * from actor a where a.birth_year > 1990 and (a.gender = 'Female' or a.gender = 'Male')
+        String xml = """
+                <explain xmlns="http://www.postgresql.org/2009/explain">
+                  <Query>
+                    <Plan>
+                      <Node-Type>Seq Scan</Node-Type>
+                      <Parallel-Aware>false</Parallel-Aware>
+                      <Relation-Name>actor</Relation-Name>
+                      <Schema>target</Schema>
+                      <Alias>a</Alias>
+                      <Startup-Cost>0.00</Startup-Cost>
+                      <Total-Cost>23.65</Total-Cost>
+                      <Plan-Rows>3</Plan-Rows>
+                      <Plan-Width>76</Plan-Width>
+                      <Output>
+                        <Item>oid</Item>
+                        <Item>name</Item>
+                        <Item>gender</Item>
+                        <Item>birth_year</Item>
+                      </Output>
+                      <Filter>((a.birth_year &gt; 1990) AND ((a.gender = 'Female'::text) OR (a.gender = 'Male'::text)))</Filter>
+                    </Plan>
+                  </Query>
+                </explain>
+                """;
+
+        Document queryPlan = buildDOMFromString(xml);
+
+        PostgresXMLParser parser = new PostgresXMLParser();
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+
+        Assertions.assertNotNull(operator, "Operator is null!");
+        Assertions.assertTrue(operator instanceof Select, operator.getName());
+
+        Select select = (Select) operator;
+        List<Expression> selections = select.getSelections();
+        Assertions.assertEquals(1, selections.size());
+
+        Expression expression = selections.get(0);
+        Assertions.assertEquals(2, expression.getVariables().size());
+        Assertions.assertEquals("actor_a.birth_year", expression.getVariables().get(0));
+        Assertions.assertEquals("actor_a.gender", expression.getVariables().get(1));
+    }
+
+    @Test
+    @Disabled
+    public void testWhereWithBooleanOperationsNot() {
+        // SQL: select * from actor a where not a.birth_year > 1990 and (a.gender != 'Female' or a.gender = 'Male')
+        String xml = """
+                <explain xmlns="http://www.postgresql.org/2009/explain">
+                  <Query>
+                    <Plan>
+                      <Node-Type>Seq Scan</Node-Type>
+                      <Parallel-Aware>false</Parallel-Aware>
+                      <Relation-Name>actor</Relation-Name>
+                      <Schema>target</Schema>
+                      <Alias>a</Alias>
+                      <Startup-Cost>0.00</Startup-Cost>
+                      <Total-Cost>23.65</Total-Cost>
+                      <Plan-Rows>259</Plan-Rows>
+                      <Plan-Width>76</Plan-Width>
+                      <Output>
+                        <Item>oid</Item>
+                        <Item>name</Item>
+                        <Item>gender</Item>
+                        <Item>birth_year</Item>
+                      </Output>
+                      <Filter>((a.birth_year &lt;= 1990) AND ((a.gender &lt;&gt; 'Female'::text) OR (a.gender = 'Male'::text)))</Filter>
+                    </Plan>
+                  </Query>
+                </explain>
+                """;
+
+        Document queryPlan = buildDOMFromString(xml);
+
+        PostgresXMLParser parser = new PostgresXMLParser();
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+
+        Assertions.assertNotNull(operator, "Operator is null!");
+        Assertions.assertTrue(operator instanceof Select, operator.getName());
+
+        Select select = (Select) operator;
+        List<Expression> selections = select.getSelections();
+        Assertions.assertEquals(1, selections.size());
+
+        Expression expression = selections.get(0);
+        Assertions.assertEquals(2, expression.getVariables().size());
+        Assertions.assertEquals("actor_a.birth_year", expression.getVariables().get(0));
+        Assertions.assertEquals("actor_a.gender", expression.getVariables().get(1));
+    }
+
+    @Test
+    public void testSelectWhere() {
+        // SQL: select a.name from actor a where a.birth_year > 1990
+        String xml = """
+                <explain xmlns="http://www.postgresql.org/2009/explain">
+                  <Query>
+                    <Plan>
+                      <Node-Type>Seq Scan</Node-Type>
+                      <Parallel-Aware>false</Parallel-Aware>
+                      <Relation-Name>actor</Relation-Name>
+                      <Schema>target</Schema>
+                      <Alias>a</Alias>
+                      <Startup-Cost>0.00</Startup-Cost>
+                      <Total-Cost>19.75</Total-Cost>
+                      <Plan-Rows>260</Plan-Rows>
+                      <Plan-Width>32</Plan-Width>
+                      <Output>
+                        <Item>name</Item>
+                      </Output>
+                      <Filter>(a.birth_year &gt; 1990)</Filter>
+                    </Plan>
+                  </Query>
+                </explain>
+                """;
+
+        Document queryPlan = buildDOMFromString(xml);
+
+        PostgresXMLParser parser = new PostgresXMLParser();
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+
+        Assertions.assertNotNull(operator, "Operator is null!");
+        Assertions.assertTrue(operator instanceof Project, operator.getName());
+
+        Project project = (Project) operator;
+        Assertions.assertFalse(project.isAggregative());
+        Assertions.assertEquals(1, project.getAttributes(null, llmDB).size());
+        Assertions.assertEquals("name", project.getAttributes(null, llmDB).get(0).getName());
+        Assertions.assertEquals(1, project.getChildren().size());
+
+        IAlgebraOperator child = project.getChildren().get(0);
+        Assertions.assertTrue(child instanceof Select);
+
+        Select select = (Select) child;
+        List<Expression> selections = select.getSelections();
+        Assertions.assertEquals(1, selections.size());
+
+        Expression expression = selections.get(0);
+        Assertions.assertEquals(1, expression.getVariables().size());
+        Assertions.assertEquals("actor_a.birth_year", expression.getVariables().get(0));
     }
 
 }

@@ -9,7 +9,6 @@ import galois.llm.query.ollama.OllamaLlama3TableQueryExecutor;
 import galois.llm.query.outlines.OutlinesKeyAttributesQueryExecutor;
 import galois.llm.query.outlines.OutlinesKeyValueQueryExecutor;
 import galois.test.utils.TestUtils;
-import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,6 @@ import speedy.model.database.IDatabase;
 import speedy.model.database.TableAlias;
 import speedy.model.database.Tuple;
 import speedy.persistence.relational.AccessConfiguration;
-
-import static galois.utils.Mapper.fromJSON;
 
 @Slf4j
 public class TestScanStrategies {
