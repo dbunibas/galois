@@ -1,15 +1,18 @@
 {
-  "name": "Dummy Experiment",
+  "name": "MoviesOutline",
   "metrics": [
     "DummyMetric",
     "TupleCardinalityMetric",
-    "CellRecall",
     "CellPrecision",
-    "F1ScoreMetric",
+    "CellRecall",
+    "CellF1Score",
     "TupleCardinality",
     "TupleConstraint",
-    "EditDistance",
-    "TupleOrder"
+    "TupleOrder",
+    "TupleSimilarityConstraint",
+    "CellSimilarityPrecision",
+    "CellSimilarityRecall",
+    "CellSimilarityF1Score"
   ],
   "dbms": "postgres",
   "operatorsConfig": {

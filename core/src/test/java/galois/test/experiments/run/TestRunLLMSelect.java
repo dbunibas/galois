@@ -26,7 +26,7 @@ public class TestRunLLMSelect {
 
     @Test
     public void testDisneyMovieExperiment() throws IOException {
-        Experiment experiment = ExperimentParser.loadAndParseJSON("/disney-movies/movies-experiment.json");
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/disney-movies/movies-outlines-experiment.json");
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }
