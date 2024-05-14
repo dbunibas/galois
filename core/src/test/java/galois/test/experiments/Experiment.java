@@ -39,7 +39,7 @@ public final class Experiment {
                 .map(m -> m.getScore(query.getDatabase(), query.getResults(), results))
                 .toList();
 
-        return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString());
+        return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
     }
 
 }

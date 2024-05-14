@@ -21,6 +21,7 @@ public class ExperimentResults {
     private final List<Tuple> actualResults;
     private final List<Double> scores;
     private final String queryExecutor;
+    private final String sql_query;
 
     @Override
     public String toString() {
@@ -33,6 +34,7 @@ public class ExperimentResults {
         String[] parts = queryExecutor.split("\\.");
         String executorName = parts[parts.length - 1];
         sb.append("Query Executor: ").append(executorName).append("\n");
+        sb.append("SQL Query: ").append(sql_query).append("\n");
         for (int i = 0; i < scores.size(); i++) {
             sb.append(metrics.get(i).getName()).append(": ").append(scores.get(i)).append("\n");
         }

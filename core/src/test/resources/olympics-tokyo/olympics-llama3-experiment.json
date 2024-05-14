@@ -1,16 +1,15 @@
 {
-  "name": "Tokyo Olympics Experiment",
+  "name": "Tokyo Olympics llama3 Experiment",
   "metrics": [
-    "TupleCardinalityMetric",
     "CellPrecision",
-    "CellRecall",
-    "CellF1Score",
-    "TupleCardinality",
-    "TupleConstraint",
-    "TupleOrder",
-    "CellSimilarityRecall",
     "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
     "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleOrder",
+    "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",
