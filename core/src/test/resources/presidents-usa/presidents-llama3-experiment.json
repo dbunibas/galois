@@ -4,7 +4,7 @@
     "TupleCardinalityMetric",
     "CellPrecision",
     "CellRecall",
-    "F1ScoreMetric",
+    "CellF1Score",
     "TupleCardinality",
     "TupleConstraint",
     "TupleOrder",
@@ -22,13 +22,13 @@
   "query": {
     "sql": "select * from target.usa_president p order by p.Number",
     "schema": {
-      "name": "usa_presidents",
+      "name": "usa_all_presidents",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "usa_president",
+          "tableName": "usa_presidents",
           "attributes": [
             {
               "name": "Name",

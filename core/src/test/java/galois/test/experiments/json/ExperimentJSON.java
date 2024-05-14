@@ -12,4 +12,5 @@ public class ExperimentJSON {
     private OperatorsConfigurationJSON operatorsConfig;
     private List<String> metrics;
     private QueryJSON query;
+    private String queryExecutor;
 }

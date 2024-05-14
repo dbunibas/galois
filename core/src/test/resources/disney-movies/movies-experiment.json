@@ -17,7 +17,7 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaMistralTableQueryExecutor"
+      "queryExecutor": "OllamaLLama3KeyAttributesQueryExecutor"
     }
   },
   "query": {

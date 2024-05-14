@@ -20,6 +20,7 @@ public final class Experiment {
     private final List<IMetric> metrics;
     private final OperatorsConfiguration operatorsConfiguration;
     private final Query query;
+    private final String queryExecutor;
 
     @SuppressWarnings("unchecked")
     public ExperimentResults execute() {
@@ -38,7 +39,7 @@ public final class Experiment {
                 .map(m -> m.getScore(query.getDatabase(), query.getResults(), results))
                 .toList();
 
-        return new ExperimentResults(name, metrics, query.getResults(), results, scores);
+        return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString());
     }
 
 }
