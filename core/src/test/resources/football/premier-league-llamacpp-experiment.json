@@ -1,5 +1,5 @@
 {
-  "name": "Tokyo Olympics Mistral Experiment",
+  "name": "Premier League LlamaCpp Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -15,55 +15,57 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaMistralTableQueryExecutor"
+      "queryExecutor": "LlamaCppKeyAttributesQueryExecutor"
     }
   },
   "query": {
-    "sql": "select * from target.olympics_tokyo_2021 o order by o.rank",
+    "sql": "select * from target.premier_league_2018_2019 pl order by pl.year",
     "schema": {
-      "name": "olympics_tokyo_2021_medal",
+      "name": "premier_league_matches_2018_2019",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "olympics_tokyo_2021",
+          "tableName": "premier_league_2018_2019",
           "attributes": [
             {
-              "name": "country",
+              "name": "year",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "home_team",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "gold_medal",
+              "name": "away_team",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "FTHG",
               "type": "INTEGER",
               "nullable": false
             },
             {
-              "name": "silver_medal",
+              "name": "FTAG",
               "type": "INTEGER",
               "nullable": false
             },
             {
-              "name": "bronze_medal",
-              "type": "INTEGER",
-              "nullable": false
-            },
-            {
-              "name": "total",
-              "type": "INTEGER",
-              "nullable": false
-            },
-            {
-              "name": "rank",
-              "type": "INTEGER",
+              "name": "referee_surname",
+              "type": "STRING",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/olympics-tokyo/olympics"
+    "results": "/football/premier-league"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "Tokyo Olympics Mistral Experiment",
+  "name": "Tokyo Olympics llamacpp Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -15,7 +15,7 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaMistralTableQueryExecutor"
+      "queryExecutor": "LlamaCppKeyAttributesQueryExecutor"
     }
   },
   "query": {

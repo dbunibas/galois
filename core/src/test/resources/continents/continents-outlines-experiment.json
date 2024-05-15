@@ -1,29 +1,27 @@
 {
-  "name": "Dummy Experiment",
+  "name": "Continents Outlines Experiment",
   "metrics": [
-    "DummyMetric",
-    "TupleCardinalityMetric",
     "CellPrecision",
-    "CellRecall",
-    "CellF1Score",
-    "TupleCardinality",
-    "TupleConstraint",
-    "TupleOrder",
-    "TupleSimilarityConstraint",
     "CellSimilarityPrecision",
+    "CellRecall",
     "CellSimilarityRecall",
-    "CellSimilarityF1Score"
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleOrder",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaMistralTableQueryExecutor"
+      "queryExecutor": "OutlinesKeyValueQueryExecutor"
     }
   },
   "query": {
     "sql": "select * from target.continents c order by c.name",
     "schema": {
-      "name": "dummy_continents",
+      "name": "continents",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
@@ -51,6 +49,6 @@
         }
       ]
     },
-    "results": "/dummy-continents/continent"
+    "results": "/continents/continent"
   }
 }

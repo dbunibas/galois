@@ -24,7 +24,7 @@ import static galois.utils.Mapper.fromJSON;
 
 @Slf4j
 public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
-//    private static final String MODEL_NAME = "mistral-7b-instruct-v0.2.Q4_K_M.gguf";
+    // private static final String MODEL_NAME = "mistral-7b-instruct-v0.2.Q4_K_M.gguf";
     private static final String MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_K_M.gguf";
 
     private final OutlinesService outlinesService;

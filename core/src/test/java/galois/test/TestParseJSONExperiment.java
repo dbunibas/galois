@@ -23,7 +23,7 @@ public class TestParseJSONExperiment {
     @Test
     public void testParseToExperimentJSON() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        URL jsonResource = TestParseJSONExperiment.class.getResource("/dummy-continents/dummy-experiment.json");
+        URL jsonResource = TestParseJSONExperiment.class.getResource("/continents/continents-llama3-experiment.json");
         ExperimentJSON experimentJSON = mapper.readValue(jsonResource, ExperimentJSON.class);
 
         Assertions.assertEquals("Dummy Experiment", experimentJSON.getName());
@@ -40,7 +40,7 @@ public class TestParseJSONExperiment {
 
         QueryJSON queryJSON = experimentJSON.getQuery();
         Assertions.assertEquals("select * from target.continent c order by c.name", queryJSON.getSql());
-        Assertions.assertEquals("/dummy-continents/continent", queryJSON.getResults());
+        Assertions.assertEquals("/continents/continent", queryJSON.getResults());
 
         SchemaJSON schemaJSON = queryJSON.getSchema();
         Assertions.assertNotNull(schemaJSON);
@@ -74,7 +74,7 @@ public class TestParseJSONExperiment {
     @Test
     public void testParseToExperiment() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        URL jsonResource = TestParseJSONExperiment.class.getResource("/dummy-continents/dummy-experiment.json");
+        URL jsonResource = TestParseJSONExperiment.class.getResource("/continents/continents-llama3-experiment.json");
         ExperimentJSON experimentJSON = mapper.readValue(jsonResource, ExperimentJSON.class);
         Assertions.assertNotNull(experimentJSON);
 
@@ -108,7 +108,7 @@ public class TestParseJSONExperiment {
 
     @Test
     public void testLoadAndParseToExperiment() throws IOException {
-        Experiment experiment = ExperimentParser.loadAndParseJSON("/dummy-continents/dummy-experiment.getjson");
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/continents/dummy-experiment.getjson");
         Assertions.assertNotNull(experiment);
         Assertions.assertEquals("Dummy Experiment", experiment.getName());
 

@@ -41,6 +41,7 @@ public class ExperimentResults {
 
         // return sb.toString();
         sb.append("\n");
+        sb.append("------------------------------------------------------------------------------------\n");
         String result = sb.toString();
         String nameReplaced = name.replace(" ", "_");
         String basePath = System.getProperty("user.dir");

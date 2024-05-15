@@ -1,34 +1,33 @@
 {
-  "name": "Premier League Experiment",
+  "name": "Football Llama3 Experiment",
   "metrics": [
-    "TupleCardinalityMetric",
     "CellPrecision",
-    "CellRecall",
-    "CellF1Score",
-    "TupleCardinality",
-    "TupleConstraint",
-    "TupleOrder",
-    "CellSimilarityRecall",
     "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
     "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleOrder",
+    "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaMistralTableQueryExecutor"
+      "queryExecutor": "OllamaLlama3TableQueryExecutor"
     }
   },
   "query": {
-    "sql": "select * from target.premier_league_2018_2019 pl order by pl.year",
+    "sql": "select * from target.international_football ifm order by ifm.year",
     "schema": {
-      "name": "premier_league_matches_2018_2019",
+      "name": "international_football_matches",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "premier_league_2018_2019",
+          "tableName": "international_football",
           "attributes": [
             {
               "name": "year",
@@ -49,24 +48,40 @@
               "key": true
             },
             {
-              "name": "FTHG",
+              "name": "home_score",
               "type": "INTEGER",
               "nullable": false
             },
             {
-              "name": "FTAG",
+              "name": "away_score",
               "type": "INTEGER",
               "nullable": false
             },
             {
-              "name": "referee_surname",
+              "name": "tournament",
               "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "city",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "country",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "neutral",
+              "type": "BOOLEAN",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/football/premier-league"
+    "results": "/football/international-football"
   }
 }

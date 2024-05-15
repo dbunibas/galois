@@ -1,5 +1,5 @@
 {
-  "name": "Tokyo Olympics Mistral Experiment",
+  "name": "Continents Mistral Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -19,51 +19,36 @@
     }
   },
   "query": {
-    "sql": "select * from target.olympics_tokyo_2021 o order by o.rank",
+    "sql": "select * from target.continents c order by c.name",
     "schema": {
-      "name": "olympics_tokyo_2021_medal",
+      "name": "continents",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "olympics_tokyo_2021",
+          "tableName": "continents",
           "attributes": [
             {
-              "name": "country",
+              "name": "name",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "gold_medal",
-              "type": "INTEGER",
+              "name": "area",
+              "type": "STRING",
               "nullable": false
             },
             {
-              "name": "silver_medal",
-              "type": "INTEGER",
-              "nullable": false
-            },
-            {
-              "name": "bronze_medal",
-              "type": "INTEGER",
-              "nullable": false
-            },
-            {
-              "name": "total",
-              "type": "INTEGER",
-              "nullable": false
-            },
-            {
-              "name": "rank",
-              "type": "INTEGER",
+              "name": "population",
+              "type": "STRING",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/olympics-tokyo/olympics"
+    "results": "/continents/continent"
   }
 }
