@@ -1,10 +1,11 @@
 package galois.llm.query.llamacpp;
 
+import galois.llm.models.IModel;
+import galois.llm.models.LlamaCppModel;
 import galois.llm.query.IQueryExecutor;
-import galois.llm.query.http.payloads.JSONPayload;
-import galois.llm.query.http.payloads.RegexPayload;
-import galois.llm.query.http.payloads.TextPayload;
-import galois.llm.query.http.services.LlamaCppService;
+import galois.http.payloads.JSONPayload;
+import galois.http.payloads.TextPayload;
+import galois.http.services.LlamaCppService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static galois.llm.query.QueryUtils.*;
-import static galois.llm.query.http.HTTPUtils.executeSyncRequest;
+import static galois.http.HTTPUtils.executeSyncRequest;
 import static galois.utils.Mapper.fromJSON;
 
 @Slf4j
@@ -28,22 +29,13 @@ public class LlamaCppKeyAttributesQueryExecutor implements IQueryExecutor {
 //    private static final String MODEL_NAME = "mistral-7b-instruct-v0.2.Q4_K_M.gguf";
     private static final String MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_K_M.gguf";
 
-    private final LlamaCppService llamaCppService;
+    private final IModel model;
 
     private final int maxKeyIterations = 1;
     private int currentKeyIteration = 0;
 
     public LlamaCppKeyAttributesQueryExecutor() {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .readTimeout(5, TimeUnit.MINUTES)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://127.0.0.1:8000/")
-                .client(client)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-        llamaCppService = retrofit.create(LlamaCppService.class);
+        model = new LlamaCppModel(MODEL_NAME);
     }
 
     @Override
@@ -79,10 +71,7 @@ public class LlamaCppKeyAttributesQueryExecutor implements IQueryExecutor {
                     getKeyPrompt(table, key) :
                     getIterativeKeyPrompt(table, key, lastKeys);
 
-            TextPayload payload = new TextPayload(MODEL_NAME, prompt);
-            Call<String> call = llamaCppService.text(payload);
-            // TODO: Delete replaceAll?
-            String response = executeSyncRequest(call).replaceAll("\"", "");
+            String response = model.text(prompt);
             lastKeys = Arrays.stream(response.split(",")).map(String::trim).collect(Collectors.toUnmodifiableSet());
             keys = Stream.concat(keys.stream(), lastKeys.stream()).collect(Collectors.toUnmodifiableSet());
 
@@ -117,11 +106,7 @@ public class LlamaCppKeyAttributesQueryExecutor implements IQueryExecutor {
     private void addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key) {
         String prompt = getAttributesPrompt(table, attributes, key);
         String schema = generateJsonSchemaFromAttributes(table, attributes);
-        JSONPayload payload = new JSONPayload(MODEL_NAME, prompt, schema);
-
-        Call<String> call = llamaCppService.json(payload);
-        String response = executeSyncRequest(call);
-        Map<String, Object> jsonMap = fromJSON(response);
+        Map<String, Object> jsonMap = model.json(prompt, schema);
 
         for (Attribute attribute : attributes) {
             IValue cellValue = jsonMap.containsKey(attribute.getName()) ?

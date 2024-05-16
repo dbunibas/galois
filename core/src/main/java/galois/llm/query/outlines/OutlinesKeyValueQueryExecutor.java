@@ -1,9 +1,11 @@
 package galois.llm.query.outlines;
 
+import galois.llm.models.IModel;
+import galois.llm.models.OutlinesModel;
 import galois.llm.query.IQueryExecutor;
-import galois.llm.query.http.payloads.JSONPayload;
-import galois.llm.query.http.payloads.TextPayload;
-import galois.llm.query.http.services.OutlinesService;
+import galois.http.payloads.JSONPayload;
+import galois.http.payloads.TextPayload;
+import galois.http.services.OutlinesService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 
 import static galois.llm.query.QueryUtils.createNewTupleWithMockOID;
 import static galois.llm.query.QueryUtils.generateJsonSchemaFromAttribute;
-import static galois.llm.query.http.HTTPUtils.executeSyncRequest;
+import static galois.http.HTTPUtils.executeSyncRequest;
 import static galois.utils.Mapper.fromJSON;
 
 @Slf4j
@@ -29,19 +31,10 @@ public class OutlinesKeyValueQueryExecutor implements IQueryExecutor {
     // private static final String MODEL_NAME = "mistral-7b-instruct-v0.2.Q4_K_M.gguf";
     private static final String MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_K_M.gguf";
 
-    private final OutlinesService outlinesService;
+    private final IModel model;
 
     public OutlinesKeyValueQueryExecutor() {
-        OkHttpClient client = new OkHttpClient.Builder()
-                .readTimeout(30, TimeUnit.SECONDS)
-                .build();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://127.0.0.1:8000/")
-                .client(client)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-        outlinesService = retrofit.create(OutlinesService.class);
+        this.model = new OutlinesModel(MODEL_NAME);
     }
 
     @Override
@@ -63,12 +56,8 @@ public class OutlinesKeyValueQueryExecutor implements IQueryExecutor {
     }
 
     private List<String> generateKeyValues(ITable table, Key primaryKey) {
-        TextPayload payload = new TextPayload(MODEL_NAME, getKeyPrompt(table, primaryKey));
-
-        Call<String> call = outlinesService.text(payload);
-        // TODO: Delete replaceAll?
-        String response = executeSyncRequest(call).replaceAll("\"", "");
-
+        String prompt = getKeyPrompt(table, primaryKey);
+        String response = model.text(prompt);
         return Arrays.stream(response.split(",")).map(String::trim).toList();
     }
 
@@ -97,14 +86,10 @@ public class OutlinesKeyValueQueryExecutor implements IQueryExecutor {
     private void addValueFromAttribute(ITable table, TableAlias tableAlias, Attribute attribute, Tuple tuple, String key) {
         String prompt = getAttributePrompt(table, attribute, key);
         String schema = generateJsonSchemaFromAttribute(table, attribute);
-        JSONPayload payload = new JSONPayload(MODEL_NAME, prompt, schema);
+        Map<String, Object> jsonMap = model.json(prompt, schema);
 
-        Call<String> call = outlinesService.json(payload);
-        String response = executeSyncRequest(call);
-        Map<String, Object> map = fromJSON(response);
-
-        IValue cellValue = map.containsKey(attribute.getName()) ?
-                new ConstantValue(map.get(attribute.getName())) :
+        IValue cellValue = jsonMap.containsKey(attribute.getName()) ?
+                new ConstantValue(jsonMap.get(attribute.getName())) :
                 new NullValue(SpeedyConstants.NULL_VALUE);
         Cell currentCell = new Cell(
                 tuple.getOid(),

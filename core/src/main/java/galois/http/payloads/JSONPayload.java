@@ -1,4 +1,4 @@
-package galois.llm.query.http.payloads;
+package galois.http.payloads;
 
 import lombok.Value;
 

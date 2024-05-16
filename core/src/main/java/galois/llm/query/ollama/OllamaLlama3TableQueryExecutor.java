@@ -2,6 +2,8 @@ package galois.llm.query.ollama;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import galois.llm.models.IModel;
+import galois.llm.models.OllamaModel;
 import galois.llm.query.IQueryExecutor;
 import lombok.extern.slf4j.Slf4j;
 import speedy.SpeedyConstants;
@@ -15,20 +17,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class OllamaLlama3TableQueryExecutor implements IQueryExecutor {
-    private final ChatLanguageModel model;
+    private final IModel model;
 
     public OllamaLlama3TableQueryExecutor() {
-        this.model = OllamaChatModel.builder()
-                .baseUrl("http://127.0.0.1:11434")
-                .modelName("llama3")
-                .temperature(0.0)
-                .build();
+        this.model = new OllamaModel("llama3");
     }
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
         ITable table = database.getTable(tableAlias.getTableName());
-        String response = model.generate(getInitialPrompt(table));
+        String response = model.text(getInitialPrompt(table));
         return new ArrayList<>(
                 Arrays.stream(response.split("\n"))
                         .skip(2)

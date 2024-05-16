@@ -1,7 +1,7 @@
-package galois.llm.query.http.services;
+package galois.http.services;
 
-import galois.llm.query.http.payloads.JSONPayload;
-import galois.llm.query.http.payloads.TextPayload;
+import galois.http.payloads.TextPayload;
+import galois.http.payloads.JSONPayload;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

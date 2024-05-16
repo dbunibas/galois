@@ -1,4 +1,4 @@
-package galois.llm.query.http;
+package galois.http;
 
 import galois.llm.query.LLMQueryException;
 import lombok.extern.slf4j.Slf4j;

@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class ScanConfigurationParser {
     private static final Map<String, IQueryExecutorGenerator> parserMap = Map.ofEntries(
-            Map.entry(OllamaMistralQAQueryExecutor.class.getSimpleName(), OllamaMistralQAQueryExecutor::new),
             Map.entry(OllamaMistralTableQueryExecutor.class.getSimpleName(), OllamaMistralTableQueryExecutor::new),
 
             Map.entry(OllamaLlama3TableQueryExecutor.class.getSimpleName(), OllamaLlama3TableQueryExecutor::new),

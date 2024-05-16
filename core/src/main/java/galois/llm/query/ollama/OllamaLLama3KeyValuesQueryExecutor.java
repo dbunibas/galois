@@ -2,6 +2,8 @@ package galois.llm.query.ollama;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import galois.llm.models.IModel;
+import galois.llm.models.OllamaModel;
 import galois.llm.query.IQueryExecutor;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
@@ -17,17 +19,13 @@ import static galois.llm.query.QueryUtils.createNewTupleWithMockOID;
 
 @Slf4j
 public class OllamaLLama3KeyValuesQueryExecutor implements IQueryExecutor {
-    private final ChatLanguageModel model;
+    private final IModel model;
 
     private final int maxKeyIterations = 5;
     private int currentKeyIteration = 0;
 
     public OllamaLLama3KeyValuesQueryExecutor() {
-        this.model = OllamaChatModel.builder()
-                .baseUrl("http://127.0.0.1:11434")
-                .modelName("llama3")
-                .temperature(0.0)
-                .build();
+        this.model = new OllamaModel("llama3");
     }
 
     @Override
@@ -61,7 +59,7 @@ public class OllamaLLama3KeyValuesQueryExecutor implements IQueryExecutor {
                     getKeyPrompt(table, key) :
                     getIterativeKeyPrompt(table, key, lastKeys);
 
-            String response = model.generate(prompt);
+            String response = model.text(prompt);
             lastKeys = Arrays.stream(response.split(",")).map(String::trim).collect(Collectors.toUnmodifiableSet());
             keys = Stream.concat(keys.stream(), lastKeys.stream()).collect(Collectors.toUnmodifiableSet());
 
@@ -96,7 +94,7 @@ public class OllamaLLama3KeyValuesQueryExecutor implements IQueryExecutor {
     private void addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key) {
         for (Attribute attribute : attributes) {
             String prompt = getAttributePrompt(table, attribute, key);
-            String response = model.generate(prompt);
+            String response = model.text(prompt);
             log.debug("attribute response is: {}", response);
 
             IValue cellValue = new ConstantValue(response);
