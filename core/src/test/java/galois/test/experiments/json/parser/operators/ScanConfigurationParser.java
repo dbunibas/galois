@@ -2,6 +2,7 @@ package galois.test.experiments.json.parser.operators;
 
 import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.llamacpp.LlamaCppKeyAttributesQueryExecutor;
 import galois.llm.query.ollama.*;
 import galois.llm.query.outlines.OutlinesKeyAttributesQueryExecutor;
 import galois.llm.query.outlines.OutlinesKeyValueQueryExecutor;
@@ -18,7 +19,9 @@ public class ScanConfigurationParser {
             Map.entry(OllamaLLama3KeyValuesQueryExecutor.class.getSimpleName(), OllamaLLama3KeyValuesQueryExecutor::new),
 
             Map.entry(OutlinesKeyAttributesQueryExecutor.class.getSimpleName(), OutlinesKeyAttributesQueryExecutor::new),
-            Map.entry(OutlinesKeyValueQueryExecutor.class.getSimpleName(), OutlinesKeyValueQueryExecutor::new)
+            Map.entry(OutlinesKeyValueQueryExecutor.class.getSimpleName(), OutlinesKeyValueQueryExecutor::new),
+
+            Map.entry(LlamaCppKeyAttributesQueryExecutor.class.getSimpleName(), LlamaCppKeyAttributesQueryExecutor::new)
     );
 
     public static ScanConfiguration parse(ScanConfigurationJSON json) {
