@@ -4,14 +4,27 @@ import speedy.SpeedyConstants;
 import speedy.model.database.*;
 import speedy.model.database.mainmemory.datasource.IntegerOIDGenerator;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static galois.utils.Mapper.asString;
 
 public class QueryUtils {
+    public static String getKeyAsString(Key key) {
+        // TODO: Check composite key
+        return key.getAttributes().stream()
+                .map(AttributeRef::getName)
+                .collect(Collectors.joining(" and "));
+    }
+
+    public static String getAttributesAsString(Collection<Attribute> attributes) {
+        return attributes.stream().map(Attribute::getName).collect(Collectors.joining(" and "));
+    }
+
     public static Tuple createNewTupleWithMockOID(TableAlias tableAlias) {
         TupleOID mockOID = new TupleOID(IntegerOIDGenerator.getNextOID());
         Tuple tuple = new Tuple(mockOID);

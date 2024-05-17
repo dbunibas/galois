@@ -5,6 +5,10 @@ import dev.langchain4j.model.ollama.OllamaChatModel;
 import galois.llm.models.IModel;
 import galois.llm.models.OllamaModel;
 import galois.llm.query.IQueryExecutor;
+import galois.prompt.ETablePrompts;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import speedy.SpeedyConstants;
 import speedy.model.database.*;
@@ -17,44 +21,34 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
-
-    private final IModel model;
-
-    public OllamaMistralTableQueryExecutor() {
-        this.model = new OllamaModel("mistral");
-    }
+    @Builder.Default
+    private final IModel model = new OllamaModel("mistral");
+    @Builder.Default
+    private final ETablePrompts tablePrompt = ETablePrompts.TABLE_PROMPT;
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
         ITable table = database.getTable(tableAlias.getTableName());
-        String response = model.text(getInitialPrompt(table));
-        return new ArrayList<>(
-                Arrays.stream(response.split("\n"))
-                        .skip(2)
-                        .map(row -> toTuple(row, table, tableAlias))
-                        .toList()
-        );
+        List<Attribute> attributes = table.getAttributes().stream()
+                .filter(a -> !a.getName().equals("oid"))
+                .toList();
+
+        String prompt = tablePrompt.generate(table, attributes);
+        log.debug("Table prompt is: {}", prompt);
+        String response = model.text(prompt);
+        log.debug("Table response is: {}", response);
+
+        return Arrays.stream(response.split("\n"))
+                .skip(2)
+                .map(row -> toTuple(row, tableAlias, attributes))
+                .toList();
     }
 
-    private String getInitialPrompt(ITable table) {
-        StringBuilder prompt = new StringBuilder();
-        prompt.append("Given the following query, populate the table with actual values.").append("\n");
-        prompt.append("query: select ");
-
-        String attributes = table.getAttributes().stream()
-                .map(Attribute::getName)
-                .filter(name -> !name.equals("oid"))
-                .collect(Collectors.joining(", "));
-        prompt.append(attributes).append(" ");
-
-        prompt.append("from ").append(table.getName()).append("s.").append("\n");
-
-        prompt.append("Include all the values that you know. Just report the table without any comment.");
-        return prompt.toString();
-    }
-
-    private Tuple toTuple(String answer, ITable table, TableAlias tableAlias) {
+    private Tuple toTuple(String answer, TableAlias tableAlias, List<Attribute> attributes) {
         TupleOID mockOID = new TupleOID(IntegerOIDGenerator.getNextOID());
         Tuple tuple = new Tuple(mockOID);
         Cell oidCell = new Cell(
@@ -63,10 +57,6 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
                 new ConstantValue(mockOID)
         );
         tuple.addCell(oidCell);
-
-        List<Attribute> attributes = table.getAttributes().stream()
-                .filter(a -> !a.getName().equals("oid"))
-                .toList();
 
         List<String> cells = Arrays.stream(answer.trim().split("\\|"))
                 .filter(s -> !s.isBlank())

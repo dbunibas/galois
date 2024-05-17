@@ -3,45 +3,51 @@ package galois.llm.query.outlines;
 import galois.llm.models.IModel;
 import galois.llm.models.OutlinesModel;
 import galois.llm.query.IQueryExecutor;
-import galois.http.payloads.JSONPayload;
-import galois.http.payloads.RegexPayload;
-import galois.http.services.OutlinesService;
+import galois.prompt.EAttributesPrompts;
+import galois.prompt.EIterativeKeyPrompts;
+import galois.prompt.EKeyPrompts;
+import galois.prompt.key.IKeyResponseParser;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 import speedy.SpeedyConstants;
 import speedy.model.database.*;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static galois.llm.query.QueryUtils.*;
-import static galois.http.HTTPUtils.executeSyncRequest;
-import static galois.utils.Mapper.fromJSON;
+import static galois.llm.query.QueryUtils.createNewTupleWithMockOID;
+import static galois.llm.query.QueryUtils.generateJsonSchemaFromAttributes;
 
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
     // private static final String MODEL_NAME = "mistral-7b-instruct-v0.2.Q4_K_M.gguf";
     private static final String MODEL_NAME = "Meta-Llama-3-8B-Instruct.Q4_K_M.gguf";
 
-    private final IModel model;
+    @Builder.Default
+    private final IModel model = new OutlinesModel(MODEL_NAME);
+    @Builder.Default
+    private final EKeyPrompts keyPrompt = EKeyPrompts.KEY_PROMPT;
+    @Builder.Default
+    private final EIterativeKeyPrompts iterativeKeyPrompt = EIterativeKeyPrompts.ITERATIVE_PROMPT;
+    @Builder.Default
+    private final EAttributesPrompts attributesPrompt = EAttributesPrompts.ATTRIBUTES_PROMPT;
 
-    private final int maxKeyIterations = 10;
-    private int currentKeyIteration = 0;
-
-    public OutlinesKeyAttributesQueryExecutor() {
-        this.model = new OutlinesModel(MODEL_NAME);
-    }
+    @Builder.Default
+    private final int maxKeyIterations = 1;
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
         ITable table = database.getTable(tableAlias.getTableName());
         Key primaryKey = database.getPrimaryKey(table.getName());
+
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream()
                 .map(AttributeRef::getName)
                 .toList();
@@ -56,23 +62,21 @@ public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
     }
 
     private Set<String> generateKeyValues(ITable table, Key primaryKey) {
-        // TODO: Check composite primary key
-        String key = primaryKey.getAttributes().stream()
-                .map(AttributeRef::getName)
-                .collect(Collectors.joining(" and "));
-
         Set<String> keys = Set.of();
         Set<String> lastKeys = Set.of();
-
-        String keyRegex = generateRegexForKeys();
+        int currentKeyIteration = 0;
 
         while (currentKeyIteration < maxKeyIterations) {
             String prompt = currentKeyIteration == 0 ?
-                    getKeyPrompt(table, key) :
-                    getIterativeKeyPrompt(table, key, lastKeys);
-            String response = model.regex(prompt, keyRegex);
+                    keyPrompt.generate(table, primaryKey) :
+                    iterativeKeyPrompt.generate(table, primaryKey, lastKeys);
+            log.debug("Key prompt is: {}", prompt);
+            IKeyResponseParser responseParser = currentKeyIteration == 0 ?
+                    keyPrompt.getParser() :
+                    iterativeKeyPrompt.getParser();
 
-            lastKeys = Arrays.stream(response.split(",")).map(String::trim).collect(Collectors.toUnmodifiableSet());
+            String response = model.text(prompt);
+            lastKeys = responseParser.parse(response);
             keys = Stream.concat(keys.stream(), lastKeys.stream()).collect(Collectors.toUnmodifiableSet());
 
             currentKeyIteration++;
@@ -104,7 +108,8 @@ public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
     }
 
     private void addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key) {
-        String prompt = getAttributesPrompt(table, attributes, key);
+        String prompt = attributesPrompt.generate(table, key, attributes);
+        log.debug("Attribute prompt is: {}", prompt);
         String schema = generateJsonSchemaFromAttributes(table, attributes);
         Map<String, Object> jsonMap = model.json(prompt, schema);
 
@@ -120,46 +125,4 @@ public class OutlinesKeyAttributesQueryExecutor implements IQueryExecutor {
             tuple.addCell(currentCell);
         }
     }
-
-    private String getKeyPrompt(ITable table, String key) {
-        StringBuilder prompt = new StringBuilder();
-
-        prompt.append("List the ").append(key);
-        prompt.append(" of some ").append(table.getName()).append("s. ");
-        prompt.append("Just report the values in a row separated by commas without any comments.");
-
-        log.debug("Keys prompt is: {}", prompt);
-
-        return prompt.toString();
-    }
-
-    private String getIterativeKeyPrompt(ITable table, String key, Collection<String> values) {
-        StringBuilder prompt = new StringBuilder();
-
-//        prompt.append("Given the values: ").append(String.join(", ", values)).append("\n");
-        prompt.append("Exclude the values: ").append(String.join(", ", values)).append(".\n");
-//        prompt.append("Avoid repeating the values: ").append(String.join(", ", values)).append("\n");
-        prompt.append("List the ").append(key);
-        prompt.append(" of some other ").append(table.getName()).append("s. ");
-//        prompt.append("Just report the values in a row separated by commas without any comments between ().");
-        prompt.append("Just report the values in a row separated by commas without any comments.");
-
-        log.debug("Iterative key prompt is: {}", prompt);
-
-        return prompt.toString();
-    }
-
-    private String getAttributesPrompt(ITable table, List<Attribute> attributes, String key) {
-        StringBuilder prompt = new StringBuilder();
-
-        prompt.append("List the ");
-        prompt.append(attributes.stream().map(Attribute::getName).collect(Collectors.joining(" and ")));
-        prompt.append(" of the ").append(table.getName()).append(" ").append(key).append(".\n");
-        prompt.append("Just report the values in a row without any additional comments.");
-
-        log.debug("Attribute prompt is: {}", prompt);
-
-        return prompt.toString();
-    }
-
 }

@@ -6,6 +6,7 @@ import galois.llm.query.llamacpp.LlamaCppKeyAttributesQueryExecutor;
 import galois.llm.query.ollama.OllamaLLama3KeyAttributesQueryExecutor;
 import galois.llm.query.ollama.OllamaLLama3KeyValuesQueryExecutor;
 import galois.llm.query.ollama.OllamaLlama3TableQueryExecutor;
+import galois.llm.query.ollama.OllamaMistralTableQueryExecutor;
 import galois.llm.query.outlines.OutlinesKeyAttributesQueryExecutor;
 import galois.llm.query.outlines.OutlinesKeyValueQueryExecutor;
 import galois.test.utils.TestUtils;
@@ -50,6 +51,16 @@ public class TestScanStrategies {
     }
 
     @Test
+    public void testLLMScanUsingMistralTable() {
+        // Query: SELECT * FROM film_director fd
+        TableAlias tableAlias = new TableAlias("film_director", "fd");
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor());
+
+        ITupleIterator tuples = llmScan.execute(llmDB, null);
+        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
     public void testLLMScanUsingLLama3KeyAttributes() {
         // Query: SELECT * FROM film_director fd
         TableAlias tableAlias = new TableAlias("film_director", "fd");
@@ -80,20 +91,20 @@ public class TestScanStrategies {
     }
 
     @Test
-    public void testLLMScanUsingLlamaCppKeyAttributes() {
+    public void testLLMScanUsingOutlinesKeyValue() {
         // Query: SELECT * FROM film_director fd
         TableAlias tableAlias = new TableAlias("film_director", "fd");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new LlamaCppKeyAttributesQueryExecutor());
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OutlinesKeyValueQueryExecutor());
 
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
     }
 
     @Test
-    public void testLLMScanUsingOutlinesKeyValue() {
+    public void testLLMScanUsingLlamaCppKeyAttributes() {
         // Query: SELECT * FROM film_director fd
         TableAlias tableAlias = new TableAlias("film_director", "fd");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OutlinesKeyValueQueryExecutor());
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new LlamaCppKeyAttributesQueryExecutor());
 
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);

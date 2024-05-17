@@ -1,10 +1,15 @@
 package galois.llm.query.ollama;
 
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.ollama.OllamaChatModel;
 import galois.llm.models.IModel;
 import galois.llm.models.OllamaModel;
 import galois.llm.query.IQueryExecutor;
+import galois.prompt.EAttributesPrompts;
+import galois.prompt.EIterativeKeyPrompts;
+import galois.prompt.EKeyPrompts;
+import galois.prompt.key.IKeyResponseParser;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
@@ -18,20 +23,27 @@ import java.util.stream.Stream;
 import static galois.llm.query.QueryUtils.createNewTupleWithMockOID;
 
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class OllamaLLama3KeyValuesQueryExecutor implements IQueryExecutor {
-    private final IModel model;
+    @Builder.Default
+    private final IModel model = new OllamaModel("llama3");
+    @Builder.Default
+    private final EKeyPrompts keyPrompt = EKeyPrompts.KEY_PROMPT;
+    @Builder.Default
+    private final EIterativeKeyPrompts iterativeKeyPrompt = EIterativeKeyPrompts.ITERATIVE_PROMPT;
+    @Builder.Default
+    private final EAttributesPrompts attributesPrompt = EAttributesPrompts.ATTRIBUTES_PROMPT;
 
-    private final int maxKeyIterations = 5;
-    private int currentKeyIteration = 0;
-
-    public OllamaLLama3KeyValuesQueryExecutor() {
-        this.model = new OllamaModel("llama3");
-    }
+    @Builder.Default
+    private final int maxKeyIterations = 1;
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
         ITable table = database.getTable(tableAlias.getTableName());
         Key primaryKey = database.getPrimaryKey(table.getName());
+
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream()
                 .map(AttributeRef::getName)
                 .toList();
@@ -46,21 +58,21 @@ public class OllamaLLama3KeyValuesQueryExecutor implements IQueryExecutor {
     }
 
     private Set<String> generateKeyValues(ITable table, Key primaryKey) {
-        // TODO: Check composite primary key
-        String key = primaryKey.getAttributes().stream()
-                .map(AttributeRef::getName)
-                .collect(Collectors.joining(" and "));
-
         Set<String> keys = Set.of();
         Set<String> lastKeys = Set.of();
+        int currentKeyIteration = 0;
 
         while (currentKeyIteration < maxKeyIterations) {
             String prompt = currentKeyIteration == 0 ?
-                    getKeyPrompt(table, key) :
-                    getIterativeKeyPrompt(table, key, lastKeys);
+                    keyPrompt.generate(table, primaryKey) :
+                    iterativeKeyPrompt.generate(table, primaryKey, lastKeys);
+            log.debug("Key prompt is: {}", prompt);
+            IKeyResponseParser responseParser = currentKeyIteration == 0 ?
+                    keyPrompt.getParser() :
+                    iterativeKeyPrompt.getParser();
 
             String response = model.text(prompt);
-            lastKeys = Arrays.stream(response.split(",")).map(String::trim).collect(Collectors.toUnmodifiableSet());
+            lastKeys = responseParser.parse(response);
             keys = Stream.concat(keys.stream(), lastKeys.stream()).collect(Collectors.toUnmodifiableSet());
 
             currentKeyIteration++;
@@ -93,7 +105,8 @@ public class OllamaLLama3KeyValuesQueryExecutor implements IQueryExecutor {
 
     private void addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key) {
         for (Attribute attribute : attributes) {
-            String prompt = getAttributePrompt(table, attribute, key);
+            String prompt = attributesPrompt.generate(table, key, List.of(attribute));
+            log.debug("Attribute prompt is: {}", prompt);
             String response = model.text(prompt);
             log.debug("attribute response is: {}", response);
 
@@ -105,50 +118,5 @@ public class OllamaLLama3KeyValuesQueryExecutor implements IQueryExecutor {
             );
             tuple.addCell(currentCell);
         }
-    }
-
-    private String getKeyPrompt(ITable table, String key) {
-        StringBuilder prompt = new StringBuilder();
-
-        prompt.append("[INST]\n");
-        prompt.append("List the ").append(key);
-        prompt.append(" of some ").append(table.getName()).append("s. ");
-        prompt.append("Just report the values in a row separated by commas without any comments.");
-        prompt.append("\n[/INST]");
-
-        log.debug("Keys prompt is: {}", prompt);
-
-        return prompt.toString();
-    }
-
-    private String getIterativeKeyPrompt(ITable table, String key, Collection<String> values) {
-        StringBuilder prompt = new StringBuilder();
-
-        prompt.append("[INST]\n");
-//        prompt.append("Given the values: ").append(String.join(", ", values)).append("\n");
-        prompt.append("Exclude the values: ").append(String.join(", ", values)).append(".\n");
-//        prompt.append("Avoid repeating the values: ").append(String.join(", ", values)).append("\n");
-        prompt.append("List the ").append(key);
-        prompt.append(" of some other ").append(table.getName()).append("s. ");
-        prompt.append("Just report the values in a row separated by commas without any comments.");
-        prompt.append("\n[/INST]");
-
-        log.debug("Iterative key prompt is: {}", prompt);
-
-        return prompt.toString();
-    }
-
-    private String getAttributePrompt(ITable table, Attribute attribute, String key) {
-        StringBuilder prompt = new StringBuilder();
-
-        prompt.append("[INST]\n");
-        prompt.append("List the ").append(attribute.getName());
-        prompt.append(" of the ").append(table.getName()).append(" ").append(key).append(".\n");
-        prompt.append("Just report the value in a row without any additional comments.");
-        prompt.append("\n[/INST]");
-
-        log.debug("Attribute prompt is: {}", prompt);
-
-        return prompt.toString();
     }
 }
