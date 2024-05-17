@@ -1,5 +1,5 @@
 {
-  "name": "Movies Outlines Experiment",
+  "name": "USA Presidents Mistral Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -15,46 +15,45 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OutlinesKeyAttributesQueryExecutor"
+      "queryExecutor": "OllamaMistralTableQueryExecutor"
     }
   },
   "query": {
-    "sql": "select * from target.disney_movie m order by m.movie_title",
+    "sql": "select * from target.usa_presidents p order by p.Number",
     "schema": {
-      "name": "disney_movies",
+      "name": "usa_all_presidents",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "disney_movie",
+          "tableName": "usa_presidents",
           "attributes": [
             {
-              "name": "movie_title",
+              "name": "Name",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "genre",
+              "name": "Years_In_Office",
               "type": "STRING",
-              "nullable": false,
-              "key": false
-            },
-            {
-              "name": "total_gross",
-              "type": "REAL",
               "nullable": false
             },
             {
-              "name": "release_year",
-              "type": "INTEGER",
+              "name": "Number",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Party",
+              "type": "STRING",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/disney-movies/movie"
+    "results": "/presidents-usa/presidents-data"
   }
 }

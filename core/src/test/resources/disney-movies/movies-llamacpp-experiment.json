@@ -1,49 +1,52 @@
 {
-  "name": "Actors Experiment",
+  "name": "Movies LlamaCpp Experiment",
   "metrics": [
-    "DummyMetric",
-    "TupleCardinalityMetric",
     "CellPrecision",
-    "CellRecall",
-    "CellF1Score",
-    "TupleCardinality",
-    "TupleConstraint",
-    "TupleOrder",
-    "TupleSimilarityConstraint",
     "CellSimilarityPrecision",
+    "CellRecall",
     "CellSimilarityRecall",
-    "CellSimilarityF1Score"
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleOrder",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaMistralTableQueryExecutor"
+      "queryExecutor": "LlamaCppKeyAttributesQueryExecutor"
     }
   },
   "query": {
-    "sql": "select * from target.actors a order by a.name",
+    "sql": "select * from target.disney_movies_total_gross m order by m.movie_title",
     "schema": {
-      "name": "dummy_actors",
+      "name": "disney_movies",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "actors",
+          "tableName": "disney_movies_total_gross",
           "attributes": [
             {
-              "name": "name",
+              "name": "movie_title",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "gender",
+              "name": "genre",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "birth_year",
+              "name": "total_gross",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "release_year",
               "type": "INTEGER",
               "nullable": false
             }
@@ -51,6 +54,6 @@
         }
       ]
     },
-    "results": "/dummyActors/actor"
+    "results": "/disney-movies/movie"
   }
 }

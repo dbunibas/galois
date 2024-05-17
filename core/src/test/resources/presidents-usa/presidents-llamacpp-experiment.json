@@ -1,61 +1,59 @@
 {
-  "name": "Movies Experiment",
+  "name": "USA Presidents Mistral Experiment",
   "metrics": [
-    "DummyMetric",
-    "TupleCardinalityMetric",
     "CellPrecision",
-    "CellRecall",
-    "CellF1Score",
-    "TupleCardinality",
-    "TupleConstraint",
-    "TupleOrder",
-    "TupleSimilarityConstraint",
     "CellSimilarityPrecision",
+    "CellRecall",
     "CellSimilarityRecall",
-    "CellSimilarityF1Score"
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleOrder",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaLLama3KeyAttributesQueryExecutor"
+      "queryExecutor": "LlamaCppKeyAttributesQueryExecutor"
     }
   },
   "query": {
-    "sql": "select * from target.disney_movies_total_gross m order by m.movie_title",
+    "sql": "select * from target.usa_presidents p order by p.Number",
     "schema": {
-      "name": "disney_movies",
+      "name": "usa_all_presidents",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "disney_movies_total_gross",
+          "tableName": "usa_presidents",
           "attributes": [
             {
-              "name": "movie_title",
+              "name": "Name",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "genre",
+              "name": "Years_In_Office",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "total_gross",
+              "name": "Number",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "release_year",
-              "type": "INTEGER",
+              "name": "Party",
+              "type": "STRING",
               "nullable": false
             }
           ]
         }
       ]
     },
-    "results": "/disney-movies/movie"
+    "results": "/presidents-usa/presidents-data"
   }
 }

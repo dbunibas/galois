@@ -1,5 +1,5 @@
 {
-  "name": "Movies Outlines Experiment",
+  "name": "Movies Llama3 Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -15,11 +15,11 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OutlinesKeyAttributesQueryExecutor"
+      "queryExecutor": "OllamaLlama3TableQueryExecutor"
     }
   },
   "query": {
-    "sql": "select * from target.disney_movie m order by m.movie_title",
+    "sql": "select * from target.disney_movies_total_gross m order by m.movie_title",
     "schema": {
       "name": "disney_movies",
       "schema": "target",
@@ -27,7 +27,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "disney_movie",
+          "tableName": "disney_movies_total_gross",
           "attributes": [
             {
               "name": "movie_title",
@@ -38,12 +38,11 @@
             {
               "name": "genre",
               "type": "STRING",
-              "nullable": false,
-              "key": false
+              "nullable": false
             },
             {
               "name": "total_gross",
-              "type": "REAL",
+              "type": "STRING",
               "nullable": false
             },
             {
