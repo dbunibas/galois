@@ -1,5 +1,5 @@
 {
-  "name": "Movies Outlines Experiment",
+  "name": "Actors Llama3 Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -15,39 +15,33 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OutlinesKeyAttributesQueryExecutor"
+      "queryExecutor": "OllamaLlama3TableQueryExecutor"
     }
   },
   "query": {
-    "sql": "select * from target.disney_movie m order by m.movie_title",
+    "sql": "select * from target.actors a order by a.name",
     "schema": {
-      "name": "disney_movies",
+      "name": "dummy_actors",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "disney_movie",
+          "tableName": "actors",
           "attributes": [
             {
-              "name": "movie_title",
+              "name": "name",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "genre",
+              "name": "gender",
               "type": "STRING",
-              "nullable": false,
-              "key": false
-            },
-            {
-              "name": "total_gross",
-              "type": "REAL",
               "nullable": false
             },
             {
-              "name": "release_year",
+              "name": "birth_year",
               "type": "INTEGER",
               "nullable": false
             }
@@ -55,6 +49,6 @@
         }
       ]
     },
-    "results": "/disney-movies/movie"
+    "results": "/dummyActors/actor"
   }
 }

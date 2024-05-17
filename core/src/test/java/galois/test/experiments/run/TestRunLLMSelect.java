@@ -39,18 +39,61 @@ public class TestRunLLMSelect {
     }
 
     @Test
-    public void testActorExperiment() throws IOException {
-        Experiment experiment = ExperimentParser.loadAndParseJSON("/dummyActors/actors-experiment.json");
+    public void testActorLlama3Experiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/dummyActors/actors-llama3-experiment.json");
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }
 
     @Test
-    public void testDisneyMovieExperiment() throws IOException {
+    public void testActorMistralExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/dummyActors/actors-mistral-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testActorLlamaCppExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/dummyActors/actors-llamacpp-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testActorOutlinesExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/dummyActors/actors-outlines-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testMoviesLlama3Experiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/disney-movies/movies-llama3-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testMoviesMistralExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/disney-movies/movies-mistral-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testMoviesLlamaCppExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/disney-movies/movies-llamacpp-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testMoviesOutlinesExperiment() throws IOException {
         Experiment experiment = ExperimentParser.loadAndParseJSON("/disney-movies/movies-outlines-experiment.json");
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }
+
 
     @Test
     public void testInternationalFootballLlama3Experiment() throws IOException {
@@ -137,15 +180,29 @@ public class TestRunLLMSelect {
     }
 
     @Test
-    public void testPresidentsExperiment() throws IOException {
-        Experiment experiment = ExperimentParser.loadAndParseJSON("/presidents-usa/presidents-experiment.json");
+    public void testPresidentsLlama3Experiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/presidents-usa/presidents-llama3-experiment.json");
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }
 
     @Test
-    public void testPresidentsExperimentLlama3() throws IOException {
-        Experiment experiment = ExperimentParser.loadAndParseJSON("/presidents-usa/presidents-llama3-experiment.json");
+    public void testPresidentsMistralExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/presidents-usa/presidents-mistral-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testPresidentsLlamacppExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/presidents-usa/presidents-llamacpp-experiment.json");
+        ExperimentResults results = experiment.execute();
+        log.info("{}", results);
+    }
+
+    @Test
+    public void testPresidentsOutlinesExperiment() throws IOException {
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/presidents-usa/presidents-outlines-experiment.json");
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }
