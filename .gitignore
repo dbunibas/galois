@@ -42,3 +42,6 @@ bin/
 .DS_Store
 
 gradle.properties
+
+## query results ##
+core/src/test/resources/results/
