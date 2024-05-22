@@ -19,7 +19,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.olympics_tokyo_2021 o order by o.rank",
+    "sql": "SELECT * FROM target.state",
     "schema": {
       "name": "geo",
       "schema": "target",
