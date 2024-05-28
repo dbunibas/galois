@@ -1,4 +1,4 @@
-package galois.llm.query;
+package galois.llm.query.utils;
 
 import speedy.SpeedyConstants;
 import speedy.model.database.*;
@@ -25,6 +25,10 @@ public class QueryUtils {
         return attributes.stream().map(Attribute::getName).collect(Collectors.joining(" and "));
     }
 
+    public static List<Attribute> getCleanAttributes(ITable table) {
+        return table.getAttributes().stream().filter(a -> !a.getName().equalsIgnoreCase("oid")).toList();
+    }
+
     public static Tuple createNewTupleWithMockOID(TableAlias tableAlias) {
         TupleOID mockOID = new TupleOID(IntegerOIDGenerator.getNextOID());
         Tuple tuple = new Tuple(mockOID);
@@ -37,10 +41,38 @@ public class QueryUtils {
         return tuple;
     }
 
+    public static Tuple mapToTuple(Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
+        Tuple tuple = createNewTupleWithMockOID(tableAlias);
+        for (Attribute attribute : attributes) {
+            IValue cellValue = map.containsKey(attribute.getName()) ?
+                    new ConstantValue(map.get(attribute.getName())) :
+                    new NullValue(SpeedyConstants.NULL_VALUE);
+            Cell currentCell = new Cell(
+                    tuple.getOid(),
+                    new AttributeRef(tableAlias, attribute.getName()),
+                    cellValue
+            );
+            tuple.addCell(currentCell);
+        }
+        return tuple;
+    }
+
     public static String generateRegexForKeys() {
         return "[a-zA-Z, ]+";
 //        return "[a-zA-Z0-9, ]+";
 //        return "[a-zA-Z0-9,. ]+";
+    }
+
+    public static String generateJsonSchemaForKeys(ITable table) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", table.getName());
+        map.put("type", "array");
+
+        Map<String, Object> items = new HashMap<>();
+        items.put("type", "string");
+        map.put("items", items);
+
+        return asString(map);
     }
 
     public static String generateJsonSchemaFromAttributes(ITable table, List<Attribute> attributes) {

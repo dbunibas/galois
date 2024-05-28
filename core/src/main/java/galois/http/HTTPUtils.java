@@ -1,11 +1,9 @@
 package galois.http;
 
-import galois.llm.query.LLMQueryException;
+import galois.llm.query.exception.LLMQueryException;
 import lombok.extern.slf4j.Slf4j;
 import retrofit2.Call;
 import retrofit2.Response;
-
-import java.util.Map;
 
 import static galois.utils.FunctionalUtils.orElseThrow;
 

@@ -1,4 +1,4 @@
-package galois.llm.query.ollama;
+package galois.llm.query.ollama.mistral;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
@@ -37,7 +37,7 @@ public class OllamaMistralTableQueryExecutor implements IQueryExecutor {
                 .filter(a -> !a.getName().equals("oid"))
                 .toList();
 
-        String prompt = tablePrompt.generate(table, attributes);
+        String prompt = tablePrompt.generate(table, attributes, null);
         log.debug("Table prompt is: {}", prompt);
         String response = model.text(prompt);
         log.debug("Table response is: {}", response);

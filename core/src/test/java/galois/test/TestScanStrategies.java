@@ -3,10 +3,9 @@ package galois.test;
 import galois.llm.algebra.LLMScan;
 import galois.llm.database.LLMDB;
 import galois.llm.query.llamacpp.LlamaCppKeyAttributesQueryExecutor;
-import galois.llm.query.ollama.OllamaLLama3KeyAttributesQueryExecutor;
-import galois.llm.query.ollama.OllamaLLama3KeyValuesQueryExecutor;
-import galois.llm.query.ollama.OllamaLlama3TableQueryExecutor;
-import galois.llm.query.ollama.OllamaMistralTableQueryExecutor;
+import galois.llm.query.ollama.llama3.*;
+import galois.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
+import galois.llm.query.ollama.mistral.OllamaMistralTableQueryExecutor;
 import galois.llm.query.outlines.OutlinesKeyAttributesQueryExecutor;
 import galois.llm.query.outlines.OutlinesKeyValueQueryExecutor;
 import galois.test.utils.TestUtils;
@@ -41,40 +40,10 @@ public class TestScanStrategies {
     }
 
     @Test
-    public void testLLMScanUsingLLama3Table() {
-        // Query: SELECT * FROM film_director fd
-        TableAlias tableAlias = new TableAlias("film_director", "fd");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLlama3TableQueryExecutor());
-
-        ITupleIterator tuples = llmScan.execute(llmDB, null);
-        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
-    }
-
-    @Test
     public void testLLMScanUsingMistralTable() {
         // Query: SELECT * FROM film_director fd
         TableAlias tableAlias = new TableAlias("film_director", "fd");
         IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor());
-
-        ITupleIterator tuples = llmScan.execute(llmDB, null);
-        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
-    }
-
-    @Test
-    public void testLLMScanUsingLLama3KeyAttributes() {
-        // Query: SELECT * FROM film_director fd
-        TableAlias tableAlias = new TableAlias("film_director", "fd");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLLama3KeyAttributesQueryExecutor());
-
-        ITupleIterator tuples = llmScan.execute(llmDB, null);
-        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
-    }
-
-    @Test
-    public void testLLMScanUsingLLama3KeyValues() {
-        // Query: SELECT * FROM film_director fd
-        TableAlias tableAlias = new TableAlias("film_director", "fd");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLLama3KeyValuesQueryExecutor());
 
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
@@ -105,6 +74,74 @@ public class TestScanStrategies {
         // Query: SELECT * FROM film_director fd
         TableAlias tableAlias = new TableAlias("film_director", "fd");
         IAlgebraOperator llmScan = new LLMScan(tableAlias, new LlamaCppKeyAttributesQueryExecutor());
+
+        ITupleIterator tuples = llmScan.execute(llmDB, null);
+        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testOllamaLlama3NLQuery() {
+        // Query: SELECT * FROM film_director fd
+        TableAlias tableAlias = new TableAlias("film_director", "fd");
+
+        OllamaLlama3NLQueryExecutor executor = OllamaLlama3NLQueryExecutor.builder()
+                .naturalLanguagePrompt("List the name, gender and birth year of some film directors")
+                .build();
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+
+        ITupleIterator tuples = llmScan.execute(llmDB, null);
+        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testOllamaLlama3SQLQuery() {
+        // Query: SELECT * FROM film_director fd
+        TableAlias tableAlias = new TableAlias("film_director", "fd");
+
+        OllamaLlama3SQLQueryExecutor executor = OllamaLlama3SQLQueryExecutor.builder()
+                .sql("select * from film_director")
+                .build();
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+
+        ITupleIterator tuples = llmScan.execute(llmDB, null);
+        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testOllamaLlama3Table() {
+        // Query: SELECT * FROM film_director fd
+        TableAlias tableAlias = new TableAlias("film_director", "fd");
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLlama3TableQueryExecutor());
+
+        ITupleIterator tuples = llmScan.execute(llmDB, null);
+        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testOllamaLLama3Key() {
+        // Query: SELECT * FROM film_director fd
+        TableAlias tableAlias = new TableAlias("film_director", "fd");
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLLama3KeyQueryExecutor());
+
+        ITupleIterator tuples = llmScan.execute(llmDB, null);
+        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testOllamaLLama3KeyScan() {
+        // Query: SELECT * FROM film_director fd
+        TableAlias tableAlias = new TableAlias("film_director", "fd");
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLLama3KeyScanQueryExecutor());
+
+        ITupleIterator tuples = llmScan.execute(llmDB, null);
+        TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testOllamaMistralNLQuery() {
+        // Query: SELECT * FROM film_director fd
+        TableAlias tableAlias = new TableAlias("film_director", "fd");
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralNLQueryExecutor());
 
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);

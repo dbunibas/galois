@@ -2,7 +2,7 @@ package galois.test;
 
 import galois.llm.algebra.LLMScan;
 import galois.llm.database.LLMDB;
-import galois.llm.query.ollama.OllamaMistralTableQueryExecutor;
+import galois.llm.query.ollama.mistral.OllamaMistralTableQueryExecutor;
 import galois.test.utils.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,7 @@
 package galois.prompt;
 
-import galois.prompt.attributes.CommaAttributesParser;
-import galois.prompt.attributes.IAttributesResponseParser;
+import galois.prompt.parser.attributes.CommaAttributesParser;
+import galois.prompt.parser.IAttributesResponseParser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import speedy.model.database.Attribute;
@@ -9,7 +9,7 @@ import speedy.model.database.ITable;
 
 import java.util.Collection;
 
-import static galois.llm.query.QueryUtils.getAttributesAsString;
+import static galois.llm.query.utils.QueryUtils.getAttributesAsString;
 
 @Getter
 @AllArgsConstructor

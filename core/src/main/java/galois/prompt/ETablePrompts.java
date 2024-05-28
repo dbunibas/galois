@@ -5,10 +5,12 @@ import speedy.model.database.ITable;
 
 import java.util.Collection;
 
-import static galois.llm.query.QueryUtils.getAttributesAsString;
+import static galois.llm.query.utils.QueryUtils.getAttributesAsString;
 
 public enum ETablePrompts {
-    TABLE_PROMPT("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}s.\nInclude all the values that you know. Just report the table without any comment.");
+    TABLE_PROMPT("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\n${query}"),
+    NATURAL_LANGUAGE_PROMPT("${query}"),
+    ;
 
     private final String template;
 
@@ -16,10 +18,11 @@ public enum ETablePrompts {
         this.template = template;
     }
 
-    public String generate(ITable table, Collection<Attribute> attributes) {
+    public String generate(ITable table, Collection<Attribute> attributes, String query) {
         String attributesString = getAttributesAsString(attributes);
         return template
                 .replaceAll("\\$\\{attributes\\}", attributesString)
-                .replaceAll("\\$\\{table\\}", table.getName());
+                .replaceAll("\\$\\{table\\}", table.getName())
+                .replaceAll("\\$\\{query\\}", query);
     }
 }

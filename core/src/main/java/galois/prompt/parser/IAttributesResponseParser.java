@@ -1,4 +1,4 @@
-package galois.prompt.attributes;
+package galois.prompt.parser;
 
 import speedy.model.database.Attribute;
 

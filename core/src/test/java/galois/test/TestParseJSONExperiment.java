@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.database.LLMDB;
-import galois.llm.query.ollama.OllamaMistralTableQueryExecutor;
+import galois.llm.query.ollama.mistral.OllamaMistralTableQueryExecutor;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.Query;
 import galois.test.experiments.json.*;

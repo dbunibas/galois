@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static galois.http.HTTPUtils.executeSyncRequest;
-import static galois.utils.Mapper.fromJSON;
+import static galois.utils.Mapper.fromJsonToMap;
 
 public class OutlinesModel implements IModel {
     private final String modelName;
@@ -48,7 +48,7 @@ public class OutlinesModel implements IModel {
         JSONPayload payload = new JSONPayload(modelName, prompt, schema);
         Call<String> call = outlinesService.json(payload);
         String response = executeSyncRequest(call);
-        return fromJSON(response);
+        return fromJsonToMap(response);
     }
 
     @Override

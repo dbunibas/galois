@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class LLMScan extends AbstractOperator {
 
     private static final Logger logger = LoggerFactory.getLogger(LLMScan.class);
 
-    @Getter
     private final TableAlias tableAlias;
     private final IQueryExecutor queryExecutor;
 

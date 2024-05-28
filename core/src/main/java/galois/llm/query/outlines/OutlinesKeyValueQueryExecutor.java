@@ -6,7 +6,7 @@ import galois.llm.query.IQueryExecutor;
 import galois.prompt.EAttributesPrompts;
 import galois.prompt.EIterativeKeyPrompts;
 import galois.prompt.EKeyPrompts;
-import galois.prompt.key.IKeyResponseParser;
+import galois.prompt.parser.IKeyResponseParser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -20,8 +20,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static galois.llm.query.QueryUtils.createNewTupleWithMockOID;
-import static galois.llm.query.QueryUtils.generateJsonSchemaFromAttribute;
+import static galois.llm.query.utils.QueryUtils.createNewTupleWithMockOID;
+import static galois.llm.query.utils.QueryUtils.generateJsonSchemaFromAttribute;
 
 @Slf4j
 @NoArgsConstructor
@@ -76,7 +76,7 @@ public class OutlinesKeyValueQueryExecutor implements IQueryExecutor {
                     iterativeKeyPrompt.getParser();
 
             String response = model.text(prompt);
-            lastKeys = responseParser.parse(response);
+            lastKeys = responseParser.parse(response).stream().collect(Collectors.toUnmodifiableSet());
             keys = Stream.concat(keys.stream(), lastKeys.stream()).collect(Collectors.toUnmodifiableSet());
 
             currentKeyIteration++;

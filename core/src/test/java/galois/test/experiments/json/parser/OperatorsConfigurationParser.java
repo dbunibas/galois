@@ -2,7 +2,7 @@ package galois.test.experiments.json.parser;
 
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.llm.algebra.config.ScanConfiguration;
-import galois.llm.query.ollama.OllamaMistralTableQueryExecutor;
+import galois.llm.query.ollama.mistral.OllamaMistralTableQueryExecutor;
 import galois.test.experiments.json.config.OperatorsConfigurationJSON;
 import galois.test.experiments.json.parser.operators.ScanConfigurationParser;
 

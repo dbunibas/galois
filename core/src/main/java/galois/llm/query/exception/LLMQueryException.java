@@ -1,4 +1,4 @@
-package galois.llm.query;
+package galois.llm.query.exception;
 
 public class LLMQueryException extends RuntimeException {
 
