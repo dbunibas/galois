@@ -3,9 +3,13 @@ package galois.test;
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.database.LLMDB;
+import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.OllamaLLama3KeyQueryExecutor;
+import galois.llm.query.ollama.llama3.OllamaLLama3KeyScanQueryExecutor;
 import galois.llm.query.ollama.llama3.OllamaLlama3SQLQueryExecutor;
 import galois.llm.query.ollama.llama3.OllamaLlama3TableQueryExecutor;
+import galois.optimizer.AllConditionPushdownOptimizer;
+import galois.optimizer.IOptimization;
 import galois.parser.IQueryPlanParser;
 import galois.parser.postgresql.PostgresXMLParser;
 import galois.planner.IQueryPlanner;
@@ -29,8 +33,7 @@ public class TestGalois {
     @BeforeAll
     public static void beforeAll() {
         String driver = "org.postgresql.Driver";
-//        String uri = "jdbc:postgresql:speedy_llm_actors";
-        String uri = "jdbc:postgresql:llm_elections";
+        String uri = "jdbc:postgresql:speedy_llm_actors";
         String schemaName = "target";
         String username = "pguser";
         String password = "pguser";
@@ -107,30 +110,15 @@ public class TestGalois {
         Document queryPlan = planner.planFrom(sql);
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(new ScanConfiguration(new OllamaLLama3KeyQueryExecutor()));
+        IQueryExecutor executor = new OllamaLLama3KeyQueryExecutor();
+        ScanConfiguration scanConfiguration = new ScanConfiguration(executor);
+        OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration);
 
-//        IOptimizer optimizer = new LLMHistogramOptimizer();
-//        IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, operator);
+        IOptimization optimizer = new AllConditionPushdownOptimizer();
+        IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, operator);
 
-        ITupleIterator iterator = operator.execute(llmDB, null);
-        TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
-    }
-
-    @Test
-    public void testMultipleConditions() {
-        String sql = "select p.surname from target.politician p where p.country = 'Italy' AND p.age < 40 AND p.election = 'Europe' AND p.year = 2019";
-        IDatabase llmDB = new LLMDB(accessConfiguration);
-
-        IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
-        Document queryPlan = planner.planFrom(sql);
-
-        IQueryPlanParser<Document> parser = new PostgresXMLParser();
-//        OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(new ScanConfiguration(new OllamaLLama3KeyQueryExecutor()));
-        OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(new ScanConfiguration(OllamaLlama3SQLQueryExecutor.builder().sql(sql).build()));
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration);
-
-        ITupleIterator iterator = operator.execute(llmDB, null);
+        ITupleIterator iterator = optimizedQuery.execute(llmDB, null);
         TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
     }
 }

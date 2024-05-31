@@ -3,6 +3,7 @@ package galois.llm.query.utils;
 import speedy.SpeedyConstants;
 import speedy.model.database.*;
 import speedy.model.database.mainmemory.datasource.IntegerOIDGenerator;
+import speedy.model.expressions.Expression;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +24,10 @@ public class QueryUtils {
 
     public static String getAttributesAsString(Collection<Attribute> attributes) {
         return attributes.stream().map(Attribute::getName).collect(Collectors.joining(" and "));
+    }
+
+    public static String getExpressionAsString(Expression expression) {
+        return expression != null ? expression.getExpressionString() : null;
     }
 
     public static List<Attribute> getCleanAttributes(ITable table) {

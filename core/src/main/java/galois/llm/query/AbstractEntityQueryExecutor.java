@@ -1,7 +1,6 @@
 package galois.llm.query;
 
 import dev.langchain4j.chain.ConversationalChain;
-import galois.prompt.EPrompts;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
@@ -14,12 +13,6 @@ import static galois.llm.query.utils.QueryUtils.*;
 @Slf4j
 public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
     abstract protected ConversationalChain getConversationalChain();
-
-    abstract protected EPrompts getFirstPrompt();
-
-    abstract protected EPrompts getIterativePrompt();
-
-    abstract protected int getMaxIterations();
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {

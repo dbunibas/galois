@@ -1,7 +1,6 @@
 package galois.llm.query;
 
 import dev.langchain4j.chain.ConversationalChain;
-import galois.prompt.EPrompts;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
@@ -15,12 +14,6 @@ import static galois.llm.query.utils.QueryUtils.generateJsonSchemaForKeys;
 @Slf4j
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     abstract protected ConversationalChain getConversationalChain();
-
-    abstract protected EPrompts getFirstPrompt();
-
-    abstract protected EPrompts getIterativePrompt();
-
-    abstract protected int getMaxIterations();
 
     protected abstract Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain);
 
@@ -42,8 +35,8 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0 ?
-                    getFirstPrompt().generate(table, primaryKey, schema) :
-                    getIterativePrompt().generate(table, primaryKey, schema);
+                    getFirstPrompt().generate(table, primaryKey, getExpression(), schema) :
+                    getIterativePrompt().generate(table, primaryKey, getExpression(), schema);
             log.debug("Key prompt is: {}", userMessage);
 
             String response = chain.execute(userMessage);

@@ -12,6 +12,7 @@
     </root>
 
     <logger name="galois.llm" level="DEBUG"/>
+    <logger name="galois.optimizer" level="DEBUG"/>
     <logger name="galois.parser" level="DEBUG"/>
     <logger name="galois.test" level="DEBUG"/>
 
