@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static galois.llm.query.ConversationalChainFactory.buildOllamaLlama3ConversationalChain;
+import static galois.llm.query.utils.QueryUtils.mapToTuple;
 
 @Slf4j
 @NoArgsConstructor
@@ -41,23 +42,9 @@ public class OllamaLLama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecu
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
         String prompt = attributesPrompt.generate(table, key, attributes);
         log.debug("Attributes prompt is: {}", prompt);
-
         String response = chain.execute(prompt);
         log.debug("addValueFromAttributes response: {}", response);
-
         Map<String, Object> attributesMap = attributesPrompt.getAttributesParser().parse(response, attributes);
-        for (Attribute attribute : attributes) {
-            IValue cellValue = attributesMap.containsKey(attribute.getName()) ?
-                    new ConstantValue(attributesMap.get(attribute.getName())) :
-                    new NullValue(SpeedyConstants.NULL_VALUE);
-            Cell currentCell = new Cell(
-                    tuple.getOid(),
-                    new AttributeRef(tableAlias, attribute.getName()),
-                    cellValue
-            );
-            tuple.addCell(currentCell);
-        }
-
-        return tuple;
+        return mapToTuple(tuple, attributesMap, tableAlias, attributes);
     }
 }

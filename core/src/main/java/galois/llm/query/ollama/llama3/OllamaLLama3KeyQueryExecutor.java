@@ -8,11 +8,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import speedy.model.database.*;
+import speedy.model.database.Attribute;
+import speedy.model.database.ITable;
+import speedy.model.database.TableAlias;
+import speedy.model.database.Tuple;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static galois.llm.query.ConversationalChainFactory.buildOllamaLlama3ConversationalChain;
+import static galois.llm.query.utils.QueryUtils.mapToTuple;
 
 @Slf4j
 @NoArgsConstructor
@@ -27,7 +33,7 @@ public class OllamaLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor 
     @Builder.Default
     private final EPrompts attributesPrompt = EPrompts.ATTRIBUTES_COMMA;
     @Builder.Default
-    private final int maxIterations = 5;
+    private final int maxIterations = 1;
 
     @Override
     protected ConversationalChain getConversationalChain() {
@@ -36,21 +42,14 @@ public class OllamaLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor 
 
     @Override
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
+        Map<String, Object> attributesMap = new HashMap<>();
         for (Attribute attribute : attributes) {
             String prompt = attributesPrompt.generate(table, key, List.of(attribute));
             log.debug("Attribute prompt is: {}", prompt);
-
             String response = chain.execute(prompt);
             log.debug("Attribute response is: {}", response);
-
-            IValue cellValue = new ConstantValue(response);
-            Cell currentCell = new Cell(
-                    tuple.getOid(),
-                    new AttributeRef(tableAlias, attribute.getName()),
-                    cellValue
-            );
-            tuple.addCell(currentCell);
+            attributesMap.put(attribute.getName(), response);
         }
-        return tuple;
+        return mapToTuple(tuple, attributesMap, tableAlias, attributes);
     }
 }

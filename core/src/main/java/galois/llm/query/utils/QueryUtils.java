@@ -43,6 +43,10 @@ public class QueryUtils {
 
     public static Tuple mapToTuple(Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
+        return mapToTuple(tuple, map, tableAlias, attributes);
+    }
+
+    public static Tuple mapToTuple(Tuple tuple, Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
         for (Attribute attribute : attributes) {
             IValue cellValue = map.containsKey(attribute.getName()) ?
                     new ConstantValue(map.get(attribute.getName())) :
@@ -88,6 +92,28 @@ public class QueryUtils {
             properties.put(attribute.getName(), description);
         }
         map.put("properties", properties);
+
+        return asString(map);
+    }
+
+    public static String generateJsonSchemaListFromAttributes(ITable table, List<Attribute> attributes) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("title", table.getName());
+        map.put("type", "array");
+
+        Map<String, Object> items = new HashMap<>();
+        items.put("type", "object");
+
+        Map<String, Object> properties = new HashMap<>();
+        for (Attribute attribute : attributes) {
+            Map<String, Object> description = new HashMap<>();
+            description.put("title", attribute.getName());
+            description.put("type", getJsonSchemaTypeFromDBType(attribute.getType()));
+            properties.put(attribute.getName(), description);
+        }
+        items.put("properties", properties);
+
+        map.put("items", items);
 
         return asString(map);
     }

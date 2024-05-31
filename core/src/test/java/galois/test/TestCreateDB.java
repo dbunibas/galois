@@ -64,6 +64,42 @@ public class TestCreateDB {
         Assertions.assertEquals(db.getTableNames().size(), 3);
     }
 
+    @Test
+    public void testCreateElectionsDB() {
+        String driver = "org.postgresql.Driver";
+        String uri = "jdbc:postgresql:llm_elections";
+        String schemaName = "target";
+        String username = "pguser";
+        String password = "pguser";
+
+        AccessConfiguration accessConfiguration = new AccessConfiguration();
+        accessConfiguration.setDriver(driver);
+        accessConfiguration.setUri(uri);
+        accessConfiguration.setSchemaName(schemaName);
+        accessConfiguration.setLogin(username);
+        accessConfiguration.setPassword(password);
+
+        DBMSDB db = new DBMSDB(accessConfiguration);
+        Assertions.assertNotNull(db);
+        db.getInitDBConfiguration().setInitDBScript(createSchema(schemaName));
+        db.initDBMS();
+
+        String politiciansTableName = "politician";
+        List<Attribute> politicianAttributes = List.of(
+                new Attribute(politiciansTableName, "surname", "string"),
+                new Attribute(politiciansTableName, "country", "string"),
+                new Attribute(politiciansTableName, "age", "integer"),
+                new Attribute(politiciansTableName, "election", "string"),
+                new Attribute(politiciansTableName, "year", "integer")
+        );
+        Set<String> actorPrimaryKeys = Set.of("surname");
+
+        ICreateTable tableGenerator = new SQLCreateTable();
+        tableGenerator.createTable(politiciansTableName, politicianAttributes, actorPrimaryKeys, db);
+
+        Assertions.assertEquals(db.getTableNames().size(), 1);
+    }
+
     private String createSchema(String schemaName) {
         StringBuilder sb = new StringBuilder();
         if (schemaName == null || schemaName.isEmpty()) return "";

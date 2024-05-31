@@ -28,7 +28,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         ITable table = database.getTable(tableAlias.getTableName());
 
         List<Attribute> attributes = getCleanAttributes(table);
-        String jsonSchema = generateJsonSchemaFromAttributes(table, attributes);
+        String jsonSchema = generateJsonSchemaListFromAttributes(table, attributes);
 
         List<Tuple> tuples = new ArrayList<>();
 
