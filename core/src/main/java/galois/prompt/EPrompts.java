@@ -15,6 +15,7 @@ import speedy.model.database.ITable;
 import speedy.model.database.Key;
 
 import java.util.Collection;
+import java.util.List;
 
 import static galois.llm.query.utils.QueryUtils.getAttributesAsString;
 import static galois.llm.query.utils.QueryUtils.getKeyAsString;
@@ -30,6 +31,7 @@ public enum EPrompts {
     // Attributes
     ATTRIBUTES_PIPE("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by | without any additional comments.", null, PipeAttributesParser::parse, null),
     ATTRIBUTES_COMMA("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by comma without any additional comments.", null, CommaAttributesParser::parse, null),
+    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
 
     // Entities
     FROM_TABLE_JSON("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, Mapper::fromJsonToListOfMaps),
@@ -60,28 +62,20 @@ public enum EPrompts {
         return generate(null, null, null, null, sql, jsonSchema);
     }
 
-    public String generate(ITable table, Key primaryKey) {
-        return generate(table.getName(), getKeyAsString(primaryKey), null, null, null, null);
-    }
-
     public String generate(ITable table, Key primaryKey, String jsonSchema) {
         return generate(table.getName(), getKeyAsString(primaryKey), null, null, null, jsonSchema);
     }
 
-    public String generate(ITable table, Key primaryKey, Collection<Attribute> attributes) {
-        return generate(table.getName(), getKeyAsString(primaryKey), getAttributesAsString(attributes), null, null, null);
+    public String generate(ITable table, Key primaryKey, Collection<Attribute> attributes, String jsonSchema) {
+        return generate(table.getName(), getKeyAsString(primaryKey), getAttributesAsString(attributes), null, null, jsonSchema);
     }
 
-    public String generate(ITable table, String key, Collection<Attribute> attributes) {
-        return generate(table.getName(), key, getAttributesAsString(attributes), null, null, null);
+    public String generate(ITable table, String key, Collection<Attribute> attributes, String jsonSchema) {
+        return generate(table.getName(), key, getAttributesAsString(attributes), null, null, jsonSchema);
     }
 
     public String generate(ITable table, Collection<Attribute> attributes, String jsonSchema) {
         return generate(table.getName(), null, getAttributesAsString(attributes), null, null, jsonSchema);
-    }
-
-    public String generate(ITable table, Collection<Attribute> attributes, String prompt, String jsonSchema) {
-        return generate(table.getName(), null, getAttributesAsString(attributes), prompt, null, jsonSchema);
     }
 
     private String generate(String tableName, String primaryKey, String attributes, String prompt, String sql, String jsonSchema) {

@@ -79,6 +79,10 @@ public class QueryUtils {
         return asString(map);
     }
 
+    public static String generateJsonSchemaFromAttribute(ITable table, Attribute attribute) {
+        return generateJsonSchemaFromAttributes(table, List.of(attribute));
+    }
+
     public static String generateJsonSchemaFromAttributes(ITable table, List<Attribute> attributes) {
         Map<String, Object> map = new HashMap<>();
         map.put("title", table.getName());
@@ -116,10 +120,6 @@ public class QueryUtils {
         map.put("items", items);
 
         return asString(map);
-    }
-
-    public static String generateJsonSchemaFromAttribute(ITable table, Attribute attribute) {
-        return generateJsonSchemaFromAttributes(table, List.of(attribute));
     }
 
     private static String getJsonSchemaTypeFromDBType(String type) {

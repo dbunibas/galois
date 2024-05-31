@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static galois.llm.query.ConversationalChainFactory.buildOllamaLlama3ConversationalChain;
+import static galois.llm.query.utils.QueryUtils.generateJsonSchemaFromAttributes;
 import static galois.llm.query.utils.QueryUtils.mapToTuple;
 
 @Slf4j
@@ -25,13 +26,13 @@ import static galois.llm.query.utils.QueryUtils.mapToTuple;
 @Getter
 public class OllamaLLama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecutor {
     @Builder.Default
-    private final EPrompts firstPrompt = EPrompts.LIST_KEY_PIPE;
+    private final EPrompts firstPrompt = EPrompts.LIST_KEY_JSON;
     @Builder.Default
     private final EPrompts iterativePrompt = EPrompts.LIST_MORE_NO_REPEAT;
     @Builder.Default
-    private final EPrompts attributesPrompt = EPrompts.ATTRIBUTES_COMMA;
+    private final EPrompts attributesPrompt = EPrompts.ATTRIBUTES_JSON;
     @Builder.Default
-    private final int maxIterations = 5;
+    private final int maxIterations = 1;
 
     @Override
     protected ConversationalChain getConversationalChain() {
@@ -40,7 +41,8 @@ public class OllamaLLama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecu
 
     @Override
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
-        String prompt = attributesPrompt.generate(table, key, attributes);
+        String jsonSchema = generateJsonSchemaFromAttributes(table, attributes);
+        String prompt = attributesPrompt.generate(table, key, attributes, jsonSchema);
         log.debug("Attributes prompt is: {}", prompt);
         String response = chain.execute(prompt);
         log.debug("addValueFromAttributes response: {}", response);
