@@ -30,6 +30,9 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
     implementation("com.squareup.retrofit2:converter-jackson:2.11.0")
 
+    implementation("commons-lang:commons-lang:2.6")
+    implementation("com.github.jsqlparser:jsqlparser:4.9")
+
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
