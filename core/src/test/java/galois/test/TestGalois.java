@@ -4,10 +4,7 @@ import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.database.LLMDB;
 import galois.llm.query.IQueryExecutor;
-import galois.llm.query.ollama.llama3.OllamaLLama3KeyQueryExecutor;
-import galois.llm.query.ollama.llama3.OllamaLLama3KeyScanQueryExecutor;
-import galois.llm.query.ollama.llama3.OllamaLlama3SQLQueryExecutor;
-import galois.llm.query.ollama.llama3.OllamaLlama3TableQueryExecutor;
+import galois.llm.query.ollama.llama3.OllamaLlama3KeyQueryExecutor;
 import galois.optimizer.AllConditionPushdownOptimizer;
 import galois.optimizer.IOptimization;
 import galois.parser.IQueryPlanParser;
@@ -110,7 +107,7 @@ public class TestGalois {
         Document queryPlan = planner.planFrom(sql);
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IQueryExecutor executor = new OllamaLLama3KeyQueryExecutor();
+        IQueryExecutor executor = new OllamaLlama3KeyQueryExecutor();
         ScanConfiguration scanConfiguration = new ScanConfiguration(executor);
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration);

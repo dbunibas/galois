@@ -129,7 +129,7 @@ public class TestScanStrategies {
         // Query: SELECT * FROM film_director fd
         TableAlias tableAlias = new TableAlias("film_director", "fd");
 
-        IQueryExecutor executor = OllamaLLama3KeyQueryExecutor.builder()
+        IQueryExecutor executor = OllamaLlama3KeyQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
         IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
@@ -143,7 +143,7 @@ public class TestScanStrategies {
         // Query: SELECT * FROM film_director fd
         TableAlias tableAlias = new TableAlias("film_director", "fd");
 
-        IQueryExecutor executor = OllamaLLama3KeyScanQueryExecutor.builder()
+        IQueryExecutor executor = OllamaLlama3KeyScanQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
         IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);

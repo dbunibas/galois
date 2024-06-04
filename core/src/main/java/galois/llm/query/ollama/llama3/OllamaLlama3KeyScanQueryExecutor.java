@@ -24,14 +24,14 @@ import static galois.utils.FunctionalUtils.orElse;
 
 @Slf4j
 @Getter
-public class OllamaLLama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecutor {
+public class OllamaLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecutor {
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final EPrompts attributesPrompt;
     private final int maxIterations;
     private final Expression expression;
 
-    public OllamaLLama3KeyScanQueryExecutor(
+    public OllamaLlama3KeyScanQueryExecutor(
     ) {
         this.firstPrompt = EPrompts.LIST_KEY_JSON;
         this.iterativePrompt = EPrompts.LIST_MORE_NO_REPEAT;
@@ -40,7 +40,7 @@ public class OllamaLLama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecu
         this.expression = null;
     }
 
-    public OllamaLLama3KeyScanQueryExecutor(
+    public OllamaLlama3KeyScanQueryExecutor(
             EPrompts firstPrompt,
             EPrompts iterativePrompt,
             EPrompts attributesPrompt,
@@ -82,7 +82,7 @@ public class OllamaLLama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecu
     public static class OllamaLLama3KeyScanQueryExecutorBuilder extends AbstractQueryExecutorBuilder {
         @Override
         public IQueryExecutor build() {
-            return new OllamaLLama3KeyScanQueryExecutor(
+            return new OllamaLlama3KeyScanQueryExecutor(
                     getFirstPrompt(),
                     getIterativePrompt(),
                     getAttributesPrompt(),

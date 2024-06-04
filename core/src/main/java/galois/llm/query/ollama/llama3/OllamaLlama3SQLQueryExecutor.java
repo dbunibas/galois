@@ -32,7 +32,7 @@ public class OllamaLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor {
         this.sql = sql;
     }
 
-    OllamaLlama3SQLQueryExecutor(EPrompts firstPrompt, EPrompts iterativePrompt, Integer maxIterations, String sql) {
+    public OllamaLlama3SQLQueryExecutor(EPrompts firstPrompt, EPrompts iterativePrompt, Integer maxIterations, String sql) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.FROM_SQL_JSON);
         this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES);
         this.maxIterations = maxIterations;

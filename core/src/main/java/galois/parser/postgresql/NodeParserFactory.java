@@ -20,7 +20,7 @@ public class NodeParserFactory {
 
         String type = nodeType.getTextTrim();
         if (type == null || type.isEmpty() || !parserMap.containsKey(type))
-            throw new ParserException("Invalid node type!");
+            throw new ParserException("Invalid node type: " + type + "!");
 
         INodeParserGenerator parserGenerator = parserMap.get(type);
         return parserGenerator.create();

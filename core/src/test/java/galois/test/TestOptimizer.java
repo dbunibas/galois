@@ -2,7 +2,7 @@ package galois.test;
 
 import galois.llm.algebra.LLMScan;
 import galois.llm.database.LLMDB;
-import galois.llm.query.ollama.llama3.OllamaLLama3KeyScanQueryExecutor;
+import galois.llm.query.ollama.llama3.OllamaLlama3KeyScanQueryExecutor;
 import galois.optimizer.IOptimization;
 import galois.optimizer.LLMHistogramOptimizer;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,7 @@ public class TestOptimizer {
     public void testConditionPushDown() {
         // Query: SELECT * FROM actor WHERE gender = 'male'
         TableAlias tableAlias = new TableAlias("actor", "a");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLLama3KeyScanQueryExecutor());
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLlama3KeyScanQueryExecutor());
 
         Expression exp = new Expression("gender == \"Female\"");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
@@ -66,7 +66,7 @@ public class TestOptimizer {
     public void testConditionPushDownOrderBy() {
         // Query: SELECT * FROM actor WHERE gender = 'male' ORDER_BY name
         TableAlias tableAlias = new TableAlias("actor", "a");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLLama3KeyScanQueryExecutor());
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLlama3KeyScanQueryExecutor());
 
         Expression exp = new Expression("gender == \"Female\"");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));

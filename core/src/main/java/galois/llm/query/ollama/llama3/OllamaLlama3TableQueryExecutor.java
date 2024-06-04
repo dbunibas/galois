@@ -28,7 +28,7 @@ public class OllamaLlama3TableQueryExecutor extends AbstractEntityQueryExecutor 
         this.expression = null;
     }
 
-    OllamaLlama3TableQueryExecutor(
+    public OllamaLlama3TableQueryExecutor(
             EPrompts firstPrompt,
             EPrompts iterativePrompt,
             Integer maxIterations,
