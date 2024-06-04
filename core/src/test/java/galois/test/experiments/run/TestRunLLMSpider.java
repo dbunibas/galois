@@ -12,7 +12,7 @@ import java.io.IOException;
 public class TestRunLLMSpider {
     @Test
     public void testContinentsLlama3Experiment() throws IOException {
-        Experiment experiment = ExperimentParser.loadAndParseJSON("/continents/continents-llama3-experiment.json");
+        Experiment experiment = ExperimentParser.loadAndParseJSON("/continents/continents-llama3-table-experiment.json");
         ExperimentResults results = experiment.execute();
         log.info("{}", results);
     }

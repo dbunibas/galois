@@ -1,0 +1,55 @@
+{
+  "name": "Continents llama3 Experiment",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleOrder",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "ollama-llama3-key",
+      "maxIterations": 1
+    }
+  },
+  "query": {
+    "sql": "select * from target.continents c order by c.name",
+    "schema": {
+      "name": "continents",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "continents",
+          "attributes": [
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "area",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "population",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/continents/continent"
+  }
+}

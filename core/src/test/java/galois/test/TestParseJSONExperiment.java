@@ -23,7 +23,7 @@ public class TestParseJSONExperiment {
     @Test
     public void testParseToExperimentJSON() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        URL jsonResource = TestParseJSONExperiment.class.getResource("/continents/continents-llama3-experiment.json");
+        URL jsonResource = TestParseJSONExperiment.class.getResource("/continents/continents-llama3-table-experiment.json");
         ExperimentJSON experimentJSON = mapper.readValue(jsonResource, ExperimentJSON.class);
 
         Assertions.assertEquals("Dummy Experiment", experimentJSON.getName());
@@ -74,7 +74,7 @@ public class TestParseJSONExperiment {
     @Test
     public void testParseToExperiment() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        URL jsonResource = TestParseJSONExperiment.class.getResource("/continents/continents-llama3-experiment.json");
+        URL jsonResource = TestParseJSONExperiment.class.getResource("/continents/continents-llama3-table-experiment.json");
         ExperimentJSON experimentJSON = mapper.readValue(jsonResource, ExperimentJSON.class);
         Assertions.assertNotNull(experimentJSON);
 

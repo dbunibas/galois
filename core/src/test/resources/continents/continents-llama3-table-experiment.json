@@ -15,7 +15,8 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaLlama3TableQueryExecutor"
+      "queryExecutor": "ollama-llama3-table",
+      "maxIterations": 1
     }
   },
   "query": {
