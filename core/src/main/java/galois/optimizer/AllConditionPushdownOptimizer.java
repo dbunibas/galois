@@ -14,7 +14,7 @@ public class AllConditionPushdownOptimizer implements IOptimization {
     public IAlgebraOperator optimize(IDatabase database, IAlgebraOperator query) {
         // TODO: Add scan to abstract component
         log.warn("Naïve implementation, for testing purposes only!");
-        IAlgebraOperator currentNode = query;
+        IAlgebraOperator currentNode = query.clone();
         while (currentNode != null) {
             if (currentNode instanceof Select) {
                 IAlgebraOperator optimizedNode = allConditionsPushdown.optimize(database, currentNode);

@@ -2,6 +2,7 @@ package galois.test.experiments.json.parser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import galois.llm.algebra.config.OperatorsConfiguration;
+import galois.optimizer.IOptimization;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.Query;
 import galois.test.experiments.json.ExperimentJSON;
@@ -22,12 +23,17 @@ public class ExperimentParser {
 
     public static Experiment parseJSON(ExperimentJSON json) {
         List<IMetric> metrics = parseMetrics(json.getMetrics());
+        List<IOptimization> optimizers = parseOptimizers(json.getOptimizers());
         OperatorsConfiguration operatorsConfiguration = OperatorsConfigurationParser.parseJSON(json.getOperatorsConfig());
         Query query = QueryParser.parseJSON(json.getQuery());
-        return new Experiment(json.getName(), json.getDbms(), metrics, operatorsConfiguration, query, json.getQueryExecutor());
+        return new Experiment(json.getName(), json.getDbms(), metrics, optimizers, operatorsConfiguration, query, json.getQueryExecutor());
     }
 
     private static List<IMetric> parseMetrics(List<String> metrics) {
         return metrics.stream().map(MetricFactory::getMetricByName).toList();
+    }
+
+    private static List<IOptimization> parseOptimizers(List<String> optimizers) {
+        return optimizers.stream().map(OptimizersFactory::getOptimizerByName).toList();
     }
 }

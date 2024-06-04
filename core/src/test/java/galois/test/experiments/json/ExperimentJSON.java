@@ -11,6 +11,7 @@ public class ExperimentJSON {
     private String dbms;
     private OperatorsConfigurationJSON operatorsConfig;
     private List<String> metrics;
+    private List<String> optimizers;
     private QueryJSON query;
     private String queryExecutor;
 }

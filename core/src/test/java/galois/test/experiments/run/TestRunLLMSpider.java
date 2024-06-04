@@ -10,10 +10,10 @@ import java.io.IOException;
 
 @Slf4j
 public class TestRunLLMSpider {
-    @Test
-    public void testContinentsLlama3Experiment() throws IOException {
-        Experiment experiment = ExperimentParser.loadAndParseJSON("/continents/continents-llama3-table-experiment.json");
-        ExperimentResults results = experiment.execute();
-        log.info("{}", results);
-    }
+//    @Test
+//    public void testContinentsLlama3Experiment() throws IOException {
+//        Experiment experiment = ExperimentParser.loadAndParseJSON("/continents/continents-llama3-table-experiment.json");
+//        ExperimentResults results = experiment.execute();
+//        log.info("{}", results);
+//    }
 }

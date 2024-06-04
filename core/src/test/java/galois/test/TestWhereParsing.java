@@ -15,6 +15,8 @@ public class TestWhereParsing {
         String sql = "select * from target.actor a where a.name = 'Mario' AND a.age > 20 AND a.surname='Rossi'";
         ParserWhere parser = new ParserWhere();
         parser.parseWhere(sql);
+        log.info("Parsed expressions: {}", parser.getExpressions());
+        log.info("Parser operation: {}", parser.getOperation());
     }
     
     @Test
