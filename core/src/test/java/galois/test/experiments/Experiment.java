@@ -2,6 +2,7 @@ package galois.test.experiments;
 
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.optimizer.IOptimization;
+import galois.optimizer.IOptimizer;
 import galois.parser.IQueryPlanParser;
 import galois.planner.IQueryPlanner;
 import galois.test.experiments.metrics.IMetric;
@@ -23,7 +24,7 @@ public final class Experiment {
     private final String name;
     private final String dbms;
     private final List<IMetric> metrics;
-    private final List<IOptimization> optimizers;
+    private final List<IOptimizer> optimizers;
     private final OperatorsConfiguration operatorsConfiguration;
     private final Query query;
     private final String queryExecutor;
@@ -42,8 +43,8 @@ public final class Experiment {
         var unoptimizedResult = executeUnoptimizedExperiment(operator);
         results.put("Unoptimized", unoptimizedResult);
 
-        List<IOptimization> optimizersList = optimizers == null ? List.of() : optimizers;
-        for (IOptimization optimizer : optimizersList) {
+        List<IOptimizer> optimizersList = optimizers == null ? List.of() : optimizers;
+        for (IOptimizer optimizer : optimizersList) {
             var result = executeOptimizedExperiment(operator, optimizer);
             results.put(optimizer.getClass().getSimpleName(), result);
         }
@@ -56,8 +57,8 @@ public final class Experiment {
         return toExperimentResults(iterator);
     }
 
-    private ExperimentResults executeOptimizedExperiment(IAlgebraOperator operator, IOptimization optimizer) {
-        IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), operator);
+    private ExperimentResults executeOptimizedExperiment(IAlgebraOperator operator, IOptimizer optimizer) {
+        IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), query.getSql(), operator);
         ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), null);
         return toExperimentResults(iterator);
     }

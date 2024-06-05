@@ -1,7 +1,7 @@
 package galois.test.experiments.json.parser;
 
 import galois.optimizer.AllConditionPushdownOptimizer;
-import galois.optimizer.IOptimization;
+import galois.optimizer.IOptimizer;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public class OptimizersFactory {
             // Map.entry("OptimizerName", OptimizerClass::new)
     );
 
-    public static IOptimization getOptimizerByName(String name) {
+    public static IOptimizer getOptimizerByName(String name) {
         if (name == null || name.isEmpty() || !optimizersMap.containsKey(name))
             throw new IllegalArgumentException("Invalid metric name: " + name + "!");
 
@@ -22,6 +22,6 @@ public class OptimizersFactory {
 
     @FunctionalInterface
     private interface IOptimizerGenerator {
-        IOptimization create();
+        IOptimizer create();
     }
 }
