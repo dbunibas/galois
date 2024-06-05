@@ -14,7 +14,7 @@ public class OptimizersFactory {
 
     public static IOptimizer getOptimizerByName(String name) {
         if (name == null || name.isEmpty() || !optimizersMap.containsKey(name))
-            throw new IllegalArgumentException("Invalid metric name: " + name + "!");
+            throw new IllegalArgumentException("Invalid optimizer name: " + name + "!");
 
         IOptimizerGenerator optimizerGenerator = optimizersMap.get(name);
         return optimizerGenerator.create();

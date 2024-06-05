@@ -13,7 +13,7 @@
     "TupleSimilarityConstraint"
   ],
   "optimizers": [
-    "AllConditionPushdownOptimizer"
+    "SingleConditionsOptimizerFactory"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
@@ -24,7 +24,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.actor a where a.gender = 'Female'",
+    "sql": "select * from target.actor a where gender = 'Female' AND birth_year > 1980",
     "schema": {
       "name": "dummy_actors",
       "schema": "target",

@@ -17,6 +17,11 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
     private final int index;
 
     @Override
+    public String getName() {
+        return this.getClass().getSimpleName() + " - index " + this.index;
+    }
+
+    @Override
     public IAlgebraOperator optimize(IDatabase database, String sql, IAlgebraOperator query) {
         // TODO: Add scan to abstract component
         log.warn("Naïve implementation, for testing purposes only!");

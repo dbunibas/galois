@@ -46,7 +46,7 @@ public final class Experiment {
         List<IOptimizer> optimizersList = optimizers == null ? List.of() : optimizers;
         for (IOptimizer optimizer : optimizersList) {
             var result = executeOptimizedExperiment(operator, optimizer);
-            results.put(optimizer.getClass().getSimpleName(), result);
+            results.put(optimizer.getName(), result);
         }
 
         return results;

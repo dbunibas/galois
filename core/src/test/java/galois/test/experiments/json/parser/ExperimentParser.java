@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.optimizer.IOptimization;
 import galois.optimizer.IOptimizer;
+import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.parser.ParserWhere;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.Query;
 import galois.test.experiments.json.ExperimentJSON;
@@ -12,6 +14,7 @@ import galois.test.experiments.metrics.MetricFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExperimentParser {
@@ -24,9 +27,9 @@ public class ExperimentParser {
 
     public static Experiment parseJSON(ExperimentJSON json) {
         List<IMetric> metrics = parseMetrics(json.getMetrics());
-        List<IOptimizer> optimizers = parseOptimizers(json.getOptimizers());
         OperatorsConfiguration operatorsConfiguration = OperatorsConfigurationParser.parseJSON(json.getOperatorsConfig());
         Query query = QueryParser.parseJSON(json.getQuery());
+        List<IOptimizer> optimizers = parseOptimizers(json.getOptimizers(), query);
         return new Experiment(json.getName(), json.getDbms(), metrics, optimizers, operatorsConfiguration, query, json.getQueryExecutor());
     }
 
@@ -34,7 +37,23 @@ public class ExperimentParser {
         return metrics.stream().map(MetricFactory::getMetricByName).toList();
     }
 
-    private static List<IOptimizer> parseOptimizers(List<String> optimizers) {
-        return optimizers.stream().map(OptimizersFactory::getOptimizerByName).toList();
+    private static List<IOptimizer> parseOptimizers(List<String> optimizers, Query query) {
+        List<IOptimizer> parsedOptimizers = new ArrayList<>();
+
+        // TODO: Refactor by changing the OptimizersFactory signature
+        for (String optimizer : optimizers) {
+            if (optimizer.equals("SingleConditionsOptimizerFactory")) {
+                ParserWhere parserWhere = new ParserWhere();
+                parserWhere.parseWhere(query.getSql());
+                for (int i = 0; i < parserWhere.getExpressions().size(); i++) {
+                    parsedOptimizers.add(new IndexedConditionPushdownOptimizer(i));
+                }
+                continue;
+            }
+
+            parsedOptimizers.add(OptimizersFactory.getOptimizerByName(optimizer));
+        }
+
+        return parsedOptimizers;
     }
 }

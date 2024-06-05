@@ -48,6 +48,7 @@ public class SingleConditionPushdown implements IOptimization {
         String conditionAsString = pushdownCondition.toString();
         // TODO: Add this to utility (same code in FilterParser.java)
         Expression pushdownExpression = new Expression(cleanExpression(conditionAsString));
+        log.debug("Optimized pushdown expression: {}", pushdownExpression);
         addAllAttributesToExpression(pushdownExpression, table, tableAlias);
 
         IQueryExecutor executor = scan.getQueryExecutor();
@@ -70,7 +71,7 @@ public class SingleConditionPushdown implements IOptimization {
                 .collect(Collectors.joining(cleanOperation));
         Expression expression = new Expression(cleanExpression(conditionsAsString));
         addAllAttributesToExpression(expression, table, tableAlias);
-        log.info("Optimized expression: {}", expression);
+        log.debug("Optimized select expression: {}", expression);
 
         return new Select(expression);
     }
