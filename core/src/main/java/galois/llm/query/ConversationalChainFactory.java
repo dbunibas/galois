@@ -14,6 +14,10 @@ public class ConversationalChainFactory {
         return buildOllamaConversationalChain("mistral");
     }
 
+    public static ConversationalChain buildOllamaPhi3ConversationalChain() {
+        return buildOllamaConversationalChain("phi3");
+    }
+
     private static ConversationalChain buildOllamaConversationalChain(String modelName) {
         OllamaChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")

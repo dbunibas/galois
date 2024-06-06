@@ -5,6 +5,7 @@ import galois.llm.database.LLMDB;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
 import galois.llm.query.ollama.mistral.*;
+import galois.llm.query.ollama.phi3.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -119,6 +120,48 @@ public class TestScanStrategies {
     @Test
     public void testOllamaMistralKeyScan() {
         IQueryExecutor executor = OllamaMistralKeyScanQueryExecutor.builder()
+                .maxIterations(2)
+                .build();
+        testExecutor(executor);
+    }
+
+    @Test
+    public void testOllamaPhi3NLQuery() {
+        IQueryExecutor executor = OllamaPhi3NLQueryExecutor.builder()
+                .naturalLanguagePrompt(NL_PROMPT)
+                .maxIterations(2)
+                .build();
+        testExecutor(executor);
+    }
+
+    @Test
+    public void testOllamaPhi3SQLQuery() {
+        IQueryExecutor executor = OllamaPhi3SQLQueryExecutor.builder()
+                .sql(SQL)
+                .maxIterations(2)
+                .build();
+        testExecutor(executor);
+    }
+
+    @Test
+    public void testOllamaPhi3Table() {
+        IQueryExecutor executor = OllamaPhi3TableQueryExecutor.builder()
+                .maxIterations(2)
+                .build();
+        testExecutor(executor);
+    }
+
+    @Test
+    public void testOllamaPhi3Key() {
+        IQueryExecutor executor = OllamaPhi3KeyQueryExecutor.builder()
+                .maxIterations(2)
+                .build();
+        testExecutor(executor);
+    }
+
+    @Test
+    public void testOllamaPhi3KeyScan() {
+        IQueryExecutor executor = OllamaPhi3KeyScanQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
         testExecutor(executor);
