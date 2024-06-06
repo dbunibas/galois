@@ -1,4 +1,4 @@
-package galois.llm.query.ollama.llama3;
+package galois.llm.query.ollama.mistral;
 
 import dev.langchain4j.chain.ConversationalChain;
 import galois.llm.query.AbstractEntityQueryExecutor;
@@ -13,25 +13,25 @@ import speedy.model.database.ITable;
 
 import java.util.List;
 
-import static galois.llm.query.ConversationalChainFactory.buildOllamaLlama3ConversationalChain;
+import static galois.llm.query.ConversationalChainFactory.buildOllamaMistralConversationalChain;
 import static galois.utils.FunctionalUtils.orElse;
 
 @Slf4j
 @Getter
-public class OllamaLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor {
+public class OllamaMistralSQLQueryExecutor extends AbstractEntityQueryExecutor {
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final int maxIterations;
     private final String sql;
 
-    public OllamaLlama3SQLQueryExecutor(String sql) {
+    public OllamaMistralSQLQueryExecutor(String sql) {
         this.firstPrompt = EPrompts.FROM_SQL_JSON;
         this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES;
         this.maxIterations = 10;
         this.sql = sql;
     }
 
-    public OllamaLlama3SQLQueryExecutor(EPrompts firstPrompt, EPrompts iterativePrompt, Integer maxIterations, String sql) {
+    public OllamaMistralSQLQueryExecutor(EPrompts firstPrompt, EPrompts iterativePrompt, Integer maxIterations, String sql) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.FROM_SQL_JSON);
         this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES);
         this.maxIterations = maxIterations;
@@ -41,7 +41,7 @@ public class OllamaLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor {
 
     @Override
     protected ConversationalChain getConversationalChain() {
-        return buildOllamaLlama3ConversationalChain();
+        return buildOllamaMistralConversationalChain();
     }
 
     @Override
@@ -49,8 +49,8 @@ public class OllamaLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor {
         return firstPrompt.generateUsingSQL(sql, jsonSchema);
     }
 
-    public static OllamaLlama3SQLQueryExecutorBuilder builder() {
-        return new OllamaLlama3SQLQueryExecutorBuilder();
+    public static OllamaMistralSQLQueryExecutorBuilder builder() {
+        return new OllamaMistralSQLQueryExecutorBuilder();
     }
 
     @Override
@@ -58,17 +58,17 @@ public class OllamaLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor {
         return builder();
     }
 
-    public static class OllamaLlama3SQLQueryExecutorBuilder extends AbstractQueryExecutorBuilder {
+    public static class OllamaMistralSQLQueryExecutorBuilder extends AbstractQueryExecutorBuilder {
         private String sql;
 
-        public OllamaLlama3SQLQueryExecutorBuilder sql(String sql) {
+        public OllamaMistralSQLQueryExecutorBuilder sql(String sql) {
             this.sql = sql;
             return this;
         }
 
         @Override
         public IQueryExecutor build() {
-            return new OllamaLlama3SQLQueryExecutor(
+            return new OllamaMistralSQLQueryExecutor(
                     getFirstPrompt(),
                     getIterativePrompt(),
                     getMaxIterations(),

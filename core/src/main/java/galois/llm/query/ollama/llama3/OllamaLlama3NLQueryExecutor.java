@@ -19,7 +19,6 @@ import static galois.utils.FunctionalUtils.orElse;
 @Slf4j
 @Getter
 public class OllamaLlama3NLQueryExecutor extends AbstractEntityQueryExecutor {
-
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final int maxIterations;
