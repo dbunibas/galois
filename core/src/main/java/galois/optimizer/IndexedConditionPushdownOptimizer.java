@@ -30,6 +30,10 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
             if (currentNode instanceof Select) {
                 ParserWhere parserWhere = new ParserWhere();
                 parserWhere.parseWhere(sql);
+                if (parserWhere.getOperation().equals("OR")) {
+                    log.debug("Cannot optimize tree with OR operation");
+                    return currentNode;
+                }
                 List<Expression> expressions = parserWhere.getExpressions();
                 Expression pushdownCondition = expressions.remove(index);
                 log.debug("pushdownCondition is: {}", pushdownCondition);
