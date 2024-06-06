@@ -5,8 +5,7 @@ import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.database.LLMDB;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.OllamaLlama3KeyQueryExecutor;
-import galois.optimizer.AllConditionPushdownOptimizer;
-import galois.optimizer.IOptimization;
+import galois.optimizer.AllConditionsPushdownOptimizer;
 import galois.optimizer.IOptimizer;
 import galois.parser.IQueryPlanParser;
 import galois.parser.postgresql.PostgresXMLParser;
@@ -113,7 +112,7 @@ public class TestGalois {
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration);
 
-        IOptimizer optimizer = new AllConditionPushdownOptimizer();
+        IOptimizer optimizer = new AllConditionsPushdownOptimizer();
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, operator);
 
         ITupleIterator iterator = optimizedQuery.execute(llmDB, null);

@@ -37,6 +37,7 @@ public class TestUtils {
         String csv = Objects.requireNonNull(TestUtils.class.getResource(fileName)).getFile();
         DAOMainMemoryDatabase dao = new DAOMainMemoryDatabase();
         IDatabase mainMemoryDB = dao.loadCSVDatabase(csv, ',', null, false, header);
+        // TODO: getFirstTable() is inadequate if loading a full database (for query execution)
         return toTupleList(mainMemoryDB.getFirstTable().getTupleIterator());
     }
 

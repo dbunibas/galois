@@ -7,7 +7,7 @@ import speedy.model.algebra.Select;
 import speedy.model.database.IDatabase;
 
 @Slf4j
-public class AllConditionPushdownOptimizer implements IOptimizer {
+public class AllConditionsPushdownOptimizer implements IOptimizer {
     private final AllConditionsPushdown allConditionsPushdown = new AllConditionsPushdown();
 
     @Override

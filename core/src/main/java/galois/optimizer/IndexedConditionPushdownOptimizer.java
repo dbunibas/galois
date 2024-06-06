@@ -21,7 +21,7 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
 
     @Override
     public String getName() {
-        return getClass().getSimpleName() + " - index " + index + " - pushdown " + pushdownCondition;
+        return getClass().getSimpleName() + " - index " + index + " - pushdown \"" + pushdownCondition + "\"";
     }
 
     @Override

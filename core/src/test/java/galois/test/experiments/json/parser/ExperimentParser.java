@@ -2,7 +2,6 @@ package galois.test.experiments.json.parser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import galois.llm.algebra.config.OperatorsConfiguration;
-import galois.optimizer.IOptimization;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
 import galois.parser.ParserWhere;
@@ -38,6 +37,10 @@ public class ExperimentParser {
     }
 
     private static List<IOptimizer> parseOptimizers(List<String> optimizers, Query query) {
+        if (optimizers == null || optimizers.isEmpty()) {
+            return List.of();
+        }
+
         List<IOptimizer> parsedOptimizers = new ArrayList<>();
 
         // TODO: Refactor by changing the OptimizersFactory signature

@@ -1,5 +1,6 @@
 package galois.llm.query.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import speedy.SpeedyConstants;
 import speedy.model.database.*;
 import speedy.model.database.mainmemory.datasource.IntegerOIDGenerator;
@@ -9,11 +10,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static galois.utils.Mapper.asString;
 
+@Slf4j
 public class QueryUtils {
     public static String getKeyAsString(Key key) {
         // TODO: Check composite key
@@ -128,7 +129,7 @@ public class QueryUtils {
     }
 
     private static String getJsonSchemaTypeFromDBType(String type) {
-        return switch (type) {
+        return switch (type.toLowerCase()) {
             case "double precision", "real" -> "number";
             case "integer", "long" -> "integer";
             default -> "string";

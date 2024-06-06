@@ -8,20 +8,20 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 @Slf4j
-public class TestRunDummyFilteredActors {
+public class TestRunGeo {
     @Test
     public void testOllamaLlama3TableExperiment() {
-        execute("/dummy-filtered-actors/actors-llama3-table-experiment.json");
+        execute("/geo_data/geo-llama3-table-experiment.json");
     }
 
     @Test
     public void testOllamaLlama3KeyExperiment() {
-        execute("/dummy-filtered-actors/actors-llama3-key-experiment.json");
+        execute("/geo_data/geo-llama3-key-experiment.json");
     }
 
     @Test
     public void testOllamaLlama3KeyScanExperiment() {
-        execute("/dummy-filtered-actors/actors-llama3-key-scan-experiment.json");
+        execute("/geo_data/geo-llama3-key-scan-experiment.json");
     }
 
     private void execute(String path) {

@@ -28,7 +28,10 @@ public enum EPrompts {
     LIST_KEY_JSON_CONDITION("List the ${key} of some ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
 
     LIST_KEY_PIPE("List the ${key} of some ${table}s. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null),
+    LIST_KEY_PIPE_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null),
+
     LIST_KEY_COMMA("List the ${key} of some ${table}s. Just report the values in a row separated by comma without any comments.", CommaKeyParser::parse, null, null),
+    LIST_KEY_COMMA_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by comma without any comments.", CommaKeyParser::parse, null, null),
 
 
     // Attributes
@@ -38,6 +41,8 @@ public enum EPrompts {
 
     // Entities
     FROM_TABLE_JSON("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, Mapper::fromJsonToListOfMaps),
+    FROM_TABLE_JSON_CONDITION("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table} where ${condition}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, Mapper::fromJsonToListOfMaps),
+
     FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", null, null, Mapper::fromJsonToListOfMaps),
 
     // Natural Language
@@ -75,6 +80,10 @@ public enum EPrompts {
 
     public String generate(ITable table, Collection<Attribute> attributes, String jsonSchema) {
         return generate(table.getName(), null, getAttributesAsString(attributes), null, null, null, jsonSchema);
+    }
+
+    public String generate(ITable table, Collection<Attribute> attributes, Expression condition, String jsonSchema) {
+        return generate(table.getName(), null, getAttributesAsString(attributes), getExpressionAsString(condition), null, null, jsonSchema);
     }
 
     private String generate(String tableName, String primaryKey, String attributes, String condition, String prompt, String sql, String jsonSchema) {

@@ -13,6 +13,7 @@
     "TupleSimilarityConstraint"
   ],
   "optimizers": [
+    "AllConditionsPushdownOptimizer",
     "SingleConditionsOptimizerFactory"
   ],
   "dbms": "postgres",
@@ -20,6 +21,7 @@
     "scan": {
       "queryExecutor": "ollama-llama3-key-scan",
       "maxIterations": 1,
+      "firstPrompt": "LIST_KEY_PIPE",
       "attributesPrompt": "ATTRIBUTES_COMMA"
     }
   },
