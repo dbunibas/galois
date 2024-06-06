@@ -2,7 +2,6 @@ package galois.optimizer;
 
 import galois.optimizer.optimizations.SingleConditionPushdown;
 import galois.parser.ParserWhere;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import speedy.model.algebra.IAlgebraOperator;
@@ -12,13 +11,17 @@ import speedy.model.database.IDatabase;
 import java.util.List;
 
 @Slf4j
-@AllArgsConstructor
 public class IndexedConditionPushdownOptimizer implements IOptimizer {
     private final int index;
+    private Expression pushdownCondition;
+
+    public IndexedConditionPushdownOptimizer(int index) {
+        this.index = index;
+    }
 
     @Override
     public String getName() {
-        return this.getClass().getSimpleName() + " - index " + this.index;
+        return getClass().getSimpleName() + " - index " + index + " - pushdown " + pushdownCondition;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
                     return currentNode;
                 }
                 List<Expression> expressions = parserWhere.getExpressions();
-                Expression pushdownCondition = expressions.remove(index);
+                pushdownCondition = expressions.remove(index);
                 log.debug("pushdownCondition is: {}", pushdownCondition);
                 SingleConditionPushdown singleConditionPushdown = new SingleConditionPushdown(pushdownCondition, expressions, parserWhere.getOperation());
                 IAlgebraOperator optimizedNode = singleConditionPushdown.optimize(database, currentNode);
