@@ -33,7 +33,6 @@ public enum EPrompts {
     LIST_KEY_COMMA("List the ${key} of some ${table}s. Just report the values in a row separated by comma without any comments.", CommaKeyParser::parse, null, null),
     LIST_KEY_COMMA_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by comma without any comments.", CommaKeyParser::parse, null, null),
 
-
     // Attributes
     ATTRIBUTES_PIPE("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by | without any additional comments.", null, PipeAttributesParser::parse, null),
     ATTRIBUTES_COMMA("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by comma without any additional comments.", null, CommaAttributesParser::parse, null),
