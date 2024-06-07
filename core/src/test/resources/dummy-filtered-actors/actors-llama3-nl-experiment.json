@@ -1,0 +1,56 @@
+{
+  "name": "Actors llama3-nl Experiment",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleOrder",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "ollama-llama3-nl",
+      "maxIterations": 1,
+      "naturalLanguagePrompt": "List the name, gender and birth year of female actors born after 1980."
+    }
+  },
+  "query": {
+    "sql": "select * from target.actor a where gender = 'Female' AND birth_year > 1980",
+    "schema": {
+      "name": "dummy_actors",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "actor",
+          "attributes": [
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "gender",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_year",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/dummy-filtered-actors/actor"
+  }
+}

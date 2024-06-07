@@ -9,6 +9,6 @@ public class ScanConfigurationJSON {
     private String iterativePrompt;
     private int maxIterations;
     private String attributesPrompt;
-    private String prompt;
+    private String naturalLanguagePrompt;
     private String sql;
 }

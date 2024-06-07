@@ -4,6 +4,7 @@ import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
 import galois.prompt.EPrompts;
+import galois.test.experiments.Query;
 import galois.test.experiments.json.config.ScanConfigurationJSON;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,23 +24,24 @@ public class ScanConfigurationParser {
             Map.entry("ollama-llama3-key-scan", ScanConfigurationParser::generateOllamaLlama3KeyScanQueryExecutor)
     );
 
-    public static ScanConfiguration parse(ScanConfigurationJSON json) {
-        return new ScanConfiguration(getExecutor(json));
+    public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
+        return new ScanConfiguration(getExecutor(json, query));
     }
 
-    private static IQueryExecutor getExecutor(ScanConfigurationJSON json) {
+    private static IQueryExecutor getExecutor(ScanConfigurationJSON json, Query query) {
         String name = json.getQueryExecutor();
         if (name == null || name.isEmpty() || !parserMap.containsKey(name))
             throw new IllegalArgumentException("Invalid executor name: " + name + "!");
-
         IQueryExecutorGenerator generator = parserMap.get(name);
         return generator.create(
                 json.getFirstPrompt(),
                 json.getIterativePrompt(),
                 json.getMaxIterations(),
                 json.getAttributesPrompt(),
-                json.getPrompt(),
-                json.getSql()
+                json.getNaturalLanguagePrompt(),
+                json.getSql() == null || json.getSql().isBlank() ?
+                        query.getSql() :
+                        json.getSql()
         );
     }
 

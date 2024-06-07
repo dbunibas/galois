@@ -26,8 +26,8 @@ public class ExperimentParser {
 
     public static Experiment parseJSON(ExperimentJSON json) {
         List<IMetric> metrics = parseMetrics(json.getMetrics());
-        OperatorsConfiguration operatorsConfiguration = OperatorsConfigurationParser.parseJSON(json.getOperatorsConfig());
         Query query = QueryParser.parseJSON(json.getQuery());
+        OperatorsConfiguration operatorsConfiguration = OperatorsConfigurationParser.parseJSON(json.getOperatorsConfig(), query);
         List<IOptimizer> optimizers = parseOptimizers(json.getOptimizers(), query);
         return new Experiment(json.getName(), json.getDbms(), metrics, optimizers, operatorsConfiguration, query, json.getQueryExecutor());
     }

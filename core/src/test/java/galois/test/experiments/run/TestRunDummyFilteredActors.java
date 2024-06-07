@@ -10,6 +10,16 @@ import java.io.IOException;
 @Slf4j
 public class TestRunDummyFilteredActors {
     @Test
+    public void testOllamaLlama3NLExperiment() {
+        execute("/dummy-filtered-actors/actors-llama3-nl-experiment.json");
+    }
+
+    @Test
+    public void testOllamaLlama3SQLExperiment() {
+        execute("/dummy-filtered-actors/actors-llama3-sql-experiment.json");
+    }
+
+    @Test
     public void testOllamaLlama3TableExperiment() {
         execute("/dummy-filtered-actors/actors-llama3-table-experiment.json");
     }

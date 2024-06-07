@@ -72,7 +72,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof LLMScan);
@@ -120,7 +120,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof OrderBy);
@@ -157,7 +157,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Project);
@@ -197,7 +197,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Select, operator.getName());
@@ -242,7 +242,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Select, operator.getName());
@@ -289,7 +289,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Select, operator.getName());
@@ -332,7 +332,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Project, operator.getName());

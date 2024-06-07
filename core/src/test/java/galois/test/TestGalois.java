@@ -90,7 +90,7 @@ public class TestGalois {
         Document queryPlan = planner.planFrom(sql);
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.parseJSON(null));
+        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.getDefault());
 
         ITupleIterator iterator = operator.execute(llm, null);
 
