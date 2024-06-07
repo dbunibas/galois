@@ -1,6 +1,7 @@
 package galois.test.experiments;
 
 import galois.llm.algebra.config.OperatorsConfiguration;
+import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimization;
 import galois.optimizer.IOptimizer;
 import galois.parser.IQueryPlanParser;
@@ -54,12 +55,14 @@ public final class Experiment {
 
     private ExperimentResults executeUnoptimizedExperiment(IAlgebraOperator operator) {
         // TODO [Stats]: Reset stats
+        LLMQueryStatManager.getInstance().resetStats();
         ITupleIterator iterator = operator.execute(query.getDatabase(), null);
         return toExperimentResults(iterator);
     }
 
     private ExperimentResults executeOptimizedExperiment(IAlgebraOperator operator, IOptimizer optimizer) {
         // TODO [Stats]: Reset stats
+        LLMQueryStatManager.getInstance().resetStats();
         IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), query.getSql(), operator);
         ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), null);
         return toExperimentResults(iterator);
