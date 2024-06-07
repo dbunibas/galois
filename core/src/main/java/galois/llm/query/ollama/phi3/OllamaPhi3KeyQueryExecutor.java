@@ -63,13 +63,8 @@ public class OllamaPhi3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
         Map<String, Object> attributesMap = new HashMap<>();
         for (Attribute attribute : attributes) {
-            List<Attribute> currentAttributeList = List.of(attribute);
-            String jsonSchema = generateJsonSchemaFromAttributes(table, currentAttributeList);
-            String prompt = attributesPrompt.generate(table, key, currentAttributeList, jsonSchema);
-            log.debug("Attribute prompt is: {}", prompt);
-            String response = chain.execute(prompt);
-            log.debug("Attribute response is: {}", response);
-            Map<String, Object> map = attributesPrompt.getAttributesParser().parse(response, currentAttributeList);
+            List<Attribute> currentAttributesList = List.of(attribute);
+            Map<String, Object> map = getAttributesValues(table, currentAttributesList, key, chain);
             attributesMap.putAll(map);
         }
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);

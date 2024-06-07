@@ -14,6 +14,7 @@ import speedy.model.database.TableAlias;
 import speedy.model.database.Tuple;
 import speedy.model.expressions.Expression;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,12 +62,7 @@ public class OllamaLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecu
 
     @Override
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
-        String jsonSchema = generateJsonSchemaFromAttributes(table, attributes);
-        String prompt = attributesPrompt.generate(table, key, attributes, jsonSchema);
-        log.debug("Attributes prompt is: {}", prompt);
-        String response = chain.execute(prompt);
-        log.debug("addValueFromAttributes response: {}", response);
-        Map<String, Object> attributesMap = attributesPrompt.getAttributesParser().parse(response, attributes);
+        Map<String, Object> attributesMap = getAttributesValues(table, attributes, key, chain);
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
     }
 

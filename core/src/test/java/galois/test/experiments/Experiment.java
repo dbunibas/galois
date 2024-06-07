@@ -53,11 +53,13 @@ public final class Experiment {
     }
 
     private ExperimentResults executeUnoptimizedExperiment(IAlgebraOperator operator) {
+        // TODO [Stats]: Reset stats
         ITupleIterator iterator = operator.execute(query.getDatabase(), null);
         return toExperimentResults(iterator);
     }
 
     private ExperimentResults executeOptimizedExperiment(IAlgebraOperator operator, IOptimizer optimizer) {
+        // TODO [Stats]: Reset stats
         IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), query.getSql(), operator);
         ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), null);
         return toExperimentResults(iterator);
@@ -70,6 +72,7 @@ public final class Experiment {
                 .map(m -> m.getScore(query.getDatabase(), query.getResults(), results))
                 .toList();
 
+        // TODO [Stats]: Add stats to results
         return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
     }
 }

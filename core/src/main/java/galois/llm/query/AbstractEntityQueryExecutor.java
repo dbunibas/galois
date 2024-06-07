@@ -31,6 +31,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     generateIterativePrompt(table, attributes, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
 
+            // TODO [Stats]: update stats
             String response = chain.execute(userMessage);
             log.debug("Response is: {}", response);
 

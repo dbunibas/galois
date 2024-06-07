@@ -4,12 +4,9 @@ import dev.langchain4j.chain.ConversationalChain;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static galois.llm.query.utils.QueryUtils.createNewTupleWithMockOID;
-import static galois.llm.query.utils.QueryUtils.generateJsonSchemaForKeys;
+import static galois.llm.query.utils.QueryUtils.*;
 
 @Slf4j
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
@@ -70,5 +67,15 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 new ConstantValue(key)
         );
         tuple.addCell(keyCell);
+    }
+
+    protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributes, String key, ConversationalChain chain) {
+        String jsonSchema = generateJsonSchemaFromAttributes(table, attributes);
+        String prompt = getAttributesPrompt().generate(table, key, attributes, jsonSchema);
+        log.debug("Attribute prompt is: {}", prompt);
+        // TODO [Stats]: update stats
+        String response = chain.execute(prompt);
+        log.debug("Attribute response is: {}", response);
+        return getAttributesPrompt().getAttributesParser().parse(response, attributes);
     }
 }
