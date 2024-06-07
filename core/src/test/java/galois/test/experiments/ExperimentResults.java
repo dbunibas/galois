@@ -1,5 +1,6 @@
 package galois.test.experiments;
 
+import galois.llm.query.LLMQueryStatManager;
 import galois.test.experiments.metrics.IMetric;
 import lombok.Data;
 import speedy.model.database.Tuple;
@@ -38,7 +39,17 @@ public class ExperimentResults {
         for (int i = 0; i < scores.size(); i++) {
             sb.append(metrics.get(i).getName()).append(": ").append(scores.get(i)).append("\n");
         }
-
+        LLMQueryStatManager queryStats = LLMQueryStatManager.getInstance();
+        int llmRequest = queryStats.getLLMRequest();
+        double llmTokensInput = queryStats.getLLMTokensInput();
+        double llmTokensOutput = queryStats.getLLMTokensOutput();
+        long timeMs = queryStats.getTimeMs();
+        double totalTokens = llmTokensInput + llmTokensOutput;
+        sb.append("LLM Total Requests: ").append(llmRequest).append("\n");
+        sb.append("LLM Total Input Tokens: ").append(llmTokensInput).append("\n");
+        sb.append("LLM Total Output Tokens: ").append(llmTokensInput).append("\n");
+        sb.append("LLM Total Tokens: ").append(totalTokens).append("\n");
+        sb.append("LLM Time (ms): ").append(timeMs).append("\n");
         // return sb.toString();
         sb.append("\n");
         sb.append("------------------------------------------------------------------------------------\n");
