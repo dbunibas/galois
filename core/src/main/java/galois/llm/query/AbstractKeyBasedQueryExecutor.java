@@ -1,6 +1,7 @@
 package galois.llm.query;
 
 import dev.langchain4j.chain.ConversationalChain;
+import galois.llm.TokensEstimator;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
@@ -10,6 +11,7 @@ import static galois.llm.query.utils.QueryUtils.*;
 
 @Slf4j
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
+
     abstract protected ConversationalChain getConversationalChain();
 
     protected abstract Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain);
@@ -35,8 +37,8 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                     getFirstPrompt().generate(table, primaryKey, getExpression(), schema) :
                     getIterativePrompt().generate(table, primaryKey, getExpression(), schema);
             log.debug("Key prompt is: {}", userMessage);
-
-            String response = chain.execute(userMessage);
+            
+            String response = getResponse(chain, userMessage);
             log.debug("Response is: {}", response);
 
             List<String> currentKeys = getFirstPrompt().getKeyParser().parse(response);
@@ -73,9 +75,23 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         String jsonSchema = generateJsonSchemaFromAttributes(table, attributes);
         String prompt = getAttributesPrompt().generate(table, key, attributes, jsonSchema);
         log.debug("Attribute prompt is: {}", prompt);
-        // TODO [Stats]: update stats
-        String response = chain.execute(prompt);
+        String response = getResponse(chain, prompt);
         log.debug("Attribute response is: {}", response);
         return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+    }
+
+    private String getResponse(ConversationalChain chain, String userMessage) {
+        TokensEstimator estimator = new TokensEstimator();
+        // TODO [Stats:] TokenCountEstimator estimator get from model
+        LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
+        double inputTokens = estimator.getTokens(userMessage);
+        queryStatManager.updateLLMTokensInput(inputTokens);
+        long start = System.currentTimeMillis();
+        String response = chain.execute(userMessage);
+        queryStatManager.updateTimeMs(System.currentTimeMillis() - start);
+        double outputTokens = estimator.getTokens(response);
+        queryStatManager.updateLLMTokensOutput(outputTokens);
+        queryStatManager.updateLLMRequest(1);
+        return response;
     }
 }
