@@ -1,4 +1,5 @@
 package galois.test.experiments.metrics;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 
 // This class provides a way to calculate the Edit Distance metric
 public class EditDistance{
@@ -19,50 +20,10 @@ public class EditDistance{
         }
 
         // Calculate the edit distance between the expected and result cells
-        double distance = editDistance(expected, result);
+        LevenshteinDistance levenshteinDistance = new LevenshteinDistance();
+        double distance = levenshteinDistance.apply(expected, result);
         // Return true if the distance is less than or equal to the threshold, otherwise return false
         return distance <= threshold;
     }
 
-    // Calculates the edit distance between the given strings
-    public int editDistance(String str1, String str2)
-    {
-        // Get the lengths of the two input strings.
-        int m = str1.length();
-        int n = str2.length();
-
-        // Initialize an array to store the current row of edit distances.
-        int[] curr = new int[n + 1];
-
-        // Initialize the first row with values 0 to n.
-        for (int j = 0; j <= n; j++) {
-            curr[j] = j;
-        }
-
-        int previous;
-        for (int i = 1; i <= m; i++) {
-            // Store the value of the previous row's first column.
-            previous = curr[0];
-            curr[0] = i;
-
-            for (int j = 1; j <= n; j++) {
-                // Store the current value before updating it.
-                int temp = curr[j];
-
-                // Check if the characters at the current positions in str1 and str2 are the same.
-                if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
-                    // If they are the same, no additional cost is incurred.
-                    curr[j] = previous;
-                }
-                else {
-                    // If the characters are different, calculate the minimum of three operations: deletion, insertion, and substitution.
-                    curr[j] = 1 + Math.min(Math.min(previous, curr[j - 1]), curr[j]);
-                }
-                // Update the previous value to the stored temporary value.
-                previous = temp;
-            }
-        }
-        // The value in the last cell of the current row represents the edit distance.
-        return curr[n];
-    }
 }

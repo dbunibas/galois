@@ -33,6 +33,8 @@ dependencies {
     implementation("commons-lang:commons-lang:2.6")
     implementation("com.github.jsqlparser:jsqlparser:4.9")
 
+    implementation("org.apache.commons:commons-text:1.10.0")
+
     implementation("com.knuddels:jtokkit:1.0.0")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))

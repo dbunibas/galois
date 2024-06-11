@@ -3,6 +3,7 @@ package galois.test.experiments.json.parser.operators;
 import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
+import galois.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
 import galois.prompt.EPrompts;
 import galois.test.experiments.Query;
 import galois.test.experiments.json.config.ScanConfigurationJSON;
@@ -21,7 +22,8 @@ public class ScanConfigurationParser {
             Map.entry("ollama-llama3-sql", ScanConfigurationParser::generateOllamaLlama3SQLQueryExecutor),
             Map.entry("ollama-llama3-table", ScanConfigurationParser::generateOllamaLlama3TableQueryExecutor),
             Map.entry("ollama-llama3-key", ScanConfigurationParser::generateOllamaLlama3KeyQueryExecutor),
-            Map.entry("ollama-llama3-key-scan", ScanConfigurationParser::generateOllamaLlama3KeyScanQueryExecutor)
+            Map.entry("ollama-llama3-key-scan", ScanConfigurationParser::generateOllamaLlama3KeyScanQueryExecutor),
+            Map.entry("ollama-mistral-nl", ScanConfigurationParser::generateOllamaMistralNLQueryExecutor)
     );
 
     public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
@@ -72,6 +74,11 @@ public class ScanConfigurationParser {
     private static IQueryExecutor generateOllamaLlama3KeyScanQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaLlama3KeyScanQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null);
+    }
+
+    private static IQueryExecutor generateOllamaMistralNLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new OllamaMistralNLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt);
     }
 
     @FunctionalInterface
