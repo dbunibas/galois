@@ -5,6 +5,8 @@ import galois.prompt.parser.IEntitiesResponseParser;
 import galois.prompt.parser.IKeyResponseParser;
 import galois.prompt.parser.attributes.CommaAttributesParser;
 import galois.prompt.parser.attributes.PipeAttributesParser;
+import galois.prompt.parser.entities.JSONEntitiesParser;
+import galois.prompt.parser.entities.MistralTableEntitiesParser;
 import galois.prompt.parser.key.CommaKeyParser;
 import galois.prompt.parser.key.PipeKeyParser;
 import galois.utils.Mapper;
@@ -19,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static galois.llm.query.utils.QueryUtils.*;
+import static galois.utils.Mapper.fromJsonToListOfMaps;
 
 @Getter
 @AllArgsConstructor
@@ -36,16 +39,18 @@ public enum EPrompts {
     // Attributes
     ATTRIBUTES_PIPE("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by | without any additional comments.", null, PipeAttributesParser::parse, null),
     ATTRIBUTES_COMMA("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by comma without any additional comments.", null, CommaAttributesParser::parse, null),
-    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
+    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}\nExample:  { \"name\": \"Antarctica\", \"area\": \"13720000\" }", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
 
     // Entities
-    FROM_TABLE_JSON("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, Mapper::fromJsonToListOfMaps),
-    FROM_TABLE_JSON_CONDITION("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table} where ${condition}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, Mapper::fromJsonToListOfMaps),
+    FROM_TABLE_JSON("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
+    FROM_TABLE_JSON_CONDITION("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table} where ${condition}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
 
-    FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", null, null, Mapper::fromJsonToListOfMaps),
+    FROM_TABLE_MISTRAL("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nInclude all the values that you know. Just report the table without any comment.", null, null, MistralTableEntitiesParser::parse),
+
+    FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
 
     // Natural Language
-    NATURAL_LANGUAGE_JSON("${prompt}\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, Mapper::fromJsonToListOfMaps),
+    NATURAL_LANGUAGE_JSON("${prompt}\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
 
     // Iterative
     LIST_DIFFERENT_VALUES("List different values.", null, null, null),

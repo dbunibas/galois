@@ -34,7 +34,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             String response = getResponse(chain, userMessage);
             log.debug("Response is: {}", response);
 
-            List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response);
+            List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
             log.debug("Parsed response is: {}", parsedResponse);
 
             for (Map<String, Object> map : parsedResponse) {
