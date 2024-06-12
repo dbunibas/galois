@@ -1,5 +1,6 @@
 package galois.utils;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,7 +18,11 @@ public class Mapper {
     private static final TypeReference<List<String>> LIST_STRING_REF = new TypeReference<>() {
     };
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper()
+            .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
+            .configure(JsonParser.Feature.ALLOW_YAML_COMMENTS, true)
+            .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
+            .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 
     public static String asString(Object value) {
         return orElseThrow(
@@ -29,7 +34,7 @@ public class Mapper {
     public static Map<String, Object> fromJsonToMap(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(value, JSON_REF) :
+                        mapper.readValue(toCleanJsonObject(value), JSON_REF) :
                         null,
                 MapperException::new
         );
@@ -38,7 +43,7 @@ public class Mapper {
     public static List<Map<String, Object>> fromJsonToListOfMaps(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(value, LIST_OF_JSON_REF) :
+                        mapper.readValue(toCleanJsonObject(value), LIST_OF_JSON_REF) :
                         null,
                 MapperException::new
         );
@@ -47,10 +52,15 @@ public class Mapper {
     public static List<String> fromJsonListToList(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(value, LIST_STRING_REF) :
+                        mapper.readValue(toCleanJsonObject(value), LIST_STRING_REF) :
                         null,
                 MapperException::new
         );
+    }
+
+    private static String toCleanJsonObject(String response) {
+        if (response == null || !response.contains("{") || !response.contains("}")) return response;
+        return response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1);
     }
 
     private static final class MapperException extends RuntimeException {
