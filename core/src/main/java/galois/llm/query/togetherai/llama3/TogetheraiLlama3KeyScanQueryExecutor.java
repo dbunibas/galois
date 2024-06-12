@@ -1,6 +1,8 @@
-package galois.llm.query.ollama.llama3;
+package galois.llm.query.togetherai.llama3;
 
 import dev.langchain4j.chain.ConversationalChain;
+import galois.Constants;
+import galois.llm.models.TogetherAIModel;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
@@ -14,24 +16,24 @@ import speedy.model.database.TableAlias;
 import speedy.model.database.Tuple;
 import speedy.model.expressions.Expression;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static galois.llm.query.ConversationalChainFactory.buildOllamaLlama3ConversationalChain;
+import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
 import static galois.llm.query.utils.QueryUtils.mapToTuple;
 import static galois.utils.FunctionalUtils.orElse;
 
 @Slf4j
 @Getter
-public class OllamaLlama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
+public class TogetheraiLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecutor {
+
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final EPrompts attributesPrompt;
     private final int maxIterations;
     private final Expression expression;
 
-    public OllamaLlama3KeyQueryExecutor() {
+    public TogetheraiLlama3KeyScanQueryExecutor() {
         this.firstPrompt = EPrompts.LIST_KEY_JSON;
         this.iterativePrompt = EPrompts.LIST_MORE_NO_REPEAT;
         this.attributesPrompt = EPrompts.ATTRIBUTES_JSON;
@@ -39,7 +41,7 @@ public class OllamaLlama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor 
         this.expression = null;
     }
 
-    public OllamaLlama3KeyQueryExecutor(
+    public TogetheraiLlama3KeyScanQueryExecutor(
             EPrompts firstPrompt,
             EPrompts iterativePrompt,
             EPrompts attributesPrompt,
@@ -55,22 +57,18 @@ public class OllamaLlama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor 
 
     @Override
     protected ConversationalChain getConversationalChain() {
-        return buildOllamaLlama3ConversationalChain();
+        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+//        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);
     }
 
     @Override
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
-        Map<String, Object> attributesMap = new HashMap<>();
-        for (Attribute attribute : attributes) {
-            List<Attribute> currentAttributesList = List.of(attribute);
-            Map<String, Object> map = getAttributesValues(table, currentAttributesList, key, chain);
-            attributesMap.putAll(map);
-        }
+        Map<String, Object> attributesMap = getAttributesValues(table, attributes, key, chain);
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
     }
 
-    public static OllamaLLama3KeyQueryExecutorBuilder builder() {
-        return new OllamaLLama3KeyQueryExecutorBuilder();
+    public static TogetheraiLLama3KeyScanQueryExecutorBuilder builder() {
+        return new TogetheraiLLama3KeyScanQueryExecutorBuilder();
     }
 
     @Override
@@ -78,10 +76,11 @@ public class OllamaLlama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor 
         return builder();
     }
 
-    public static class OllamaLLama3KeyQueryExecutorBuilder extends AbstractQueryExecutorBuilder {
+    public static class TogetheraiLLama3KeyScanQueryExecutorBuilder extends AbstractQueryExecutorBuilder {
+
         @Override
         public IQueryExecutor build() {
-            return new OllamaLlama3KeyQueryExecutor(
+            return new TogetheraiLlama3KeyScanQueryExecutor(
                     getFirstPrompt(),
                     getIterativePrompt(),
                     getAttributesPrompt(),

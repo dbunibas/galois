@@ -47,7 +47,7 @@ public class ExperimentResults {
         double totalTokens = llmTokensInput + llmTokensOutput;
         sb.append("LLM Total Requests: ").append(llmRequest).append("\n");
         sb.append("LLM Total Input Tokens: ").append(llmTokensInput).append("\n");
-        sb.append("LLM Total Output Tokens: ").append(llmTokensInput).append("\n");
+        sb.append("LLM Total Output Tokens: ").append(llmTokensOutput).append("\n");
         sb.append("LLM Total Tokens: ").append(totalTokens).append("\n");
         sb.append("LLM Time (ms): ").append(timeMs).append("\n");
         // return sb.toString();

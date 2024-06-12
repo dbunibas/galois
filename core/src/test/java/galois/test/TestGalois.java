@@ -5,6 +5,7 @@ import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.database.LLMDB;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.OllamaLlama3KeyQueryExecutor;
+import galois.llm.query.togetherai.llama3.TogetheraiLLama3KeyQueryExecutor;
 import galois.optimizer.AllConditionsPushdownOptimizer;
 import galois.optimizer.IOptimizer;
 import galois.parser.IQueryPlanParser;
@@ -108,6 +109,28 @@ public class TestGalois {
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
         IQueryExecutor executor = new OllamaLlama3KeyQueryExecutor();
+        ScanConfiguration scanConfiguration = new ScanConfiguration(executor);
+        OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration);
+
+        IOptimizer optimizer = new AllConditionsPushdownOptimizer();
+        IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, operator);
+
+        ITupleIterator iterator = optimizedQuery.execute(llmDB, null);
+        TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
+    }
+    
+    @Test
+    public void testFullPipelineTogetherAI() {
+        // TODO: This will be added in the executeQuery method once stable
+        String sql = "select a.name from target.actor a where a.gender = 'Female' order by a.name";
+        IDatabase llmDB = new LLMDB(accessConfiguration);
+
+        IQueryPlanner<Document> planner = new PostgresXMLPlanner(accessConfiguration);
+        Document queryPlan = planner.planFrom(sql);
+
+        IQueryPlanParser<Document> parser = new PostgresXMLParser();
+        IQueryExecutor executor = new TogetheraiLLama3KeyQueryExecutor();
         ScanConfiguration scanConfiguration = new ScanConfiguration(executor);
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration);

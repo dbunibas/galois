@@ -11,13 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.data.message.ChatMessage;
+import dev.langchain4j.data.message.ChatMessageType;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.output.Response;
+import dev.langchain4j.model.output.TokenUsage;
 import galois.llm.models.togetherai.Choice;
 import galois.llm.models.togetherai.Message;
 import galois.llm.models.togetherai.ResponseTogetherAI;
 import galois.llm.models.togetherai.Usage;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public class TogetherAIModel implements IModel {
+public class TogetherAIModel implements IModel, ChatLanguageModel {
 
     public static final String MODEL_LLAMA3_8B = "meta-llama/Llama-3-8b-chat-hf";
     public static final String MODEL_LLAMA3_70B = "meta-llama/Llama-3-70b-chat-hf";
@@ -33,6 +41,7 @@ public class TogetherAIModel implements IModel {
     private ObjectMapper objectMapper = new ObjectMapper();
     private int inputTokens = 0;
     private int outputTokens = 0;
+    private int waitTimeInSec = 1;
 
     public TogetherAIModel(String toghetherAiAPI, String modelName) {
         this.toghetherAiAPI = toghetherAiAPI;
@@ -41,6 +50,18 @@ public class TogetherAIModel implements IModel {
 
     @Override
     public String text(String prompt) {
+        ResponseTogetherAI responseAPI = getResponse(prompt);
+        if (responseAPI != null) {
+            Choice choice = responseAPI.getChoices().get(0);
+            Message message = choice.getMessage();
+            if (message != null) {
+                return message.getContent().trim();
+            }
+        }
+        return null;
+    }
+
+    public ResponseTogetherAI getResponse(String prompt) {
         Message newMessage = new Message();
         newMessage.setRole(USER);
         newMessage.setContent(prompt);
@@ -51,6 +72,9 @@ public class TogetherAIModel implements IModel {
         }
         String authorizationValue = "Bearer " + this.toghetherAiAPI;
         String response = this.makeRequest(jsonRequest, authorizationValue);
+        if (response == null || response.isEmpty()) {
+            return null;
+        }
         try {
             ResponseTogetherAI responseAPI = objectMapper.readValue(response, ResponseTogetherAI.class);
             Choice choice = responseAPI.getChoices().get(0);
@@ -60,8 +84,8 @@ public class TogetherAIModel implements IModel {
                 this.inputTokens += usage.getPromptTokens();
                 this.outputTokens += usage.getCompletionTokens();
                 this.messages.add(message);
-                return message.getContent().trim();
             }
+            return responseAPI;
         } catch (Exception e) {
             log.error("Exception with parsing response: " + response);
             log.error("Exception: " + e);
@@ -75,6 +99,38 @@ public class TogetherAIModel implements IModel {
 
     public int getOutputTokens() {
         return outputTokens;
+    }
+
+    @Override
+    public Response<AiMessage> generate(List<ChatMessage> messages) {
+        this.messages.clear();
+        String lastTextMessage = null;
+        for (ChatMessage message : messages) {
+            if (message.type().equals(ChatMessageType.USER)) {
+                Message mex = new Message();
+                mex.setRole(USER);
+                mex.setContent(message.text());
+                this.messages.add(mex);
+            } else {
+                Message mex = new Message();
+                mex.setRole(ASSISTANT);
+                mex.setContent(message.text());
+                this.messages.add(mex);
+            }
+            lastTextMessage = message.text();
+        }
+        if (lastTextMessage != null) {
+            ResponseTogetherAI responseAPI = getResponse(lastTextMessage);
+            if (responseAPI != null) {
+                Choice choice = responseAPI.getChoices().get(0);
+                Message message = choice.getMessage();
+                if (message != null) {
+                    return Response.from(AiMessage.from(message.getContent()), new TokenUsage(responseAPI.getUsage().getPromptTokens(), responseAPI.getUsage().getCompletionTokens()));
+                }
+            }
+            return null;
+        }
+        return null;
     }
 
     private String makeRequest(String jsonRequest, String authorizationValue) {
@@ -97,7 +153,16 @@ public class TogetherAIModel implements IModel {
             }
             return response.toString().trim();
         } catch (Exception e) {
-            log.error("Exception with the request: " + e);
+            if (e instanceof IOException) {
+                try {
+                    TimeUnit.SECONDS.sleep(this.waitTimeInSec);
+                    return makeRequest(jsonRequest, authorizationValue);
+                } catch (InterruptedException ie) {
+                }
+            } else {
+                log.error("Exception with the request: " + e);
+                return null;
+            }
         }
         return "";
     }
