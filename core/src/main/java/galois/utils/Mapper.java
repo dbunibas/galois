@@ -43,7 +43,7 @@ public class Mapper {
     public static List<Map<String, Object>> fromJsonToListOfMaps(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(toCleanJsonObject(value), LIST_OF_JSON_REF) :
+                        mapper.readValue(toCleanJsonList(value), LIST_OF_JSON_REF) :
                         null,
                 MapperException::new
         );
@@ -52,15 +52,23 @@ public class Mapper {
     public static List<String> fromJsonListToList(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(toCleanJsonObject(value), LIST_STRING_REF) :
+                        mapper.readValue(toCleanJsonList(value), LIST_STRING_REF) :
                         null,
                 MapperException::new
         );
     }
 
     private static String toCleanJsonObject(String response) {
-        if (response == null || !response.contains("{") || !response.contains("}")) return response;
-        return response.substring(response.indexOf("{"), response.lastIndexOf("}") + 1);
+        return getContentBetween(response, "{", "}");
+    }
+
+    private static String toCleanJsonList(String response) {
+        return getContentBetween(response, "[", "]");
+    }
+
+    private static String getContentBetween(String response, String firstValue, String secondValue) {
+        if (response == null || !response.contains(firstValue) || !response.contains(secondValue)) return response;
+        return response.substring(response.indexOf(firstValue), response.lastIndexOf(secondValue) + 1);
     }
 
     private static final class MapperException extends RuntimeException {
