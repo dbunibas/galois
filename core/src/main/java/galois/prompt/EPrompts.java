@@ -39,8 +39,8 @@ public enum EPrompts {
     // Attributes
     ATTRIBUTES_PIPE("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by | without any additional comments.", null, PipeAttributesParser::parse, null),
     ATTRIBUTES_COMMA("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by comma without any additional comments.", null, CommaAttributesParser::parse, null),
-    // TODO: Even if the example is actually effective, it should be at least auto-generated from the table attributes
-    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}\nExample:  { \"name\": \"Antarctica\", \"area\": \"13720000\" }", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
+    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
+    // TODO: Add attributes prompt with auto-generated example from the table attributes
 
     // Entities
     FROM_TABLE_JSON("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
