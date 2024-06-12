@@ -1,5 +1,5 @@
 {
-  "name": "Continents llama3 Experiment",
+  "name": "Continents llama3 Key Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -8,7 +8,6 @@
     "CellF1Score",
     "CellSimilarityF1Score",
     "TupleCardinality",
-    "TupleOrder",
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
@@ -20,7 +19,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.continents c order by c.name",
+    "sql": "select * from target.continents c",
     "schema": {
       "name": "continents",
       "schema": "target",
@@ -37,7 +36,7 @@
               "key": true
             },
             {
-              "name": "area",
+              "name": "area_km2",
               "type": "STRING",
               "nullable": false
             },

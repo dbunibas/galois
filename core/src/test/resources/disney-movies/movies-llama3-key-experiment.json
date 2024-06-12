@@ -1,5 +1,5 @@
 {
-  "name": "Continents llama3 Table Experiment",
+  "name": "Disney Movies llama3 Key Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -14,41 +14,47 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "ollama-llama3-table",
+      "queryExecutor": "ollama-llama3-key",
       "maxIterations": 1
     }
   },
   "query": {
-    "sql": "select * from target.continents c",
+    "sql": "select movie_title, main_genre from target.disney_movies_total_gross m",
     "schema": {
-      "name": "continents",
+      "name": "disney_movies_total_gross",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "continents",
+          "tableName": "disney_movies_total_gross",
           "attributes": [
             {
-              "name": "name",
+              "name": "movie_title",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "area_km2",
+              "name": "main_genre",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "population",
+              "name": "total_gross_dollars",
               "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "release_year",
+              "type": "INTEGER",
               "nullable": false
             }
           ]
         }
       ]
+
     },
-    "results": "/continents/continent"
+    "results": "/disney-movies/movie"
   }
 }

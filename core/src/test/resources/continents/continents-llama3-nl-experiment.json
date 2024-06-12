@@ -17,11 +17,11 @@
     "scan": {
       "queryExecutor": "ollama-llama3-nl",
       "maxIterations": 1,
-      "naturalLanguagePrompt": "List the name, gender and birth year of female actors born after 1980."
+      "naturalLanguagePrompt": "List the names, area (in km2) and population of all continents in the world. Example: Antarctica | 13720000 | 1000"
     }
   },
   "query": {
-    "sql": "select name from target.continents c order by c.name",
+    "sql": "select * from target.continents c",
     "schema": {
       "name": "continents",
       "schema": "target",

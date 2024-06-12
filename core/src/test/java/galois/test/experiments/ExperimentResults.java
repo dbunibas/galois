@@ -52,6 +52,15 @@ public class ExperimentResults {
         sb.append("LLM Time (ms): ").append(timeMs).append("\n");
         // return sb.toString();
         sb.append("\n");
+        sb.append("Only results, same order: \n");
+        for (int i = 0; i < scores.size(); i++) {
+            sb.append(scores.get(i)).append("\n");
+        }
+        sb.append(llmRequest).append("\n");
+        sb.append(llmTokensInput).append("\n");
+        sb.append(llmTokensInput).append("\n");
+        sb.append(totalTokens).append("\n");
+        sb.append(timeMs).append("\n");
         sb.append("------------------------------------------------------------------------------------\n");
         String result = sb.toString();
         String nameReplaced = name.replace(" ", "_");

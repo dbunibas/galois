@@ -1,5 +1,5 @@
 {
-  "name": "Continents llama3 Table Experiment",
+  "name": "Continents llama3 SQL Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -8,18 +8,19 @@
     "CellF1Score",
     "CellSimilarityF1Score",
     "TupleCardinality",
+    "TupleOrder",
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "ollama-llama3-table",
+      "queryExecutor": "ollama-llama3-sql",
       "maxIterations": 1
     }
   },
   "query": {
-    "sql": "select * from target.continents c",
+    "sql": "select name, area_km2 from target.continents c",
     "schema": {
       "name": "continents",
       "schema": "target",
