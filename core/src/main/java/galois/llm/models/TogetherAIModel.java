@@ -21,6 +21,7 @@ import galois.llm.models.togetherai.Choice;
 import galois.llm.models.togetherai.Message;
 import galois.llm.models.togetherai.ResponseTogetherAI;
 import galois.llm.models.togetherai.Usage;
+import galois.utils.Mapper;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -35,13 +36,17 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private String endPoint = "https://api.together.xyz/v1/chat/completions";
     private String toghetherAiAPI;
     private String modelName;
-    private int maxTokens = 512;
+    private int maxTokens = 4096; // max returned tokens
     private double temperature = 0.7;
     private List<Message> messages = new ArrayList<>();
     private ObjectMapper objectMapper = new ObjectMapper();
     private int inputTokens = 0;
     private int outputTokens = 0;
     private int waitTimeInSec = 1;
+    private int numRetry = 0;
+    private int maxRetry = 10;
+    private boolean checkJSON = true;
+    private boolean checkJSONResponseContent = true;
 
     public TogetherAIModel(String toghetherAiAPI, String modelName) {
         this.toghetherAiAPI = toghetherAiAPI;
@@ -80,6 +85,13 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             Choice choice = responseAPI.getChoices().get(0);
             Message message = choice.getMessage();
             if (message != null) {
+                if (checkJSONResponseContent) {
+                    String content = message.getContent();
+                    if (content != null && !Mapper.isJSON(content)) {
+                        if (!this.messages.isEmpty()) this.messages.remove(this.messages.size() - 1);
+                        return null;
+                    }
+                }
                 Usage usage = responseAPI.getUsage();
                 this.inputTokens += usage.getPromptTokens();
                 this.outputTokens += usage.getCompletionTokens();
@@ -103,6 +115,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
 
     @Override
     public Response<AiMessage> generate(List<ChatMessage> messages) {
+        log.trace("Messages: " + messages);
         this.messages.clear();
         String lastTextMessage = null;
         for (ChatMessage message : messages) {
@@ -119,6 +132,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             }
             lastTextMessage = message.text();
         }
+        log.trace("Last Message: " + lastTextMessage);
         if (lastTextMessage != null) {
             ResponseTogetherAI responseAPI = getResponse(lastTextMessage);
             if (responseAPI != null) {
@@ -134,6 +148,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     }
 
     private String makeRequest(String jsonRequest, String authorizationValue) {
+        if (this.numRetry >= this.maxRetry) return null;
         try {
             URL url = URI.create(this.endPoint).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -151,13 +166,20 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            return response.toString().trim();
+            log.trace("Request: \n" + jsonRequest);
+            String responseText = response.toString().trim();
+            log.trace("Response: \n" + responseText);
+            if (checkJSON && !Mapper.isJSON(responseText)) {
+                return null;
+            }
+            return responseText;
         } catch (Exception e) {
             if (e instanceof IOException) {
                 try {
                     TimeUnit.SECONDS.sleep(this.waitTimeInSec);
                     return makeRequest(jsonRequest, authorizationValue);
                 } catch (InterruptedException ie) {
+                    this.numRetry++;
                 }
             } else {
                 log.error("Exception with the request: " + e);

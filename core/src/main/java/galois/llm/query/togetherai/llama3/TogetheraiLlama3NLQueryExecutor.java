@@ -29,7 +29,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
 
     public TogetheraiLlama3NLQueryExecutor(String naturalLanguagePrompt) {
         this.firstPrompt = EPrompts.NATURAL_LANGUAGE_JSON;
-        this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES;
+        this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES_JSON;
         this.maxIterations = 10;
         this.naturalLanguagePrompt = naturalLanguagePrompt;
     }
@@ -41,7 +41,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
             String naturalLanguagePrompt
     ) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.NATURAL_LANGUAGE_JSON);
-        this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES);
+        this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES_JSON);
         this.maxIterations = maxIterations;
         if (naturalLanguagePrompt == null || naturalLanguagePrompt.isBlank()) {
             throw new IllegalArgumentException("naturalLanguagePrompt cannot be null or blank!");

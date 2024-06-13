@@ -11,10 +11,14 @@ import java.io.IOException;
 public class TestRunDisneyMovies {
 
     @Test
-    public void TestOllamaLlama3NLExperiment() {execute("/disney-movies/movies-llama3-nl-experiment.json");}
+    public void TestOllamaLlama3NLExperiment() {
+        execute("/disney-movies/movies-llama3-nl-experiment.json");
+    }
 
     @Test
-    public void TestOllamaLlama3SQLExperiment() {execute("/disney-movies/movies-llama3-sql-experiment.json");}
+    public void TestOllamaLlama3SQLExperiment() {
+        execute("/disney-movies/movies-llama3-sql-experiment.json");
+    }
 
     @Test
     public void testOllamaLlama3TableExperiment() {
@@ -29,6 +33,12 @@ public class TestRunDisneyMovies {
     @Test
     public void testOllamaLlama3KeyScanExperiment() {
         execute("/disney-movies/movies-llama3-key-scan-experiment.json");
+    }
+
+    @Test
+    public void testExp() {
+        execute("/disney-movies/movies-togetherai-llama3-table-experiment.json");
+//        execute("/disney-movies/movies-togetherai-llama3-key-experiment.json");
     }
 
     private void execute(String path) {

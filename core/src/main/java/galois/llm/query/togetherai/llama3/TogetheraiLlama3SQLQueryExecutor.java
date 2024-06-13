@@ -29,14 +29,14 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
 
     public TogetheraiLlama3SQLQueryExecutor(String sql) {
         this.firstPrompt = EPrompts.FROM_SQL_JSON;
-        this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES;
+        this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES_JSON;
         this.maxIterations = 10;
         this.sql = sql;
     }
 
     public TogetheraiLlama3SQLQueryExecutor(EPrompts firstPrompt, EPrompts iterativePrompt, Integer maxIterations, String sql) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.FROM_SQL_JSON);
-        this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES);
+        this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES_JSON);
         this.maxIterations = maxIterations;
         if (sql == null || sql.isBlank()) {
             throw new IllegalArgumentException("sql cannot be null or blank!");

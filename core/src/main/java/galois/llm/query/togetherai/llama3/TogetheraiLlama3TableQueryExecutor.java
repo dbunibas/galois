@@ -25,7 +25,7 @@ public class TogetheraiLlama3TableQueryExecutor extends AbstractEntityQueryExecu
 
     public TogetheraiLlama3TableQueryExecutor() {
         this.firstPrompt = EPrompts.FROM_TABLE_JSON;
-        this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES;
+        this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES_JSON;
         this.maxIterations = 10;
         this.expression = null;
     }
@@ -37,7 +37,7 @@ public class TogetheraiLlama3TableQueryExecutor extends AbstractEntityQueryExecu
             Expression expression
     ) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.FROM_TABLE_JSON);
-        this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES);
+        this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES_JSON);
         this.maxIterations = maxIterations;
         this.expression = expression;
     }

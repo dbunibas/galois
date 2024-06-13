@@ -31,16 +31,20 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     ? generateFirstPrompt(table, attributes, jsonSchema)
                     : generateIterativePrompt(table, attributes, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
-            String response = getResponse(chain, userMessage);
-            log.debug("Response is: {}", response);
+            try {
+                String response = getResponse(chain, userMessage);
+                log.debug("Response is: {}", response);
+                List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
+                log.debug("Parsed response is: {}", parsedResponse);
 
-            List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
-            log.debug("Parsed response is: {}", parsedResponse);
-
-            for (Map<String, Object> map : parsedResponse) {
-                Tuple tuple = mapToTuple(map, tableAlias, attributes);
-                // TODO: Handle possible duplicates
-                tuples.add(tuple);
+                for (Map<String, Object> map : parsedResponse) {
+                    Tuple tuple = mapToTuple(map, tableAlias, attributes);
+                    // TODO: Handle possible duplicates
+                    tuples.add(tuple);
+                }
+            } catch (Exception e) {
+                // BEST EFFORT. The response could not be parseble, or the request could return a null chain
+                // TODO: log it for debug?
             }
         }
         return tuples;

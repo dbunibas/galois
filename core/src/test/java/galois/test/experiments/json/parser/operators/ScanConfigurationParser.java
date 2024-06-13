@@ -28,11 +28,11 @@ public class ScanConfigurationParser {
             Map.entry("ollama-llama3-table", ScanConfigurationParser::generateOllamaLlama3TableQueryExecutor),
             Map.entry("ollama-llama3-key", ScanConfigurationParser::generateOllamaLlama3KeyQueryExecutor),
             Map.entry("ollama-llama3-key-scan", ScanConfigurationParser::generateOllamaLlama3KeyScanQueryExecutor),
-            Map.entry("togheterai-llama3-nl", ScanConfigurationParser::generateTogetheraiLlama3NLQueryExecutor),
-            Map.entry("togheterai-llama3-sql", ScanConfigurationParser::generateTogetheraiLlama3SQLQueryExecutor),
-            Map.entry("togheterai-llama3-table", ScanConfigurationParser::generateTogetheraiLlama3TableQueryExecutor),
-            Map.entry("togheterai-llama3-key", ScanConfigurationParser::generateTogetheraiLlama3KeyQueryExecutor),
-            Map.entry("togheterai-llama3-key-scan", ScanConfigurationParser::generateTogetheraiLlama3KeyScanQueryExecutor),
+            Map.entry("togetherai-llama3-nl", ScanConfigurationParser::generateTogetheraiLlama3NLQueryExecutor),
+            Map.entry("togetherai-llama3-sql", ScanConfigurationParser::generateTogetheraiLlama3SQLQueryExecutor),
+            Map.entry("togetherai-llama3-table", ScanConfigurationParser::generateTogetheraiLlama3TableQueryExecutor),
+            Map.entry("togetherai-llama3-key", ScanConfigurationParser::generateTogetheraiLlama3KeyQueryExecutor),
+            Map.entry("togetherai-llama3-key-scan", ScanConfigurationParser::generateTogetheraiLlama3KeyScanQueryExecutor),
             Map.entry("ollama-mistral-nl", ScanConfigurationParser::generateOllamaMistralNLQueryExecutor)
     );
 

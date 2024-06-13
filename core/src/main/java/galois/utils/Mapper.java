@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import static galois.utils.FunctionalUtils.orElseThrow;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Mapper {
     private static final TypeReference<HashMap<String, Object>> JSON_REF = new TypeReference<>() {
     };
@@ -56,6 +58,14 @@ public class Mapper {
                         null,
                 MapperException::new
         );
+    }
+    
+    public static boolean isJSON(String response) {
+        String responseList = toCleanJsonList(response);
+        String responseJson = toCleanJsonObject(response);
+        if (responseList.startsWith("[") && responseList.endsWith("]")) return true;
+        if (responseJson.startsWith("{") && responseJson.endsWith("}")) return true;
+        return false;
     }
 
     private static String toCleanJsonObject(String response) {

@@ -55,6 +55,7 @@ public enum EPrompts {
 
     // Iterative
     LIST_DIFFERENT_VALUES("List different values.", null, null, null),
+    LIST_DIFFERENT_VALUES_JSON("List different values. Respond with JSON only.", null, null, null),
     LIST_MORE_NO_REPEAT("List more values. Don't repeat the previous values.", null, null, null),
     ;
 
