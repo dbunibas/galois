@@ -6,16 +6,21 @@ import lombok.Data;
 import speedy.model.database.Tuple;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 @Data
+@Slf4j
 public class ExperimentResults {
+
     private final String name;
     private final List<IMetric> metrics;
     private final List<Tuple> expectedResults;
@@ -23,6 +28,7 @@ public class ExperimentResults {
     private final List<Double> scores;
     private final String queryExecutor;
     private final String sql_query;
+    private boolean exportActualResults = true;
 
     @Override
     public String toString() {
@@ -66,13 +72,50 @@ public class ExperimentResults {
         String nameReplaced = name.replace(" ", "_");
         String basePath = System.getProperty("user.dir");
         Path filePath = Paths.get(basePath, "src", "test", "resources", "results", nameReplaced + ".txt");
-
         try {
             Files.write(Paths.get(filePath.toUri()), result.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        if (exportActualResults) {
+            Path filePathCSV = Paths.get(basePath, "src", "test", "resources", "results", nameReplaced + ".csv");
+            saveActualResult(filePathCSV);
+        }
         return result;
+    }
+
+    private void saveActualResult(Path filePathCSV) {
+        if (actualResults.isEmpty()) {
+            return;
+        }
+        Tuple firstTuple = actualResults.get(0);
+        String[] headers = getHeaders(firstTuple);
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(headers).build();
+        try {
+            PrintWriter writer = new PrintWriter(filePathCSV.toFile());
+            CSVPrinter printer = new CSVPrinter(writer, csvFormat);
+            for (Tuple tuple : actualResults) {
+                printer.printRecord(getCellContent(tuple));
+            }
+            writer.close();
+        } catch (IOException ioe) {
+            log.error("Exception: {}", ioe);
+        }
+    }
+
+    private String[] getHeaders(Tuple tuple) {
+        String[] headers = new String[tuple.getCells().size()];
+        for (int i = 0; i < tuple.getCells().size(); i++) {
+            headers[i] = tuple.getCells().get(i).getAttribute();
+        }
+        return headers;
+    }
+
+    private Object[] getCellContent(Tuple tuple) {
+        String[] cells = new String[tuple.getCells().size()];
+        for (int i = 0; i < tuple.getCells().size(); i++) {
+            cells[i] = tuple.getCells().get(i).getValue().toString();
+        }
+        return cells;
     }
 }

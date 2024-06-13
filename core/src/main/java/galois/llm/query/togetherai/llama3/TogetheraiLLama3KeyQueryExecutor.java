@@ -66,7 +66,7 @@ public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecu
         for (Attribute attribute : attributes) {
             List<Attribute> currentAttributesList = List.of(attribute);
             Map<String, Object> map = getAttributesValues(table, currentAttributesList, key, chain);
-            attributesMap.putAll(map);
+            if (map != null) attributesMap.putAll(map);
         }
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
     }

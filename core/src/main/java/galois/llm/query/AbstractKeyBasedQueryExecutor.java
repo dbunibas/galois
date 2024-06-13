@@ -77,7 +77,14 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         log.debug("Attribute prompt is: {}", prompt);
         String response = getResponse(chain, prompt);
         log.debug("Attribute response is: {}", response);
-        return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+        try {
+            return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+        } catch (Exception e) {
+            log.error("Prompt: \n{} ", prompt);
+            log.error("Response: \n{} ", response);
+            log.error("Exception: {}", e);
+            return new HashMap<>();
+        }
     }
 
     private String getResponse(ConversationalChain chain, String userMessage) {
