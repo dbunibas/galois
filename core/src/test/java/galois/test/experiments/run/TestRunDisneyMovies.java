@@ -37,9 +37,11 @@ public class TestRunDisneyMovies {
 
     @Test
     public void testExp() {
-        execute("/disney-movies/movies-togetherai-llama3-nl-experiment.json");
+//        execute("/disney-movies/movies-togetherai-llama3-nl-experiment.json");
+//        execute("/disney-movies/movies-togetherai-llama3-sql-experiment.json");
 //        execute("/disney-movies/movies-togetherai-llama3-table-experiment.json");
 //        execute("/disney-movies/movies-togetherai-llama3-key-experiment.json");
+        execute("/disney-movies/movies-togetherai-llama3-key-scan-experiment.json");
     }
 
     private void execute(String path) {

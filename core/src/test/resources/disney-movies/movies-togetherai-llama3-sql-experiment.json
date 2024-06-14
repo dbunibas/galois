@@ -1,0 +1,60 @@
+{
+  "name": "Disney Movies llama3 SQL Experiment",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-sql",
+      "maxIterations": 10
+    }
+  },
+  "query": {
+    "sql": "select movie_title, main_genre from target.disney_movies m",
+    "schema": {
+      "name": "disney_movies",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "disney_movies",
+          "attributes": [
+            {
+              "name": "movie_title",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "main_genre",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "total_gross_dollars",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "release_year",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+
+    },
+    "results": "/disney-movies/movie"
+  }
+}

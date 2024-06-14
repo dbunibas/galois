@@ -33,19 +33,23 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         String schema = generateJsonSchemaForKeys(table);
 
         for (int i = 0; i < getMaxIterations(); i++) {
-            String userMessage = i == 0 ?
-                    getFirstPrompt().generate(table, primaryKey, getExpression(), schema) :
-                    getIterativePrompt().generate(table, primaryKey, getExpression(), schema);
+            String userMessage = i == 0
+                    ? getFirstPrompt().generate(table, primaryKey, getExpression(), schema)
+                    : getIterativePrompt().generate(table, primaryKey, getExpression(), schema);
             log.debug("Key prompt is: {}", userMessage);
-            
-            String response = getResponse(chain, userMessage);
-            log.debug("Response is: {}", response);
-
-            List<String> currentKeys = getFirstPrompt().getKeyParser().parse(response);
-            log.debug("Parsed keys are: {}", currentKeys);
-            keys.addAll(currentKeys);
+            String response = "";
+            try {
+                response = getResponse(chain, userMessage);
+                log.debug("Response is: {}", response);
+                List<String> currentKeys = getFirstPrompt().getKeyParser().parse(response);
+                log.debug("Parsed keys are: {}", currentKeys);
+                keys.addAll(currentKeys);
+            } catch (Exception e) {
+                log.error("Key prompt is: \n" + userMessage);
+                log.error("Response is: \n" + response);
+                log.error("Exception: \n" + e);
+            }
         }
-
         return keys;
     }
 
@@ -75,14 +79,15 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         String jsonSchema = generateJsonSchemaFromAttributes(table, attributes);
         String prompt = getAttributesPrompt().generate(table, key, attributes, jsonSchema);
         log.debug("Attribute prompt is: {}", prompt);
-        String response = getResponse(chain, prompt);
-        log.debug("Attribute response is: {}", response);
+        String response = "";
         try {
+            response = getResponse(chain, prompt);
+            log.debug("Attribute response is: {}", response);
             return getAttributesPrompt().getAttributesParser().parse(response, attributes);
         } catch (Exception e) {
-            log.error("Prompt: \n{} ", prompt);
-            log.error("Response: \n{} ", response);
-            log.error("Exception: {}", e);
+            log.error("Prompt: \n" + prompt);
+            log.error("Response: \n " + response);
+            log.error("Exception: \n" + e);
             return new HashMap<>();
         }
     }

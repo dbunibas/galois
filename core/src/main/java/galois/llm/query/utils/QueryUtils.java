@@ -54,7 +54,9 @@ public class QueryUtils {
 
     public static Tuple mapToTuple(Tuple tuple, Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
         for (Attribute attribute : attributes) {
-            IValue cellValue = map.containsKey(attribute.getName()) && !map.get(attribute.getName()).equals("null") ?
+            IValue cellValue = map.containsKey(attribute.getName()) &&
+                    map.get(attribute.getName()) != null && 
+                    !map.get(attribute.getName()).equals("null") ?
                     new ConstantValue(map.get(attribute.getName())) :
                     new NullValue(SpeedyConstants.NULL_VALUE);
             Cell currentCell = new Cell(
