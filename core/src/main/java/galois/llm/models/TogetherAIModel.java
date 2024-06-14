@@ -43,6 +43,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private int inputTokens = 0;
     private int outputTokens = 0;
     private int waitTimeInSec = 1;
+    private int connectionTimeout = 5 * 60 * 1000;
     private int numRetry = 0;
     private int maxRetry = 10;
     private boolean checkJSON = true;
@@ -152,6 +153,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         try {
             URL url = URI.create(this.endPoint).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(this.connectionTimeout);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
@@ -172,13 +174,16 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             if (checkJSON && !Mapper.isJSON(responseText)) {
                 return null;
             }
+            connection.disconnect();
             return responseText;
         } catch (Exception e) {
             if (e instanceof IOException) {
                 try {
                     TimeUnit.SECONDS.sleep(this.waitTimeInSec);
+                    this.numRetry++;
                     return makeRequest(jsonRequest, authorizationValue);
                 } catch (InterruptedException ie) {
+                    log.trace("Retry the request");
                     this.numRetry++;
                 }
             } else {

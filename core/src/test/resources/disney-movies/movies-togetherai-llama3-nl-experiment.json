@@ -1,5 +1,5 @@
 {
-  "name": "Disney Movies llama3 Key Experiment",
+  "name": "Disney Movies llama3 NL Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -14,12 +14,13 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-key",
-      "maxIterations": 10
+      "queryExecutor": "togetherai-llama3-nl",
+      "maxIterations": 10,
+      "naturalLanguagePrompt": "List the movie title of Disney Movies. Pick only one genre for each movie."
     }
   },
   "query": {
-    "sql": "select movie_title, main_genre from target.disney_movies m",
+    "sql": "select * from target.disney_movies m",
     "schema": {
       "name": "disney_movies",
       "schema": "target",
@@ -36,12 +37,12 @@
               "key": true
             },
             {
-              "name": "main_genre",
+              "name": "genre",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "total_gross_dollars",
+              "name": "total_gross",
               "type": "STRING",
               "nullable": false
             },
