@@ -1,0 +1,59 @@
+{
+  "name": "Venezuela SQL Presidents Experiment",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-sql",
+      "maxIterations": 1
+    }
+  },
+  "query": {
+    "sql": "select Name from target.venezuela_presidents p",
+    "schema": {
+      "name": "venezuela_all_presidents",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "venezuela_presidents",
+          "attributes": [
+            {
+              "name": "Name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "Years_In_Office",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Cardinal_Number",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Party",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/presidents_venezuela/presidents_data"
+  }
+}
