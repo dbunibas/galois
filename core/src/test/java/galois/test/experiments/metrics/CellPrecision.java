@@ -18,6 +18,10 @@ public class CellPrecision implements IMetric {
     @Override
     public Double getScore(IDatabase database, List<Tuple> expected, List<Tuple> result) {
 
+        if(expected.isEmpty() && result.isEmpty()) {
+            return 1.0;
+        }
+
         CellNormalizer cellNormalizer = new CellNormalizer();
 
         Set<String> expectedCells = new HashSet<>();
