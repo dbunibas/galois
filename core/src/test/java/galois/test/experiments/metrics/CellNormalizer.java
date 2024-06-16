@@ -18,6 +18,28 @@ public class CellNormalizer {
         } else if (cell instanceof String) {
             String strCell = (String) cell;
             strCell = strCell.replaceAll(",", "");
+
+            // Patterns for million, billion, and thousand
+            Pattern millionPattern = Pattern.compile("(\\d+(\\.\\d+)?)\\s*(million|m)", Pattern.CASE_INSENSITIVE);
+            Pattern billionPattern = Pattern.compile("(\\d+(\\.\\d+)?)\\s*(billion|b)", Pattern.CASE_INSENSITIVE);
+            Pattern thousandPattern = Pattern.compile("(\\d+(\\.\\d+)?)\\s*(thousand|k)", Pattern.CASE_INSENSITIVE);
+
+
+            Matcher millionMatcher = millionPattern.matcher(strCell);
+            Matcher billionMatcher = billionPattern.matcher(strCell);
+            Matcher thousandMatcher = thousandPattern.matcher(strCell);
+
+            if (millionMatcher.find()) {
+                double value = Double.parseDouble(millionMatcher.group(1)) * 1_000_000;
+                return String.format("%.0f", value);
+            } else if (billionMatcher.find()) {
+                double value = Double.parseDouble(billionMatcher.group(1)) * 1_000_000_000;
+                return String.format("%.0f", value);
+            } else if (thousandMatcher.find()) {
+                double value = Double.parseDouble(thousandMatcher.group(1)) * 1_000;
+                return String.format("%.0f", value);
+            }
+
             if (strCell.matches("^-?\\d+(\\.\\d+)?$")) {
                 double value = Double.parseDouble(strCell);
                 if (strCell.contains(".")) {
