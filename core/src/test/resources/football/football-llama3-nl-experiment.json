@@ -1,0 +1,77 @@
+{
+  "name": "Football Llama3 NL Experiment",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-nl",
+      "maxIterations": 1,
+      "naturalLanguagePrompt": "List the international football matches of years 2008 to 2018"
+    }
+  },
+  "query": {
+    "sql": "select match from target.international_football",
+    "schema": {
+      "name": "international_football_matches",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "international_football",
+          "attributes": [
+            {
+              "name": "year_2008_to_2018",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "home_score",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "away_score",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "tournament",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "city",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "country",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "match",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/football/international-football"
+  }
+}
