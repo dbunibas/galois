@@ -65,6 +65,8 @@ public class TupleSimilarityConstraint implements  IMetric{
 
             for(List<String> res : resultCellCount.keySet()){
 
+                count = 0;
+
                 for(int i = 0; i < exp.size(); i++){
 
                     if (i < res.size()) {
@@ -84,7 +86,7 @@ public class TupleSimilarityConstraint implements  IMetric{
                 }
 
 
-                count = 0;
+
             }
         }
 
