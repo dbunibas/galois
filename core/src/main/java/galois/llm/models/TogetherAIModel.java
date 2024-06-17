@@ -71,7 +71,6 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         Message newMessage = new Message();
         newMessage.setRole(USER);
         newMessage.setContent(prompt);
-        this.messages.add(newMessage);
         String jsonRequest = getJsonForRequest();
         if (jsonRequest.isEmpty()) {
             return null;
@@ -96,6 +95,8 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 Usage usage = responseAPI.getUsage();
                 this.inputTokens += usage.getPromptTokens();
                 this.outputTokens += usage.getCompletionTokens();
+                log.trace("Add Assistant Message in getResponse: " + newMessage);
+                this.messages.add(newMessage);
                 this.messages.add(message);
             }
             return responseAPI;
@@ -117,6 +118,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     @Override
     public Response<AiMessage> generate(List<ChatMessage> messages) {
         log.trace("Messages: " + messages);
+        log.trace("Clear all messages!");
         this.messages.clear();
         String lastTextMessage = null;
         for (ChatMessage message : messages) {
@@ -124,11 +126,13 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 Message mex = new Message();
                 mex.setRole(USER);
                 mex.setContent(message.text());
+                log.trace("Add User Message: " + mex);
                 this.messages.add(mex);
             } else {
                 Message mex = new Message();
                 mex.setRole(ASSISTANT);
                 mex.setContent(message.text());
+                log.trace("Add Assistant message: " + mex);
                 this.messages.add(mex);
             }
             lastTextMessage = message.text();
