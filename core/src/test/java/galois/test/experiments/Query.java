@@ -1,5 +1,6 @@
 package galois.test.experiments;
 
+import galois.test.experiments.json.QueryJSON;
 import lombok.Data;
 import speedy.model.database.IDatabase;
 import speedy.model.database.Tuple;
@@ -13,5 +14,6 @@ public class Query {
     private final AccessConfiguration accessConfiguration;
     private final IDatabase database;
     private final List<Tuple> results;
+    private final String resultPath;
 }
 

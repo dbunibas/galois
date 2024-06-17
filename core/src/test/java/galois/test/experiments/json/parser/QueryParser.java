@@ -14,6 +14,6 @@ public class QueryParser {
         AccessConfiguration accessConfiguration = AccessConfigurationParser.getAccessConfiguration(json.getSchema());
         IDatabase database = LLMDatabaseParser.parseDatabase(json.getSchema());
         List<Tuple> results = TestUtils.loadTuplesFromCSV(json.getResults(), true);
-        return new Query(json.getSql(), accessConfiguration, database, results);
+        return new Query(json.getSql(), accessConfiguration, database, results, json.getResults());
     }
 }
