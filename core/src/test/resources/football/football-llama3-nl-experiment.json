@@ -63,7 +63,7 @@
               "nullable": false
             },
             {
-              "name": "match",
+              "name": "home_team_vs_away_team",
               "type": "STRING",
               "nullable": false,
               "key": true

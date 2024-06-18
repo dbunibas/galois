@@ -22,7 +22,7 @@
     }
   },
   "query": {
-    "sql": "select home_team_vs_away_team, year_2008_to_2018 from target.international_football where city = 'Dakar'",
+    "sql": "select home_team_vs_away_team, year_2008_to_2018 from target.international_football where city = 'London'",
     "schema": {
       "name": "international_football_matches",
       "schema": "target",
