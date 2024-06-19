@@ -1,6 +1,8 @@
 package galois.parser.postgresql.nodeparsers;
 
 import galois.llm.algebra.config.OperatorsConfiguration;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Element;
 import speedy.model.algebra.IAlgebraOperator;
@@ -9,7 +11,10 @@ import speedy.model.database.*;
 import speedy.model.expressions.Expression;
 
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
 public class FilterParser extends AbstractNodeParser {
+    private String conditionNode = "Filter";
 
     @Override
     public IAlgebraOperator parse(Element node, IDatabase database, OperatorsConfiguration configuration) {
@@ -19,7 +24,8 @@ public class FilterParser extends AbstractNodeParser {
         TableAlias tableAlias = new TableAlias(tableName, alias);
         setTableAlias(tableAlias);
 
-        String filterText = node.getChild("Filter", node.getNamespace()).getText();
+        log.debug("filtering using node: {}", conditionNode);
+        String filterText = node.getChild(conditionNode, node.getNamespace()).getText();
         log.debug("filterText: {}", filterText);
         Expression expression = parseExpression(filterText, database);
         log.debug("Parsed expression: {}", expression);

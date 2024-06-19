@@ -9,6 +9,7 @@ import java.util.Map;
 public class NodeParserFactory {
     private static final Map<String, INodeParserGenerator> parserMap = Map.ofEntries(
             Map.entry("Seq Scan", ScanParser::new),
+            Map.entry("Bitmap Heap Scan", () -> new ScanParser("Recheck-Cond")),
             Map.entry("Sort", SortParser::new),
             Map.entry("Hash", HashParser::new),
             Map.entry("Hash Join", HashJoinParser::new)

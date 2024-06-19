@@ -2,13 +2,19 @@ package galois.parser.postgresql.nodeparsers;
 
 import galois.llm.algebra.LLMScan;
 import galois.llm.algebra.config.OperatorsConfiguration;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.jdom2.Element;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
 import speedy.model.database.TableAlias;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScanParser extends AbstractNodeParser {
+    private String conditionNode = "Filter";
+
     @Override
     public IAlgebraOperator parse(Element node, IDatabase database, OperatorsConfiguration configuration) {
         String tableName = node.getChild("Relation-Name", node.getNamespace()).getText();
@@ -18,8 +24,8 @@ public class ScanParser extends AbstractNodeParser {
 //        IAlgebraOperator scan = new Scan(tableAlias);
         IAlgebraOperator root = new LLMScan(tableAlias, configuration.getScan().getQueryExecutor());
 
-        if (node.getChild("Filter", node.getNamespace()) != null) {
-            FilterParser filterParser = new FilterParser();
+        if (node.getChild(conditionNode, node.getNamespace()) != null) {
+            FilterParser filterParser = new FilterParser(conditionNode);
             IAlgebraOperator filter = filterParser.parse(node, database, configuration);
             filter.addChild(root);
             root = filter;
