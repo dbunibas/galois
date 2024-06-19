@@ -9,7 +9,9 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.utils.TestUtils;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +23,16 @@ import speedy.model.database.Tuple;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
+import org.apache.commons.io.FileUtils;
 import speedy.OperatorFactory;
 import speedy.exceptions.DBMSException;
+import speedy.model.database.Attribute;
 import speedy.model.database.ITable;
 import speedy.model.database.dbms.DBMSDB;
 import speedy.model.database.dbms.DBMSTupleIterator;
 import speedy.persistence.DAODBMSDatabase;
+import speedy.persistence.Types;
 import speedy.persistence.file.CSVFile;
 import speedy.persistence.relational.AccessConfiguration;
 import speedy.persistence.relational.QueryManager;
@@ -57,15 +63,26 @@ public final class Experiment {
 
         ITable firstTable = query.getDatabase().getFirstTable();
         DBMSDB dbmsDatabase = null;
+        List<Attribute> attributes = firstTable.getAttributes();
         if (firstTable.getSize() == 0) {
             URL resource = Experiment.class.getResource(query.getResultPath());
             File[] files = new File(resource.getPath()).listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
-                    return name.endsWith(".csv");
+                    return name.endsWith(".csv") && !name.contains("_speedy");
                 }
             });
+            
             File file = files[0];
+            File speedyFile = new File(resource.getPath() + File.separator + file.getName().replace(".csv", "") + "_speedy.csv");
+            try {
+                FileUtils.copyFile(file, speedyFile);
+                replaceHeadersWithTypes(speedyFile, attributes);
+            } catch (IOException ioe) {
+                log.error("Unable to duplicate file: " + file + " to " + speedyFile);
+                log.error("Exception: " + ioe);
+                throw new IllegalStateException(ioe);
+            }
             DAODBMSDatabase daoDatabase = new DAODBMSDatabase();
             dbmsDatabase = daoDatabase.loadDatabase(query.getAccessConfiguration().getDriver(),
                     query.getAccessConfiguration().getUri(),
@@ -73,12 +90,19 @@ public final class Experiment {
                     query.getAccessConfiguration().getLogin(),
                     query.getAccessConfiguration().getPassword());
             dbmsDatabase.getInitDBConfiguration().setCreateTablesFromFiles(true);
-            CSVFile fileToImport = new CSVFile(file.getAbsolutePath());
+            CSVFile fileToImport = new CSVFile(speedyFile.getAbsolutePath());
             fileToImport.setHasHeader(true);
             fileToImport.setSeparator(',');
             dbmsDatabase.getInitDBConfiguration().addFileToImportForTable(firstTable.getName(), fileToImport);
             dbmsDatabase.initDBMS();
             OperatorFactory.getInstance().getQueryRunner(dbmsDatabase);
+            if (speedyFile != null) {
+                try {
+                    FileUtils.delete(speedyFile);
+                } catch (IOException ioe) {
+                    log.error("Unable to delete: " + speedyFile);
+                }
+            }
         }
         String queryToExecute = query.getSql().replace("target.", "public.");
         ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
@@ -144,5 +168,34 @@ public final class Experiment {
                 log.warn("Unable to drop database.\n" + ex.getLocalizedMessage());
             }
         }
+    }
+
+    private void replaceHeadersWithTypes(File speedyFile, List<Attribute> attributes) throws IOException{
+        List<String> lines = FileUtils.readLines(speedyFile, "utf-8");
+        String headers = lines.get(0);
+        StringTokenizer tokenizer = new StringTokenizer(headers, ",");
+        String updatedHeaders = updateHeaders(tokenizer, attributes);
+        lines.remove(0);
+        lines.add(0, updatedHeaders);
+        FileUtils.writeLines(speedyFile, lines);
+    }
+
+    private String updateHeaders(StringTokenizer tokenizer, List<Attribute> attributes) {
+        Map<String,String> attributesWithType = new HashMap<>();
+        for (Attribute attribute : attributes) {
+            attributesWithType.put(attribute.getName(), attribute.getType());
+        }
+        String headersWithType = "";
+        while(tokenizer.hasMoreTokens()) {
+            String attributeName = tokenizer.nextToken().trim();
+            String type = attributesWithType.get(attributeName);
+            if (type.equals(Types.STRING)) {
+                headersWithType += attributeName + ",";
+            } else {
+                headersWithType += attributeName+"(" + type + ")" + ",";
+            }
+        }
+        headersWithType = headersWithType.substring(0, headersWithType.length() - 1);
+        return headersWithType;
     }
 }
