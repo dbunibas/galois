@@ -1,6 +1,7 @@
 package galois.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -63,8 +64,8 @@ public class Mapper {
     public static boolean isJSON(String response) {
         String responseList = toCleanJsonList(response);
         String responseJson = toCleanJsonObject(response);
-        if (responseList.startsWith("[") && responseList.endsWith("]")) return true;
-        if (responseJson.startsWith("{") && responseJson.endsWith("}")) return true;
+        if (isBetween(responseList, "[", "]")) return true;
+        if (isBetween(responseJson, "{", "}")) return true;
         return false;
     }
 
@@ -73,12 +74,21 @@ public class Mapper {
     }
 
     private static String toCleanJsonList(String response) {
-        return getContentBetween(response, "[", "]");
+        String cleanContent = getContentBetween(response, "[", "]");
+        if (isBetween(cleanContent, "[", "]")) return cleanContent;
+        String substring = cleanContent.substring(0, cleanContent.lastIndexOf("}") + 1);
+        String jsonList = substring + "]";
+        log.debug("Repaired json list: {}", jsonList);
+        return jsonList;
     }
 
     private static String getContentBetween(String response, String firstValue, String secondValue) {
         if (response == null || !response.contains(firstValue) || !response.contains(secondValue)) return response;
         return response.substring(response.indexOf(firstValue), response.lastIndexOf(secondValue) + 1);
+    }
+
+    private static boolean isBetween(String response, String start, String end) {
+        return response.startsWith(start) && response.endsWith(end);
     }
 
     private static final class MapperException extends RuntimeException {
