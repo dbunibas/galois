@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import org.apache.commons.io.FileUtils;
 import speedy.OperatorFactory;
+import speedy.exceptions.DAOException;
 import speedy.exceptions.DBMSException;
 import speedy.model.database.Attribute;
 import speedy.model.database.ITable;
@@ -61,7 +62,34 @@ public final class Experiment {
         Document queryPlan = planner.planFrom(query.getSql());
         IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration);
 
-        ITable firstTable = query.getDatabase().getFirstTable();
+        DBMSDB dbmsDatabase = createDatabaseForExpected();
+        String queryToExecute = query.getSql().replace("target.", "public.");
+        ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
+        ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
+        List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
+//        log.info("Expected");
+//        log.info("Query: " + query.getSql());
+//        for (Tuple expectedResult : expectedResults) {
+//            log.info(expectedResult.toString());
+//        }
+//        log.info("-----------------------------");
+
+        var unoptimizedResult = executeUnoptimizedExperiment(operator, expectedResults);
+        results.put("Unoptimized", unoptimizedResult);
+
+        List<IOptimizer> optimizersList = optimizers == null ? List.of() : optimizers;
+        for (IOptimizer optimizer : optimizersList) {
+            var result = executeOptimizedExperiment(operator, optimizer, expectedResults);
+            results.put(optimizer.getName(), result);
+        }
+        if (dbmsDatabase != null) {
+            deleteDB(dbmsDatabase.getAccessConfiguration());
+        }
+        return results;
+    }
+
+    private DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {
+         ITable firstTable = query.getDatabase().getFirstTable();
         DBMSDB dbmsDatabase = null;
         List<Attribute> attributes = firstTable.getAttributes();
         if (firstTable.getSize() == 0) {
@@ -104,29 +132,7 @@ public final class Experiment {
                 }
             }
         }
-        String queryToExecute = query.getSql().replace("target.", "public.");
-        ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
-        ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
-        List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
-//        log.info("Expected");
-//        log.info("Query: " + query.getSql());
-//        for (Tuple expectedResult : expectedResults) {
-//            log.info(expectedResult.toString());
-//        }
-//        log.info("-----------------------------");
-
-        var unoptimizedResult = executeUnoptimizedExperiment(operator, expectedResults);
-        results.put("Unoptimized", unoptimizedResult);
-
-        List<IOptimizer> optimizersList = optimizers == null ? List.of() : optimizers;
-        for (IOptimizer optimizer : optimizersList) {
-            var result = executeOptimizedExperiment(operator, optimizer, expectedResults);
-            results.put(optimizer.getName(), result);
-        }
-        if (dbmsDatabase != null) {
-            deleteDB(dbmsDatabase.getAccessConfiguration());
-        }
-        return results;
+        return dbmsDatabase;
     }
 
     private ExperimentResults executeUnoptimizedExperiment(IAlgebraOperator operator, List<Tuple> expectedResults) {
@@ -167,6 +173,7 @@ public final class Experiment {
             if (!message.contains("does not exist")) {
                 log.warn("Unable to drop database.\n" + ex.getLocalizedMessage());
             }
+            
         }
     }
 
