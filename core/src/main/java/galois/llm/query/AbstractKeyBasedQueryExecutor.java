@@ -45,9 +45,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 log.debug("Parsed keys are: {}", currentKeys);
                 keys.addAll(currentKeys);
             } catch (Exception e) {
-                log.error("Key prompt is: \n" + userMessage);
-                log.error("Response is: \n" + response);
-                log.error("Exception: \n" + e);
+                log.debug("Key prompt is: \n" + userMessage);
+                log.debug("Response is: \n" + response);
+                log.debug("Exception: \n" + e);
             }
         }
         return keys;
@@ -85,9 +85,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
             log.debug("Attribute response is: {}", response);
             return getAttributesPrompt().getAttributesParser().parse(response, attributes);
         } catch (Exception e) {
-            log.error("Prompt: \n" + prompt);
-            log.error("Response: \n " + response);
-            log.error("Exception: \n" + e);
+            log.debug("Prompt: \n" + prompt);
+            log.debug("Response: \n " + response);
+            log.debug("Exception: \n" + e);
             return new HashMap<>();
         }
     }
