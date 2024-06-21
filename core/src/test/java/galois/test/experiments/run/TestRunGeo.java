@@ -9,6 +9,17 @@ import java.io.IOException;
 
 @Slf4j
 public class TestRunGeo {
+
+    @Test
+    public void testOllamaLlama3NLExperiment() {
+        execute("/geo_data/geo-llama3-nl-experiment.json");
+    }
+
+    @Test
+    public void testOllamaLlama3SQLExperiment() {
+        execute("/geo_data/geo-llama3-sql-experiment.json");
+    }
+
     @Test
     public void testOllamaLlama3TableExperiment() {
         execute("/geo_data/geo-llama3-table-experiment.json");
