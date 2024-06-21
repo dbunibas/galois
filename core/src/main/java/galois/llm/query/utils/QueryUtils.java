@@ -132,7 +132,7 @@ public class QueryUtils {
 
     private static String getJsonSchemaTypeFromDBType(String type) {
         return switch (type.toLowerCase()) {
-            case "double precision", "real" -> "number";
+            case "double precision", "real", "float" -> "number";
             case "integer", "long" -> "integer";
             default -> "string";
         };
