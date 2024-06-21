@@ -1,8 +1,10 @@
 package galois.llm.query.ollama.llama3;
 
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
+import static galois.llm.query.ConversationalChainFactory.buildOllamaLlama3ChatLanguageModel;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.IQueryExecutorBuilder;
 import galois.prompt.EPrompts;
@@ -26,14 +28,14 @@ import static galois.utils.FunctionalUtils.orElse;
 @Slf4j
 @Getter
 public class OllamaLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecutor {
+
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final EPrompts attributesPrompt;
     private final int maxIterations;
     private final Expression expression;
 
-    public OllamaLlama3KeyScanQueryExecutor(
-    ) {
+    public OllamaLlama3KeyScanQueryExecutor() {
         this.firstPrompt = EPrompts.LIST_KEY_JSON;
         this.iterativePrompt = EPrompts.LIST_MORE_NO_REPEAT;
         this.attributesPrompt = EPrompts.ATTRIBUTES_JSON;
@@ -61,6 +63,11 @@ public class OllamaLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecu
     }
 
     @Override
+    protected ChatLanguageModel getChatLanguageModel() {
+        return buildOllamaLlama3ChatLanguageModel();
+    }
+
+    @Override
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
         Map<String, Object> attributesMap = getAttributesValues(table, attributes, key, chain);
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
@@ -76,6 +83,7 @@ public class OllamaLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecu
     }
 
     public static class OllamaLLama3KeyScanQueryExecutorBuilder extends AbstractQueryExecutorBuilder {
+
         @Override
         public IQueryExecutor build() {
             return new OllamaLlama3KeyScanQueryExecutor(

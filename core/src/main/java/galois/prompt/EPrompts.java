@@ -27,8 +27,10 @@ import static galois.utils.Mapper.fromJsonToListOfMaps;
 @AllArgsConstructor
 public enum EPrompts {
     // Keys
-    LIST_KEY_JSON("List the ${key} of some ${table}s.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
-    LIST_KEY_JSON_CONDITION("List the ${key} of some ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
+//    LIST_KEY_JSON("List the ${key} of some ${table}s.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
+    LIST_KEY_JSON("List the ${key} of ${table}s.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
+//    LIST_KEY_JSON_CONDITION("List the ${key} of some ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
+    LIST_KEY_JSON_CONDITION("List the ${key} of ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
 
     LIST_KEY_PIPE("List the ${key} of some ${table}s. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null),
     LIST_KEY_PIPE_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null),
@@ -57,6 +59,10 @@ public enum EPrompts {
     LIST_DIFFERENT_VALUES("List different values.", null, null, null),
     LIST_DIFFERENT_VALUES_JSON("List different values. Respond with JSON only.", null, null, null),
     LIST_MORE_NO_REPEAT("List more values. Don't repeat the previous values.", null, null, null),
+    
+    // JSON Error correction
+    ERROR_JSON_FORMAT("Respond in an appropriate JSON format.", null, null, null),
+    ERROR_JSON_NUMBER_FORMAT("Respond in an appropriate JSON format for a numerical value. Do not use the thousands separator.", null, null, null),
     ;
 
     private final String template;

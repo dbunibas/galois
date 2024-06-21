@@ -1,18 +1,24 @@
 package galois.llm.query;
 
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.llm.TokensEstimator;
+import galois.llm.models.IModel;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
 import java.util.*;
 
 import static galois.llm.query.utils.QueryUtils.*;
+import galois.prompt.EPrompts;
+import galois.utils.Mapper;
 
 @Slf4j
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     abstract protected ConversationalChain getConversationalChain();
+
+    abstract protected ChatLanguageModel getChatLanguageModel();
 
     protected abstract Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain);
 
@@ -80,15 +86,42 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         String prompt = getAttributesPrompt().generate(table, key, attributes, jsonSchema);
         log.debug("Attribute prompt is: {}", prompt);
         String response = "";
+        ConversationalChain newChain = null;
         try {
-            response = getResponse(chain, prompt);
+            ChatLanguageModel chatLanguageModel = getChatLanguageModel();
+            response = chatLanguageModel.generate(prompt);
+            //response = getResponse(chain, prompt);
             log.debug("Attribute response is: {}", response);
+            if (!Mapper.isJSON(response)) {
+                log.debug("Response not in JSON format...execute it again through new chain");
+                newChain = getConversationalChain();
+                response = getResponse(newChain, prompt);
+                log.debug("Attribute response is: {}", response);
+                if (!Mapper.isJSON(response)) {
+                    response = getResponse(newChain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
+                    log.debug("Attribute response is after appropriate JSON format: {}", response);
+                    return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+                } else {
+                    log.debug("Attribute response is: {}", response);
+                    return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+                }
+            }
             return getAttributesPrompt().getAttributesParser().parse(response, attributes);
         } catch (Exception e) {
             log.debug("Prompt: \n" + prompt);
             log.debug("Response: \n " + response);
             log.debug("Exception: \n" + e);
-            return new HashMap<>();
+            try {
+                if (newChain == null) {
+                    newChain = getConversationalChain();
+                    response = getResponse(newChain, prompt);
+                }
+                response = getResponse(newChain, EPrompts.ERROR_JSON_NUMBER_FORMAT.getTemplate());
+                log.debug("Exception - Attribute response is after appropriate JSON format: {}", response);
+                return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+            } catch (Exception internal) {
+                return new HashMap<>();
+            }
         }
     }
 

@@ -37,7 +37,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private String toghetherAiAPI;
     private String modelName;
     private int maxTokens = 4096; // max returned tokens
-    private double temperature = 0.7;
+    private double temperature = 0.0; // 0.0 deterministic
     private List<Message> messages = new ArrayList<>();
     private ObjectMapper objectMapper = new ObjectMapper();
     private int inputTokens = 0;
@@ -47,7 +47,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private int numRetry = 0;
     private int maxRetry = 10;
     private boolean checkJSON = true;
-    private boolean checkJSONResponseContent = true;
+    private boolean checkJSONResponseContent = false;
 
     public TogetherAIModel(String toghetherAiAPI, String modelName) {
         this.toghetherAiAPI = toghetherAiAPI;
@@ -73,11 +73,15 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         newMessage.setContent(prompt);
         String jsonRequest = getJsonForRequest();
         if (jsonRequest.isEmpty()) {
+            log.trace("Return null because jsonRequest is empty: " + jsonRequest);
             return null;
         }
         String authorizationValue = "Bearer " + this.toghetherAiAPI;
+        this.numRetry = 0;
+        log.trace("Reset retry to 0");
         String response = this.makeRequest(jsonRequest, authorizationValue);
         if (response == null || response.isEmpty()) {
+            log.trace("Return null because response is null or empty: " + response);
             return null;
         }
         try {
@@ -88,7 +92,10 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 if (checkJSONResponseContent) {
                     String content = message.getContent();
                     if (content != null && !Mapper.isJSON(content)) {
-                        if (!this.messages.isEmpty()) this.messages.remove(this.messages.size() - 1);
+                        if (!this.messages.isEmpty()) {
+                            this.messages.remove(this.messages.size() - 1);
+                        }
+                        log.trace("Return null because content is not a JSON: \n" + content);
                         return null;
                     }
                 }
@@ -104,6 +111,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             log.error("Exception with parsing response: " + response);
             log.error("Exception: " + e);
         }
+        log.trace("Return null because there was an exception.");
         return null;
     }
 
@@ -137,6 +145,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             }
             lastTextMessage = message.text();
         }
+        log.trace("Messages: " + this.messages.size());
         log.trace("Last Message: " + lastTextMessage);
         if (lastTextMessage != null) {
             ResponseTogetherAI responseAPI = getResponse(lastTextMessage);
@@ -147,13 +156,18 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                     return Response.from(AiMessage.from(message.getContent()), new TokenUsage(responseAPI.getUsage().getPromptTokens(), responseAPI.getUsage().getCompletionTokens()));
                 }
             }
+            log.trace("Return null because responseAPI is null");
             return null;
         }
+        log.trace("Return null because lastTextMessage is null");
         return null;
     }
 
     private String makeRequest(String jsonRequest, String authorizationValue) {
-        if (this.numRetry >= this.maxRetry) return null;
+        if (this.numRetry >= this.maxRetry) {
+            log.trace("Return null because reached max retry: " + this.numRetry + " over attempts " + this.maxRetry);
+            return null;
+        }
         try {
             URL url = URI.create(this.endPoint).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -176,6 +190,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             String responseText = response.toString().trim();
             log.trace("Response: \n" + responseText);
             if (checkJSON && !Mapper.isJSON(responseText)) {
+                log.trace("Return null because the response is not a JSON: \n" + responseText);
                 return null;
             }
             connection.disconnect();
@@ -183,11 +198,13 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         } catch (Exception e) {
             if (e instanceof IOException) {
                 try {
+                    log.trace("Retry the request IOE: " + this.numRetry);
+                    log.trace("Exception: " + e);
                     TimeUnit.SECONDS.sleep(this.waitTimeInSec);
                     this.numRetry++;
                     return makeRequest(jsonRequest, authorizationValue);
                 } catch (InterruptedException ie) {
-                    log.trace("Retry the request");
+                    log.trace("Retry the request in catch");
                     this.numRetry++;
                 }
             } else {

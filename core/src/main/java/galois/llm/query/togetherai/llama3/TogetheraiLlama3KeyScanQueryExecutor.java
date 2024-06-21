@@ -1,6 +1,7 @@
 package galois.llm.query.togetherai.llama3;
 
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
+import static galois.llm.query.ConversationalChainFactory.buildTogetherAiChatLanguageModel;
 import static galois.llm.query.utils.QueryUtils.mapToTuple;
 import static galois.utils.FunctionalUtils.orElse;
 
@@ -59,6 +61,12 @@ public class TogetheraiLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryE
     protected ConversationalChain getConversationalChain() {
         return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
 //        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);
+    }
+
+    @Override
+    protected ChatLanguageModel getChatLanguageModel() {
+        return buildTogetherAiChatLanguageModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+//        return buildTogetherAiChatLanguageModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);
     }
 
     @Override

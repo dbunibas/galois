@@ -82,14 +82,11 @@ public final class Experiment {
             var result = executeOptimizedExperiment(operator, optimizer, expectedResults);
             results.put(optimizer.getName(), result);
         }
-        if (dbmsDatabase != null) {
-            deleteDB(dbmsDatabase.getAccessConfiguration());
-        }
         return results;
     }
 
     private DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {
-         ITable firstTable = query.getDatabase().getFirstTable();
+        ITable firstTable = query.getDatabase().getFirstTable();
         DBMSDB dbmsDatabase = null;
         List<Attribute> attributes = firstTable.getAttributes();
         if (firstTable.getSize() == 0) {
@@ -100,7 +97,7 @@ public final class Experiment {
                     return name.endsWith(".csv") && !name.contains("_speedy");
                 }
             });
-            
+
             File file = files[0];
             File speedyFile = new File(resource.getPath() + File.separator + file.getName().replace(".csv", "") + "_speedy.csv");
             try {
@@ -163,21 +160,21 @@ public final class Experiment {
         return new ExperimentResults(name, metrics, expectedResults, results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
     }
 
-    public static void deleteDB(AccessConfiguration accessConfiguration) {
+    public static void dropTable(DBMSDB database) {
+        AccessConfiguration accessConfiguration = database.getAccessConfiguration();
+        String dbName = database.getName() + "." + database.getFirstTable().getName();
         try {
 //            log.info("Removing db " + accessConfiguration.getDatabaseName() + ", if exist...");
-            DBMSUtility.deleteDB(accessConfiguration);
+            String script = "DROP TABLE " + dbName + ";";
+            log.info("Script drop: " + script);
+            QueryManager.executeScript(script, accessConfiguration, true, true, true, true);
 //            log.info("Database removed!");
         } catch (DBMSException ex) {
-            String message = ex.getMessage();
-            if (!message.contains("does not exist")) {
-                log.warn("Unable to drop database.\n" + ex.getLocalizedMessage());
-            }
-            
+            log.warn("Unable to drop table " + dbName + ". " + ex.getLocalizedMessage());
         }
     }
 
-    private void replaceHeadersWithTypes(File speedyFile, List<Attribute> attributes) throws IOException{
+    private void replaceHeadersWithTypes(File speedyFile, List<Attribute> attributes) throws IOException {
         List<String> lines = FileUtils.readLines(speedyFile, "utf-8");
         String headers = lines.get(0);
         StringTokenizer tokenizer = new StringTokenizer(headers, ",");
@@ -188,18 +185,18 @@ public final class Experiment {
     }
 
     private String updateHeaders(StringTokenizer tokenizer, List<Attribute> attributes) {
-        Map<String,String> attributesWithType = new HashMap<>();
+        Map<String, String> attributesWithType = new HashMap<>();
         for (Attribute attribute : attributes) {
             attributesWithType.put(attribute.getName(), attribute.getType());
         }
         String headersWithType = "";
-        while(tokenizer.hasMoreTokens()) {
+        while (tokenizer.hasMoreTokens()) {
             String attributeName = tokenizer.nextToken().trim();
             String type = attributesWithType.get(attributeName);
             if (type.equals(Types.STRING)) {
                 headersWithType += attributeName + ",";
             } else {
-                headersWithType += attributeName+"(" + type + ")" + ",";
+                headersWithType += attributeName + "(" + type + ")" + ",";
             }
         }
         headersWithType = headersWithType.substring(0, headersWithType.length() - 1);

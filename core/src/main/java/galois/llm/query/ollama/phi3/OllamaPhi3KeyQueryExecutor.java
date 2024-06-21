@@ -1,6 +1,7 @@
 package galois.llm.query.ollama.phi3;
 
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static galois.llm.query.ConversationalChainFactory.buildOllamaPhi3ConversationalChain;
+import static galois.llm.query.ConversationalChainFactory.buildOllamaPhi3ChatLanguageModel;
 import static galois.llm.query.utils.QueryUtils.generateJsonSchemaFromAttributes;
 import static galois.llm.query.utils.QueryUtils.mapToTuple;
 import static galois.utils.FunctionalUtils.orElse;
@@ -26,6 +28,7 @@ import static galois.utils.FunctionalUtils.orElse;
 @Slf4j
 @Getter
 public class OllamaPhi3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
+
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final EPrompts attributesPrompt;
@@ -60,6 +63,11 @@ public class OllamaPhi3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
     }
 
     @Override
+    protected ChatLanguageModel getChatLanguageModel() {
+        return buildOllamaPhi3ChatLanguageModel();
+    }
+
+    @Override
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
         Map<String, Object> attributesMap = new HashMap<>();
         for (Attribute attribute : attributes) {
@@ -80,6 +88,7 @@ public class OllamaPhi3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
     }
 
     public static class OllamaPhi3KeyQueryExecutorBuilder extends AbstractQueryExecutorBuilder {
+
         @Override
         public IQueryExecutor build() {
             return new OllamaPhi3KeyQueryExecutor(
