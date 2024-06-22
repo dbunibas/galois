@@ -19,7 +19,7 @@
     }
   },
   "query": {
-    "sql": "select name, years_in_office, cardinal_number, party from target.usa_presidents p",
+    "sql": "select Name from target.usa_presidents p",
     "schema": {
       "name": "usa_all_presidents",
       "schema": "target",

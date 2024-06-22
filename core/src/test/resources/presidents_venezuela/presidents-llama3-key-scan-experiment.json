@@ -19,7 +19,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.venezuela_presidents p",
+    "sql": "select Name from target.venezuela_presidents p",
     "schema": {
       "name": "venezuela_all_presidents",
       "schema": "target",
