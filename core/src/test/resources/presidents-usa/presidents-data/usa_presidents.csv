@@ -1,4 +1,4 @@
-Name,Years_In_Office,Number,Party
+Name,Years_In_Office,cardinal_number,Party
 George Washington,1789-1797,1st,Federalist
 John Adams,1797-1801,2nd,Federalist
 Thomas Jefferson,1801-1809,3rd,Democratic Republican

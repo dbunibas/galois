@@ -1,27 +1,25 @@
 {
   "name": "USA Presidents Experiment",
   "metrics": [
-    "TupleCardinalityMetric",
     "CellPrecision",
+    "CellSimilarityPrecision",
     "CellRecall",
+    "CellSimilarityRecall",
     "CellF1Score",
+    "CellSimilarityF1Score",
     "TupleCardinality",
     "TupleConstraint",
-    "CellSimilarityRecall",
-    "CellSimilarityPrecision",
-    "CellSimilarityF1Score",
     "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-nl",
-      "maxIterations": 1,
-      "naturalLanguagePrompt": "List the name of USA presidents."
+      "queryExecutor": "togetherai-llama3-sql",
+      "maxIterations": 1
     }
   },
   "query": {
-    "sql": "select name from target.usa_president p",
+    "sql": "select name from target.usa_presidents p",
     "schema": {
       "name": "usa_all_presidents",
       "schema": "target",
@@ -43,7 +41,7 @@
               "nullable": false
             },
             {
-              "name": "Number",
+              "name": "cardinal_number",
               "type": "STRING",
               "nullable": false
             },
