@@ -193,7 +193,7 @@ public final class Experiment {
         while (tokenizer.hasMoreTokens()) {
             String attributeName = tokenizer.nextToken().trim();
             String type = attributesWithType.get(attributeName);
-            if (type.equals(Types.STRING)) {
+            if (type == null || type.equals(Types.STRING)) {
                 headersWithType += attributeName + ",";
             } else {
                 headersWithType += attributeName + "(" + type + ")" + ",";
