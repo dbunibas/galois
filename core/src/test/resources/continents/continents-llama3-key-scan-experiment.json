@@ -14,7 +14,7 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "ollama-llama3-key-scan",
+      "queryExecutor": "togetherai-llama3-key-scan",
       "maxIterations": 1
     }
   },
@@ -42,7 +42,7 @@
             },
             {
               "name": "population",
-              "type": "STRING",
+              "type": "REAL",
               "nullable": false
             }
           ]
