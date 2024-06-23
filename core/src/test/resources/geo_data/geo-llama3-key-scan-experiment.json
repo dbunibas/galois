@@ -8,19 +8,18 @@
     "CellF1Score",
     "CellSimilarityF1Score",
     "TupleCardinality",
-    "TupleOrder",
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "ollama-llama3-key-scan",
+      "queryExecutor": "togetherai-llama3-key-scan",
       "maxIterations": 1
     }
   },
   "query": {
-    "sql": "SELECT * FROM target.usa_state ORDER BY state_name",
+    "sql": "SELECT state_name, capital, population FROM target.usa_state where population>500000",
     "schema": {
       "name": "usa_geo",
       "schema": "target",
@@ -43,7 +42,7 @@
             },
             {
               "name": "area",
-              "type": "DOUBLE PRECISION",
+              "type": "FLOAT",
               "nullable": true
             },
             {
@@ -58,161 +57,7 @@
             },
             {
               "name": "density",
-              "type": "DOUBLE PRECISION",
-              "nullable": true
-            }
-          ]
-        },
-        {
-          "tableName": "city",
-          "attributes": [
-            {
-              "name": "city_name",
-              "type": "STRING",
-              "nullable": false,
-              "key": true
-            },
-            {
-              "name": "population",
-              "type": "INTEGER",
-              "nullable": true
-            },
-            {
-              "name": "country_name",
-              "type": "STRING",
-              "nullable": false
-            },
-            {
-              "name": "state_name",
-              "type": "STRING",
-              "nullable": false,
-              "key": true
-            }
-          ]
-        },
-        {
-          "tableName": "border_info",
-          "attributes": [
-            {
-              "name": "state_name",
-              "type": "STRING",
-              "nullable": false,
-              "key": true
-            },
-            {
-              "name": "border",
-              "type": "STRING",
-              "nullable": false,
-                "key": true
-            }
-          ]
-        },
-        {
-          "tableName": "highlow",
-          "attributes": [
-            {
-              "name": "state_name",
-              "type": "STRING",
-              "nullable": false,
-              "key": true
-            },
-            {
-              "name": "highest_elevation",
-              "type": "STRING",
-              "nullable": true
-            },
-            {
-              "name": "lowest_point",
-              "type": "STRING",
-              "nullable": true
-            },
-            {
-              "name": "highest_point",
-              "type": "STRING",
-              "nullable": true
-            },
-            {
-              "name": "lowest_elevation",
-              "type": "STRING",
-              "nullable": true
-            }
-          ]
-        },
-        {
-          "tableName": "lake",
-          "attributes": [
-            {
-              "name": "lake_name",
-              "type": "STRING",
-              "nullable": false,
-              "key": true
-            },
-            {
-              "name": "area",
-              "type": "DOUBLE PRECISION",
-              "nullable": true
-            },
-            {
-              "name": "country_name",
-              "type": "STRING",
-              "nullable": false
-            },
-            {
-              "name": "state_name",
-              "type": "STRING",
-              "nullable": true
-            }
-          ]
-        },
-        {
-          "tableName": "mountain",
-          "attributes": [
-            {
-              "name": "mountain_name",
-              "type": "STRING",
-              "nullable": false,
-              "key": true
-            },
-            {
-              "name": "mountain_altitude",
-              "type": "INTEGER",
-              "nullable": true
-            },
-            {
-              "name": "country_name",
-              "type": "STRING",
-              "nullable": false
-            },
-            {
-              "name": "state_name",
-              "type": "STRING",
-              "nullable": false,
-                "key": true
-            }
-          ]
-        },
-        {
-          "tableName": "river",
-          "attributes": [
-            {
-              "name": "river_name",
-              "type": "STRING",
-              "nullable": false,
-              "key": true
-            },
-            {
-              "name": "length",
-              "type": "INTEGER",
-              "nullable": true
-            },
-            {
-              "name": "country_name",
-              "type": "STRING",
-              "nullable": false
-            },
-            {
-              "name": "traverse",
-              "type": "STRING",
+              "type": "FLOAT",
               "nullable": true
             }
           ]
