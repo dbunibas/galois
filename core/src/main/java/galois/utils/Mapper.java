@@ -76,7 +76,7 @@ public class Mapper {
     private static String toCleanJsonList(String response) {
         String cleanContent = getContentBetween(response, "[", "]");
         if (isBetween(cleanContent, "[", "]")) return cleanContent;
-        String substring = cleanContent.substring(0, cleanContent.lastIndexOf("}") + 1);
+        String substring = cleanContent.substring(cleanContent.indexOf("["), cleanContent.lastIndexOf("}") + 1);
         String jsonList = substring + "]";
         log.debug("Repaired json list: {}", jsonList);
         return jsonList;
