@@ -33,7 +33,9 @@ public class FilterParser extends AbstractNodeParser {
     }
 
     private Expression parseExpression(String text, IDatabase database) {
+        log.debug("Expression: " + text);
         String cleanText = cleanExpression(text);
+        log.debug("Cleaned Expression: " + cleanText);
         Expression expression = new Expression(cleanText);
 
         ITable table = database.getTable(getTableAlias().getTableName());
@@ -49,6 +51,7 @@ public class FilterParser extends AbstractNodeParser {
         // TODO: Handle all cases by using a map! (TestParseXML::testWhereWithBooleanOperationsNot should than work)
         return text
                 .replaceAll("::text", "")
+                .replaceAll("::double precision", "")
                 .replaceAll("'", "\"")
                 .replaceAll("=", "==")
                 .replaceAll("AND", "&&")
