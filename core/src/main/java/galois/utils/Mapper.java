@@ -62,7 +62,8 @@ public class Mapper {
     }
     
     public static boolean isJSON(String response) {
-        String responseList = toCleanJsonList(response);
+        String responseList = "";
+        if (response.contains("[")) responseList = toCleanJsonList(response);
         String responseJson = toCleanJsonObject(response);
         if (isBetween(responseList, "[", "]")) return true;
         if (isBetween(responseJson, "{", "}")) return true;
