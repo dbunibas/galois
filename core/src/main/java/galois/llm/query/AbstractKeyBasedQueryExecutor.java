@@ -49,6 +49,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 log.debug("Response is: {}", response);
                 List<String> currentKeys = getFirstPrompt().getKeyParser().parse(response);
                 log.debug("Parsed keys are: {}", currentKeys);
+                if (currentKeys.isEmpty()) break; // avoit other requests
                 keys.addAll(currentKeys);
             } catch (Exception e) {
                 log.debug("Key prompt is: \n" + userMessage);

@@ -38,6 +38,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private String modelName;
     private int maxTokens = 4096; // max returned tokens
     private double temperature = 0.0; // 0.0 deterministic
+    private double topP = 0.0; // 0.0 deterministic
     private List<Message> messages = new ArrayList<>();
     private ObjectMapper objectMapper = new ObjectMapper();
     private int inputTokens = 0;
@@ -220,7 +221,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + "    \"model\": \"{$MODEL_NAME$}\",\n"
                 + "    \"max_tokens\": {$MAX_TOKENS$},\n"
                 + "    \"temperature\": {$TEMPERATURE$},\n"
-                + "    \"top_p\": 0.7,\n"
+                + "    \"top_p\": {$TOP_P$},\n"
                 + "    \"top_k\": 50,\n"
                 + "    \"repetition_penalty\": 1,\n"
                 + "    \"stop\": [\n"
@@ -231,6 +232,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         jsonReturn = jsonReturn.replace("{$MODEL_NAME$}", this.modelName);
         jsonReturn = jsonReturn.replace("{$MAX_TOKENS$}", this.maxTokens + "");
         jsonReturn = jsonReturn.replace("{$TEMPERATURE$}", this.temperature + "");
+        jsonReturn = jsonReturn.replace("{$TOP_P$}", this.topP + "");
         try {
             String jsonMessages = objectMapper.writeValueAsString(this.messages);
             log.trace("Json Messages: " + jsonMessages);

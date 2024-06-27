@@ -36,7 +36,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 log.debug("Response is: {}", response);
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                 log.debug("Parsed response is: {}", parsedResponse);
-
+                if(parsedResponse.isEmpty()) break; // no more iterations
                 for (Map<String, Object> map : parsedResponse) {
                     Tuple tuple = mapToTuple(map, tableAlias, attributes);
                     // TODO: Handle possible duplicates
