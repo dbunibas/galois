@@ -7,9 +7,12 @@ import speedy.model.database.Tuple;
 import speedy.model.expressions.Expression;
 
 import java.util.List;
+import speedy.model.database.AttributeRef;
 
 public interface IQueryExecutor {
     List<Tuple> execute(IDatabase database, TableAlias tableAlias);
+    
+    void setAttributes(List<AttributeRef> attributes);
 
     EPrompts getFirstPrompt();
 

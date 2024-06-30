@@ -10,11 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 import static galois.llm.query.utils.QueryUtils.*;
+import galois.prompt.EPrompts;
 
 @Slf4j
 public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
 
+    private List<AttributeRef> attributes = null;
+
     abstract protected ConversationalChain getConversationalChain();
+
+    @Override
+    public void setAttributes(List<AttributeRef> attributes) {
+        this.attributes = attributes;
+    }
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
@@ -22,29 +30,49 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
 
         ITable table = database.getTable(tableAlias.getTableName());
 
-        List<Attribute> attributes = getCleanAttributes(table);
-        String jsonSchema = generateJsonSchemaListFromAttributes(table, attributes);
+        List<Attribute> attributesExecution = getCleanAttributes(table);
+        if (this.attributes != null && !this.attributes.isEmpty()) {
+            attributesExecution = new ArrayList<>();
+            for (AttributeRef attribute : this.attributes) {
+                attributesExecution.add(table.getAttribute(attribute.getName()));
+            }
+        }
+        String jsonSchema = generateJsonSchemaListFromAttributes(table, attributesExecution);
 
         List<Tuple> tuples = new ArrayList<>();
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
-                    ? generateFirstPrompt(table, attributes, jsonSchema)
-                    : generateIterativePrompt(table, attributes, jsonSchema);
+                    ? generateFirstPrompt(table, attributesExecution, jsonSchema)
+                    : generateIterativePrompt(table, attributesExecution, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
             try {
                 String response = getResponse(chain, userMessage);
                 log.debug("Response is: {}", response);
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                 log.debug("Parsed response is: {}", parsedResponse);
-                if(parsedResponse.isEmpty()) break; // no more iterations
+                if (parsedResponse.isEmpty()) {
+                    break; // no more iterations
+                }
                 for (Map<String, Object> map : parsedResponse) {
-                    Tuple tuple = mapToTuple(map, tableAlias, attributes);
+                    Tuple tuple = mapToTuple(map, tableAlias, attributesExecution);
                     // TODO: Handle possible duplicates
                     tuples.add(tuple);
                 }
             } catch (Exception e) {
-                // BEST EFFORT. The response could not be parseble, or the request could return a null chain
-                // TODO: log it for debug?
+                try {
+                    log.debug("Error with the response, try again with attentio on JSON format");
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
+                    log.debug("Response is: {}", response);
+                    List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
+                    log.debug("Parsed response is: {}", parsedResponse);
+                    for (Map<String, Object> map : parsedResponse) {
+                        Tuple tuple = mapToTuple(map, tableAlias, attributesExecution);
+                        // TODO: Handle possible duplicates
+                        tuples.add(tuple);
+                    }
+                } catch (Exception internal) {
+                    // do nothing
+                }
             }
         }
         return tuples;

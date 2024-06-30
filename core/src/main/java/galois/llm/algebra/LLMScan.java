@@ -25,10 +25,17 @@ public class LLMScan extends AbstractOperator {
 
     private final TableAlias tableAlias;
     private final IQueryExecutor queryExecutor;
-
+    private List<AttributeRef> attributesSelect = null;
+    
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor) {
         this.tableAlias = tableAlias;
         this.queryExecutor = queryExecutor;
+    }
+    
+    public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect) {
+        this.tableAlias = tableAlias;
+        this.queryExecutor = queryExecutor;
+        this.attributesSelect = attributesSelect;
     }
 
     @Override
@@ -44,11 +51,15 @@ public class LLMScan extends AbstractOperator {
     @Override
     public ITupleIterator execute(IDatabase source, IDatabase target) {
         checkSourceTarget(source, target);
+        if (this.attributesSelect != null) {
+            return new LLMScanTupleIterator(source, queryExecutor, attributesSelect);
+        }
         return new LLMScanTupleIterator(source, queryExecutor);
     }
 
     @Override
     public List<AttributeRef> getAttributes(IDatabase source, IDatabase target) {
+        if (attributesSelect != null) return this.attributesSelect;
         checkSourceTarget(source, target);
         LLMTable table = (LLMTable) source.getTable(tableAlias.getTableName());
         return table.getAttributes().stream()
@@ -73,10 +84,16 @@ public class LLMScan extends AbstractOperator {
 
         private final IDatabase database;
         private final IQueryExecutor queryExecutor;
-
+         
         public LLMScanTupleIterator(IDatabase database, IQueryExecutor queryExecutor) {
             this.database = database;
             this.queryExecutor = queryExecutor;
+        }
+
+        public LLMScanTupleIterator(IDatabase database, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect) {
+            this.database = database;
+            this.queryExecutor = queryExecutor;
+            this.queryExecutor.setAttributes(attributesSelect);
         }
 
         private static final int MAX_TRIES = 1;

@@ -3,7 +3,6 @@ package galois.llm.query;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.llm.TokensEstimator;
-import galois.llm.models.IModel;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
@@ -16,11 +15,18 @@ import galois.utils.Mapper;
 @Slf4j
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
+    private List<AttributeRef> attributes = null;
+
     abstract protected ConversationalChain getConversationalChain();
 
     abstract protected ChatLanguageModel getChatLanguageModel();
 
     protected abstract Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain);
+
+    @Override
+    public void setAttributes(List<AttributeRef> attributes) {
+        this.attributes = attributes;
+    }
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
@@ -64,12 +70,21 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream().map(AttributeRef::getName).toList();
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
         addCellForPrimaryKey(tuple, tableAlias, keyValue, primaryKeyAttributes);
-
-        List<Attribute> attributes = table.getAttributes().stream()
-                .filter(a -> !a.getName().equals("oid") && !primaryKeyAttributes.contains(a.getName()))
-                .toList();
-
-        return addValueFromAttributes(table, tableAlias, attributes, tuple, keyValue, chain);
+        List<Attribute> attributesQuery = null;
+        if (this.attributes != null && !this.attributes.isEmpty()) {
+            attributesQuery = new ArrayList<>();
+            for (AttributeRef aRef : this.attributes) {
+                Attribute a = table.getAttribute(aRef.getName());
+                if (!a.getName().equals("oid") && !primaryKeyAttributes.contains(a.getName())) {
+                    attributesQuery.add(a);
+                }
+            }
+        } else {
+            attributesQuery = table.getAttributes().stream()
+                    .filter(a -> !a.getName().equals("oid") && !primaryKeyAttributes.contains(a.getName()))
+                    .toList();
+        }
+        return addValueFromAttributes(table, tableAlias, attributesQuery, tuple, keyValue, chain);
     }
 
     private void addCellForPrimaryKey(Tuple tuple, TableAlias tableAlias, String key, List<String> primaryKeyAttributes) {
@@ -82,9 +97,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         tuple.addCell(keyCell);
     }
 
-    protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributes, String key, ConversationalChain chain) {
-        String jsonSchema = generateJsonSchemaFromAttributes(table, attributes);
-        String prompt = getAttributesPrompt().generate(table, key, attributes, jsonSchema);
+    protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributesPrompt, String key, ConversationalChain chain) {
+        String jsonSchema = generateJsonSchemaFromAttributes(table, attributesPrompt);
+        String prompt = getAttributesPrompt().generate(table, key, attributesPrompt, jsonSchema);
         log.debug("Attribute prompt is: {}", prompt);
         String response = "";
         ConversationalChain newChain = null;
@@ -101,13 +116,13 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 if (!Mapper.isJSON(response)) {
                     response = getResponse(newChain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
                     log.debug("Attribute response is after appropriate JSON format: {}", response);
-                    return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+                    return getAttributesPrompt().getAttributesParser().parse(response, attributesPrompt);
                 } else {
                     log.debug("Attribute response is: {}", response);
-                    return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+                    return getAttributesPrompt().getAttributesParser().parse(response, attributesPrompt);
                 }
             }
-            return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+            return getAttributesPrompt().getAttributesParser().parse(response, attributesPrompt);
         } catch (Exception e) {
             log.debug("Prompt: \n" + prompt);
             log.debug("Response: \n " + response);
@@ -119,7 +134,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 }
                 response = getResponse(newChain, EPrompts.ERROR_JSON_NUMBER_FORMAT.getTemplate());
                 log.debug("Exception - Attribute response is after appropriate JSON format: {}", response);
-                return getAttributesPrompt().getAttributesParser().parse(response, attributes);
+                return getAttributesPrompt().getAttributesParser().parse(response, attributesPrompt);
             } catch (Exception internal) {
                 return new HashMap<>();
             }

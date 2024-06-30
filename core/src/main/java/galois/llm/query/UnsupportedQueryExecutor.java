@@ -6,6 +6,7 @@ import speedy.model.database.TableAlias;
 import speedy.model.database.Tuple;
 
 import java.util.List;
+import speedy.model.database.AttributeRef;
 
 // TODO: Delete class (and restore inheriting children)
 public class UnsupportedQueryExecutor implements IQueryExecutor {
@@ -14,6 +15,11 @@ public class UnsupportedQueryExecutor implements IQueryExecutor {
         throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 
+    @Override
+    public void setAttributes(List<AttributeRef> attributes) {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
+    }
+    
     @Override
     public EPrompts getFirstPrompt() {
         throw new UnsupportedOperationException("The query executor is currently unsupported");

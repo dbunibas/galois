@@ -28,7 +28,7 @@ public class ProjectParser extends AbstractNodeParser {
         return new Project(getProjectionAttributes(output));
     }
 
-    private List<ProjectionAttribute> getProjectionAttributes(Element output) {
+    public List<ProjectionAttribute> getProjectionAttributes(Element output) {
         return output.getChildren("Item", output.getNamespace()).stream()
                 .map(i -> new ProjectionAttribute(new AttributeRef(getTableAlias(), i.getText())))
                 .toList();
