@@ -45,6 +45,11 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
     }
 
     @Override
+    public boolean ignoreTree() {
+        return true;
+    }
+
+    @Override
     protected ConversationalChain getConversationalChain() {
         return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
 //        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);

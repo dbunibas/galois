@@ -46,6 +46,11 @@ public class OllamaLlama3NLQueryExecutor extends AbstractEntityQueryExecutor {
     }
 
     @Override
+    public boolean ignoreTree() {
+        return true;
+    }
+
+    @Override
     protected ConversationalChain getConversationalChain() {
         return buildOllamaLlama3ConversationalChain();
     }

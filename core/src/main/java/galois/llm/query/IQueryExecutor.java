@@ -28,6 +28,10 @@ public interface IQueryExecutor {
         return null;
     }
 
+    default boolean ignoreTree() {
+        return false;
+    }
+
     IQueryExecutorBuilder getBuilder();
 
     default IQueryExecutorBuilder toBuilder() {
