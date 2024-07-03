@@ -16,7 +16,17 @@ import speedy.model.database.ITable;
 import java.util.List;
 
 import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
+import galois.llm.query.utils.QueryUtils;
+import static galois.llm.query.utils.QueryUtils.generateJsonSchemaListFromAttributes;
+import static galois.llm.query.utils.QueryUtils.getCleanAttributes;
+import static galois.llm.query.utils.QueryUtils.mapToTuple;
 import static galois.utils.FunctionalUtils.orElse;
+import java.util.ArrayList;
+import java.util.Map;
+import speedy.model.database.AttributeRef;
+import speedy.model.database.IDatabase;
+import speedy.model.database.TableAlias;
+import speedy.model.database.Tuple;
 
 @Slf4j
 @Getter
@@ -42,6 +52,60 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
             throw new IllegalArgumentException("sql cannot be null or blank!");
         }
         this.sql = sql;
+    }
+
+    @Override
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+        ConversationalChain chain = getConversationalChain();
+
+        ITable table = database.getTable(tableAlias.getTableName());
+
+        List<Attribute> attributesExecution = getCleanAttributes(table);
+        if (this.attributes != null && !this.attributes.isEmpty()) {
+            attributesExecution = new ArrayList<>();
+            for (AttributeRef attribute : this.attributes) {
+                attributesExecution.add(table.getAttribute(attribute.getName()));
+            }
+        }
+        String jsonSchema = generateJsonSchemaListFromAttributes(table, attributesExecution);
+
+        List<Tuple> tuples = new ArrayList<>();
+        for (int i = 0; i < getMaxIterations(); i++) {
+            String userMessage = i == 0
+                    ? generateFirstPrompt(table, attributesExecution, jsonSchema)
+                    : generateIterativePrompt(table, attributesExecution, jsonSchema);
+            log.debug("Prompt is: {}", userMessage);
+            try {
+                String response = super.getResponse(chain, userMessage);
+                log.debug("Response is: {}", response);
+                List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
+                log.debug("Parsed response is: {}", parsedResponse);
+                if (parsedResponse.isEmpty()) {
+                    break; // no more iterations
+                }
+                for (Map<String, Object> map : parsedResponse) {
+                    Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
+                    // TODO: Handle possible duplicates
+                    tuples.add(tuple);
+                }
+            } catch (Exception e) {
+                try {
+                    log.debug("Error with the response, try again with attention on JSON format");
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
+                    log.debug("Response is: {}", response);
+                    List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
+                    log.debug("Parsed response is: {}", parsedResponse);
+                    for (Map<String, Object> map : parsedResponse) {
+                        Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
+                        // TODO: Handle possible duplicates
+                        tuples.add(tuple);
+                    }
+                } catch (Exception internal) {
+                    // do nothing
+                }
+            }
+        }
+        return tuples;
     }
 
     @Override

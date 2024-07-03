@@ -16,6 +16,7 @@ import static galois.utils.Mapper.asString;
 
 @Slf4j
 public class QueryUtils {
+
     public static String getKeyAsString(Key key) {
         // TODO: Check composite key
         return key.getAttributes().stream()
@@ -65,6 +66,23 @@ public class QueryUtils {
                     cellValue
             );
             tuple.addCell(currentCell);
+        }
+        return tuple;
+    }
+
+    public static Tuple mapToTupleIgnoreMissingAttributes(Map<String, Object> map, TableAlias tableAlias) {
+        Tuple tuple = createNewTupleWithMockOID(tableAlias);
+        for (String attributeName : map.keySet()) {
+            IValue cellValue = !map.get(attributeName).equals("null")
+                    ? new ConstantValue(map.get(attributeName))
+                    : new NullValue(SpeedyConstants.NULL_VALUE);
+            Cell currentCell = new Cell(
+                    tuple.getOid(),
+                    new AttributeRef(tableAlias, attributeName),
+                    cellValue
+            );
+            tuple.addCell(currentCell);
+
         }
         return tuple;
     }

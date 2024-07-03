@@ -15,7 +15,7 @@ import galois.prompt.EPrompts;
 @Slf4j
 public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
 
-    private List<AttributeRef> attributes = null;
+    protected List<AttributeRef> attributes = null;
 
     abstract protected ConversationalChain getConversationalChain();
 
@@ -60,7 +60,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 }
             } catch (Exception e) {
                 try {
-                    log.debug("Error with the response, try again with attentio on JSON format");
+                    log.debug("Error with the response, try again with attention on JSON format");
                     String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
                     log.debug("Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
@@ -78,7 +78,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         return tuples;
     }
 
-    private String getResponse(ConversationalChain chain, String userMessage) {
+    protected String getResponse(ConversationalChain chain, String userMessage) {
         TokensEstimator estimator = new TokensEstimator();
         // TODO [Stats:] TokenCountEstimator estimator get from model
         LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();

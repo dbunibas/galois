@@ -5,5 +5,5 @@ import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.database.IDatabase;
 
 public interface IQueryPlanParser<T> {
-    IAlgebraOperator parse(T queryPlan, IDatabase database, OperatorsConfiguration configuration);
+    IAlgebraOperator parse(T queryPlan, IDatabase database, OperatorsConfiguration configuration, String sql);
 }

@@ -44,7 +44,7 @@ public class ScanParser extends AbstractNodeParser {
             List<ProjectionAttribute> projectionAttributes = projectParser.getProjectionAttributes(output);
             List<AttributeRef> attributes = new ArrayList<>();
             for (ProjectionAttribute pa : projectionAttributes) {
-                attributes.add(pa.getAttributeRef());
+                if (!attributes.contains(pa.getAttributeRef())) attributes.add(pa.getAttributeRef());
             }
             if (node.getChild(conditionNode, node.getNamespace()) != null) {
                 filter = filterParser.parse(node, database, configuration);
@@ -57,7 +57,8 @@ public class ScanParser extends AbstractNodeParser {
                         tokenizer.nextToken();
                         String attributeName = tokenizer.nextToken();
                         AttributeRef aRef = new AttributeRef(tableName, attributeName);
-                        if (!attributes.contains(aRef)) attributes.add(aRef);
+                        if(!containsAttributeByName(attributes, aRef)) attributes.add(aRef);
+//                        if (!attributes.contains(aRef)) attributes.add(aRef);
                     }
                 }
             }
@@ -76,5 +77,12 @@ public class ScanParser extends AbstractNodeParser {
             root = select;
         }
         return root;
+    }
+
+    private boolean containsAttributeByName(List<AttributeRef> attributes, AttributeRef aRef) {
+        for (AttributeRef attribute : attributes) {
+            if (attribute.getName().equals(aRef.getName())) return true;
+        }
+        return false;
     }
 }

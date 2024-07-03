@@ -60,7 +60,7 @@ public final class Experiment {
         IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
 
         Document queryPlan = planner.planFrom(query.getSql());
-        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration);
+        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
 
         DBMSDB dbmsDatabase = createDatabaseForExpected();
         String queryToExecute = query.getSql().replace("target.", "public.");
@@ -116,6 +116,7 @@ public final class Experiment {
                     query.getAccessConfiguration().getPassword());
             dbmsDatabase.getInitDBConfiguration().setCreateTablesFromFiles(true);
             CSVFile fileToImport = new CSVFile(speedyFile.getAbsolutePath());
+            System.out.println("File to import: " + speedyFile.getAbsolutePath());
             fileToImport.setHasHeader(true);
             fileToImport.setSeparator(',');
             dbmsDatabase.getInitDBConfiguration().addFileToImportForTable(firstTable.getName(), fileToImport);

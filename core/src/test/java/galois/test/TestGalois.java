@@ -91,7 +91,7 @@ public class TestGalois {
         Document queryPlan = planner.planFrom(sql);
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.getDefault());
+        IAlgebraOperator operator = parser.parse(queryPlan, llm, OperatorsConfigurationParser.getDefault(), sql);
 
         ITupleIterator iterator = operator.execute(llm, null);
 
@@ -111,7 +111,7 @@ public class TestGalois {
         IQueryExecutor executor = new OllamaLlama3KeyQueryExecutor();
         ScanConfiguration scanConfiguration = new ScanConfiguration(executor);
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration);
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration, sql);
 
         IOptimizer optimizer = new AllConditionsPushdownOptimizer();
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, operator);
@@ -133,7 +133,7 @@ public class TestGalois {
         IQueryExecutor executor = new TogetheraiLLama3KeyQueryExecutor();
         ScanConfiguration scanConfiguration = new ScanConfiguration(executor);
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration);
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration, sql);
 
         IOptimizer optimizer = new AllConditionsPushdownOptimizer();
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, operator);

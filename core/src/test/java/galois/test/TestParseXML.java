@@ -45,6 +45,7 @@ public class TestParseXML {
     @Test
     public void testSimpleSelect() {
         // SQL: select * from target.actor a
+        String sql = "select * from target.actor a";
         String xml = """
                 <explain xmlns="http://www.postgresql.org/2009/explain">
                   <Query>
@@ -72,7 +73,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault(), sql);
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof LLMScan);
@@ -86,6 +87,7 @@ public class TestParseXML {
     @Test
     public void testSelectOrderBy() {
         // SQL: select * from target.actor a order by a.name
+        String sql  = "select * from target.actor a order by a.name";
         String xml = """
                 <explain xmlns="http://www.postgresql.org/2009/explain">
                   <Query>
@@ -120,7 +122,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault(), sql);
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof OrderBy);
@@ -133,6 +135,7 @@ public class TestParseXML {
     @Test
     public void testSelect() {
         // SQL: select a.name from target.actor a
+        String sql = "select a.name from target.actor a";
         String xml = """
                 <explain xmlns="http://www.postgresql.org/2009/explain">
                   <Query>
@@ -157,7 +160,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault(), sql);
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Project);
@@ -169,6 +172,7 @@ public class TestParseXML {
     @Test
     public void testWhere() {
         // SQL: select * from actor a where a.gender = 'Female'
+        String sql = "select * from actor a where a.gender = 'Female'";
         String xml = """
                   <explain xmlns="http://www.postgresql.org/2009/explain">
                     <Query>
@@ -197,7 +201,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault(), sql);
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Select, operator.getName());
@@ -214,6 +218,7 @@ public class TestParseXML {
     @Test
     public void testWhereWithBooleanOperations() {
         // SQL: select * from actor a where a.birth_year > 1990 and (a.gender = 'Female' or a.gender = 'Male')
+        String sql = "select * from actor a where a.birth_year > 1990 and (a.gender = 'Female' or a.gender = 'Male')";
         String xml = """
                 <explain xmlns="http://www.postgresql.org/2009/explain">
                   <Query>
@@ -242,7 +247,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault(), sql);
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Select, operator.getName());
@@ -261,6 +266,7 @@ public class TestParseXML {
     @Disabled
     public void testWhereWithBooleanOperationsNot() {
         // SQL: select * from actor a where not a.birth_year > 1990 and (a.gender != 'Female' or a.gender = 'Male')
+        String sql = "select * from actor a where not a.birth_year > 1990 and (a.gender != 'Female' or a.gender = 'Male')";
         String xml = """
                 <explain xmlns="http://www.postgresql.org/2009/explain">
                   <Query>
@@ -289,7 +295,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault(), sql);
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Select, operator.getName());
@@ -307,6 +313,7 @@ public class TestParseXML {
     @Test
     public void testSelectWhere() {
         // SQL: select a.name from actor a where a.birth_year > 1990
+        String sql = "select a.name from actor a where a.birth_year > 1990";
         String xml = """
                 <explain xmlns="http://www.postgresql.org/2009/explain">
                   <Query>
@@ -332,7 +339,7 @@ public class TestParseXML {
         Document queryPlan = buildDOMFromString(xml);
 
         PostgresXMLParser parser = new PostgresXMLParser();
-        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault());
+        IAlgebraOperator operator = parser.parse(queryPlan, llmDB, OperatorsConfigurationParser.getDefault(), sql);
 
         Assertions.assertNotNull(operator, "Operator is null!");
         Assertions.assertTrue(operator instanceof Project, operator.getName());
