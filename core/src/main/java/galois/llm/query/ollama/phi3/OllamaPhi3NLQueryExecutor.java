@@ -15,6 +15,7 @@ import java.util.List;
 
 import static galois.llm.query.ConversationalChainFactory.buildOllamaPhi3ConversationalChain;
 import static galois.utils.FunctionalUtils.orElse;
+import speedy.model.expressions.Expression;
 
 @Slf4j
 @Getter
@@ -56,7 +57,7 @@ public class OllamaPhi3NLQueryExecutor extends AbstractEntityQueryExecutor {
     }
 
     @Override
-    protected String generateFirstPrompt(ITable table, List<Attribute> attributes, String jsonSchema) {
+    protected String generateFirstPrompt(ITable table, List<Attribute> attributes, Expression expression, String jsonSchema) {
         return firstPrompt.generateUsingNL(naturalLanguagePrompt, jsonSchema);
     }
 

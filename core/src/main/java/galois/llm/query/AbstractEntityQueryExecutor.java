@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static galois.llm.query.utils.QueryUtils.*;
 import galois.prompt.EPrompts;
+import speedy.model.expressions.Expression;
 
 @Slf4j
 public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
@@ -38,11 +39,12 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             }
         }
         String jsonSchema = generateJsonSchemaListFromAttributes(table, attributesExecution);
-
+        Expression expression = getExpression();
+        log.debug("Expression: " + expression);
         List<Tuple> tuples = new ArrayList<>();
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
-                    ? generateFirstPrompt(table, attributesExecution, jsonSchema)
+                    ? generateFirstPrompt(table, attributesExecution, getExpression(), jsonSchema)
                     : generateIterativePrompt(table, attributesExecution, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
             try {
@@ -93,8 +95,8 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         return response;
     }
 
-    protected String generateFirstPrompt(ITable table, List<Attribute> attributes, String jsonSchema) {
-        return getFirstPrompt().generate(table, attributes, jsonSchema);
+    protected String generateFirstPrompt(ITable table, List<Attribute> attributes, Expression expression, String jsonSchema) {
+        return getFirstPrompt().generate(table, attributes, expression, jsonSchema);
     }
 
     protected String generateIterativePrompt(ITable table, List<Attribute> attributes, String jsonSchema) {

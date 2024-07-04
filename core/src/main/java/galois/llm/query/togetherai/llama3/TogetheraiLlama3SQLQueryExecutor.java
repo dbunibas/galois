@@ -27,6 +27,7 @@ import speedy.model.database.AttributeRef;
 import speedy.model.database.IDatabase;
 import speedy.model.database.TableAlias;
 import speedy.model.database.Tuple;
+import speedy.model.expressions.Expression;
 
 @Slf4j
 @Getter
@@ -72,7 +73,7 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
         List<Tuple> tuples = new ArrayList<>();
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
-                    ? generateFirstPrompt(table, attributesExecution, jsonSchema)
+                    ? generateFirstPrompt(table, attributesExecution, null, jsonSchema)
                     : generateIterativePrompt(table, attributesExecution, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
             try {
@@ -120,7 +121,7 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
     }
 
     @Override
-    protected String generateFirstPrompt(ITable table, List<Attribute> attributes, String jsonSchema) {
+    protected String generateFirstPrompt(ITable table, List<Attribute> attributes, Expression expression, String jsonSchema) {
         return firstPrompt.generateUsingSQL(sql, jsonSchema);
     }
 

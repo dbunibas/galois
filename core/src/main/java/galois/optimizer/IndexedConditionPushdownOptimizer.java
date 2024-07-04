@@ -12,6 +12,7 @@ import java.util.List;
 
 @Slf4j
 public class IndexedConditionPushdownOptimizer implements IOptimizer {
+
     private final int index;
     private Expression pushdownCondition;
 
@@ -28,7 +29,8 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
     public IAlgebraOperator optimize(IDatabase database, String sql, IAlgebraOperator query) {
         // TODO: Add scan to abstract component
         log.warn("Naïve implementation, for testing purposes only!");
-        IAlgebraOperator currentNode = query.clone();
+        IAlgebraOperator root = query.clone();
+        IAlgebraOperator currentNode = root;
         while (currentNode != null) {
             if (currentNode instanceof Select) {
                 ParserWhere parserWhere = new ParserWhere();
@@ -53,6 +55,6 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
             }
             currentNode = currentNode.getChildren().isEmpty() ? null : currentNode.getChildren().get(0);
         }
-        return query;
+        return root;
     }
 }

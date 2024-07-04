@@ -29,6 +29,7 @@ public class SingleConditionPushdown implements IOptimization {
         LLMScan scan = (LLMScan) query.getChildren().get(0);
         IAlgebraOperator optimizedScan = toOptimizedScan(database, scan);
         IAlgebraOperator optimizedSelect = toOptimizedSelect(database, scan);
+        if (optimizedSelect == null) return optimizedScan;
         optimizedSelect.addChild(optimizedScan);
         return optimizedSelect;
     }
@@ -58,13 +59,13 @@ public class SingleConditionPushdown implements IOptimization {
                 .attributesPrompt(optimizePrompt(executor.getAttributesPrompt()))
                 .expression(pushdownExpression)
                 .build();
-        return new LLMScan(scan.getTableAlias(), optimizedExecutor);
+        return new LLMScan(scan.getTableAlias(), optimizedExecutor, scan.getAttributesSelect());
     }
 
     private Select toOptimizedSelect(IDatabase database, LLMScan scan) {
+        if (this.operation == null || this.operation.isBlank()) return null;
         TableAlias tableAlias = scan.getTableAlias();
-        ITable table = database.getTable(tableAlias.getTableName());
-
+        ITable table = database.getTable(tableAlias.getTableName());          
         String cleanOperation = cleanExpression(operation);
         String conditionsAsString = remainingConditions.stream()
                 .map(Object::toString)
@@ -72,7 +73,6 @@ public class SingleConditionPushdown implements IOptimization {
         Expression expression = new Expression(cleanExpression(conditionsAsString));
         addAllAttributesToExpression(expression, table, tableAlias);
         log.debug("Optimized select expression: {}", expression);
-
         return new Select(expression);
     }
 
