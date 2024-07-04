@@ -65,10 +65,12 @@ public class SingleConditionPushdown implements IOptimization {
     private Select toOptimizedSelect(IDatabase database, LLMScan scan) {
         if (this.operation == null || this.operation.isBlank()) return null;
         TableAlias tableAlias = scan.getTableAlias();
-        ITable table = database.getTable(tableAlias.getTableName());          
+        ITable table = database.getTable(tableAlias.getTableName());
+        String replaceAlias = tableAlias.getAlias()+".";
         String cleanOperation = cleanExpression(operation);
         String conditionsAsString = remainingConditions.stream()
                 .map(Object::toString)
+                .map(c->c.replace(replaceAlias, ""))
                 .collect(Collectors.joining(cleanOperation));
         Expression expression = new Expression(cleanExpression(conditionsAsString));
         addAllAttributesToExpression(expression, table, tableAlias);
