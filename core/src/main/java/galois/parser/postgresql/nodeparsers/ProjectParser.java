@@ -11,11 +11,14 @@ import speedy.model.database.ITable;
 import speedy.model.database.TableAlias;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ProjectParser extends AbstractNodeParser {
     public boolean shouldParseNode(Element node, ITable table) {
         if (node == null) return false;
-        return node.getChildren("Item", node.getNamespace()).size() != table.getAttributes().size();
+        List<Element> items = node.getChildren("Item", node.getNamespace());
+        return items.size() != table.getAttributes().size();
     }
 
     @Override

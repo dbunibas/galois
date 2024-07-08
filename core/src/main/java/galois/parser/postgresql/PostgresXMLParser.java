@@ -41,7 +41,9 @@ public class PostgresXMLParser implements IQueryPlanParser<Document> {
         }
 
         IAlgebraOperator operator = NodeParserFactory.getParserForNode(root).parse(root, database, configuration);
-
+        if (operator instanceof Project) {
+            return operator;
+        }
         if (sqlQuery != null && !sqlQuery.isEmpty()) {
             try {
                 PlainSelect select = (PlainSelect) CCJSqlParserUtil.parse(sqlQuery);
@@ -75,6 +77,7 @@ public class PostgresXMLParser implements IQueryPlanParser<Document> {
 
             }
         }
+        log.debug("Operator: " + operator.toString("\t"));
         return operator;
     }
 

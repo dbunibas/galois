@@ -12,6 +12,7 @@ public class NodeParserFactory {
             Map.entry("Bitmap Heap Scan", () -> new ScanParser("Recheck-Cond")),
             Map.entry("Sort", SortParser::new),
             Map.entry("Hash", HashParser::new),
+            Map.entry("Aggregate", AggregateParser::new),
             Map.entry("Hash Join", HashJoinParser::new)
     );
 

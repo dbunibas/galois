@@ -26,12 +26,12 @@ public class LLMScan extends AbstractOperator {
     private final TableAlias tableAlias;
     private final IQueryExecutor queryExecutor;
     private List<AttributeRef> attributesSelect = null;
-    
+
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor) {
         this.tableAlias = tableAlias;
         this.queryExecutor = queryExecutor;
     }
-    
+
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect) {
         this.tableAlias = tableAlias;
         this.queryExecutor = queryExecutor;
@@ -59,7 +59,9 @@ public class LLMScan extends AbstractOperator {
 
     @Override
     public List<AttributeRef> getAttributes(IDatabase source, IDatabase target) {
-        if (attributesSelect != null) return this.attributesSelect;
+        if (attributesSelect != null) {
+            return this.attributesSelect;
+        }
         checkSourceTarget(source, target);
         LLMTable table = (LLMTable) source.getTable(tableAlias.getTableName());
         return table.getAttributes().stream()
@@ -67,6 +69,10 @@ public class LLMScan extends AbstractOperator {
                 .collect(Collectors.toUnmodifiableSet())
                 .stream()
                 .toList();
+    }
+
+    public void setAttributesSelect(List<AttributeRef> attributesSelect) {
+        this.attributesSelect = attributesSelect;
     }
 
     private void checkSourceTarget(IDatabase source, IDatabase target) {
@@ -84,7 +90,7 @@ public class LLMScan extends AbstractOperator {
 
         private final IDatabase database;
         private final IQueryExecutor queryExecutor;
-         
+
         public LLMScanTupleIterator(IDatabase database, IQueryExecutor queryExecutor) {
             this.database = database;
             this.queryExecutor = queryExecutor;
