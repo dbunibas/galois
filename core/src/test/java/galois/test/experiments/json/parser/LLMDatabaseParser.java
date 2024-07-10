@@ -16,6 +16,7 @@ import speedy.utility.DBMSUtility;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ public class LLMDatabaseParser {
 
         ICreateTable tableGenerator = new SQLCreateTable();
         tables.forEach(t -> tableGenerator.createTable(t.getTableName(), getTableAttributes(t), getKeysAttributes(t), db));
-
+       
         Connection connection = QueryManager.getConnection(accessConfiguration);
         if (connection != null) {
             try {
@@ -58,7 +59,7 @@ public class LLMDatabaseParser {
 
     private static List<Attribute> getTableAttributes(TableJSON table) {
         return table.getAttributes().stream()
-                .map(json -> new Attribute(table.getTableName(), json.getName(), json.getType(), json.getNullable()))
+                .map(json -> new Attribute(table.getTableName(), json.getName(), json.getSpeedyAttributeType(), json.getNullable()))
                 .toList();
     }
 

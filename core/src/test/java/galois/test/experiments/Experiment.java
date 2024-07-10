@@ -54,19 +54,18 @@ public final class Experiment {
     @SuppressWarnings("unchecked")
     public Map<String, ExperimentResults> execute() {
         Map<String, ExperimentResults> results = new HashMap<>();
-
         // TODO: Make this generic (and remove annotation)
         IQueryPlanner<Document> planner = (IQueryPlanner<Document>) PlannerParserFactory.getPlannerFor(dbms, query.getAccessConfiguration());
         IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
-
         Document queryPlan = planner.planFrom(query.getSql());
         IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
-
         DBMSDB dbmsDatabase = createDatabaseForExpected();
         String queryToExecute = query.getSql().replace("target.", "public.");
+        log.debug("Query for results: \n" + queryToExecute);
         ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
         ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
         List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
+        log.info("Expected size: " + expectedResults.size());
 //        log.info("Expected");
 //        log.info("Query: " + query.getSql());
 //        for (Tuple expectedResult : expectedResults) {
@@ -100,9 +99,10 @@ public final class Experiment {
 
             File file = files[0];
             File speedyFile = new File(resource.getPath() + File.separator + file.getName().replace(".csv", "") + "_speedy.csv");
+            String textDelim = null;
             try {
                 FileUtils.copyFile(file, speedyFile);
-                replaceHeadersWithTypes(speedyFile, attributes);
+                textDelim = replaceHeadersWithTypes(speedyFile, attributes);
             } catch (IOException ioe) {
                 log.error("Unable to duplicate file: " + file + " to " + speedyFile);
                 log.error("Exception: " + ioe);
@@ -119,16 +119,17 @@ public final class Experiment {
             System.out.println("File to import: " + speedyFile.getAbsolutePath());
             fileToImport.setHasHeader(true);
             fileToImport.setSeparator(',');
+            if (textDelim != null) fileToImport.setQuoteCharacter(textDelim.charAt(0));
             dbmsDatabase.getInitDBConfiguration().addFileToImportForTable(firstTable.getName(), fileToImport);
             dbmsDatabase.initDBMS();
             OperatorFactory.getInstance().getQueryRunner(dbmsDatabase);
-            if (speedyFile != null) {
-                try {
-                    FileUtils.delete(speedyFile);
-                } catch (IOException ioe) {
-                    log.error("Unable to delete: " + speedyFile);
-                }
-            }
+//            if (speedyFile != null) {
+//                try {
+//                    FileUtils.delete(speedyFile);
+//                } catch (IOException ioe) {
+//                    log.error("Unable to delete: " + speedyFile);
+//                }
+//            }
         }
         return dbmsDatabase;
     }
@@ -150,6 +151,8 @@ public final class Experiment {
 
     private ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults) {
         List<Tuple> results = TestUtils.toTupleList(actual);
+        log.info("Results size: " + results.size());
+        log.info("Results: " + results);
         List<Double> scores = metrics
                 .stream()
                 //                .map(m -> m.getScore(query.getDatabase(), query.getResults(), results))
@@ -175,17 +178,19 @@ public final class Experiment {
         }
     }
 
-    private void replaceHeadersWithTypes(File speedyFile, List<Attribute> attributes) throws IOException {
+    private String replaceHeadersWithTypes(File speedyFile, List<Attribute> attributes) throws IOException {
         List<String> lines = FileUtils.readLines(speedyFile, "utf-8");
         String headers = lines.get(0);
         StringTokenizer tokenizer = new StringTokenizer(headers, ",");
-        String updatedHeaders = updateHeaders(tokenizer, attributes);
+        String textDelim = getTextDelim(headers);
+        String updatedHeaders = updateHeaders(tokenizer, attributes, textDelim);
         lines.remove(0);
         lines.add(0, updatedHeaders);
         FileUtils.writeLines(speedyFile, lines);
+        return textDelim; // TODO refactor
     }
 
-    private String updateHeaders(StringTokenizer tokenizer, List<Attribute> attributes) {
+    private String updateHeaders(StringTokenizer tokenizer, List<Attribute> attributes, String textDelim) {
         Map<String, String> attributesWithType = new HashMap<>();
         for (Attribute attribute : attributes) {
             attributesWithType.put(attribute.getName(), attribute.getType());
@@ -193,14 +198,26 @@ public final class Experiment {
         String headersWithType = "";
         while (tokenizer.hasMoreTokens()) {
             String attributeName = tokenizer.nextToken().trim();
+//            String attributeNameCleaned = attributeName.replace("\"", "");
+            if (textDelim != null) attributeName = attributeName.replace(textDelim, "");
             String type = attributesWithType.get(attributeName);
             if (type == null || type.equals(Types.STRING)) {
                 headersWithType += attributeName + ",";
             } else {
-                headersWithType += attributeName + "(" + type + ")" + ",";
+                if (textDelim == null) {
+                    headersWithType += attributeName + "(" + type + ")" + ",";
+                } else {
+                    headersWithType += textDelim + attributeName + "(" + type + ")" + textDelim + ",";
+                }
             }
         }
         headersWithType = headersWithType.substring(0, headersWithType.length() - 1);
         return headersWithType;
+    }
+
+    private String getTextDelim(String headers) {
+        if (headers.contains("\"")) return "\"";
+        if (headers.contains("'")) return "'";
+        return null;
     }
 }

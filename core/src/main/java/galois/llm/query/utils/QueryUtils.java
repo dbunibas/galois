@@ -67,6 +67,7 @@ public class QueryUtils {
             );
             tuple.addCell(currentCell);
         }
+        if (tuple.getCells().size() <= 1) return null;
         return tuple;
     }
 

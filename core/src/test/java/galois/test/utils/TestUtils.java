@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TestUtils {
     public static Document buildDOMFromString(String content) throws DAOException {
         if (content == null || content.isEmpty()) {

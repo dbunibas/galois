@@ -58,7 +58,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 for (Map<String, Object> map : parsedResponse) {
                     Tuple tuple = mapToTuple(map, tableAlias, attributesExecution);
                     // TODO: Handle possible duplicates
-                    tuples.add(tuple);
+                    if (tuple != null) tuples.add(tuple);
                 }
             } catch (Exception e) {
                 try {
@@ -70,7 +70,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = mapToTuple(map, tableAlias, attributesExecution);
                         // TODO: Handle possible duplicates
-                        tuples.add(tuple);
+                        if (tuple != null) tuples.add(tuple);
                     }
                 } catch (Exception internal) {
                     // do nothing

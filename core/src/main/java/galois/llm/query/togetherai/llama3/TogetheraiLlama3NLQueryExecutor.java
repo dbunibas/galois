@@ -93,7 +93,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
                 for (Map<String, Object> map : parsedResponse) {
                     Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
                     // TODO: Handle possible duplicates
-                    tuples.add(tuple);
+                    if (tuple != null ) tuples.add(tuple);
                 }
             } catch (Exception e) {
                 try {
@@ -105,7 +105,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
                         // TODO: Handle possible duplicates
-                        tuples.add(tuple);
+                        if (tuple != null) tuples.add(tuple);
                     }
                 } catch (Exception internal) {
                     // do nothing

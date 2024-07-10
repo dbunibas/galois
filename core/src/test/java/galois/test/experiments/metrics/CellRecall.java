@@ -35,9 +35,11 @@ public class CellRecall implements IMetric {
 
         Set<String> resultCells = new HashSet<>();
         for (Tuple tuple : result) {
-            for (Cell cell : tuple.getCells()) {
-                if (!cell.isOID()) {
-                    resultCells.add(cellNormalizer.normalize(cell.getValue().toString()));
+            if (tuple != null && tuple.getCells() != null) {
+                for (Cell cell : tuple.getCells()) {
+                    if (!cell.isOID()) {
+                        resultCells.add(cellNormalizer.normalize(cell.getValue().toString()));
+                    }
                 }
             }
         }
