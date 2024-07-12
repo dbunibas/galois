@@ -43,7 +43,7 @@ public class TupleConstraint implements  IMetric{
                 .sorted(Comparator.comparing(tuple -> tuple.getCells().get(1).getValue().toString()))
                 .toList();
 
-        List<List<String>> resultCells = resultSorted.stream().map(tuple -> tuple.getCells().stream()
+        List<List<String>> resultCells = resultSorted.stream().filter(tuple -> tuple != null).map(tuple -> tuple.getCells().stream()
                         .filter(cell -> !cell.isOID())
                         .map(cell -> cellNormalizer.normalize(cell.getValue().toString()))
                         .toList())

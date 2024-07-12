@@ -84,28 +84,36 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
             log.debug("Prompt is: {}", userMessage);
             try {
                 String response = super.getResponse(chain, userMessage);
-                log.debug("Response is: {}", response);
+                log.debug("First Response is: {}", response);
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
-                log.debug("Parsed response is: {}", parsedResponse);
+                log.debug("First Parsed response is: {}", parsedResponse);
                 if (parsedResponse.isEmpty()) {
                     break; // no more iterations
                 }
                 for (Map<String, Object> map : parsedResponse) {
+                    log.debug("Try to parse: " + speedy.utility.SpeedyUtility.printMapCompact(map));
                     Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
                     // TODO: Handle possible duplicates
-                    if (tuple != null ) tuples.add(tuple);
+                    if (tuple != null ) {
+                        log.debug("Add tuple: " + tuple);
+                        tuples.add(tuple);
+                    }
                 }
             } catch (Exception e) {
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
                     String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
-                    log.debug("Response is: {}", response);
+                    log.debug("Second Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
-                    log.debug("Parsed response is: {}", parsedResponse);
+                    log.debug("Second Parsed response is: {}", parsedResponse);
                     for (Map<String, Object> map : parsedResponse) {
+                        log.debug("Second Try to parse: " + speedy.utility.SpeedyUtility.printMapCompact(map));
                         Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
                         // TODO: Handle possible duplicates
-                        if (tuple != null) tuples.add(tuple);
+                        if (tuple != null) {
+                           log.debug("Add tuple: " + tuple);
+                            tuples.add(tuple);
+                        }
                     }
                 } catch (Exception internal) {
                     // do nothing
@@ -117,8 +125,8 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
 
     @Override
     protected ConversationalChain getConversationalChain() {
-        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
-//        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);
+//        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);
     }
 
     @Override

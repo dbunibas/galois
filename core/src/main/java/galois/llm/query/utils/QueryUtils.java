@@ -55,11 +55,17 @@ public class QueryUtils {
 
     public static Tuple mapToTuple(Tuple tuple, Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
         for (Attribute attribute : attributes) {
-            IValue cellValue = map.containsKey(attribute.getName()) &&
+            IValue cellValue = null;
+            if (map.get(attribute.getName()) == null || map.get(attribute.getName()).toString().equalsIgnoreCase("null")) {
+                cellValue = new NullValue(SpeedyConstants.NULL_VALUE);
+            } else {
+                cellValue = new ConstantValue(map.get(attribute.getName()));
+            }
+            /*IValue cellValue = map.containsKey(attribute.getName()) &&
                     map.get(attribute.getName()) != null && 
                     !map.get(attribute.getName()).equals("null") ?
                     new ConstantValue(map.get(attribute.getName())) :
-                    new NullValue(SpeedyConstants.NULL_VALUE);
+                    new NullValue(SpeedyConstants.NULL_VALUE); */
             Cell currentCell = new Cell(
                     tuple.getOid(),
                     new AttributeRef(tableAlias, attribute.getName()),
@@ -74,16 +80,18 @@ public class QueryUtils {
     public static Tuple mapToTupleIgnoreMissingAttributes(Map<String, Object> map, TableAlias tableAlias) {
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
         for (String attributeName : map.keySet()) {
-            IValue cellValue = !map.get(attributeName).equals("null")
-                    ? new ConstantValue(map.get(attributeName))
-                    : new NullValue(SpeedyConstants.NULL_VALUE);
+            IValue cellValue = null;
+            if (map.get(attributeName) == null || map.get(attributeName).toString().equalsIgnoreCase("null")) {
+                cellValue = new NullValue(SpeedyConstants.NULL_VALUE);
+            } else {
+                cellValue = new ConstantValue(map.get(attributeName));
+            }
             Cell currentCell = new Cell(
                     tuple.getOid(),
                     new AttributeRef(tableAlias, attributeName),
                     cellValue
             );
             tuple.addCell(currentCell);
-
         }
         return tuple;
     }

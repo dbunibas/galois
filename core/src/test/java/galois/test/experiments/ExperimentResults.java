@@ -89,17 +89,19 @@ public class ExperimentResults {
             return;
         }
         Tuple firstTuple = actualResults.get(0);
-        String[] headers = getHeaders(firstTuple);
-        CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(headers).build();
-        try {
-            PrintWriter writer = new PrintWriter(filePathCSV.toFile());
-            CSVPrinter printer = new CSVPrinter(writer, csvFormat);
-            for (Tuple tuple : actualResults) {
-                printer.printRecord(getCellContent(tuple));
-            }
-            writer.close();
-        } catch (IOException ioe) {
-            log.error("Exception: {}", ioe);
+        if (firstTuple != null) {
+            String[] headers = getHeaders(firstTuple);
+            CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(headers).build();
+            try {
+                PrintWriter writer = new PrintWriter(filePathCSV.toFile());
+                CSVPrinter printer = new CSVPrinter(writer, csvFormat);
+                for (Tuple tuple : actualResults) {
+                    printer.printRecord(getCellContent(tuple));
+                }
+                writer.close();
+            } catch (IOException ioe) {
+                log.error("Exception: {}", ioe);
+        }
         }
     }
 

@@ -123,13 +123,13 @@ public final class Experiment {
             dbmsDatabase.getInitDBConfiguration().addFileToImportForTable(firstTable.getName(), fileToImport);
             dbmsDatabase.initDBMS();
             OperatorFactory.getInstance().getQueryRunner(dbmsDatabase);
-//            if (speedyFile != null) {
-//                try {
-//                    FileUtils.delete(speedyFile);
-//                } catch (IOException ioe) {
-//                    log.error("Unable to delete: " + speedyFile);
-//                }
-//            }
+            if (speedyFile != null) {
+                try {
+                    FileUtils.delete(speedyFile);
+                } catch (IOException ioe) {
+                    log.error("Unable to delete: " + speedyFile);
+                }
+            }
         }
         return dbmsDatabase;
     }
