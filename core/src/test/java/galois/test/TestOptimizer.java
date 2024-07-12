@@ -4,16 +4,12 @@ import galois.llm.algebra.LLMScan;
 import galois.llm.database.LLMDB;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.OllamaLlama3KeyScanQueryExecutor;
-import galois.optimizer.IOptimization;
-import galois.optimizer.IOptimizer;
-import galois.optimizer.IndexedConditionPushdownOptimizer;
-import galois.optimizer.LLMHistogramOptimizer;
+import galois.llm.query.togetherai.llama3.TogetheraiLlama3TableQueryExecutor;
+import galois.optimizer.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import speedy.model.algebra.IAlgebraOperator;
-import speedy.model.algebra.OrderBy;
-import speedy.model.algebra.Select;
+import speedy.model.algebra.*;
 import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.IDatabase;
@@ -25,8 +21,7 @@ import speedy.persistence.relational.AccessConfiguration;
 import java.util.List;
 
 import static galois.test.utils.TestUtils.toTupleStream;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 public class TestOptimizer {
@@ -134,10 +129,97 @@ public class TestOptimizer {
         IOptimizer optimizer = new IndexedConditionPushdownOptimizer(0);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
 
-        assertTrue(optimizedQuery instanceof Select);
+        assertInstanceOf(Select.class, optimizedQuery);
         assertEquals(1, optimizedQuery.getChildren().size());
 
         ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
         toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testAggregateConditionsSingleOR() {
+        String sql = "select * from actor where gender = 'Female' OR birth_year > 1980";
+
+        TableAlias tableAlias = new TableAlias("actor", "a");
+        IQueryExecutor executor = TogetheraiLlama3TableQueryExecutor.builder()
+                .maxIterations(2)
+                .build();
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+
+        Expression exp = new Expression("gender == \"Female\" || birth_year > 1980");
+        exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
+        exp.setVariableDescription("birth_year", new AttributeRef(tableAlias, "birth_year"));
+        Select select = new Select(exp);
+        select.addChild(llmScan);
+
+        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
+        IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
+
+        assertInstanceOf(Union.class, optimizedQuery);
+        assertEquals(2, optimizedQuery.getChildren().size());
+        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(0));
+        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(1));
+
+        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
+        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testAggregateConditionsSingleAND() {
+        String sql = "select * from actor where gender = 'Female' AND birth_year > 1980";
+
+        TableAlias tableAlias = new TableAlias("actor", "a");
+        IQueryExecutor executor = TogetheraiLlama3TableQueryExecutor.builder()
+                .maxIterations(2)
+                .build();
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+
+        Expression exp = new Expression("gender == \"Female\" && birth_year > 1980");
+        exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
+        exp.setVariableDescription("birth_year", new AttributeRef(tableAlias, "birth_year"));
+        Select select = new Select(exp);
+        select.addChild(llmScan);
+
+        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
+        IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
+
+        assertInstanceOf(Intersection.class, optimizedQuery);
+        assertEquals(2, optimizedQuery.getChildren().size());
+        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(0));
+        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(1));
+
+        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
+        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
+    public void testAggregateConditionsMultipleOR() {
+        String sql = "select * from actor where gender = 'Female' OR birth_year > 1980 OR name = 'Robert De Niro'";
+
+        TableAlias tableAlias = new TableAlias("actor", "a");
+        IQueryExecutor executor = TogetheraiLlama3TableQueryExecutor.builder()
+                .maxIterations(2)
+                .build();
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+
+        Expression exp = new Expression("gender == \"Female\" || birth_year > 1980 || name == \"Robert De Niro\"");
+        exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
+        exp.setVariableDescription("birth_year", new AttributeRef(tableAlias, "birth_year"));
+        exp.setVariableDescription("name", new AttributeRef(tableAlias, "name"));
+        Select select = new Select(exp);
+        select.addChild(llmScan);
+
+        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
+        IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
+
+        assertInstanceOf(Union.class, optimizedQuery);
+        assertEquals(2, optimizedQuery.getChildren().size());
+        assertInstanceOf(Union.class, optimizedQuery.getChildren().get(0));
+        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(1));
+
+        IAlgebraOperator left = optimizedQuery.getChildren().get(0);
+        assertEquals(2, left.getChildren().size());
+        assertInstanceOf(LLMScan.class, left.getChildren().get(0));
+        assertInstanceOf(LLMScan.class, left.getChildren().get(1));
     }
 }
