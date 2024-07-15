@@ -4,7 +4,6 @@ import galois.llm.algebra.LLMScan;
 import galois.llm.query.IQueryExecutor;
 import galois.optimizer.IOptimization;
 import galois.optimizer.OptimizerException;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Intersection;
