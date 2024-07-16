@@ -44,14 +44,17 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
                 log.debug("pushdownCondition is: {}", pushdownCondition);
                 SingleConditionPushdown singleConditionPushdown = new SingleConditionPushdown(pushdownCondition, expressions, parserWhere.getOperation());
                 IAlgebraOperator optimizedNode = singleConditionPushdown.optimize(database, currentNode);
-                IAlgebraOperator father = currentNode.getFather();
-                if (father == null) {
-                    return optimizedNode;
-                }
-                // TODO: Add replace children?
-                father.getChildren().clear();
-                father.addChild(optimizedNode);
+                currentNode.getChildren().clear();
+                currentNode.addChild(optimizedNode);
                 currentNode = optimizedNode;
+//                IAlgebraOperator father = currentNode.getFather();
+//                if (father == null) {
+//                    return optimizedNode;
+//                }
+//                // TODO: Add replace children?
+//                father.getChildren().clear();
+//                father.addChild(optimizedNode);
+//                currentNode = optimizedNode;
             }
             currentNode = currentNode.getChildren().isEmpty() ? null : currentNode.getChildren().get(0);
         }

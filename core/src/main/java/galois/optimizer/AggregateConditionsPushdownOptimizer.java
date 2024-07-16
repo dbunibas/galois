@@ -14,7 +14,7 @@ import java.util.List;
 public class AggregateConditionsPushdownOptimizer implements IOptimizer {
     @Override
     public IAlgebraOperator optimize(IDatabase database, String sql, IAlgebraOperator query) {
-        // TODO: Add scan to abstract component, please! :C
+        // TODO: Add scan to abstract component
         log.warn("Naïve implementation, for testing purposes only!");
         IAlgebraOperator root = query.clone();
         IAlgebraOperator currentNode = root;
@@ -26,14 +26,16 @@ public class AggregateConditionsPushdownOptimizer implements IOptimizer {
                 log.debug("Parsed expressions: {}", expressions);
                 AggregateConditionsPushdown aggregateConditionsPushdown = new AggregateConditionsPushdown(expressions, parserWhere.getOperation());
                 IAlgebraOperator optimizedNode = aggregateConditionsPushdown.optimize(database, currentNode);
-                IAlgebraOperator father = currentNode.getFather();
-                if (father == null) {
-                    return optimizedNode;
-                }
+                currentNode.getChildren().clear();
+                currentNode.addChild(optimizedNode);
+//                IAlgebraOperator father = currentNode.getFather();
+//                if (father == null) {
+//                    return currentNode;
+//                }
                 // TODO: Add replace children?
-                father.getChildren().clear();
-                father.addChild(optimizedNode);
-                currentNode = optimizedNode;
+//                father.getChildren().clear();
+//                father.addChild(currentNode);
+//                currentNode = optimizedNode;
             }
             currentNode = currentNode.getChildren().isEmpty() ? null : currentNode.getChildren().get(0);
         }

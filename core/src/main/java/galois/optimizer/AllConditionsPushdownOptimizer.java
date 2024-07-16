@@ -19,14 +19,16 @@ public class AllConditionsPushdownOptimizer implements IOptimizer {
         while (currentNode != null) {
             if (currentNode instanceof Select) {
                 IAlgebraOperator optimizedNode = allConditionsPushdown.optimize(database, currentNode);
-                IAlgebraOperator father = currentNode.getFather();
-                if (father == null) {
-                    return optimizedNode;
-                }
-                // TODO: Add replace children?
-                father.getChildren().clear();
-                father.addChild(optimizedNode);
-                currentNode = optimizedNode;
+                currentNode.getChildren().clear();
+                currentNode.addChild(optimizedNode);
+//                IAlgebraOperator father = currentNode.getFather();
+//                if (father == null) {
+//                    return optimizedNode;
+//                }
+//                // TODO: Add replace children?
+//                father.getChildren().clear();
+//                father.addChild(optimizedNode);
+//                currentNode = optimizedNode;
             }
             currentNode = currentNode.getChildren().isEmpty() ? null : currentNode.getChildren().get(0);
         }

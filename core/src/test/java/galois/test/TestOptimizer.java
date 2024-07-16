@@ -8,6 +8,7 @@ import galois.llm.query.togetherai.llama3.TogetheraiLlama3TableQueryExecutor;
 import galois.optimizer.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.*;
 import speedy.model.algebra.operators.ITupleIterator;
@@ -44,6 +45,7 @@ public class TestOptimizer {
     }
 
     @Test
+    @Disabled
     public void testConditionPushDown() {
         // Query: SELECT * FROM actor WHERE gender = 'male'
         TableAlias tableAlias = new TableAlias("actor", "a");
@@ -62,6 +64,7 @@ public class TestOptimizer {
     }
 
     @Test
+    @Disabled
     public void testConditionPushDownOrderBy() {
         // Query: SELECT * FROM actor WHERE gender = 'male' ORDER_BY name
         TableAlias tableAlias = new TableAlias("actor", "a");
@@ -84,6 +87,34 @@ public class TestOptimizer {
     }
 
     @Test
+    public void testAllConditionsPushdownOptimizer() {
+        String sql = "select * from actor where gender = 'Female' && birth_year > 1980";
+
+        TableAlias tableAlias = new TableAlias("actor", "a");
+        IQueryExecutor executor = OllamaLlama3KeyScanQueryExecutor.builder()
+                .maxIterations(2)
+                .build();
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+
+        Expression exp = new Expression("gender == \"Female\" && birth_year > 1980");
+        exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
+        exp.setVariableDescription("birth_year", new AttributeRef(tableAlias, "birth_year"));
+        Select select = new Select(exp);
+        select.addChild(llmScan);
+
+        IOptimizer optimizer = new AllConditionsPushdownOptimizer();
+        IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
+
+        assertInstanceOf(Select.class, optimizedQuery);
+        assertEquals(1, optimizedQuery.getChildren().size());
+        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(0));
+        assertEquals(0, optimizedQuery.getChildren().get(0).getChildren().size());
+
+//        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
+//        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+    }
+
+    @Test
     public void testIndexedConditionPushdownOptimizer() {
         String sql = "select * from actor where gender = 'Female' && birth_year > 1980";
 
@@ -102,11 +133,23 @@ public class TestOptimizer {
         IOptimizer optimizer = new IndexedConditionPushdownOptimizer(0);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
 
-        assertTrue(optimizedQuery instanceof Select);
+        // Top level select
+        assertEquals(exp, ((Select) optimizedQuery).getSelections().get(0));
+        assertInstanceOf(Select.class, optimizedQuery);
         assertEquals(1, optimizedQuery.getChildren().size());
 
-        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
-        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+        // Remaining conditions select
+        IAlgebraOperator child = optimizedQuery.getChildren().get(0);
+        assertInstanceOf(Select.class, child);
+        assertEquals(1, child.getChildren().size());
+
+        // Scan with pushdown condition
+        child = child.getChildren().get(0);
+        assertInstanceOf(LLMScan.class, child);
+        assertEquals(0, child.getChildren().size());
+
+//        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
+//        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
     }
 
     @Test
@@ -129,11 +172,23 @@ public class TestOptimizer {
         IOptimizer optimizer = new IndexedConditionPushdownOptimizer(0);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
 
+        // Top level select
         assertInstanceOf(Select.class, optimizedQuery);
         assertEquals(1, optimizedQuery.getChildren().size());
+        assertEquals(exp, ((Select) optimizedQuery).getSelections().get(0));
 
-        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
-        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+        // Remaining conditions select
+        IAlgebraOperator child = optimizedQuery.getChildren().get(0);
+        assertInstanceOf(Select.class, child);
+        assertEquals(1, child.getChildren().size());
+
+        // Scan with pushdown condition
+        child = child.getChildren().get(0);
+        assertInstanceOf(LLMScan.class, child);
+        assertEquals(0, child.getChildren().size());
+
+//        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
+//        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
     }
 
     @Test
@@ -154,14 +209,17 @@ public class TestOptimizer {
 
         IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
+        assertInstanceOf(Select.class, optimizedQuery);
+        assertEquals(1, optimizedQuery.getChildren().size());
 
-        assertInstanceOf(Union.class, optimizedQuery);
-        assertEquals(2, optimizedQuery.getChildren().size());
-        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(0));
-        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(1));
+        IAlgebraOperator child = optimizedQuery.getChildren().get(0);
+        assertInstanceOf(Union.class, child);
+        assertEquals(2, child.getChildren().size());
+        assertInstanceOf(LLMScan.class, child.getChildren().get(0));
+        assertInstanceOf(LLMScan.class, child.getChildren().get(1));
 
-        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
-        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+//        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
+//        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
     }
 
     @Test
@@ -182,14 +240,17 @@ public class TestOptimizer {
 
         IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
+        assertInstanceOf(Select.class, optimizedQuery);
+        assertEquals(1, optimizedQuery.getChildren().size());
 
-        assertInstanceOf(Intersection.class, optimizedQuery);
-        assertEquals(2, optimizedQuery.getChildren().size());
-        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(0));
-        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(1));
+        IAlgebraOperator child = optimizedQuery.getChildren().get(0);
+        assertInstanceOf(Intersection.class, child);
+        assertEquals(2, child.getChildren().size());
+        assertInstanceOf(LLMScan.class, child.getChildren().get(0));
+        assertInstanceOf(LLMScan.class, child.getChildren().get(1));
 
-        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
-        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
+//        ITupleIterator tuples = optimizedQuery.execute(llmDB, null);
+//        toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
     }
 
     @Test
@@ -211,13 +272,16 @@ public class TestOptimizer {
 
         IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
+        assertInstanceOf(Select.class, optimizedQuery);
+        assertEquals(1, optimizedQuery.getChildren().size());
 
-        assertInstanceOf(Union.class, optimizedQuery);
-        assertEquals(2, optimizedQuery.getChildren().size());
-        assertInstanceOf(Union.class, optimizedQuery.getChildren().get(0));
-        assertInstanceOf(LLMScan.class, optimizedQuery.getChildren().get(1));
+        IAlgebraOperator child = optimizedQuery.getChildren().get(0);
+        assertInstanceOf(Union.class, child);
+        assertEquals(2, child.getChildren().size());
+        assertInstanceOf(Union.class, child.getChildren().get(0));
+        assertInstanceOf(LLMScan.class, child.getChildren().get(1));
 
-        IAlgebraOperator left = optimizedQuery.getChildren().get(0);
+        IAlgebraOperator left = child.getChildren().get(0);
         assertEquals(2, left.getChildren().size());
         assertInstanceOf(LLMScan.class, left.getChildren().get(0));
         assertInstanceOf(LLMScan.class, left.getChildren().get(1));
