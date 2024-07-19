@@ -83,7 +83,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
                     : generateIterativePrompt(table, attributesExecution, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
             try {
-                String response = super.getResponse(chain, userMessage);
+                String response = super.getResponse(chain, userMessage, false);
                 log.debug("First Response is: {}", response);
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                 log.debug("First Parsed response is: {}", parsedResponse);
@@ -102,7 +102,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
             } catch (Exception e) {
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
-                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true);
                     log.debug("Second Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Second Parsed response is: {}", parsedResponse);

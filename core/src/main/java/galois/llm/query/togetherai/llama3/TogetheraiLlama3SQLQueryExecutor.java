@@ -77,7 +77,7 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                     : generateIterativePrompt(table, attributesExecution, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
             try {
-                String response = super.getResponse(chain, userMessage);
+                String response = super.getResponse(chain, userMessage, false);
                 log.debug("Response is: {}", response);
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                 log.debug("Parsed response is: {}", parsedResponse);
@@ -92,7 +92,7 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
             } catch (Exception e) {
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
-                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true);
                     log.debug("Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);

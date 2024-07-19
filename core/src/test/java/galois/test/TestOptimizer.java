@@ -102,7 +102,7 @@ public class TestOptimizer {
         Select select = new Select(exp);
         select.addChild(llmScan);
 
-        IOptimizer optimizer = new AllConditionsPushdownOptimizer();
+        IOptimizer optimizer = new AllConditionsPushdownOptimizer(false);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
 
         assertInstanceOf(Select.class, optimizedQuery);
@@ -130,7 +130,7 @@ public class TestOptimizer {
         Select select = new Select(exp);
         select.addChild(llmScan);
 
-        IOptimizer optimizer = new IndexedConditionPushdownOptimizer(0);
+        IOptimizer optimizer = new IndexedConditionPushdownOptimizer(0, false);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
 
         // Top level select
@@ -169,7 +169,7 @@ public class TestOptimizer {
         Select select = new Select(exp);
         select.addChild(llmScan);
 
-        IOptimizer optimizer = new IndexedConditionPushdownOptimizer(0);
+        IOptimizer optimizer = new IndexedConditionPushdownOptimizer(0, false);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
 
         // Top level select
@@ -207,7 +207,7 @@ public class TestOptimizer {
         Select select = new Select(exp);
         select.addChild(llmScan);
 
-        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
+        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer(false);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
         assertInstanceOf(Select.class, optimizedQuery);
         assertEquals(1, optimizedQuery.getChildren().size());
@@ -238,7 +238,7 @@ public class TestOptimizer {
         Select select = new Select(exp);
         select.addChild(llmScan);
 
-        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
+        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer(false);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
         assertInstanceOf(Select.class, optimizedQuery);
         assertEquals(1, optimizedQuery.getChildren().size());
@@ -270,7 +270,7 @@ public class TestOptimizer {
         Select select = new Select(exp);
         select.addChild(llmScan);
 
-        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer();
+        IOptimizer optimizer = new AggregateConditionsPushdownOptimizer(false);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, select);
         assertInstanceOf(Select.class, optimizedQuery);
         assertEquals(1, optimizedQuery.getChildren().size());

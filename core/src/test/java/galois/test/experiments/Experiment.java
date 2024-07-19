@@ -1,5 +1,6 @@
 package galois.test.experiments;
 
+import galois.Constants;
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimizer;
@@ -7,12 +8,21 @@ import galois.parser.IQueryPlanParser;
 import galois.planner.IQueryPlanner;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.utils.TestUtils;
+import galois.utils.excelreport.ReportExcel;
+import galois.utils.excelreport.ReportRow;
+import galois.utils.excelreport.SheetReport;
+import galois.utils.excelreport.persistance.DAOReportExcel;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Document;
@@ -23,6 +33,7 @@ import speedy.model.database.Tuple;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import org.apache.commons.io.FileUtils;
 import speedy.OperatorFactory;
@@ -50,6 +61,7 @@ public final class Experiment {
     private final OperatorsConfiguration operatorsConfiguration;
     private final Query query;
     private final String queryExecutor;
+    private boolean exportExcel = true;
 
     @SuppressWarnings("unchecked")
     public Map<String, ExperimentResults> execute() {
@@ -80,6 +92,11 @@ public final class Experiment {
         for (IOptimizer optimizer : optimizersList) {
             var result = executeOptimizedExperiment(operator, optimizer, expectedResults);
             results.put(optimizer.getName(), result);
+        }
+        if (exportExcel) {
+            String pathExport = Constants.EXPORT_EXCEL_PATH;
+            String fileName = pathExport + this.name + ".xlsx";
+            exportExcel(fileName, results);
         }
         return results;
     }
@@ -119,7 +136,9 @@ public final class Experiment {
             System.out.println("File to import: " + speedyFile.getAbsolutePath());
             fileToImport.setHasHeader(true);
             fileToImport.setSeparator(',');
-            if (textDelim != null) fileToImport.setQuoteCharacter(textDelim.charAt(0));
+            if (textDelim != null) {
+                fileToImport.setQuoteCharacter(textDelim.charAt(0));
+            }
             dbmsDatabase.getInitDBConfiguration().addFileToImportForTable(firstTable.getName(), fileToImport);
             dbmsDatabase.initDBMS();
             OperatorFactory.getInstance().getQueryRunner(dbmsDatabase);
@@ -138,7 +157,7 @@ public final class Experiment {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
         ITupleIterator iterator = operator.execute(query.getDatabase(), null);
-        return toExperimentResults(iterator, expectedResults);
+        return toExperimentResults(iterator, expectedResults, null);
     }
 
     private ExperimentResults executeOptimizedExperiment(IAlgebraOperator operator, IOptimizer optimizer, List<Tuple> expectedResults) {
@@ -146,10 +165,10 @@ public final class Experiment {
         LLMQueryStatManager.getInstance().resetStats();
         IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), query.getSql(), operator);
         ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), null);
-        return toExperimentResults(iterator, expectedResults);
+        return toExperimentResults(iterator, expectedResults, optimizer.getName());
     }
 
-    private ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults) {
+    private ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults, String optmizerName) {
         List<Tuple> results = TestUtils.toTupleList(actual);
         log.info("Results size: " + results.size());
         log.info("Results: " + results);
@@ -161,7 +180,7 @@ public final class Experiment {
 
         // TODO [Stats]: Add stats to results
 //        return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
-        return new ExperimentResults(name, metrics, expectedResults, results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
+        return new ExperimentResults(name, metrics, expectedResults, results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql(), optmizerName);
     }
 
     public static void dropTable(DBMSDB database) {
@@ -199,7 +218,9 @@ public final class Experiment {
         while (tokenizer.hasMoreTokens()) {
             String attributeName = tokenizer.nextToken().trim();
 //            String attributeNameCleaned = attributeName.replace("\"", "");
-            if (textDelim != null) attributeName = attributeName.replace(textDelim, "");
+            if (textDelim != null) {
+                attributeName = attributeName.replace(textDelim, "");
+            }
             String type = attributesWithType.get(attributeName);
             if (type == null || type.equals(Types.STRING)) {
                 headersWithType += attributeName + ",";
@@ -216,8 +237,83 @@ public final class Experiment {
     }
 
     private String getTextDelim(String headers) {
-        if (headers.contains("\"")) return "\"";
-        if (headers.contains("'")) return "'";
+        if (headers.contains("\"")) {
+            return "\"";
+        }
+        if (headers.contains("'")) {
+            return "'";
+        }
         return null;
+    }
+
+    private void exportExcel(String fileName, Map<String, ExperimentResults> results) {
+        if (results.isEmpty()) {
+            return;
+        }
+        DAOReportExcel daoReportExcel = new DAOReportExcel();
+        ReportExcel reportExcel = new ReportExcel(this.name);
+        List<String> optmizers = new ArrayList<>(results.keySet());
+        Collections.sort(optmizers);
+        SheetReport dataSheet = reportExcel.addSheet(this.name);
+        createHeaders(optmizers, dataSheet);
+        for (IMetric metric : metrics) {
+            ReportRow rowMetric = dataSheet.addRow();
+            rowMetric.addCell(metric.getName());
+            for (String optmizer : optmizers) {
+                ExperimentResults expResult = results.get(optmizer);
+                Double value = expResult.getMetrics().get(metric.getName());
+                if (value.isNaN()) value = 0.0;
+                rowMetric.addCell(new DecimalFormat("#.###").format(value));
+            }
+        }
+        addLLMStats(optmizers, results, dataSheet);       
+        File exportFile = new File(fileName);
+        log.info("Writing file {}", exportFile);
+        daoReportExcel.saveReport(reportExcel, exportFile);
+        try {
+            Desktop.getDesktop().open(exportFile);
+        } catch (IOException e) {
+        }
+    }
+
+    private void createHeaders(List<String> optmizers, SheetReport dataSheet) {
+        ReportRow rowHeader = dataSheet.addRow();
+        rowHeader.addCell("");
+        for (String optmizer : optmizers) {
+            rowHeader.addCell(optmizer);
+        }
+    }
+
+    private void addLLMStats(List<String> optmizers, Map<String, ExperimentResults> results, SheetReport dataSheet) {
+        ReportRow rowTotalRequest = dataSheet.addRow();
+        rowTotalRequest.addCell("LLM Total Requests");
+        for (String optmizer : optmizers) {
+            ExperimentResults expResult = results.get(optmizer);
+            rowTotalRequest.addCell(expResult.getLlmRequest());
+        }
+        ReportRow towTotalInputTokens = dataSheet.addRow();
+        towTotalInputTokens.addCell("LLM Total Input Tokens");
+        for (String optmizer : optmizers) {
+            ExperimentResults expResult = results.get(optmizer);
+            towTotalInputTokens.addCell(expResult.getLlmTokensInput());
+        }
+        ReportRow towTotalOutputTokens = dataSheet.addRow();
+        towTotalOutputTokens.addCell("LLM Total Output Tokens");
+        for (String optmizer : optmizers) {
+            ExperimentResults expResult = results.get(optmizer);
+            towTotalOutputTokens.addCell(expResult.getLlmTokensOutput());
+        }
+        ReportRow towTotalTokens = dataSheet.addRow();
+        towTotalTokens.addCell("LLM Total Tokens");
+        for (String optmizer : optmizers) {
+            ExperimentResults expResult = results.get(optmizer);
+            towTotalTokens.addCell(expResult.getLlmTokensInput() + expResult.getLlmTokensOutput());
+        }
+        ReportRow towTotalTime = dataSheet.addRow();
+        towTotalTime.addCell("LLM Time (ms)");
+        for (String optmizer : optmizers) {
+            ExperimentResults expResult = results.get(optmizer);
+            towTotalTime.addCell(expResult.getTimeMs());
+        }
     }
 }

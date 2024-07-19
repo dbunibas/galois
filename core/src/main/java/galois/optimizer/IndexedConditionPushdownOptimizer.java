@@ -15,14 +15,16 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
 
     private final int index;
     private Expression pushdownCondition;
+    private boolean removeFromAlgebraTree;
 
-    public IndexedConditionPushdownOptimizer(int index) {
+    public IndexedConditionPushdownOptimizer(int index, boolean removeFromAlgebraTree) {
         this.index = index;
+        this.removeFromAlgebraTree = removeFromAlgebraTree;
     }
 
     @Override
     public String getName() {
-        return getClass().getSimpleName() + " - index " + index + " - pushdown \"" + pushdownCondition + "\"";
+        return getClass().getSimpleName() + " - index " + index + " - pushdown \"" + pushdownCondition + "\"" + " removeFromAlgebraTree - " + removeFromAlgebraTree;
     }
 
     @Override
@@ -44,17 +46,21 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
                 log.debug("pushdownCondition is: {}", pushdownCondition);
                 SingleConditionPushdown singleConditionPushdown = new SingleConditionPushdown(pushdownCondition, expressions, parserWhere.getOperation());
                 IAlgebraOperator optimizedNode = singleConditionPushdown.optimize(database, currentNode);
-                currentNode.getChildren().clear();
-                currentNode.addChild(optimizedNode);
-                currentNode = optimizedNode;
-//                IAlgebraOperator father = currentNode.getFather();
-//                if (father == null) {
-//                    return optimizedNode;
-//                }
-//                // TODO: Add replace children?
-//                father.getChildren().clear();
-//                father.addChild(optimizedNode);
-//                currentNode = optimizedNode;
+                if (removeFromAlgebraTree) {
+                    IAlgebraOperator father = currentNode.getFather();
+                    if (father == null) {
+                        return optimizedNode;
+                    }
+                    // TODO: Add replace children?
+                    father.getChildren().clear();
+                    father.addChild(optimizedNode);
+                    currentNode = optimizedNode;
+                } else {
+                    currentNode.getChildren().clear();
+                    currentNode.addChild(optimizedNode);
+                    currentNode = optimizedNode;
+                }
+
             }
             currentNode = currentNode.getChildren().isEmpty() ? null : currentNode.getChildren().get(0);
         }

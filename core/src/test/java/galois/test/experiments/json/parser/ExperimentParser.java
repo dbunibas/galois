@@ -45,11 +45,20 @@ public class ExperimentParser {
 
         // TODO: Refactor by changing the OptimizersFactory signature
         for (String optimizer : optimizers) {
+            
             if (optimizer.equals("SingleConditionsOptimizerFactory")) {
                 ParserWhere parserWhere = new ParserWhere();
                 parserWhere.parseWhere(query.getSql());
                 for (int i = 0; i < parserWhere.getExpressions().size(); i++) {
-                    parsedOptimizers.add(new IndexedConditionPushdownOptimizer(i));
+                    parsedOptimizers.add(new IndexedConditionPushdownOptimizer(i, true));
+                }
+                continue;
+            }
+            if (optimizer.equals("SingleConditionsOptimizerFactory-WithFilter")) {
+                ParserWhere parserWhere = new ParserWhere();
+                parserWhere.parseWhere(query.getSql());
+                for (int i = 0; i < parserWhere.getExpressions().size(); i++) {
+                    parsedOptimizers.add(new IndexedConditionPushdownOptimizer(i, false));
                 }
                 continue;
             }

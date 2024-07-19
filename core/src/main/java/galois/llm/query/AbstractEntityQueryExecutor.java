@@ -48,7 +48,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     : generateIterativePrompt(table, attributesExecution, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
             try {
-                String response = getResponse(chain, userMessage);
+                String response = getResponse(chain, userMessage, false);
                 log.debug("Response is: {}", response);
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                 log.debug("Parsed response is: {}", parsedResponse);
@@ -63,7 +63,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             } catch (Exception e) {
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
-                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true);
                     log.debug("Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);
@@ -80,18 +80,18 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         return tuples;
     }
 
-    protected String getResponse(ConversationalChain chain, String userMessage) {
+    protected String getResponse(ConversationalChain chain, String userMessage, boolean ignoreTokens) {
         TokensEstimator estimator = new TokensEstimator();
         // TODO [Stats:] TokenCountEstimator estimator get from model
         LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
         double inputTokens = estimator.getTokens(userMessage);
-        queryStatManager.updateLLMTokensInput(inputTokens);
+        if (!ignoreTokens) queryStatManager.updateLLMTokensInput(inputTokens);
         long start = System.currentTimeMillis();
         String response = chain.execute(userMessage);
-        queryStatManager.updateTimeMs(System.currentTimeMillis() - start);
+        if (!ignoreTokens) queryStatManager.updateTimeMs(System.currentTimeMillis() - start);
         double outputTokens = estimator.getTokens(response);
-        queryStatManager.updateLLMTokensOutput(outputTokens);
-        queryStatManager.updateLLMRequest(1);
+        if (!ignoreTokens) queryStatManager.updateLLMTokensOutput(outputTokens);
+        if (!ignoreTokens) queryStatManager.updateLLMRequest(1);
         return response;
     }
 

@@ -51,7 +51,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
             log.debug("Key prompt is: {}", userMessage);
             String response = "";
             try {
-                response = getResponse(chain, userMessage);
+                response = getResponse(chain, userMessage, false);
                 log.debug("Response is: {}", response);
                 if (response.isBlank()) break; // avoid other requests
                 List<String> currentKeys = getFirstPrompt().getKeyParser().parse(response);
@@ -112,10 +112,10 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
             if (!Mapper.isJSON(response)) {
                 log.debug("Response not in JSON format...execute it again through new chain");
                 newChain = getConversationalChain();
-                response = getResponse(newChain, prompt);
+                response = getResponse(newChain, prompt, false);
                 log.debug("Attribute response is: {}", response);
                 if (!Mapper.isJSON(response)) {
-                    response = getResponse(newChain, EPrompts.ERROR_JSON_FORMAT.getTemplate());
+                    response = getResponse(newChain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true);
                     log.debug("Attribute response is after appropriate JSON format: {}", response);
                     return getAttributesPrompt().getAttributesParser().parse(response, attributesPrompt);
                 } else {
@@ -131,9 +131,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
             try {
                 if (newChain == null) {
                     newChain = getConversationalChain();
-                    response = getResponse(newChain, prompt);
+                    response = getResponse(newChain, prompt, false);
                 }
-                response = getResponse(newChain, EPrompts.ERROR_JSON_NUMBER_FORMAT.getTemplate());
+                response = getResponse(newChain, EPrompts.ERROR_JSON_NUMBER_FORMAT.getTemplate(), false);
                 log.debug("Exception - Attribute response is after appropriate JSON format: {}", response);
                 return getAttributesPrompt().getAttributesParser().parse(response, attributesPrompt);
             } catch (Exception internal) {
@@ -142,18 +142,18 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         }
     }
 
-    private String getResponse(ConversationalChain chain, String userMessage) {
+    private String getResponse(ConversationalChain chain, String userMessage, boolean ignoreTokens) {
         TokensEstimator estimator = new TokensEstimator();
         // TODO [Stats:] TokenCountEstimator estimator get from model
         LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
         double inputTokens = estimator.getTokens(userMessage);
-        queryStatManager.updateLLMTokensInput(inputTokens);
+        if (!ignoreTokens) queryStatManager.updateLLMTokensInput(inputTokens);
         long start = System.currentTimeMillis();
         String response = chain.execute(userMessage);
-        queryStatManager.updateTimeMs(System.currentTimeMillis() - start);
+        if (!ignoreTokens) queryStatManager.updateTimeMs(System.currentTimeMillis() - start);
         double outputTokens = estimator.getTokens(response);
-        queryStatManager.updateLLMTokensOutput(outputTokens);
-        queryStatManager.updateLLMRequest(1);
+        if (!ignoreTokens) queryStatManager.updateLLMTokensOutput(outputTokens);
+        if (!ignoreTokens) queryStatManager.updateLLMRequest(1);
         return response;
     }
 }

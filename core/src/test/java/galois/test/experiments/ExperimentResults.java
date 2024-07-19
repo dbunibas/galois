@@ -2,17 +2,19 @@ package galois.test.experiments;
 
 import galois.llm.query.LLMQueryStatManager;
 import galois.test.experiments.metrics.IMetric;
+import java.io.File;
 import lombok.Data;
 import speedy.model.database.Tuple;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -28,7 +30,13 @@ public class ExperimentResults {
     private final List<Double> scores;
     private final String queryExecutor;
     private final String sql_query;
+    private final String optimizerName;
     private boolean exportActualResults = true;
+    private boolean exportResults = true;
+    private int llmRequest = LLMQueryStatManager.getInstance().getLLMRequest();
+    private double llmTokensInput = LLMQueryStatManager.getInstance().getLLMTokensInput();
+    private double llmTokensOutput = LLMQueryStatManager.getInstance().getLLMTokensOutput();
+    private long timeMs = LLMQueryStatManager.getInstance().getTimeMs();
 
     @Override
     public String toString() {
@@ -46,10 +54,6 @@ public class ExperimentResults {
             sb.append(metrics.get(i).getName()).append(": ").append(scores.get(i)).append("\n");
         }
         LLMQueryStatManager queryStats = LLMQueryStatManager.getInstance();
-        int llmRequest = queryStats.getLLMRequest();
-        double llmTokensInput = queryStats.getLLMTokensInput();
-        double llmTokensOutput = queryStats.getLLMTokensOutput();
-        long timeMs = queryStats.getTimeMs();
         double totalTokens = llmTokensInput + llmTokensOutput;
         sb.append("LLM Total Requests: ").append(llmRequest).append("\n");
         sb.append("LLM Total Input Tokens: ").append(llmTokensInput).append("\n");
@@ -64,7 +68,7 @@ public class ExperimentResults {
         }
         sb.append(llmRequest).append("\n");
         sb.append(llmTokensInput).append("\n");
-        sb.append(llmTokensInput).append("\n");
+        sb.append(llmTokensOutput).append("\n");
         sb.append(totalTokens).append("\n");
         sb.append(timeMs).append("\n");
         sb.append("------------------------------------------------------------------------------------\n");
@@ -81,7 +85,52 @@ public class ExperimentResults {
             Path filePathCSV = Paths.get(basePath, "src", "test", "resources", "results", nameReplaced + ".csv");
             saveActualResult(filePathCSV);
         }
+        if (exportResults) {
+            Path basePathExp = Paths.get(basePath, "src", "test", "resources", "results");
+            String pathExpected = basePathExp.toString() + File.separator + nameReplaced + "_expected.csv";
+            String pathActual = basePathExp.toString() + File.separator + nameReplaced + "_actual.csv";
+            if (optimizerName != null && !optimizerName.isEmpty()) {
+                pathExpected = basePathExp.toString() + File.separator + nameReplaced + "_" + optimizerName + "_expected.csv";
+                pathActual = basePathExp.toString() + File.separator + nameReplaced + "_" + optimizerName + "_actual.csv";
+            }
+            log.info("Export results in: " + pathExpected);
+            log.info("Export actual in: " + pathActual);
+            save(expectedResults, pathExpected);
+            save(actualResults, pathActual);
+        }
         return result;
+    }
+    
+    public Map<String,Double> getMetrics() {
+        Map<String, Double> map = new HashMap<>();
+        for(int i = 0; i < metrics.size(); i++) {
+            String metricName = metrics.get(i).getName();
+            double value = scores.get(i);
+            map.put(metricName, value);
+        }
+        return map;
+    }
+
+    private void save(List<Tuple> tuples, String filePath) {
+        if (tuples.isEmpty()) {
+            return;
+        }
+        Tuple firstTuple = tuples.get(0);
+        if (firstTuple != null) {
+            String[] headers = getHeaders(firstTuple);
+            CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(headers).build();
+            try {
+                PrintWriter writer = new PrintWriter(filePath);
+                CSVPrinter printer = new CSVPrinter(writer, csvFormat);
+                for (Tuple tuple : tuples) {
+                    printer.printRecord(getCellContent(tuple));
+                }
+                writer.close();
+            } catch (IOException ioe) {
+                log.error("Exception: {}", ioe);
+            }
+        }
+
     }
 
     private void saveActualResult(Path filePathCSV) {
@@ -101,7 +150,7 @@ public class ExperimentResults {
                 writer.close();
             } catch (IOException ioe) {
                 log.error("Exception: {}", ioe);
-        }
+            }
         }
     }
 

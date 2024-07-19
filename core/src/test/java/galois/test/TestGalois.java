@@ -113,7 +113,7 @@ public class TestGalois {
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration, sql);
 
-        IOptimizer optimizer = new AllConditionsPushdownOptimizer();
+        IOptimizer optimizer = new AllConditionsPushdownOptimizer(false);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, operator);
 
         ITupleIterator iterator = optimizedQuery.execute(llmDB, null);
@@ -135,7 +135,7 @@ public class TestGalois {
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration, sql);
 
-        IOptimizer optimizer = new AllConditionsPushdownOptimizer();
+        IOptimizer optimizer = new AllConditionsPushdownOptimizer(false);
         IAlgebraOperator optimizedQuery = optimizer.optimize(llmDB, sql, operator);
 
         ITupleIterator iterator = optimizedQuery.execute(llmDB, null);
