@@ -1,5 +1,5 @@
 {
-  "name": "Geo llama3-table Experiment",
+  "name": "Geo-Q1 llama3-key-scan Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -11,15 +11,17 @@
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
+  "optimizers": [
+  ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-key-scan",
-      "maxIterations": 1
+      "maxIterations": 10
     }
   },
   "query": {
-    "sql": "SELECT state_name, capital, population FROM target.usa_state where population>500000",
+    "sql": "SELECT state_name, population, area FROM target.usa_state",
     "schema": {
       "name": "usa_geo",
       "schema": "target",
@@ -37,12 +39,12 @@
             },
             {
               "name": "population",
-              "type": "INTEGER",
+              "type": "REAL",
               "nullable": true
             },
             {
               "name": "area",
-              "type": "FLOAT",
+              "type": "REAL",
               "nullable": true
             },
             {
@@ -57,7 +59,7 @@
             },
             {
               "name": "density",
-              "type": "FLOAT",
+              "type": "REAL",
               "nullable": true
             }
           ]

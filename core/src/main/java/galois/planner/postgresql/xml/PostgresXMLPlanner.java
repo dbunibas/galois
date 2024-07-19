@@ -32,15 +32,15 @@ public class PostgresXMLPlanner implements IQueryPlanner<Document> {
             throw new PlannerException("Cannot establish DB connection: access configuration is null!");
         }
         // TODO: Infer schema configuration?
+        Connection connection = QueryManager.getConnection(accessConfiguration);
         String query = "explain (verbose, format xml) " + sql;
-        try (ResultSet result = QueryManager.executeQuery(query, accessConfiguration)) {
+        try (ResultSet result = QueryManager.executeQuery(query, connection, accessConfiguration)) {
             result.next();
             String xmlString = result.getString("QUERY PLAN");
             return buildDOMFromString(xmlString);
         } catch (SQLException ex) {
             throw new PlannerException(ex);
         } finally {
-            Connection connection = QueryManager.getConnection(accessConfiguration);
             if (connection != null) {
                 try {
                     connection.close();

@@ -1,29 +1,28 @@
 package galois.llm.query.ollama.phi3;
 
 import dev.langchain4j.chain.ConversationalChain;
-import galois.llm.query.AbstractEntityQueryExecutor;
-import galois.llm.query.AbstractQueryExecutorBuilder;
-import galois.llm.query.IQueryExecutor;
-import galois.llm.query.IQueryExecutorBuilder;
+import galois.llm.query.*;
 import galois.prompt.EPrompts;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.Attribute;
 import speedy.model.database.ITable;
+import speedy.model.expressions.Expression;
 
 import java.util.List;
 
 import static galois.llm.query.ConversationalChainFactory.buildOllamaPhi3ConversationalChain;
 import static galois.utils.FunctionalUtils.orElse;
-import speedy.model.expressions.Expression;
 
 @Slf4j
 @Getter
-public class OllamaPhi3NLQueryExecutor extends AbstractEntityQueryExecutor {
+@Setter
+public class OllamaPhi3NLQueryExecutor extends AbstractEntityQueryExecutor implements INLQueryExectutor {
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final int maxIterations;
-    private final String naturalLanguagePrompt;
+    private String naturalLanguagePrompt;
 
     public OllamaPhi3NLQueryExecutor(String naturalLanguagePrompt) {
         this.firstPrompt = EPrompts.NATURAL_LANGUAGE_JSON;

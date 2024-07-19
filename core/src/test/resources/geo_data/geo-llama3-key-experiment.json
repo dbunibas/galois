@@ -1,5 +1,5 @@
 {
-  "name": "Geo llama3-key Experiment",
+  "name": "Geo-{{QN}} llama3-key Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -11,15 +11,17 @@
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
+  "optimizers": [
+  ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-key",
-      "maxIterations": 5
+      "maxIterations": 10
     }
   },
   "query": {
-    "sql": "SELECT state_name, population, capital FROM target.usa_state",
+    "sql": "{{QUERY-SQL}}",
     "schema": {
       "name": "usa_geo",
       "schema": "target",
