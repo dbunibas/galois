@@ -105,8 +105,12 @@ public class ExperimentResults {
         Map<String, Double> map = new HashMap<>();
         for(int i = 0; i < metrics.size(); i++) {
             String metricName = metrics.get(i).getName();
-            double value = scores.get(i);
-            map.put(metricName, value);
+            try {
+                double value = scores.get(i);
+                map.put(metricName, value);
+            } catch (Exception e) {
+                map.put(metricName, 0.0);
+            }
         }
         return map;
     }

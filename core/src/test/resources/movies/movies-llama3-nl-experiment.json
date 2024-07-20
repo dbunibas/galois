@@ -1,0 +1,85 @@
+{
+  "name": "Movies Experiment-nl",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-nl",
+      "maxIterations": 10,
+      "naturalLanguagePrompt": "List the year and the number of produced movies in that year directed by Steven Spielberg."
+    }
+  },
+  "query": {
+    "sql": "select m.startyear, count(*) as numMovies from public.movie m where m.director = 'Steven Spielberg' and startyear is not null group by m.startyear",
+    "schema": {
+      "name": "directors_movies",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "movie",
+          "attributes": [
+            {
+              "name": "primarytitle",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "originaltitle",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "startyear",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "endyear",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "runtimeminutes",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "genres",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "director",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birthyear",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "deathyear",
+              "type": "INTEGER",
+              "nullable": true
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/movies/movies-data"
+  }
+}

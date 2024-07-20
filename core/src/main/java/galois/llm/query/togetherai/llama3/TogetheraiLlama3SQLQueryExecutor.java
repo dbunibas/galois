@@ -16,6 +16,7 @@ import speedy.model.database.ITable;
 import java.util.List;
 
 import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
+import galois.llm.query.ISQLExecutor;
 import galois.llm.query.utils.QueryUtils;
 import static galois.llm.query.utils.QueryUtils.generateJsonSchemaListFromAttributes;
 import static galois.llm.query.utils.QueryUtils.getCleanAttributes;
@@ -31,7 +32,7 @@ import speedy.model.expressions.Expression;
 
 @Slf4j
 @Getter
-public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor {
+public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor implements ISQLExecutor{
 
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;

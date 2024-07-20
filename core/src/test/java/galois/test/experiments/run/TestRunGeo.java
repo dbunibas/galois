@@ -1,6 +1,11 @@
 package galois.test.experiments.run;
 
 import galois.llm.query.INLQueryExectutor;
+import galois.llm.query.ISQLExecutor;
+import galois.optimizer.IOptimizer;
+import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.parser.ParserException;
+import galois.parser.ParserWhere;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.ExperimentResults;
 import galois.test.experiments.json.parser.ExperimentParser;
@@ -23,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import speedy.utility.SpeedyUtility;
 
 @Slf4j
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -48,33 +54,45 @@ public class TestRunGeo {
     @Test
     public void executeAll() {
         List<IMetric> metrics = new ArrayList<>();
-        Map<String, ExperimentResults> results = new HashMap<>();
+//        Map<String, ExperimentResults> results = new HashMap<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         for (ExpVariant variant : variants) {
-            execute("/geo_data/geo-llama3-nl-experiment.json", variant, metrics, results);
-            execute("/geo_data/geo-llama3-sql-experiment.json", variant,  metrics,results);
-            execute("/geo_data/geo-llama3-table-experiment.json", variant,  metrics,results);
-            execute("/geo_data/geo-llama3-key-experiment.json", variant,  metrics,results);
-            execute("/geo_data/geo-llama3-key-scan-experiment.json", variant,  metrics,results);
+            execute("/geo_data/geo-llama3-nl-experiment.json", "NL", variant, metrics, results);
+            execute("/geo_data/geo-llama3-sql-experiment.json", "SQL", variant, metrics, results);
+            execute("/geo_data/geo-llama3-table-experiment.json", "TABLE", variant, metrics, results);
+            execute("/geo_data/geo-llama3-key-experiment.json", "KEY", variant, metrics, results);
+            execute("/geo_data/geo-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results);
         }
+        System.out.println(SpeedyUtility.printMap(results));
         exportExcel.export(EXP_NAME, metrics, results);
     }
 
-    private void execute(String path, ExpVariant variant, List<IMetric> metrics, Map<String, ExperimentResults> results) {
+    private void execute(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Map<String, ExperimentResults> queryResults = results.get(variant.getQueryNum());
+            if (queryResults == null) {
+                queryResults = new HashMap<>();
+                results.put(variant.getQueryNum(), queryResults);
+            }
             Experiment experiment = ExperimentParser.loadAndParseJSON(path);
             experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
             experiment.getQuery().setSql(variant.getQuerySql());
             if (experiment.getOperatorsConfiguration().getScan().getQueryExecutor() instanceof INLQueryExectutor queryExectutor) {
                 queryExectutor.setNaturalLanguagePrompt(variant.getPrompt());
             }
-            experiment.setOptimizers(variant.getOptimizers().stream().map(OptimizersFactory::getOptimizerByName).toList());
+            if (!(experiment.getOperatorsConfiguration().getScan().getQueryExecutor() instanceof INLQueryExectutor)
+                    && !(experiment.getOperatorsConfiguration().getScan().getQueryExecutor() instanceof ISQLExecutor)) {
+                List<IOptimizer> optimizers = loadOptimizers(variant);
+//            experiment.setOptimizers(variant.getOptimizers().stream().map(OptimizersFactory::getOptimizerByName).toList());
+                experiment.setOptimizers(optimizers);
+            }
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
             var expResults = experiment.execute();
             log.info("Results: {}", expResults);
             for (String expKey : expResults.keySet()) {
-                results.put(variant.getQueryNum() + "-" + expKey, expResults.get(expKey));
+                queryResults.put(type + "-" + expKey, expResults.get(expKey));
             }
             // Extract numbers after "Only results, same order: \n"
             String regex = "Only results, same order: \\n([\\d, ]+)-*$";
@@ -91,6 +109,30 @@ public class TestRunGeo {
             log.error("Unable to execute experiment {}", path, ioe);
             throw new RuntimeException("Cannot run experiment: " + path, ioe);
         }
+    }
+
+    private List<IOptimizer> loadOptimizers(ExpVariant variant) throws ParserException {
+        List<IOptimizer> optimizers = new ArrayList<>();
+        for (String optimizer : variant.getOptimizers()) {
+            if (optimizer.equals("SingleConditionsOptimizerFactory")) {
+                ParserWhere parserWhere = new ParserWhere();
+                parserWhere.parseWhere(variant.getQuerySql());
+                for (int i = 0; i < parserWhere.getExpressions().size(); i++) {
+                    optimizers.add(new IndexedConditionPushdownOptimizer(i, true));
+                }
+                continue;
+            }
+            if (optimizer.equals("SingleConditionsOptimizerFactory-WithFilter")) {
+                ParserWhere parserWhere = new ParserWhere();
+                parserWhere.parseWhere(variant.getQuerySql());
+                for (int i = 0; i < parserWhere.getExpressions().size(); i++) {
+                    optimizers.add(new IndexedConditionPushdownOptimizer(i, false));
+                }
+                continue;
+            }
+            optimizers.add(OptimizersFactory.getOptimizerByName(optimizer));
+        }
+        return optimizers;
     }
 
     private static void saveToFile(String data, String fileName) {

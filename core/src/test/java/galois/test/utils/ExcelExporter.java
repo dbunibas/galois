@@ -20,33 +20,38 @@ import java.util.*;
 @Slf4j
 public class ExcelExporter {
 
-    public void export(String expName, List<IMetric> metrics, Map<String, ExperimentResults> results) {
+    public void export(String expName, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
         String pathExport = Constants.EXPORT_EXCEL_PATH;
-        String fileName = pathExport + expName + "-" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) +  ".xlsx";
+        String fileName = pathExport + expName + "-" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + ".xlsx";
         exportExcel(expName, fileName, metrics, results);
     }
 
-    private void exportExcel(String expName, String fileName, List<IMetric> metrics, Map<String, ExperimentResults> results) {
+    private void exportExcel(String expName, String fileName, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
         if (results.isEmpty()) {
             return;
         }
         DAOReportExcel daoReportExcel = new DAOReportExcel();
         ReportExcel reportExcel = new ReportExcel(expName);
-        List<String> optmizers = new ArrayList<>(results.keySet());
-        Collections.sort(optmizers);
-        SheetReport dataSheet = reportExcel.addSheet("Results");
-        createHeaders(optmizers, dataSheet);
-        for (IMetric metric : metrics) {
-            ReportRow rowMetric = dataSheet.addRow();
-            rowMetric.addCell(metric.getName());
-            for (String optmizer : optmizers) {
-                ExperimentResults expResult = results.get(optmizer);
-                Double value = expResult.getMetrics().get(metric.getName());
-                if (value.isNaN()) value = 0.0;
-                rowMetric.addCell(new DecimalFormat("#.###").format(value));
+        for (String queryNumber : results.keySet()) {
+            SheetReport dataSheet = reportExcel.addSheet(queryNumber);
+            Map<String, ExperimentResults> resultExp = results.get(queryNumber);
+            List<String> optmizers = new ArrayList<>(resultExp.keySet());
+            Collections.sort(optmizers);
+            createHeaders(optmizers, dataSheet);
+            for (IMetric metric : metrics) {
+                ReportRow rowMetric = dataSheet.addRow();
+                rowMetric.addCell(metric.getName());
+                for (String optmizer : optmizers) {
+                    ExperimentResults expResult = resultExp.get(optmizer);
+                    Double value = expResult.getMetrics().get(metric.getName());
+                    if (value == null || value.isNaN()) {
+                        value = 0.0;
+                    }
+                    rowMetric.addCell(new DecimalFormat("#.###").format(value));
+                }
             }
+            addLLMStats(optmizers, resultExp, dataSheet);
         }
-        addLLMStats(optmizers, results, dataSheet);
         File exportFile = new File(fileName);
         log.info("Writing file {}", exportFile);
         daoReportExcel.saveReport(reportExcel, exportFile);

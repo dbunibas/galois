@@ -1,0 +1,88 @@
+{
+  "name": "Movies Experiment-key",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "optimizers": [
+    "AllConditionsPushdownOptimizer",
+    "SingleConditionsOptimizerFactory"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key",
+      "maxIterations": 10
+    }
+  },
+  "query": {
+    "sql": "select m.originaltitle, m.startyear from target.movie m where m.director='Richard Thorpe' and m.startyear > 1950",
+    "schema": {
+      "name": "directors_movies",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "movie",
+          "attributes": [
+            {
+              "name": "primarytitle",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "originaltitle",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "startyear",
+              "type": "integer",
+              "nullable": true
+            },
+            {
+              "name": "endyear",
+              "type": "integer",
+              "nullable": true
+            },
+            {
+              "name": "runtimeminutes",
+              "type": "integer",
+              "nullable": true
+            },
+            {
+              "name": "genres",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "director",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birthyear",
+              "type": "integer",
+              "nullable": true
+            },
+            {
+              "name": "deathyear",
+              "type": "integer",
+              "nullable": true
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/movies/movies-data"
+  }
+}
