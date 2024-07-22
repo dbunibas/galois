@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import speedy.model.algebra.IAlgebraOperator;
 import speedy.utility.SpeedyUtility;
 
 @Slf4j
@@ -47,14 +48,17 @@ public class TestRunGeo {
         variants.add(new ExpVariant("Q2", "SELECT us.state_name, us.capital, us.area FROM target.usa_state us", "List the state name, capital and area from USA states", List.of()));
         variants.add(new ExpVariant("Q3", "SELECT state_name, population, area FROM target.usa_state where capital = 'Frankfort'", "List the state name, population and area from USA states where the capital is Frankfort", List.of("AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
         variants.add(new ExpVariant("Q4", "SELECT us.state_name, us.population, us.capital FROM target.usa_state us where us.population > 5000000", "List the state name, population and capital from USA states where the population is greater than 5000000", List.of("AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
-        variants.add(new ExpVariant("Q5", "SELECT us.state_name, us.capital FROM public.usa_state us where us.population > 5000000 and us.density < 1000", "List the state name and capital from USA states where the population is greater than 5000000 and the density is lower than 1000", List.of("SingleConditionsOptimizerFactory", "SingleConditionsOptimizerFactory-WithFilter", "AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
-        variants.add(new ExpVariant("Q6", "SELECT us.state_name, us.capital, us.density, us.population FROM public.usa_state us where us.population > 5000000 and us.density < 1000 and us.area < 50000", "List the state name, capital, density and population from USA states where the population is greater than 5000000, the density is lower than 1000 and the area is lower than 50000", List.of("SingleConditionsOptimizerFactory", "SingleConditionsOptimizerFactory-WithFilter", "AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
+        variants.add(new ExpVariant("Q5", "SELECT us.state_name, us.capital FROM target.usa_state us where us.population > 5000000 and us.density < 1000", "List the state name and capital from USA states where the population is greater than 5000000 and the density is lower than 1000", List.of("SingleConditionsOptimizerFactory", "SingleConditionsOptimizerFactory-WithFilter", "AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
+        variants.add(new ExpVariant("Q6", "SELECT us.state_name, us.capital, us.density, us.population FROM target.usa_state us where us.population > 5000000 and us.density < 1000 and us.area < 50000", "List the state name, capital, density and population from USA states where the population is greater than 5000000, the density is lower than 1000 and the area is lower than 50000", List.of("SingleConditionsOptimizerFactory", "SingleConditionsOptimizerFactory-WithFilter", "AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
+        variants.add(new ExpVariant("Q7", "SELECT us.state_name, us.capital FROM target.usa_state us WHERE us.population > 3000000 and us.area > 50000 ORDER BY us.capital", "List the state name and capital ordered by capital from USA states where the population is greater than 3000000 and the area is greater than 50000", List.of("SingleConditionsOptimizerFactory", "SingleConditionsOptimizerFactory-WithFilter", "AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
+        variants.add(new ExpVariant("Q8", "SELECT us.state_name, us.capital, us.population FROM target.usa_state us WHERE us.population > 3000000 and us.population < 8000000 and us.area > 50000 ORDER BY us.population", "List the state name capital and population ordered by population from USA states where the population is greater than 3000000 and lower than 8000000 and the area is greater than 50000", List.of("SingleConditionsOptimizerFactory", "SingleConditionsOptimizerFactory-WithFilter", "AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
+        variants.add(new ExpVariant("Q9", "SELECT us.state_name, us.capital, us.population, us.area FROM target.usa_state us WHERE us.population = 47000000 and us.area = 56153", "List the state name, the capital, the popoulation and the area from USA states where the population is 4700000 and the are is 56153", List.of("SingleConditionsOptimizerFactory", "SingleConditionsOptimizerFactory-WithFilter", "AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
     }
 
     @Test
     public void executeAll() {
+        testParseAll();
         List<IMetric> metrics = new ArrayList<>();
-//        Map<String, ExperimentResults> results = new HashMap<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         for (ExpVariant variant : variants) {
             execute("/geo_data/geo-llama3-nl-experiment.json", "NL", variant, metrics, results);
@@ -65,6 +69,17 @@ public class TestRunGeo {
         }
         System.out.println(SpeedyUtility.printMap(results));
         exportExcel.export(EXP_NAME, metrics, results);
+    }
+
+//    @Test
+    public void testParseAll() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        for (ExpVariant variant : variants) {
+            parse("/geo_data/geo-llama3-table-experiment.json", "TABLE", variant, metrics, results);
+//            parse("/geo_data/geo-llama3-key-experiment.json", "KEY", variant, metrics, results);
+//            parse("/geo_data/geo-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results);
+        }
     }
 
     private void execute(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
@@ -105,6 +120,19 @@ public class TestRunGeo {
             } else {
                 log.error("Could not extract results from log entry.");
             }
+        } catch (Exception ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+        }
+    }
+
+    private void parse(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
+        try {
+            log.info("Variant: " + variant.getQueryNum());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.getQuery().setSql(variant.getQuerySql());
+            IAlgebraOperator operator = experiment.parse();
+            log.info("OK");    
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);
             throw new RuntimeException("Cannot run experiment: " + path, ioe);

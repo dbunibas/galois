@@ -77,7 +77,7 @@ public class PostgresXMLParser implements IQueryPlanParser<Document> {
 
             }
         }
-        log.debug("Operator: " + operator.toString("\t"));
+//        log.debug("Operator: " + operator.toString("\t"));
         return operator;
     }
 

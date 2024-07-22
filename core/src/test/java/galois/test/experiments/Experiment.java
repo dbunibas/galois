@@ -99,6 +99,14 @@ public final class Experiment {
         }
         return results;
     }
+    
+    public IAlgebraOperator parse() {
+        IQueryPlanner<Document> planner = (IQueryPlanner<Document>) PlannerParserFactory.getPlannerFor(dbms, query.getAccessConfiguration());
+        IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
+        Document queryPlan = planner.planFrom(query.getSql());
+        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql()); 
+        return operator;
+    }
 
     private DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {
         ITable firstTable = query.getDatabase().getFirstTable();
