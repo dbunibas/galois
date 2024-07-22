@@ -14,7 +14,9 @@ public class NodeParserFactory {
             Map.entry("Sort", SortParser::new),
             Map.entry("Hash", HashParser::new),
             Map.entry("Aggregate", AggregateParser::new),
-            Map.entry("Hash Join", HashJoinParser::new)
+            Map.entry("Gather Merge", MockParser::new),
+            Map.entry("Hash Join", HashJoinParser::new),
+            Map.entry("Limit", LimitParser::new)
     );
 
     public static INodeParser getParserForNode(Element node) {

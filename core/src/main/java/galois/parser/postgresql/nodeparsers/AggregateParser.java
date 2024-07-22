@@ -49,8 +49,15 @@ public class AggregateParser extends AbstractNodeParser {
         List<ProjectionAttribute> projectionAttributes = new ArrayList<>();
         for (Element item : output.getChildren()) {
             IAggregateFunction aggregate = getAggregate(item);
-            log.debug("Add aggregate: " + aggregate.getName() + " on " + aggregate.getAttributeRef());
-            projectionAttributes.add(new ProjectionAttribute(aggregate));
+            if (aggregate != null) {
+                log.debug("Add aggregate: " + aggregate.getName() + " on " + aggregate.getAttributeRef());
+                projectionAttributes.add(new ProjectionAttribute(aggregate));
+            } else {
+                String attributeName = item.getValue().trim();
+                ProjectionAttribute pa = new ProjectionAttribute(new AttributeRef(super.getTableAlias(), attributeName));
+                log.debug("Add attribute: " + pa.getAttributeRef().getName());
+                projectionAttributes.add(pa);
+            }
         }
         Project project = new Project(projectionAttributes);
         project.addChild(subTree);
@@ -93,6 +100,7 @@ public class AggregateParser extends AbstractNodeParser {
 
     private IAggregateFunction getAggregate(Element item) {
         String text = item.getTextTrim();
+        if (!text.contains("(") && !text.contains(")")) return null;
         String attributeName = text.substring(text.indexOf("(") + 1, text.indexOf(")")).trim();
         String functionName = text.substring(0, text.indexOf("(")).trim();
         log.debug("Function: " + functionName + " over " + attributeName);
