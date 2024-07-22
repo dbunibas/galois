@@ -21,6 +21,7 @@ import speedy.model.algebra.aggregatefunctions.MaxAggregateFunction;
 import speedy.model.algebra.aggregatefunctions.MinAggregateFunction;
 import speedy.model.algebra.aggregatefunctions.StdDevAggregateFunction;
 import speedy.model.algebra.aggregatefunctions.SumAggregateFunction;
+import speedy.model.algebra.aggregatefunctions.ValueAggregateFunction;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.IDatabase;
 import speedy.model.database.Key;
@@ -54,9 +55,8 @@ public class AggregateParser extends AbstractNodeParser {
                 projectionAttributes.add(new ProjectionAttribute(aggregate));
             } else {
                 String attributeName = item.getValue().trim();
-                ProjectionAttribute pa = new ProjectionAttribute(new AttributeRef(super.getTableAlias(), attributeName));
-                log.debug("Add attribute: " + pa.getAttributeRef().getName());
-                projectionAttributes.add(pa);
+                ValueAggregateFunction vaf = new ValueAggregateFunction(new AttributeRef(getTableAlias(), attributeName));
+                projectionAttributes.add(new ProjectionAttribute(vaf));
             }
         }
         Project project = new Project(projectionAttributes);
@@ -134,8 +134,10 @@ public class AggregateParser extends AbstractNodeParser {
         }
         if (operator instanceof Project) {
             List<IAggregateFunction> aggregateFunctions = ((Project) operator).getAggregateFunctions();
+            log.debug("Aggregate Functions: " + aggregateFunctions.size());
             for (IAggregateFunction aggregateFunction : aggregateFunctions) {
-                attributes.add(aggregateFunction.getAttributeRef());
+                log.debug("Aggregate: " + aggregateFunction);
+                if (aggregateFunction != null) attributes.add(aggregateFunction.getAttributeRef());
             }
         }
         if (operator instanceof Select) {
