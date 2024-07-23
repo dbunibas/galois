@@ -74,6 +74,7 @@ public final class Experiment {
         IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
         Document queryPlan = planner.planFrom(query.getSql());
         IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
+        log.info("Query operator {}", operator);
         DBMSDB dbmsDatabase = createDatabaseForExpected();
         String queryToExecute = query.getSql().replace("target.", "public.");
         log.debug("Query for results: \n" + queryToExecute);
