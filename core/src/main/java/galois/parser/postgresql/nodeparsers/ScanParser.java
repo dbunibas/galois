@@ -66,7 +66,7 @@ public class ScanParser extends AbstractNodeParser {
                     }
                 }
             }
-            log.info("Creating LLM Scan with: " + attributes.toString());
+            log.info("Creating LLM Scan with: {}", attributes);
             root = new LLMScan(tableAlias, configuration.getScan().getQueryExecutor(), attributes);
         } else {
             log.info("Creating LLM Scan for the table");

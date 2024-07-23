@@ -30,17 +30,19 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         ConversationalChain chain = getConversationalChain();
 
         ITable table = database.getTable(tableAlias.getTableName());
-
+        log.trace("Table: {}", table);
         List<Attribute> attributesExecution = getCleanAttributes(table);
+        log.trace("attributes: {}", attributes);
         if (this.attributes != null && !this.attributes.isEmpty()) {
             attributesExecution = new ArrayList<>();
             for (AttributeRef attribute : this.attributes) {
                 attributesExecution.add(table.getAttribute(attribute.getName()));
             }
         }
+        log.trace("attributesExecution: {}", attributesExecution);
         String jsonSchema = generateJsonSchemaListFromAttributes(table, attributesExecution);
         Expression expression = getExpression();
-        log.debug("Expression: " + expression);
+        log.debug("Expression: {}", expression);
         List<Tuple> tuples = new ArrayList<>();
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
