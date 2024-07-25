@@ -15,6 +15,8 @@ import speedy.model.algebra.aggregatefunctions.IAggregateFunction;
 import speedy.model.algebra.aggregatefunctions.ValueAggregateFunction;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.TableAlias;
+import speedy.model.database.VirtualAttributeRef;
+import speedy.persistence.Types;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,7 +72,7 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                         .filter(p -> p.isAggregative() && p.getAggregateFunction() instanceof CountAggregateFunction)
                         .findFirst()
                         .orElseThrow();
-                AttributeRef countRef = new AttributeRef(tableAlias, SpeedyConstants.COUNT);
+                AttributeRef countRef = new VirtualAttributeRef(tableAlias, SpeedyConstants.COUNT, Types.INTEGER);
                 List<IAggregateFunction> aggregateFunctions = Stream.concat(
                         groupBy.getAggregateFunctions().stream(),
                         Stream.of(new CountAggregateFunction(countRef))
@@ -94,9 +96,15 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
             List<AttributeRef> aliasAttributes = new ArrayList<>();
             for (int i = 0; i < projectionAttributes.size(); i++) {
                 SelectItem<?> item = plainSelect.getSelectItems().get(i);
-                AttributeRef newAttribute = item.getAlias() != null ?
-                        new AttributeRef(tableAlias, item.getAlias().getName()) :
-                        projectionAttributes.get(i).getAttributeRef();
+                AttributeRef attributeRef = projectionAttributes.get(i).getAttributeRef();
+                AttributeRef newAttribute = attributeRef;
+                if(item.getAlias() != null){
+                    if(attributeRef instanceof VirtualAttributeRef){
+                        newAttribute = new VirtualAttributeRef(tableAlias, item.getAlias().getName(), ((VirtualAttributeRef) attributeRef).getType());
+                    }else {
+                        newAttribute = new AttributeRef(tableAlias, item.getAlias().getName());
+                    }
+                }
                 aliasAttributes.add(newAttribute);
             }
             log.trace("Parsed projection attributes: {} - aliases: {}", projectionAttributes, aliasAttributes);

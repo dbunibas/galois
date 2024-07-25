@@ -12,6 +12,8 @@ import speedy.model.algebra.ProjectionAttribute;
 import speedy.model.algebra.aggregatefunctions.*;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.TableAlias;
+import speedy.model.database.VirtualAttributeRef;
+import speedy.persistence.Types;
 
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
         String attributeName = function.getParameters().getFirst() instanceof Column ?
                 ((Column) function.getParameters().getFirst()).getColumnName() :
                 SpeedyConstants.COUNT;
-        AttributeRef attributeCount = new AttributeRef(tableAlias, attributeName);
+        AttributeRef attributeCount = new VirtualAttributeRef(tableAlias, attributeName, Types.INTEGER);
         return new ProjectionAttribute(new CountAggregateFunction(attributeCount));
     }
 
@@ -60,7 +62,7 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
             throw new UnsupportedOperationException("Cannot parse aggregate function without a single parameter!");
         }
 
-        AttributeRef attributeRef = new AttributeRef(tableAlias, ((Column) function.getParameters().getFirst()).getColumnName());
+        AttributeRef attributeRef = new VirtualAttributeRef(tableAlias, ((Column) function.getParameters().getFirst()).getColumnName(), Types.REAL);
         return new ProjectionAttribute(supplier.get(attributeRef));
     }
 

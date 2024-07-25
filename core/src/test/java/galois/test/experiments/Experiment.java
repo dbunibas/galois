@@ -182,7 +182,7 @@ public final class Experiment {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
         IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), query.getSql(), operator);
-        ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), null);
+        ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), query.getDatabase());
         return toExperimentResults(iterator, expectedResults, optimizer.getName());
     }
 
