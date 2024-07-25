@@ -36,6 +36,7 @@ import speedy.utility.SpeedyUtility;
 public class TestRunPresidentsBatch {
 
     private static final String EXP_NAME = "PRESIDENTS";
+    //private static final String EXP_NAME = "PRESIDENTS_VENEZUELA";
     private static final String RESULT_FILE_DIR = "src/test/resources/results/";
     private static final String RESULT_FILE = "prova.txt";
 
@@ -45,6 +46,7 @@ public class TestRunPresidentsBatch {
 
     public TestRunPresidentsBatch() {
         List<String> allOptimizers = List.of("SingleConditionsOptimizerFactory", "SingleConditionsOptimizerFactory-WithFilter", "AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter");
+        // USA
         variants.add(new ExpVariant("Q1", "SELECT p.name, p.party from target.president p WHERE p.country='United States'", "List the name and party of USA presidents.", List.of("AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
         variants.add(new ExpVariant("Q2", "SELECT p.name, p.party from target.president p WHERE p.country='United States' and  p.party='Republican'", "List the name and party of USA presidents where party is Republican", allOptimizers));
         variants.add(new ExpVariant("Q3", "SELECT count(p.party) as party from target.president p WHERE p.country='United States' and p.party='Republican'", "Count the number of US presidents where party is Republican", allOptimizers));
@@ -54,6 +56,17 @@ public class TestRunPresidentsBatch {
         variants.add(new ExpVariant("Q7", "SELECT p.party, count(p.party) num from target.president p WHERE p.country='United States' group by p.party order by num desc limit 1", "List the party name and the number of presidents of the party with more USA presidents", List.of("AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
         variants.add(new ExpVariant("Q8", "SELECT count(*) from target.president p where p.country='United States' and p.start_year >= 1990  and p.start_year < 2000", "count U.S. presidents who began their terms in the 1990 and finish it in 2000.", allOptimizers));
         variants.add(new ExpVariant("Q9", "SELECT p.name from target.president p where p.country='United States' and p.party = 'Whig' order by p.end_year desc limit 1", "List the name of the last USA president where party is Whig", allOptimizers));        
+
+        // VENEZUELA
+//        variants.add(new ExpVariant("Q1", "SELECT p.name, p.party from target.president p WHERE p.country='Venezuela'", "List the name and party of Venezuela presidents.", List.of("AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
+//        variants.add(new ExpVariant("Q2", "SELECT p.name, p.party from target.president p WHERE p.country='Venezuela' and p.party='Liberal'", "List the name and party of Venezuela presidents where party is Liberal", allOptimizers));
+//        variants.add(new ExpVariant("Q3", "SELECT count(p.party) as party from target.president p WHERE p.country='Venezuela' and p.party='Liberal'", "Count the number of Venezuela presidents where party is Liberal", allOptimizers));
+//        variants.add(new ExpVariant("Q4", "SELECT p.name from target.president p WHERE p.country='Venezuela' and p.party='Liberal'", "List the name of Venezuela presidents where party is Liberal", allOptimizers));
+//        variants.add(new ExpVariant("Q5", "SELECT p.name from target.president p WHERE p.country='Venezuela' and p.party='Liberal' and p.start_year > 1858", "List the name of Venezuela presidents after 1858 where party is Liberal", allOptimizers));
+//        variants.add(new ExpVariant("Q6", "SELECT p.name, p.start_year, p.end_year, p.cardinal_number, p.party from target.president p WHERE p.country='Venezuela'", "List the name, the start year, the end year, the number of president and the party of Venezuela presidents", List.of("AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
+//        variants.add(new ExpVariant("Q7", "SELECT p.party, count(p.party) num from target.president p WHERE p.country='Venezuela' group by p.party order by num desc limit 1", "List the party name and the number of presidents of the party with more Venezuela presidents", List.of("AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter")));
+//        variants.add(new ExpVariant("Q8", "SELECT count(*) from target.president p where p.country='Venezuela' and p.start_year >= 1990  and p.start_year < 2000", "count Venezuela presidents who began their terms in the 1990 and finish it in 2000.", allOptimizers));
+//        variants.add(new ExpVariant("Q9", "SELECT p.name from target.president p where p.country='Venezuela' and p.party = 'Military' order by p.end_year desc limit 1", "List the name of the last Venezuela president where party is Military", allOptimizers));   
     }
 
     @Test
