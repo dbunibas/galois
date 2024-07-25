@@ -18,6 +18,7 @@ import speedy.model.database.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -63,16 +64,21 @@ public class LLMScan extends Scan {
 
     @Override
     public List<AttributeRef> getAttributes(IDatabase source, IDatabase target) {
-        if (attributesSelect != null) {
-            return this.attributesSelect;
-        }
         checkSourceTarget(source, target);
+
         LLMTable table = (LLMTable) source.getTable(tableAlias.getTableName());
-        return table.getAttributes().stream()
+        Set<AttributeRef> tableAttributes = table.getAttributes().stream()
                 .map(attr -> new AttributeRef(tableAlias, attr.getName()))
-                .collect(Collectors.toUnmodifiableSet())
-                .stream()
-                .toList();
+                .collect(Collectors.toUnmodifiableSet());
+
+        if (attributesSelect != null) {
+            // This filters eventual attributes with aliases
+            return this.attributesSelect.stream()
+                    .filter(tableAttributes::contains)
+                    .toList();
+        }
+
+        return tableAttributes.stream().toList();
     }
 
     public void setAttributesSelect(List<AttributeRef> attributesSelect) {

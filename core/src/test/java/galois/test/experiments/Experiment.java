@@ -1,6 +1,9 @@
 package galois.test.experiments;
 
+import com.galois.sqlparser.SQLQueryParser;
+import com.galois.sqlparser.ScanNodeFactory;
 import galois.Constants;
+import galois.llm.algebra.LLMScan;
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimizer;
@@ -30,6 +33,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Document;
 import speedy.model.algebra.IAlgebraOperator;
+import speedy.model.algebra.Scan;
 import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.database.Tuple;
 
@@ -70,10 +74,11 @@ public final class Experiment {
     public Map<String, ExperimentResults> execute() {
         Map<String, ExperimentResults> results = new HashMap<>();
         // TODO: Make this generic (and remove annotation)
-        IQueryPlanner<Document> planner = (IQueryPlanner<Document>) PlannerParserFactory.getPlannerFor(dbms, query.getAccessConfiguration());
-        IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
-        Document queryPlan = planner.planFrom(query.getSql());
-        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
+//        IQueryPlanner<Document> planner = (IQueryPlanner<Document>) PlannerParserFactory.getPlannerFor(dbms, query.getAccessConfiguration());
+//        IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
+//        Document queryPlan = planner.planFrom(query.getSql());
+//        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
+        IAlgebraOperator operator = parse();
         log.info("Query operator {}", operator);
         DBMSDB dbmsDatabase = createDatabaseForExpected();
         String queryToExecute = query.getSql().replace("target.", "public.");
@@ -102,11 +107,16 @@ public final class Experiment {
     }
     
     public IAlgebraOperator parse() {
-        IQueryPlanner<Document> planner = (IQueryPlanner<Document>) PlannerParserFactory.getPlannerFor(dbms, query.getAccessConfiguration());
-        IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
-        Document queryPlan = planner.planFrom(query.getSql());
-        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql()); 
-        return operator;
+//        Previous strategy: use PostgreSQL query plan parser
+//        IQueryPlanner<Document> planner = (IQueryPlanner<Document>) PlannerParserFactory.getPlannerFor(dbms, query.getAccessConfiguration());
+//        IQueryPlanParser<Document> parser = (IQueryPlanParser<Document>) PlannerParserFactory.getParserFor(dbms);
+//        Document queryPlan = planner.planFrom(query.getSql());
+//        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
+//        return operator;
+        SQLQueryParser sqlQueryParser = new SQLQueryParser();
+        log.info("Parsing the query using SQLQueryParser - {}", sqlQueryParser.getClass());
+        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, operatorsConfiguration.getScan().getQueryExecutor(), attributes);
+        return sqlQueryParser.parse(query.getSql(), scanNodeFactory);
     }
 
     private DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {

@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/../Speedy/jep" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/sql-parser" />
           </set>
         </option>
       </GradleProjectSettings>

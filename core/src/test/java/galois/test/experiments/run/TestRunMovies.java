@@ -1,5 +1,6 @@
 package galois.test.experiments.run;
 
+import com.galois.sqlparser.SQLQueryParser;
 import galois.test.experiments.ExperimentResults;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
@@ -7,12 +8,13 @@ import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import speedy.utility.SpeedyUtility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @Slf4j
 public class TestRunMovies {
@@ -75,23 +77,35 @@ public class TestRunMovies {
                 .build();
         ExpVariant q7 = ExpVariant.builder()
                 .queryNum("Q7")
-                .querySql("select m.startyear, count(*) as numMovies from target.movie m where m.director = 'Steven Spielberg' and startyear is not null group by m.startyear")
+                .querySql("select m.startyear, count(*) as numMovies from target.movie m where m.director = 'Steven Spielberg' and m.startyear is not null group by m.startyear")
                 .prompt("List the year and the number of produced movies in that year directed by Steven Spielberg.")
 //                .optimizers(multipleConditionsOptimizers)
                 .build();
+        // FIXME: Which Speedy tree can execute this query?
         ExpVariant q8 = ExpVariant.builder()
                 .queryNum("Q8")
                 .querySql("select m.startyear from target.movie m where m.director = 'Tim Burton' group by m.startyear order by count(*) desc limit 1")
                 .prompt("Return the most prolific year of Tim Burton")
 //                .optimizers(singleConditionOptimizers)
                 .build();
+        // FIXME: Which Speedy tree can execute this query?
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
                 .querySql("select m.director, (m.startyear - m.birthyear) as director_age from target.movie m where m.startyear is not null and m.birthyear is not null order by director_age desc limit 1")
                 .prompt("Return the oldest film director")
 //                .optimizers(multipleConditionsOptimizers)
                 .build();
-        variants = List.of(q1);
+        variants = List.of(q7);
+    }
+
+    @Test
+    public void testCanParseSQLQueries() {
+        SQLQueryParser sqlQueryParser = new SQLQueryParser();
+        for (int i = 0; i < variants.size(); i++) {
+            ExpVariant variant = variants.get(i);
+            log.info("Parsing query {}", variant.getQueryNum());
+            assertDoesNotThrow(() -> sqlQueryParser.parse(variant.getQuerySql()));
+        }
     }
 
     @Test
