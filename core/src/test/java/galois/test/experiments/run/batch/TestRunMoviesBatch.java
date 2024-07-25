@@ -82,10 +82,9 @@ public class TestRunMoviesBatch {
                 .prompt("List the year and the number of produced movies in that year directed by Steven Spielberg.")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        // FIXME: Which Speedy tree can execute this query?
         ExpVariant q8 = ExpVariant.builder()
                 .queryNum("Q8")
-                .querySql("select m.startyear from target.movie m where m.director = 'Tim Burton' group by m.startyear order by count(*) desc limit 1")
+                .querySql("select m.startyear, count(*) as count from target.movie m where m.director = 'Tim Burton' group by m.startyear order by count desc limit 1")
                 .prompt("Return the most prolific year of Tim Burton")
                 .optimizers(singleConditionOptimizers)
                 .build();
