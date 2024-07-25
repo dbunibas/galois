@@ -43,5 +43,8 @@ bin/
 
 gradle.properties
 
+## movies dataset ##
+core/src/test/resources/movies/movies-data
+
 ## query results ##
 core/src/test/resources/results/

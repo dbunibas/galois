@@ -1,13 +1,18 @@
 package galois.test.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Value;
 
 import java.util.List;
 
 @Value
+@Builder
+@AllArgsConstructor
 public class ExpVariant {
-    private String queryNum;
-    private String querySql;
-    private String prompt;
-    private List<String> optimizers;
+    String queryNum;
+    String querySql;
+    String prompt;
+    @Builder.Default
+    List<String> optimizers = List.of();
 }

@@ -2,9 +2,11 @@ package galois.parser.postgresql.nodeparsers;
 
 import galois.llm.algebra.LLMScan;
 import galois.llm.algebra.config.OperatorsConfiguration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +57,8 @@ public class ScanParser extends AbstractNodeParser {
                 for (Expression selection : selections) {
                     List<String> variables = selection.getVariables();
                     for (String variable : variables) {
+                        // Handle null (IS NULL / IS NOT NULL expressions)
+                        if (variable.equalsIgnoreCase("null")) continue;
                         StringTokenizer tokenizer = new StringTokenizer(variable, ".");
                         tokenizer.nextToken();
                         String attributeName = tokenizer.nextToken();

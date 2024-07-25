@@ -3,13 +3,16 @@ package galois.parser.postgresql.nodeparsers;
 import galois.llm.algebra.LLMScan;
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.parser.postgresql.NodeParserFactory;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Element;
+import speedy.SpeedyConstants;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Project;
 import speedy.model.algebra.ProjectionAttribute;
@@ -35,7 +38,7 @@ public class AggregateParser extends AbstractNodeParser {
     public static final String MIN = "min";
     public static final String MAX = "max";
     public static final String STDDEV = "stddev";
-    public static final String SUM = "stddev";
+    public static final String SUM = "sum";
 
     public static final String[] functions = {COUNT, AVG, MIN, MAX, STDDEV, SUM};
 
@@ -49,7 +52,10 @@ public class AggregateParser extends AbstractNodeParser {
         List<ProjectionAttribute> projectionAttributes = new ArrayList<>();
         for (Element item : output.getChildren()) {
             IAggregateFunction aggregate = getAggregate(item);
-            log.debug("Add aggregate: " + aggregate.getName() + " on " + aggregate.getAttributeRef());
+            if (aggregate == null) {
+                continue;
+            }
+            log.debug("Add aggregate: {} on {}", aggregate.getName(), aggregate.getAttributeRef());
             projectionAttributes.add(new ProjectionAttribute(aggregate));
         }
         Project project = new Project(projectionAttributes);
@@ -93,10 +99,16 @@ public class AggregateParser extends AbstractNodeParser {
 
     private IAggregateFunction getAggregate(Element item) {
         String text = item.getTextTrim();
+        // Ignore aggregate output if not functions
+        if (!text.contains("(") || !text.contains(")")) {
+            return null;
+        }
         String attributeName = text.substring(text.indexOf("(") + 1, text.indexOf(")")).trim();
         String functionName = text.substring(0, text.indexOf("(")).trim();
         log.debug("Function: " + functionName + " over " + attributeName);
-        AttributeRef attributeRef = new AttributeRef(getTableAlias(), attributeName);
+        AttributeRef attributeRef = attributeName.equals("*") ?
+                new AttributeRef(getTableAlias(), SpeedyConstants.COUNT) :
+                new AttributeRef(getTableAlias(), attributeName);
         if (functionName.equalsIgnoreCase(AVG)) {
             return new AvgAggregateFunction(attributeRef);
         }
@@ -127,7 +139,9 @@ public class AggregateParser extends AbstractNodeParser {
         if (operator instanceof Project) {
             List<IAggregateFunction> aggregateFunctions = ((Project) operator).getAggregateFunctions();
             for (IAggregateFunction aggregateFunction : aggregateFunctions) {
-                attributes.add(aggregateFunction.getAttributeRef());
+                if (aggregateFunction != null) {
+                    attributes.add(aggregateFunction.getAttributeRef());
+                }
             }
         }
         if (operator instanceof Select) {
@@ -136,6 +150,10 @@ public class AggregateParser extends AbstractNodeParser {
             for (Expression selection : selections) {
                 List<String> variables = selection.getVariables();
                 for (String variable : variables) {
+                    // Handle null (IS NULL / IS NOT NULL expressions)
+                    if (variable.equalsIgnoreCase("null")) {
+                        continue;
+                    }
                     StringTokenizer tokenizer = new StringTokenizer(variable, ".");
                     tokenizer.nextToken();
                     String attributeName = tokenizer.nextToken();

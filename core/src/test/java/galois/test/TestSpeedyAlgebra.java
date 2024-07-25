@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import speedy.SpeedyConstants;
 import speedy.model.algebra.*;
 import speedy.model.algebra.aggregatefunctions.AvgAggregateFunction;
+import speedy.model.algebra.aggregatefunctions.CountAggregateFunction;
 import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.ITable;
@@ -81,6 +83,28 @@ public class TestSpeedyAlgebra {
         ITupleIterator iterator = select.execute(null, database);
         Stream<Tuple> stream = TestUtils.toTupleStream(iterator);
         Assertions.assertEquals(16, stream.count());
+    }
+
+    @Test
+    public void testOtherSelectFromWhereCount() {
+        // SQL: SELECT COUNT(*) FROM table t WHERE t.salary > 3500
+        TableAlias tableAlias = new TableAlias(TABLE_NAME);
+        Scan scan = new Scan(tableAlias);
+
+        Expression exp = new Expression("salary > 3500");
+        exp.setVariableDescription("salary", new AttributeRef(tableAlias, "salary"));
+        Select select = new Select(exp);
+        select.addChild(scan);
+
+        AttributeRef attributeCount = new AttributeRef(tableAlias, SpeedyConstants.COUNT);
+        ProjectionAttribute projectionAttribute = new ProjectionAttribute(new CountAggregateFunction(attributeCount));
+        Project project = new Project(List.of(projectionAttribute));
+        project.addChild(select);
+
+        ITupleIterator iterator = project.execute(null, database);
+        Stream<Tuple> stream = TestUtils.toTupleStream(iterator);
+        Tuple result = stream.findFirst().orElseThrow();
+        Assertions.assertEquals(16, result.getCell(attributeCount).getValue().getPrimitiveValue());
     }
 
     @Test
