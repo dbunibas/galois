@@ -57,6 +57,8 @@ public class FilterParser extends AbstractNodeParser {
                 .replaceAll("AND", "&&")
                 .replaceAll("OR", "||")
                 .replaceAll("IS NOT", "!=")
-                .replaceAll("NULL", "null");
+                .replaceAll("NULL", "null")
+                .replaceAll(">==", ">=")
+                .replaceAll("<==", "<=");
     }
 }

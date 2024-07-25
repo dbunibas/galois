@@ -12,6 +12,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.util.IteratorIterable;
+import speedy.model.algebra.GroupBy;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.database.IDatabase;
 import speedy.model.database.TableAlias;
@@ -55,9 +56,14 @@ public class PostgresXMLParser implements IQueryPlanParser<Document> {
                     if (tokenizer.hasMoreTokens()) {
                         attribute = tokenizer.nextToken();
                     }
+                    attribute = attribute.replaceAll("\\)", "");
                     attributeSelect.add(attribute);
                 }
                 if (attributeSelect.size() == 1 && attributeSelect.get(0).equals("*")) {
+                    return operator;
+                }
+                if(operator instanceof GroupBy){
+                    //No need of extra projection
                     return operator;
                 }
                 FromItem fromItem = select.getFromItem();
@@ -74,7 +80,7 @@ public class PostgresXMLParser implements IQueryPlanParser<Document> {
                 projection.addChild(operator);
                 operator = projection;
             } catch (JSQLParserException ex) {
-
+                log.warn("JSQLParserException", ex);
             }
         }
 //        log.debug("Operator: " + operator.toString("\t"));

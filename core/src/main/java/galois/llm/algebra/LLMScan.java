@@ -7,6 +7,8 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import speedy.model.algebra.AbstractOperator;
+import speedy.model.algebra.Scan;
+import speedy.model.algebra.operators.AlgebraTreeToString;
 import speedy.model.algebra.operators.IAlgebraTreeVisitor;
 import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.database.AttributeRef;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class LLMScan extends AbstractOperator {
+public class LLMScan extends Scan {
 
     private static final Logger logger = LoggerFactory.getLogger(LLMScan.class);
 
@@ -28,11 +30,13 @@ public class LLMScan extends AbstractOperator {
     private List<AttributeRef> attributesSelect = null;
 
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor) {
+        super(tableAlias);
         this.tableAlias = tableAlias;
         this.queryExecutor = queryExecutor;
     }
 
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect) {
+        super(tableAlias);
         this.tableAlias = tableAlias;
         this.queryExecutor = queryExecutor;
         this.attributesSelect = attributesSelect;
@@ -45,7 +49,7 @@ public class LLMScan extends AbstractOperator {
 
     @Override
     public void accept(IAlgebraTreeVisitor visitor) {
-        throw new UnsupportedOperationException("Not implemented!");
+        visitor.visitScan(this);
     }
 
     @Override

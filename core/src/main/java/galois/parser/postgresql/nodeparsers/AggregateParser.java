@@ -3,32 +3,18 @@ package galois.parser.postgresql.nodeparsers;
 import galois.llm.algebra.LLMScan;
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.parser.postgresql.NodeParserFactory;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Element;
 import speedy.SpeedyConstants;
-import speedy.model.algebra.IAlgebraOperator;
-import speedy.model.algebra.Project;
-import speedy.model.algebra.ProjectionAttribute;
-import speedy.model.algebra.Select;
-import speedy.model.algebra.aggregatefunctions.AvgAggregateFunction;
-import speedy.model.algebra.aggregatefunctions.CountAggregateFunction;
-import speedy.model.algebra.aggregatefunctions.IAggregateFunction;
-import speedy.model.algebra.aggregatefunctions.MaxAggregateFunction;
-import speedy.model.algebra.aggregatefunctions.MinAggregateFunction;
-import speedy.model.algebra.aggregatefunctions.StdDevAggregateFunction;
-import speedy.model.algebra.aggregatefunctions.SumAggregateFunction;
+import speedy.model.algebra.*;
+import speedy.model.algebra.aggregatefunctions.*;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.IDatabase;
 import speedy.model.database.Key;
 import speedy.model.database.TableAlias;
 import speedy.model.expressions.Expression;
+
+import java.util.*;
 
 @Slf4j
 public class AggregateParser extends AbstractNodeParser {
@@ -52,22 +38,45 @@ public class AggregateParser extends AbstractNodeParser {
         List<ProjectionAttribute> projectionAttributes = new ArrayList<>();
         for (Element item : output.getChildren()) {
             IAggregateFunction aggregate = getAggregate(item);
-            if (aggregate == null) {
-                continue;
+            if (aggregate != null) {
+                log.debug("Add aggregate: " + aggregate.getName() + " on " + aggregate.getAttributeRef());
+                projectionAttributes.add(new ProjectionAttribute(aggregate));
+            } else {
+                String attributeName = item.getValue().trim();
+                ValueAggregateFunction vaf = new ValueAggregateFunction(new AttributeRef(getTableAlias(), attributeName));
+                projectionAttributes.add(new ProjectionAttribute(vaf));
             }
-            log.debug("Add aggregate: {} on {}", aggregate.getName(), aggregate.getAttributeRef());
-            projectionAttributes.add(new ProjectionAttribute(aggregate));
         }
-        Project project = new Project(projectionAttributes);
-        project.addChild(subTree);
-        List<AttributeRef> attributesForCleaning = cleanAttributesLLMScan(project);
+        Element groupKey = node.getChild("Group-Key", node.getNamespace());
+        IAlgebraOperator operator;
+        if (groupKey != null && !groupKey.getChildren().isEmpty()) {
+            log.info("Aggregation with group-by");
+            List<AttributeRef> groupingAttributes = extractGroupingAttributes(groupKey);
+            operator = new GroupBy(groupingAttributes, projectionAttributes.stream().map(ProjectionAttribute::getAggregateFunction).toList());
+            operator.addChild(subTree);
+        } else {
+            log.info("Aggregation without group-by");
+            operator = new Project(projectionAttributes);
+            operator.addChild(subTree);
+        }
+        List<AttributeRef> attributesForCleaning = cleanAttributesLLMScan(operator);
         addKeys(database, attributesForCleaning);
-        log.debug("Attributes: " + attributesForCleaning);
-        updateLLMScan(project, attributesForCleaning);
+        log.debug("Attributes: {}", attributesForCleaning);
+        updateLLMScan(operator, attributesForCleaning);
+        log.trace("Result: {}", operator);
 //        Limit limit1 = new Limit(1);
 //        limit1.addChild(project);
+        return operator;
+    }
 
-        return project;
+    private List<AttributeRef> extractGroupingAttributes(Element groupKey) {
+        List<AttributeRef> result = new ArrayList<>();
+        for (Element child : groupKey.getChildren("Item", groupKey.getNamespace())) {
+            String attributeWithAlias = child.getTextTrim();
+            String attributeWithoutAlias = attributeWithAlias.contains(".") ? attributeWithAlias.substring(attributeWithAlias.indexOf(".") + 1) : attributeWithAlias;
+            result.add(new AttributeRef(getTableAlias(), attributeWithoutAlias));
+        }
+        return result;
     }
 
     private void addKeys(IDatabase database, List<AttributeRef> attributesForCleaning) {
@@ -113,7 +122,7 @@ public class AggregateParser extends AbstractNodeParser {
             return new AvgAggregateFunction(attributeRef);
         }
         if (functionName.equalsIgnoreCase(COUNT)) {
-            return new CountAggregateFunction(attributeRef);
+            return new CountAggregateFunction(new AttributeRef(getTableAlias(), SpeedyConstants.COUNT));
         }
         if (functionName.equalsIgnoreCase(MIN)) {
             return new MinAggregateFunction(attributeRef);
@@ -138,14 +147,20 @@ public class AggregateParser extends AbstractNodeParser {
         }
         if (operator instanceof Project) {
             List<IAggregateFunction> aggregateFunctions = ((Project) operator).getAggregateFunctions();
+            log.debug("Aggregate Functions: {}", aggregateFunctions.size());
             for (IAggregateFunction aggregateFunction : aggregateFunctions) {
+                log.debug("Aggregate: {}", aggregateFunction);
                 if (aggregateFunction != null) {
                     attributes.add(aggregateFunction.getAttributeRef());
                 }
             }
         }
-        if (operator instanceof Select) {
-            Select s = (Select) operator;
+        if (operator instanceof GroupBy) {
+            List<AttributeRef> groupingAttributes = ((GroupBy) operator).getGroupingAttributes();
+            log.debug("Grouping attributes: {}", groupingAttributes);
+            attributes.addAll(groupingAttributes);
+        }
+        if (operator instanceof Select s) {
             List<Expression> selections = s.getSelections();
             for (Expression selection : selections) {
                 List<String> variables = selection.getVariables();

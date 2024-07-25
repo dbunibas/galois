@@ -2,6 +2,7 @@ package galois.planner.postgresql.xml;
 
 import galois.planner.IQueryPlanner;
 import galois.planner.PlannerException;
+import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -17,6 +18,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Slf4j
 public class PostgresXMLPlanner implements IQueryPlanner<Document> {
     private static final Logger logger = LoggerFactory.getLogger(PostgresXMLPlanner.class);
 
@@ -37,6 +39,7 @@ public class PostgresXMLPlanner implements IQueryPlanner<Document> {
         try (ResultSet result = QueryManager.executeQuery(query, connection, accessConfiguration)) {
             result.next();
             String xmlString = result.getString("QUERY PLAN");
+            log.info("Parsing Query Plan. \nSQL: {}\nPostgreSQL Query Plan: {}", sql, xmlString);
             return buildDOMFromString(xmlString);
         } catch (SQLException ex) {
             throw new PlannerException(ex);
