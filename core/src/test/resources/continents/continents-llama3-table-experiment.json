@@ -1,5 +1,5 @@
 {
-  "name": "Continents llama3 Table Experiment",
+  "name": "Continents-{{QN}} llama3 Table Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -19,7 +19,7 @@
     }
   },
   "query": {
-    "sql": "select * from target.continents c",
+    "sql": "{{QUERY-SQL}}",
     "schema": {
       "name": "continents",
       "schema": "target",

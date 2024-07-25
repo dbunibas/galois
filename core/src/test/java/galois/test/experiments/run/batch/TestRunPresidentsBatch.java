@@ -1,4 +1,4 @@
-package galois.test.experiments.run;
+package galois.test.experiments.run.batch;
 
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.ISQLExecutor;

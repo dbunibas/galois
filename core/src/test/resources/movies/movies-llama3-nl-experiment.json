@@ -1,5 +1,5 @@
 {
-  "name": "Movies Experiment-nl",
+  "name": "Movies-{{QN}} Experiment-nl",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -20,7 +20,7 @@
     }
   },
   "query": {
-    "sql": "select m.startyear, count(*) as numMovies from public.movie m where m.director = 'Steven Spielberg' and startyear is not null group by m.startyear",
+    "sql": "{{QUERY-SQL}}",
     "schema": {
       "name": "directors_movies",
       "schema": "target",

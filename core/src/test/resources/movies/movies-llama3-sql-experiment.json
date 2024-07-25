@@ -1,5 +1,5 @@
 {
-  "name": "Movies Experiment-sql",
+  "name": "Movies-{{QN}} Experiment-sql",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -19,7 +19,7 @@
     }
   },
   "query": {
-    "sql": "select m.originaltitle, m.startyear from target.movie m where m.director='Richard Thorpe' and m.startyear > 1950",
+    "sql": "{{QUERY-SQL}}",
     "schema": {
       "name": "directors_movies",
       "schema": "target",
