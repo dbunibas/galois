@@ -27,7 +27,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "president",
+          "tableName": "international_presidents",
           "attributes": [
             {
               "name": "name",
