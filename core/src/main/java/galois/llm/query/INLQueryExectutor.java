@@ -1,7 +1,7 @@
 package galois.llm.query;
 
 public interface INLQueryExectutor {
+    String getNaturalLanguagePrompt();
 
-    public String getNaturalLanguagePrompt();
-    public void setNaturalLanguagePrompt(String s);
+    void setNaturalLanguagePrompt(String s);
 }

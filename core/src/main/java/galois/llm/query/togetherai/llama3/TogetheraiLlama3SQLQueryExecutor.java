@@ -9,6 +9,7 @@ import galois.llm.query.IQueryExecutor;
 import galois.llm.query.IQueryExecutorBuilder;
 import galois.prompt.EPrompts;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.Attribute;
 import speedy.model.database.ITable;
@@ -32,12 +33,13 @@ import speedy.model.expressions.Expression;
 
 @Slf4j
 @Getter
+@Setter
 public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor implements ISQLExecutor{
 
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final int maxIterations;
-    private final String sql;
+    private String sql;
 
     public TogetheraiLlama3SQLQueryExecutor(String sql) {
         this.firstPrompt = EPrompts.FROM_SQL_JSON;

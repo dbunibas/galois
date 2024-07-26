@@ -1,6 +1,7 @@
 package galois.test.utils;
 
 import galois.llm.query.INLQueryExectutor;
+import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ISQLExecutor;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
@@ -44,15 +45,19 @@ public class TestRunner {
             experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
             experiment.getQuery().setSql(variant.getQuerySql());
             log.debug("SQL query is {}", experiment.getQuery().getSql());
-            if (experiment.getOperatorsConfiguration().getScan().getQueryExecutor() instanceof INLQueryExectutor queryExectutor) {
-                queryExectutor.setNaturalLanguagePrompt(variant.getPrompt());
-            }
-            if (!(experiment.getOperatorsConfiguration().getScan().getQueryExecutor() instanceof INLQueryExectutor)
-                    && !(experiment.getOperatorsConfiguration().getScan().getQueryExecutor() instanceof ISQLExecutor)) {
+
+            IQueryExecutor queryExecutor = experiment.getOperatorsConfiguration().getScan().getQueryExecutor();
+            if (queryExecutor instanceof INLQueryExectutor nlExecutor) {
+                nlExecutor.setNaturalLanguagePrompt(variant.getPrompt());
+                experiment.setOptimizers(null);
+            } else if (queryExecutor instanceof ISQLExecutor sqlExecutor) {
+                sqlExecutor.setSql(variant.getQuerySql());
+                experiment.setOptimizers(null);
+            } else {
                 List<IOptimizer> optimizers = loadOptimizers(variant);
-//            experiment.setOptimizers(variant.getOptimizers().stream().map(OptimizersFactory::getOptimizerByName).toList());
                 experiment.setOptimizers(optimizers);
             }
+
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
             var expResults = experiment.execute();
@@ -60,6 +65,7 @@ public class TestRunner {
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
             }
+
             // Extract numbers after "Only results, same order: \n"
             String regex = "Only results, same order: \\n([\\d, ]+)-*$";
             Pattern pattern = Pattern.compile(regex);
@@ -88,6 +94,7 @@ public class TestRunner {
                 }
                 continue;
             }
+
             if (optimizer.equals("SingleConditionsOptimizerFactory-WithFilter")) {
                 ParserWhere parserWhere = new ParserWhere();
                 parserWhere.parseWhere(variant.getQuerySql());
@@ -96,6 +103,7 @@ public class TestRunner {
                 }
                 continue;
             }
+
             optimizers.add(OptimizersFactory.getOptimizerByName(optimizer));
         }
         return optimizers;

@@ -8,6 +8,7 @@ import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import speedy.model.algebra.IAlgebraOperator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,48 +47,56 @@ public class TestRunMoviesBatch {
                 .prompt("List the title of the movies directed by Richard Thorpe")
                 .optimizers(singleConditionOptimizers)
                 .build();
+
         ExpVariant q2 = ExpVariant.builder()
                 .queryNum("Q2")
                 .querySql("select m.originaltitle from target.movie m where m.director='Steven Spielberg'")
                 .prompt("List the title of the movies directed by Steven Spielberg")
                 .optimizers(singleConditionOptimizers)
                 .build();
+
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
                 .querySql("select m.originaltitle, m.startyear from target.movie m where m.director='Richard Thorpe' and m.startyear > 1950")
                 .prompt("List the title and year of the movies directed by Richard Thorpe after the 1950")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
+
         ExpVariant q4 = ExpVariant.builder()
                 .queryNum("Q4")
                 .querySql("select m.originaltitle, m.startyear from target.movie m where m.director='Steven Spielberg' and m.startyear > 2000")
                 .prompt("List the title and year of the movies directed by Steven Spielberg after the 2000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
+
         ExpVariant q5 = ExpVariant.builder()
                 .queryNum("Q5")
                 .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear from target.movie m where m.director='Steven Spielberg' and m.startyear > 2000")
                 .prompt("List the title, year, genres and birthyear of the movies directed by Steven Spielberg after the 2000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
+
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
                 .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear, m.deathyear, m.runtimeminutes from target.movie m where m.director = 'Steven Spielberg' and m.startyear > 1990 and m.endyear < 2000")
                 .prompt("List the title, year, genres, birthyear, deathyear and runtimeminutes of the movies directed by Steven Spielberg between the 1990 and the 2000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
+
         ExpVariant q7 = ExpVariant.builder()
                 .queryNum("Q7")
                 .querySql("select m.startyear, count(*) as numMovies from target.movie m where m.director = 'Steven Spielberg' and m.startyear is not null group by m.startyear")
                 .prompt("List the year and the number of produced movies in that year directed by Steven Spielberg.")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
+
         ExpVariant q8 = ExpVariant.builder()
                 .queryNum("Q8")
                 .querySql("select m.startyear, count(*) as count from target.movie m where m.director = 'Tim Burton' group by m.startyear order by count desc limit 1")
                 .prompt("Return the most prolific year of Tim Burton")
                 .optimizers(singleConditionOptimizers)
                 .build();
+
         // FIXME: Which Speedy tree can execute this query?
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
@@ -95,7 +104,8 @@ public class TestRunMoviesBatch {
                 .prompt("Return the oldest film director")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7);
+
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8);
     }
 
     @Test
@@ -103,7 +113,10 @@ public class TestRunMoviesBatch {
         SQLQueryParser sqlQueryParser = new SQLQueryParser();
         for (ExpVariant variant : variants) {
             log.info("Parsing query {}", variant.getQueryNum());
-            assertDoesNotThrow(() -> sqlQueryParser.parse(variant.getQuerySql()));
+            assertDoesNotThrow(() -> {
+                IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql());
+                log.info("Parsed result:\n{}", result);
+            });
         }
     }
 

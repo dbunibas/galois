@@ -2,9 +2,11 @@ package galois.test.experiments;
 
 import com.galois.sqlparser.SQLQueryParser;
 import com.galois.sqlparser.ScanNodeFactory;
+import com.galois.sqlparser.TableAliasQueryParser;
 import galois.Constants;
 import galois.llm.algebra.LLMScan;
 import galois.llm.algebra.config.OperatorsConfiguration;
+import galois.llm.query.IQueryExecutor;
 import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimizer;
 import galois.parser.IQueryPlanParser;
@@ -115,7 +117,15 @@ public final class Experiment {
 //        return operator;
         SQLQueryParser sqlQueryParser = new SQLQueryParser();
         log.info("Parsing the query using SQLQueryParser - {}", sqlQueryParser.getClass());
-        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, operatorsConfiguration.getScan().getQueryExecutor(), attributes);
+        IQueryExecutor scanQueryExecutor = operatorsConfiguration.getScan().getQueryExecutor();
+        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, scanQueryExecutor, attributes);
+
+        // If ignoreTree() returns true, only execute the LLMScan operation
+        if (scanQueryExecutor.ignoreTree()) {
+            TableAliasQueryParser tableAliasQueryParser = new TableAliasQueryParser();
+            return scanNodeFactory.createScanNode(tableAliasQueryParser.parse(query.getSql()), null);
+        }
+
         return sqlQueryParser.parse(query.getSql(), scanNodeFactory);
     }
 
