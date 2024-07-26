@@ -20,9 +20,13 @@ import java.util.*;
 @Slf4j
 public class ExcelExporter {
 
-    public void export(String expName, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
+    public String getFileName(String expName) {
         String pathExport = Constants.EXPORT_EXCEL_PATH;
         String fileName = pathExport + expName + "-" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + ".xlsx";
+        return fileName;
+    }
+
+    public void export(String fileName, String expName, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
         exportExcel(expName, fileName, metrics, results);
     }
 
