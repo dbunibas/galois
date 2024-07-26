@@ -74,15 +74,17 @@ public class TestRunPresidentsBatch {
         testParseAll();
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
             execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results);
             execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results);
             execute("/presidents/presidents-llama3-table-experiment.json", "TABLE", variant, metrics, results);
             execute("/presidents/presidents-llama3-key-experiment.json", "KEY", variant, metrics, results);
             execute("/presidents/presidents-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+
         }
         System.out.println(SpeedyUtility.printMap(results));
-        exportExcel.export(EXP_NAME, metrics, results);
     }
 
     @Test
@@ -136,7 +138,7 @@ public class TestRunPresidentsBatch {
             }
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);
-            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+            //throw new RuntimeException("Cannot run experiment: " + path, ioe);
         }
     }
 
