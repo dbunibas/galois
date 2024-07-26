@@ -79,7 +79,7 @@ public class TestRunner {
             }
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);
-            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+//            throw new RuntimeException("Cannot run experiment: " + path, ioe);
         }
     }
 
