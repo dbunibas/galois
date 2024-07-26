@@ -32,7 +32,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-jackson:2.11.0")
 
     implementation("commons-lang:commons-lang:2.6")
-    implementation("com.github.jsqlparser:jsqlparser:4.9")
+    //implementation("com.github.jsqlparser:jsqlparser:4.9")
+    implementation("com.github.jsqlparser:jsqlparser:5.0")
 
     implementation("org.apache.commons:commons-text:1.10.0")
 

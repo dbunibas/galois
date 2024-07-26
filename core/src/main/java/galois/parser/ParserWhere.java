@@ -7,14 +7,18 @@ import net.sf.jsqlparser.expression.DateValue;
 import net.sf.jsqlparser.expression.DoubleValue;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
+import net.sf.jsqlparser.expression.ExtractExpression;
 import net.sf.jsqlparser.expression.HexValue;
 import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.NotExpression;
 import net.sf.jsqlparser.expression.NullValue;
+import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.TimeValue;
 import net.sf.jsqlparser.expression.TimestampValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
@@ -48,7 +52,6 @@ public class ParserWhere {
     public List<Expression> getExpressions() {
         return expressions;
     }
-    
 
     public void parseWhere(String sql) throws ParserException {
         try {
@@ -68,7 +71,11 @@ public class ParserWhere {
             if (expString.contains(" AND ") && expString.contains((" OR "))) {
                 stopAtFirst = true;
             }
+            logger.debug("ExpString: " + expString);
+            logger.debug("StopAtFirst: " + stopAtFirst);
             Expression exp = CCJSqlParserUtil.parseExpression(expString);
+            logger.debug("Expression: " + exp);
+            logger.debug("Expression type: " + exp.getClass().getName());
             exp.accept(expressionVisitorAdapter);
         } catch (Exception e) {
             throw new ParserException("Error with parsing: " + expression + "\nMessage: " + e.getMessage());
@@ -76,10 +83,29 @@ public class ParserWhere {
     }
 
     private void initParsers() {
-        this.expressionVisitorAdapter = new ExpressionVisitorAdapter() {
+        this.expressionVisitorAdapter = new ExpressionVisitorAdapter<>() {
 
             @Override
-            protected void visitBinaryExpression(BinaryExpression expr) {
+            public <S> Object visit(Select selectBody, S context) {
+                logger.debug("Visit select: " + selectBody);
+                return super.visit(selectBody, context);
+            }
+            
+            @Override
+            public <S> Object visit(ExpressionList<?> expressionList, S context) {
+                logger.debug("Visit ExpressionList: " + expressionList);
+                return super.visit(expressionList, context);
+            }
+            
+            @Override
+            public <S> Object visit(ExtractExpression expr, S context) {
+                logger.debug("Visit ExtractExpression: " + expr);
+                return super.visit(expr, context);
+            }            
+
+            @Override
+            protected <S> Object visitBinaryExpression(BinaryExpression expr, S context) {
+                logger.debug("Visit Binary: " + expr);
                 Expression leftExpression = expr.getLeftExpression();
                 Expression rightExpression = expr.getRightExpression();
                 if (stopAtFirst) {
@@ -87,43 +113,40 @@ public class ParserWhere {
                     logger.debug("Right Expr: " + rightExpression);
                     expressions.add(leftExpression);
                     expressions.add(rightExpression);
-                    return;
+//                    return super.visitBinaryExpression(expr, context);
+                    return null;
                 }
                 if (isAtom(leftExpression) && isAtom(rightExpression)) {
                     logger.debug("Create Leaf LLMScan on expr: " + expr);
                     logger.debug("Add LLMScan on the current");
                     expressions.add(expr);
+                    return null;
                 } else {
-                    super.visitBinaryExpression(expr);
+                    return super.visitBinaryExpression(expr, context);
                 }
-
             }
-
-//            @Override
-//            public void visit(NotExpression notExpr) {
-//                super.visit(notExpr);
-//            }
+            
             
             @Override
-            public void visit(OrExpression expr) {
+            public <S> Object visit(OrExpression expr, S context) {
                 logger.debug("OR");
                 operation = "OR";
-                super.visit(expr);
+                return super.visit(expr, context);
             }
 
             @Override
-            public void visit(AndExpression expr) {
+            public <S> Object visit(AndExpression expr, S context) {
                 logger.debug("AND");
                 operation = "AND";
-                super.visit(expr);
+                return super.visit(expr, context);
             }
 
 //            @Override
-//            public void visit(Parenthesis expr) {
+//            public void visit(Parenthesis parenthesis) {
 //                logger.debug("(PARENTHESIS)");
-//                super.visit(expr);
+//                super.visit(parenthesis);
 //            }
-            
+
             private boolean isAtom(Expression expression) {
                 if ((expression instanceof Column)
                         || (expression instanceof DateValue)
@@ -140,21 +163,17 @@ public class ParserWhere {
                 return false;
             }
 
-//            @Override
-//            public void visit(Column column) {
-//               logger.info("Found a Column " + column.getColumnName());
-//            }
-
         };
 
         this.selectVisitorAdapter = new SelectVisitorAdapter() {
             @Override
             public void visit(PlainSelect plainSelect) {
                 if (plainSelect.getWhere() != null) {
-                    logger.debug("Expression: " + plainSelect.getWhere());
+                    logger.debug("Expression in SelectVisitorAdapter: " + plainSelect.getWhere());
                     Expression where = plainSelect.getWhere();
                     try {
                         Expression expression = CCJSqlParserUtil.parseExpression(where.toString());
+                        expression.accept(expressionVisitorAdapter);
                         plainSelect.getWhere().accept(expressionVisitorAdapter);
                     } catch (Exception e) {
 
@@ -168,7 +187,7 @@ public class ParserWhere {
 
             @Override
             public void visit(Select select) {
-                select.getPlainSelect().accept(selectVisitorAdapter);
+                select.getPlainSelect().accept(selectVisitorAdapter, null);
             }
         };
     }
