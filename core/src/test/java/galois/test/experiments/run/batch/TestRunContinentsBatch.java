@@ -123,6 +123,7 @@ public class TestRunContinentsBatch {
             testRunner.execute("/continents/continents-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
         }
         log.info("Results\n{}", printMap(results));
-        exportExcel.export(EXP_NAME, metrics, results);
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        exportExcel.export(fileName, EXP_NAME, metrics, results);
     }
 }
