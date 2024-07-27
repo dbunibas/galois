@@ -50,28 +50,28 @@ public class TestRunUSAPresidentsBatch {
 
         ExpVariant q2 = ExpVariant.builder()
                 .queryNum("Q2")
-                .querySql("SELECT p.name, p.party from target.international_presidents p WHERE p.country='United States' and  p.party='Republican'")
+                .querySql("SELECT p.name, p.party from target.international_presidents p WHERE p.country='United States' AND p.party='Republican'")
                 .prompt("List the name and party of USA presidents where party is Republican")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("SELECT count(p.party) as party from target.international_presidents p WHERE p.country='United States' and p.party='Republican'")
+                .querySql("SELECT count(p.party) as party from target.international_presidents p WHERE p.country='United States' AND p.party='Republican'")
                 .prompt("Count the number of US presidents where party is Republican")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q4 = ExpVariant.builder()
                 .queryNum("Q4")
-                .querySql("SELECT p.name from target.international_presidents p WHERE p.country='United States' and p.party='Republican'")
+                .querySql("SELECT p.name from target.international_presidents p WHERE p.country='United States' AND p.party='Republican'")
                 .prompt("List the name of USA presidents where party is Republican")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q5 = ExpVariant.builder()
                 .queryNum("Q5")
-                .querySql("SELECT p.name from target.international_presidents p WHERE p.country='United States' and p.party='Republican' and p.start_year > 1980")
+                .querySql("SELECT p.name from target.international_presidents p WHERE p.country='United States' AND p.party='Republican' AND p.start_year > 1980")
                 .prompt("List the name of USA presidents after 1980 where party is Republican")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
@@ -92,14 +92,14 @@ public class TestRunUSAPresidentsBatch {
 
         ExpVariant q8 = ExpVariant.builder()
                 .queryNum("Q8")
-                .querySql("SELECT count(*) from target.international_presidents p where p.country='United States' and p.start_year >= 1990  and p.start_year < 2000")
+                .querySql("SELECT count(*) from target.international_presidents p where p.country='United States' AND p.start_year >= 1990  AND p.start_year < 2000")
                 .prompt("count U.S. presidents who began their terms in the 1990 and finish it in 2000.")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
-                .querySql("SELECT p.name from target.international_presidents p where p.country='United States' and p.party = 'Whig' order by p.end_year desc limit 1")
+                .querySql("SELECT p.name from target.international_presidents p where p.country='United States' AND p.party = 'Whig' order by p.end_year desc limit 1")
                 .prompt("List the name of the last USA president where party is Whig")
                 .optimizers(multipleConditionsOptimizers)
                 .build();

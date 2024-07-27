@@ -58,35 +58,35 @@ public class TestRunMoviesBatch {
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("select m.originaltitle, m.startyear from target.movie m where m.director='Richard Thorpe' and m.startyear > 1950")
+                .querySql("select m.originaltitle, m.startyear from target.movie m where m.director='Richard Thorpe' AND m.startyear > 1950")
                 .prompt("List the title and year of the movies directed by Richard Thorpe after the 1950")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q4 = ExpVariant.builder()
                 .queryNum("Q4")
-                .querySql("select m.originaltitle, m.startyear from target.movie m where m.director='Steven Spielberg' and m.startyear > 2000")
+                .querySql("select m.originaltitle, m.startyear from target.movie m where m.director='Steven Spielberg' AND m.startyear > 2000")
                 .prompt("List the title and year of the movies directed by Steven Spielberg after the 2000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q5 = ExpVariant.builder()
                 .queryNum("Q5")
-                .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear from target.movie m where m.director='Steven Spielberg' and m.startyear > 2000")
+                .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear from target.movie m where m.director='Steven Spielberg' AND m.startyear > 2000")
                 .prompt("List the title, year, genres and birthyear of the movies directed by Steven Spielberg after the 2000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
-                .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear, m.deathyear, m.runtimeminutes from target.movie m where m.director = 'Steven Spielberg' and m.startyear > 1990 and m.endyear < 2000")
+                .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear, m.deathyear, m.runtimeminutes from target.movie m where m.director = 'Steven Spielberg' AND m.startyear > 1990 AND m.endyear < 2000")
                 .prompt("List the title, year, genres, birthyear, deathyear and runtimeminutes of the movies directed by Steven Spielberg between the 1990 and the 2000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q7 = ExpVariant.builder()
                 .queryNum("Q7")
-                .querySql("select m.startyear, count(*) as numMovies from target.movie m where m.director = 'Steven Spielberg' and m.startyear is not null group by m.startyear")
+                .querySql("select m.startyear, count(*) as numMovies from target.movie m where m.director = 'Steven Spielberg' AND m.startyear is not null group by m.startyear")
                 .prompt("List the year and the number of produced movies in that year directed by Steven Spielberg.")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
@@ -101,7 +101,7 @@ public class TestRunMoviesBatch {
         // FIXME: Which Speedy tree can execute this query?
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
-                .querySql("select m.director, (m.startyear - m.birthyear) as director_age from target.movie m where m.startyear is not null and m.birthyear is not null order by director_age desc limit 1")
+                .querySql("select m.director, (m.startyear - m.birthyear) as director_age from target.movie m where m.startyear is not null AND m.birthyear is not null order by director_age desc limit 1")
                 .prompt("Return the oldest film director")
                 .optimizers(multipleConditionsOptimizers)
                 .build();

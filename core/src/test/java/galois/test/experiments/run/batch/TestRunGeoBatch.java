@@ -72,35 +72,35 @@ public class TestRunGeoBatch {
 
         ExpVariant q5 = ExpVariant.builder()
                 .queryNum("Q5")
-                .querySql("SELECT us.state_name, us.capital FROM public.usa_state us where us.population > 5000000 and us.density < 1000")
+                .querySql("SELECT us.state_name, us.capital FROM public.usa_state us where us.population > 5000000 AND us.density < 1000")
                 .prompt("List the state name and capital from USA states where the population is greater than 5000000 and the density is lower than 1000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
-                .querySql("SELECT us.state_name, us.capital, us.density, us.population FROM target.usa_state us where us.population > 5000000 and us.density < 1000 and us.area < 50000")
+                .querySql("SELECT us.state_name, us.capital, us.density, us.population FROM target.usa_state us where us.population > 5000000 AND us.density < 1000 AND us.area < 50000")
                 .prompt("List the state name, capital, density and population from USA states where the population is greater than 5000000, the density is lower than 1000 and the area is lower than 50000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q7 = ExpVariant.builder()
                 .queryNum("Q7")
-                .querySql("select us.state_name, us.capital from usa_state us where us.population > 3000000 and us.area > 50000 order by us.capital")
+                .querySql("select us.state_name, us.capital from usa_state us where us.population > 3000000 AND us.area > 50000 order by us.capital")
                 .prompt("List the state name and capital ordered by capital from USA states where the population is greater than 3000000 and the area is greater than 50000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q8 = ExpVariant.builder()
                 .queryNum("Q8")
-                .querySql("select us.state_name, us.capital, us.population from usa_state us where us.population > 3000000 and us.population < 8000000 and us.area > 50000 order by us.population")
+                .querySql("select us.state_name, us.capital, us.population from usa_state us where us.population > 3000000 AND us.population < 8000000 AND us.area > 50000 order by us.population")
                 .prompt("List the state name capital and population ordered by population from USA states where the population is greater than 3000000 and lower than 8000000 and the area is greater than 50000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
-                .querySql("select us.state_name, us.capital, us.population, us.area from usa_state us where us.population = 4700000 and area=56153")
+                .querySql("select us.state_name, us.capital, us.population, us.area from usa_state us where us.population = 4700000 AND area=56153")
                 .prompt("List the state name, the capital, the popoulation and the area from USA states where the population is 4700000 and the are is 56153")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
