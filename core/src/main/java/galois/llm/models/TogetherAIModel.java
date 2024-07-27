@@ -23,6 +23,8 @@ import galois.llm.models.togetherai.ResponseTogetherAI;
 import galois.llm.models.togetherai.Usage;
 import galois.utils.Mapper;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -49,6 +51,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private int maxRetry = 10;
     private boolean checkJSON = true;
     private boolean checkJSONResponseContent = false;
+    private Map<String,String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
 
     public TogetherAIModel(String toghetherAiAPI, String modelName) {
         this.toghetherAiAPI = toghetherAiAPI;
@@ -80,7 +83,11 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         String authorizationValue = "Bearer " + this.toghetherAiAPI;
         this.numRetry = 0;
         log.trace("Reset retry to 0");
-        String response = this.makeRequest(jsonRequest, authorizationValue);
+        String response = this.inMemoryCache.get(jsonRequest);
+        if (response == null && !this.inMemoryCache.containsKey(jsonRequest)) {
+            response = this.makeRequest(jsonRequest, authorizationValue);
+            this.inMemoryCache.put(jsonRequest, response);
+        }
         if (response == null || response.isEmpty()) {
             log.trace("Return null because response is null or empty: " + response);
             return null;
