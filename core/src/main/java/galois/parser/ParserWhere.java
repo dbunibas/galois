@@ -167,27 +167,27 @@ public class ParserWhere {
 
         this.selectVisitorAdapter = new SelectVisitorAdapter() {
             @Override
-            public void visit(PlainSelect plainSelect) {
+            public Object visit(PlainSelect plainSelect, Object context) {
                 if (plainSelect.getWhere() != null) {
                     logger.debug("Expression in SelectVisitorAdapter: " + plainSelect.getWhere());
                     Expression where = plainSelect.getWhere();
                     try {
                         Expression expression = CCJSqlParserUtil.parseExpression(where.toString());
-                        expression.accept(expressionVisitorAdapter);
-                        plainSelect.getWhere().accept(expressionVisitorAdapter);
+                        return expression.accept(expressionVisitorAdapter, null);
+                        //return plainSelect.getWhere().accept(expressionVisitorAdapter, null);
                     } catch (Exception e) {
 
                     }
                 }
-            }
-
+                return super.visit(plainSelect, context); 
+            }        
         };
 
         statementVisitor = new StatementVisitorAdapter() {
-
             @Override
-            public void visit(Select select) {
-                select.getPlainSelect().accept(selectVisitorAdapter, null);
+            public Object visit(Select select, Object context) {
+                return select.getPlainSelect().accept(selectVisitorAdapter, null);
+                //return super.visit(select, context);
             }
         };
     }
