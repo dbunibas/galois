@@ -12,13 +12,13 @@ import net.sf.jsqlparser.expression.HexValue;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NotExpression;
 import net.sf.jsqlparser.expression.NullValue;
-import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.TimeValue;
 import net.sf.jsqlparser.expression.TimestampValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.IsNullExpression;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
@@ -141,6 +141,13 @@ public class ParserWhere {
                 return super.visit(expr, context);
             }
 
+            @Override
+            public <S> Object visit(IsNullExpression isNullExpression, S context) {
+                logger.debug("IS NULL Expression:" + isNullExpression);
+                expressions.add(isNullExpression);
+                return super.visit(isNullExpression, context); 
+            }
+           
 //            @Override
 //            public void visit(Parenthesis parenthesis) {
 //                logger.debug("(PARENTHESIS)");

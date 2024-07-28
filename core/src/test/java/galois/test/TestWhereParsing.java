@@ -19,6 +19,15 @@ public class TestWhereParsing {
         log.info("Parsed expressions: {}", parser.getExpressions());
         log.info("Parser operation: {}", parser.getOperation());
     }
+    
+    @Test
+    public void testIsNotNull() {
+        String sql = "select m.startyear, count(*) as numMovies from target.movie m where m.director = 'Steven Spielberg' AND m.startyear is not null group by m.startyear";
+        ParserWhere parser = new ParserWhere();
+        parser.parseWhere(sql);
+        log.info("Parsed expressions: {}", parser.getExpressions());
+        log.info("Parser operation: {}", parser.getOperation());
+    }
 
     @Test
     public void testExpressionComplex() {

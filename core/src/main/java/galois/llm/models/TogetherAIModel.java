@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ChatMessageType;
@@ -51,7 +56,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private int maxRetry = 10;
     private boolean checkJSON = true;
     private boolean checkJSONResponseContent = false;
-    private Map<String,String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
+    private Map<String, String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
 
     public TogetherAIModel(String toghetherAiAPI, String modelName) {
         this.toghetherAiAPI = toghetherAiAPI;
@@ -142,13 +147,14 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 Message mex = new Message();
                 mex.setRole(USER);
                 mex.setContent(message.text());
-                log.trace("Add User Message: " + mex);
+                log.trace("Add User Message: " + mex.getContent());
                 this.messages.add(mex);
             } else {
                 Message mex = new Message();
                 mex.setRole(ASSISTANT);
-                mex.setContent(message.text());
-                log.trace("Add Assistant message: " + mex);
+                mex.setContent(Mapper.toCleanJsonList(message.text()));
+                //mex.setContent(message.text());
+                log.trace("Add Assistant message: " + mex.getContent());
                 this.messages.add(mex);
             }
             lastTextMessage = message.text();
@@ -186,6 +192,11 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             connection.setRequestProperty("Authorization", authorizationValue);
             connection.setDoOutput(true);
             OutputStream os = connection.getOutputStream();
+//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//            JsonElement je = JsonParser.parseString​(jsonRequest);
+//            String prettyJsonString = gson.toJson(je);
+//            log.trace("Request: \n" + prettyJsonString);
+//            log.trace("Is JSON valid: " + isValid(jsonRequest));
             byte[] input = jsonRequest.getBytes("utf-8");
             os.write(input, 0, input.length);
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
@@ -194,7 +205,6 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            log.trace("Request: \n" + jsonRequest);
             String responseText = response.toString().trim();
             log.trace("Response: \n" + responseText);
             if (checkJSON && !Mapper.isJSON(responseText)) {
@@ -250,6 +260,15 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             log.error("Error generating the json: " + jpe);
         }
         return null;
+    }
+
+    private boolean isValid(String json) {
+        try {
+            JsonParser.parseString(json);
+        } catch (JsonSyntaxException e) {
+            return false;
+        }
+        return true;
     }
 
 }

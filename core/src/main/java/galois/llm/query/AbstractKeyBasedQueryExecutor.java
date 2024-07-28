@@ -11,6 +11,7 @@ import java.util.*;
 import static galois.llm.query.utils.QueryUtils.*;
 import galois.prompt.EPrompts;
 import galois.utils.Mapper;
+import static galois.utils.Mapper.toCleanJsonList;
 
 @Slf4j
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
@@ -57,6 +58,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 List<String> currentKeys = getFirstPrompt().getKeyParser().parse(response);
                 log.debug("Parsed keys are: {}", currentKeys);
                 if (currentKeys.isEmpty()) break; // avoid other requests
+                String cleanedResponse = toCleanJsonList(response);
                 keys.addAll(currentKeys);
             } catch (Exception e) {
                 log.debug("Key prompt is: \n" + userMessage);

@@ -1,5 +1,6 @@
 package galois.optimizer.optimizations;
 
+import com.galois.sqlparser.WhereParser;
 import galois.llm.algebra.LLMScan;
 import galois.llm.query.IQueryExecutor;
 import galois.optimizer.IOptimization;
@@ -15,10 +16,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static galois.optimizer.PromptOptimizer.optimizePrompt;
+import java.util.ArrayList;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 
 @Slf4j
 @AllArgsConstructor
 public class SingleConditionPushdown implements IOptimization {
+
     private final net.sf.jsqlparser.expression.Expression pushdownCondition;
     private final List<net.sf.jsqlparser.expression.Expression> remainingConditions;
     private final String operation;
@@ -38,8 +42,7 @@ public class SingleConditionPushdown implements IOptimization {
     private void checkQuery(IAlgebraOperator query) {
         boolean wrongInstance = !(query instanceof Select);
         boolean wrongChild = query.getChildren().size() != 1 && query.getChildren().get(0) instanceof LLMScan;
-        if (wrongInstance || wrongChild)
-            throw new OptimizerException("Cannot apply SingleConditionPushdown to query: " + query);
+        if (wrongInstance || wrongChild) throw new OptimizerException("Cannot apply SingleConditionPushdown to query: " + query);
     }
 
     private IAlgebraOperator toOptimizedScan(IDatabase database, LLMScan scan) {
@@ -48,7 +51,10 @@ public class SingleConditionPushdown implements IOptimization {
 
         String conditionAsString = pushdownCondition.toString();
         // TODO: Add this to utility (same code in FilterParser.java)
-        Expression pushdownExpression = new Expression(cleanExpression(conditionAsString));
+        log.debug("Condition as String: " + conditionAsString);
+        List<Expression> expressions = toSpeedyExpression(List.of(pushdownCondition), tableAlias);
+        Expression pushdownExpression = expressions.get(0);
+//        Expression pushdownExpression = new Expression(cleanExpression(conditionAsString));
         log.debug("Optimized pushdown expression: {}", pushdownExpression);
         addAllAttributesToExpression(pushdownExpression, table, tableAlias);
 
@@ -63,16 +69,24 @@ public class SingleConditionPushdown implements IOptimization {
     }
 
     private Select toOptimizedSelect(IDatabase database, LLMScan scan) {
-        if (this.operation == null || this.operation.isBlank()) return null;
+        if (this.operation == null || this.operation.isBlank()) {
+            return null;
+        }
         TableAlias tableAlias = scan.getTableAlias();
         ITable table = database.getTable(tableAlias.getTableName());
-        String replaceAlias = tableAlias.getAlias()+".";
+        String replaceAlias = tableAlias.getAlias() + ".";
         String cleanOperation = cleanExpression(operation);
-        String conditionsAsString = remainingConditions.stream()
+        log.debug("Clean Operation: " + cleanOperation);
+        List<Expression> remainingConditionsSpeedy = toSpeedyExpression(remainingConditions, tableAlias);
+        log.debug("Remaining Conditions Speedy: {}", remainingConditionsSpeedy);
+        String conditionsAsString = remainingConditionsSpeedy.stream()
                 .map(Object::toString)
-                .map(c->c.replace(replaceAlias, ""))
+                .map(c -> c.replace(replaceAlias, ""))
+                .map(c -> c.replace(table.getName() + "_", ""))
                 .collect(Collectors.joining(cleanOperation));
-        Expression expression = new Expression(cleanExpression(conditionsAsString));
+        log.debug("Condition as string: {}", conditionsAsString);
+//        Expression expression = new Expression(cleanExpression(conditionsAsString));
+        Expression expression = new Expression(conditionsAsString);
         addAllAttributesToExpression(expression, table, tableAlias);
         log.debug("Optimized select expression: {}", expression);
         return new Select(expression);
@@ -94,5 +108,18 @@ public class SingleConditionPushdown implements IOptimization {
                 .replaceAll("=", "==")
                 .replaceAll("AND", "&&")
                 .replaceAll("OR", "||");
+    }
+
+    private List<Expression> toSpeedyExpression(List<net.sf.jsqlparser.expression.Expression> remainingConditions, TableAlias tableAlias) {
+        List<Expression> speedyExpressions = new ArrayList<>();
+        for (net.sf.jsqlparser.expression.Expression remainingCondition : remainingConditions) {
+            WhereParser parser = new WhereParser();
+            ExpressionList el = new ExpressionList(List.of(remainingCondition));
+            log.debug("Expression: " + remainingCondition);
+            WhereParser.WhereParseResult whereResult = parser.visit(el, tableAlias);
+            log.debug("Parsed expression: " + whereResult.expression());
+            speedyExpressions.add(whereResult.expression());
+        }
+        return speedyExpressions;
     }
 }

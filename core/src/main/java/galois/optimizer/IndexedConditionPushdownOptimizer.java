@@ -65,5 +65,5 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
             currentNode = currentNode.getChildren().isEmpty() ? null : currentNode.getChildren().get(0);
         }
         return root;
-    }
+    }    
 }

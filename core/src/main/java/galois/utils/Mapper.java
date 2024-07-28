@@ -1,7 +1,6 @@
 package galois.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -10,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import static galois.utils.FunctionalUtils.orElseThrow;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -74,10 +76,26 @@ public class Mapper {
         return getContentBetween(response, "{", "}");
     }
 
-    private static String toCleanJsonList(String response) {
+    public static String toCleanJsonList(String response) {
         String cleanContent = getContentBetween(response, "[", "]");
         if (isBetween(cleanContent, "[", "]")) return cleanContent;
-        String substring = cleanContent.substring(cleanContent.indexOf("["), cleanContent.lastIndexOf("}") + 1);
+        String substring = "";
+        if (cleanContent.contains("}")) {
+            substring = cleanContent.substring(cleanContent.indexOf("["), cleanContent.lastIndexOf("}") + 1);
+        } else {
+            Pattern pattern = Pattern.compile("\"(.*?)\"");
+            Matcher matcher = pattern.matcher(cleanContent);
+            List<String> keys = new ArrayList<>();
+            while(matcher.find()) {
+                keys.add(matcher.group(1));
+            }
+            for (String key : keys) {
+                substring += '"' + key + '"'+",\n";
+            }
+            substring = substring.substring(0, substring.length() - 2);
+            substring = "[" + substring + "\n";
+//            substring = cleanContent.substring(cleanContent.indexOf("["), cleanContent.lastIndexOf(",") + 1);
+        }
         String jsonList = substring + "]";
         log.debug("Repaired json list: {}", jsonList);
         return jsonList;
