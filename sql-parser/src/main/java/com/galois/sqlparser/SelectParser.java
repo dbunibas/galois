@@ -174,13 +174,13 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
             groupBy.addChild(currentRoot);
             currentRoot = groupBy;
         }
-        if (project != null) {
-            project.addChild(currentRoot);
-            currentRoot = project;
-        }
         if (orderBy != null) {
             orderBy.addChild(currentRoot);
             currentRoot = orderBy;
+        }
+        if (project != null) {
+            project.addChild(currentRoot);
+            currentRoot = project;
         }
         if (limit != null) {
             limit.addChild(currentRoot);
