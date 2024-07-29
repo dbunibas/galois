@@ -183,6 +183,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             return null;
         }
         try {
+            Thread.sleep(1000); // 1 req per second
             URL url = URI.create(this.endPoint).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(this.connectionTimeout);
