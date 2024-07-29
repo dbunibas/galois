@@ -21,8 +21,8 @@ import galois.llm.query.ISQLExecutor;
 import galois.llm.query.utils.QueryUtils;
 import static galois.llm.query.utils.QueryUtils.generateJsonSchemaListFromAttributes;
 import static galois.llm.query.utils.QueryUtils.getCleanAttributes;
-import static galois.llm.query.utils.QueryUtils.mapToTuple;
 import static galois.utils.FunctionalUtils.orElse;
+import galois.utils.GaloisDebug;
 import java.util.ArrayList;
 import java.util.Map;
 import speedy.model.database.AttributeRef;
@@ -109,6 +109,8 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                 }
             }
         }
+        GaloisDebug.log("LLMScan results:");
+        GaloisDebug.log(tuples);
         return tuples;
     }
 

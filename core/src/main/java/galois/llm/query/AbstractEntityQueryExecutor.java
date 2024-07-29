@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static galois.llm.query.utils.QueryUtils.*;
 import galois.prompt.EPrompts;
+import galois.utils.GaloisDebug;
 import speedy.model.expressions.Expression;
 
 @Slf4j
@@ -79,6 +80,8 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 }
             }
         }
+        GaloisDebug.log("LLMScan results:");
+        GaloisDebug.log(tuples);
         return tuples;
     }
 
