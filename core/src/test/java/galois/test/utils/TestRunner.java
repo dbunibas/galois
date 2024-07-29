@@ -13,6 +13,7 @@ import galois.test.experiments.json.parser.ExperimentParser;
 import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
+import galois.utils.GaloisDebug;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedWriter;
@@ -28,6 +29,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 public class TestRunner {
+
     // TODO: Turn into service
     public void execute(
             String path,
@@ -57,7 +59,13 @@ public class TestRunner {
                 List<IOptimizer> optimizers = loadOptimizers(variant);
                 experiment.setOptimizers(optimizers);
             }
-
+            if (experiment.getOptimizers() != null && !experiment.getOptimizers().isEmpty()) {
+                log.debug("Optimizers:");
+                for (IOptimizer optimizer : experiment.getOptimizers()) {
+                    log.debug(optimizer.getName());
+                }
+            }
+            GaloisDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
             var expResults = experiment.execute();
@@ -67,7 +75,7 @@ public class TestRunner {
             }
 
             // Extract numbers after "Only results, same order: \n"
-            String regex = "Only results, same order: \\n([\\d, ]+)-*$";
+            /*String regex = "Only results, same order: \\n([\\d, ]+)-*$";
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(results.toString());
 
@@ -76,6 +84,39 @@ public class TestRunner {
                 saveToFile(extractedResults, resultFileDir, resultFileDir + resultFile);
             } else {
                 log.error("Could not extract results from log entry.");
+            } */
+        } catch (Exception ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+//            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+        }
+    }
+
+    public void executeSingle(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, IOptimizer optimizer) {
+        try {
+            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            log.debug("SQL query is {}", experiment.getQuery().getSql());
+
+            IQueryExecutor queryExecutor = experiment.getOperatorsConfiguration().getScan().getQueryExecutor();
+            if (queryExecutor instanceof INLQueryExectutor nlExecutor) {
+                nlExecutor.setNaturalLanguagePrompt(variant.getPrompt());
+                experiment.setOptimizers(null);
+            } else if (queryExecutor instanceof ISQLExecutor sqlExecutor) {
+                sqlExecutor.setSql(variant.getQuerySql());
+                experiment.setOptimizers(null);
+            } else {
+                experiment.setOptimizers(List.of(optimizer));
+            }
+            GaloisDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
+            metrics.clear();
+            metrics.addAll(experiment.getMetrics());
+            var expResults = experiment.executeSingle(optimizer);
+            log.info("Results: {}", expResults);
+            for (String expKey : expResults.keySet()) {
+                queryResults.put(type + "-" + expKey, expResults.get(expKey));
             }
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);

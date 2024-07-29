@@ -99,6 +99,35 @@ public final class Experiment {
         }
         return results;
     }
+    
+    @SuppressWarnings("unchecked")
+    public Map<String, ExperimentResults> executeSingle(IOptimizer optimizer) {
+        Map<String, ExperimentResults> results = new HashMap<>();
+        IAlgebraOperator operator = parse();
+        log.info("Query operator {}", operator);
+        DBMSDB dbmsDatabase = createDatabaseForExpected();
+        String queryToExecute = query.getSql().replace("target.", "public.");
+        log.debug("Query for results: \n" + queryToExecute);
+        ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
+        ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
+        List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
+        expectedITerator.close();
+        log.info("Expected size: " + expectedResults.size());
+        if (optimizer == null) {
+            GaloisDebug.log("Unoptimized");
+            var unoptimizedResult = executeUnoptimizedExperiment(operator, expectedResults);
+            GaloisDebug.log("Speedy Results:");
+            GaloisDebug.log(unoptimizedResult.toDebugString());
+            results.put("Unoptimized", unoptimizedResult);
+        } else {
+            GaloisDebug.log(optimizer.getName());
+            var result = executeOptimizedExperiment(operator, optimizer, expectedResults);
+            GaloisDebug.log("Speedy Results:");
+            GaloisDebug.log(result.toDebugString());
+            results.put(optimizer.getName(), result);
+        }
+        return results;
+    }
 
     public IAlgebraOperator parse() {
 //        Previous strategy: use PostgreSQL query plan parser

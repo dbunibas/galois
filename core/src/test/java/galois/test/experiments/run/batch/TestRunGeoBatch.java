@@ -1,7 +1,10 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
+import galois.optimizer.IOptimizer;
+import galois.optimizer.IndexedConditionPushdownOptimizer;
 import galois.test.experiments.ExperimentResults;
+import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
@@ -46,14 +49,14 @@ public class TestRunGeoBatch {
                 .queryNum("Q1")
                 .querySql("SELECT state_name, population, area FROM target.usa_state")
                 .prompt("List the state name, population and area from USA states")
-                .optimizers(singleConditionOptimizers)
+                .optimizers(List.of())
                 .build();
 
         ExpVariant q2 = ExpVariant.builder()
                 .queryNum("Q2")
                 .querySql("SELECT us.state_name, us.capital, us.area FROM target.usa_state us")
                 .prompt("List the state name, capital and area from USA states")
-                .optimizers(singleConditionOptimizers)
+                .optimizers(List.of())
                 .build();
 
         ExpVariant q3 = ExpVariant.builder()
@@ -134,5 +137,22 @@ public class TestRunGeoBatch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
+    }
+
+    @Test
+    public void testSingle() {
+        // TO DEBUG single experiment
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        ExpVariant variant = variants.get(0);
+        String configPath = "/geo_data/geo-llama3-table-experiment.json";
+        String type = "TABLE";
+        int indexSingleCondition = 0;
+        IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
+        IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
+        IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
+        IOptimizer nullOptimizer = null; // to execute unomptimize experiments
+        testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
     }
 }

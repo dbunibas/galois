@@ -1,7 +1,10 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
+import galois.optimizer.IOptimizer;
+import galois.optimizer.IndexedConditionPushdownOptimizer;
 import galois.test.experiments.ExperimentResults;
+import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
@@ -20,6 +23,7 @@ import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
 public class TestRunVenezuelaPresidentsBatch {
+
     private static final String EXP_NAME = "VENEZUELA_PRESIDENTS";
     private static final String RESULT_FILE_DIR = "src/test/resources/results/";
     private static final String RESULT_FILE = "venezuela-presidents-results.txt";
@@ -133,5 +137,22 @@ public class TestRunVenezuelaPresidentsBatch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
+    }
+
+    @Test
+    public void testSingle() {
+        // TO DEBUG single experiment
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        ExpVariant variant = variants.get(0);
+        String configPath = "/presidents/presidents-llama3-table-experiment.json";
+        String type = "TABLE";
+        int indexSingleCondition = 0;
+        IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
+        IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
+        IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
+        IOptimizer nullOptimizer = null; // to execute unomptimize experiments
+        testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
     }
 }
