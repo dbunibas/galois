@@ -101,6 +101,24 @@ public class ExperimentResults {
         return result;
     }
     
+    public String toDebugString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append("\n");
+        sb.append("Expected results:\n").append(expectedResults).append("\n");
+        sb.append("Actual results:\n").append(actualResults).append("\n");
+        sb.append("Scores:\n");
+        for (int i = 0; i < scores.size(); i++) {
+            sb.append(metrics.get(i).getName()).append(": ").append(scores.get(i)).append("\n");
+        }
+        double totalTokens = llmTokensInput + llmTokensOutput;
+        sb.append("LLM Total Requests: ").append(llmRequest).append("\n");
+        sb.append("LLM Total Input Tokens: ").append(llmTokensInput).append("\n");
+        sb.append("LLM Total Output Tokens: ").append(llmTokensOutput).append("\n");
+        sb.append("LLM Total Tokens: ").append(totalTokens).append("\n");
+        sb.append("LLM Time (ms): ").append(timeMs).append("\n");
+        return sb.toString();
+    }
+    
     public Map<String,Double> getMetrics() {
         Map<String, Double> map = new HashMap<>();
         for(int i = 0; i < metrics.size(); i++) {

@@ -3,49 +3,33 @@ package galois.test.experiments;
 import com.galois.sqlparser.SQLQueryParser;
 import com.galois.sqlparser.ScanNodeFactory;
 import com.galois.sqlparser.TableAliasQueryParser;
-import galois.Constants;
 import galois.llm.algebra.LLMScan;
 import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimizer;
-import galois.parser.IQueryPlanParser;
-import galois.planner.IQueryPlanner;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.utils.TestUtils;
-import galois.utils.excelreport.ReportExcel;
-import galois.utils.excelreport.ReportRow;
-import galois.utils.excelreport.SheetReport;
-import galois.utils.excelreport.persistance.DAOReportExcel;
-import java.awt.Desktop;
+import galois.utils.GaloisDebug;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.sql.ResultSet;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.jdom2.Document;
 import speedy.model.algebra.IAlgebraOperator;
-import speedy.model.algebra.Scan;
 import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.database.Tuple;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
+import lombok.ToString;
 import org.apache.commons.io.FileUtils;
-import speedy.OperatorFactory;
 import speedy.exceptions.DAOException;
 import speedy.exceptions.DBMSException;
 import speedy.model.database.Attribute;
@@ -57,16 +41,18 @@ import speedy.persistence.Types;
 import speedy.persistence.file.CSVFile;
 import speedy.persistence.relational.AccessConfiguration;
 import speedy.persistence.relational.QueryManager;
-import speedy.utility.DBMSUtility;
 
 @AllArgsConstructor
 @Data
 @Slf4j
+@ToString(onlyExplicitlyIncluded = true)
 public final class Experiment {
 
+    @ToString.Include
     private String name;
     private final String dbms;
     private final List<IMetric> metrics;
+    @ToString.Include
     private List<IOptimizer> optimizers;
     private final OperatorsConfiguration operatorsConfiguration;
     private final Query query;
@@ -97,17 +83,23 @@ public final class Experiment {
 //        }
 //        log.info("-----------------------------");
 
+        GaloisDebug.log("Unoptimized");
         var unoptimizedResult = executeUnoptimizedExperiment(operator, expectedResults);
+        GaloisDebug.log("Speedy Results:");
+        GaloisDebug.log(unoptimizedResult.toDebugString());
         results.put("Unoptimized", unoptimizedResult);
 
         List<IOptimizer> optimizersList = optimizers == null ? List.of() : optimizers;
         for (IOptimizer optimizer : optimizersList) {
+            GaloisDebug.log(optimizer.getName());
             var result = executeOptimizedExperiment(operator, optimizer, expectedResults);
+            GaloisDebug.log("Speedy Results:");
+            GaloisDebug.log(result.toDebugString());
             results.put(optimizer.getName(), result);
         }
         return results;
     }
-    
+
     public IAlgebraOperator parse() {
 //        Previous strategy: use PostgreSQL query plan parser
 //        IQueryPlanner<Document> planner = (IQueryPlanner<Document>) PlannerParserFactory.getPlannerFor(dbms, query.getAccessConfiguration());
@@ -273,6 +265,5 @@ public final class Experiment {
         }
         return null;
     }
-
 
 }

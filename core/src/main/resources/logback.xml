@@ -6,14 +6,35 @@
             <pattern>%gray(%highlight(%-5level %logger{15})) - %msg %n</pattern>
         </encoder>
     </appender>
+    <appender name="EXP-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/your_log_dir/logs/debug-exp-${bySecond}.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
 
     <root level="WARN">
         <appender-ref ref="stdout"/>
     </root>
 
-    <logger name="galois.llm" level="DEBUG"/>
-    <logger name="galois.optimizer" level="DEBUG"/>
+    <logger name="galois.llm" level="ERROR"/>
+    <!--<logger name="galois.optimizer" level="DEBUG"/>-->
     <logger name="galois.parser" level="DEBUG"/>
+    <logger name="galois.optimizer.optimizations" level="DEBUG"/>
+    <!--<logger name="speedy.model.algebra.operators.EvaluateExpression" level="DEBUG"/>-->
+    <!--<logger name="speedy.model.database.operators.mainmemory.ImportCSVFileMainMemory" level="DEBUG"/>-->
+    <!--<logger name="speedy.persistence.DAOMainMemoryDatabase" level="DEBUG"/>-->
+    <!--<logger name="speedy.model.algebra.operators.sql.SQLCreateTable" level="DEBUG"/>-->
+    <!--<logger name="galois.llm.models.TogetherAIModel" level="TRACE"/>-->
+    <logger name="galois.llm.query.AbstractKeyBasedQueryExecutor" level="DEBUG"/>
+    <logger name="galois.llm.query.AbstractEntityQueryExecutor" level="DEBUG"/>
+    <logger name="galois.llm.query.togetherai.llama3.TogetheraiLLama3KeyQueryExecutor" level="DEBUG"/>
+    <logger name="galois.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor" level="DEBUG"/>
     <logger name="galois.test" level="DEBUG"/>
+    
+    <logger name="galois.utils.GaloisDebug" level="TRACE" additivity="false">
+        <appender-ref ref="EXP-FILE"/>
+    </logger>
 
 </configuration>

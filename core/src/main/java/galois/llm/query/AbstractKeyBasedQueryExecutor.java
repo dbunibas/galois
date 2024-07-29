@@ -10,6 +10,7 @@ import java.util.*;
 
 import static galois.llm.query.utils.QueryUtils.*;
 import galois.prompt.EPrompts;
+import galois.utils.GaloisDebug;
 import galois.utils.Mapper;
 import static galois.utils.Mapper.toCleanJsonList;
 
@@ -38,7 +39,10 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         Key primaryKey = database.getPrimaryKey(table.getName());
         Set<String> keyValues = getKeyValues(table, primaryKey, chain);
 
-        return keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
+        List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
+        GaloisDebug.log("LLMScan results:");
+        GaloisDebug.log(tuples);
+        return tuples;
     }
 
     private Set<String> getKeyValues(ITable table, Key primaryKey, ConversationalChain chain) {
