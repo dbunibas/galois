@@ -92,6 +92,27 @@ public class TestParseOrderBy {
         logTuples(tuples);
     }
 
+    @Test
+    public void testOrderByWithProject() {
+        int limitSize = 1;
+        String sql = String.format("SELECT t.name from %s t where t.salary > 5000 order by t.salary desc limit %d", TABLE_NAME, limitSize);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        assertInstanceOf(Limit.class, root);
+        Limit limit = (Limit) root;
+        assertEquals(limitSize, limit.getSize());
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        assertEquals(limitSize, tuples.size());
+
+        Tuple tuple = tuples.getFirst();
+        assertEquals("oid", tuple.getCells().getFirst().getAttribute());
+        assertEquals("RafaelNadal", tuple.getCells().getLast().getValue().getPrimitiveValue());
+    }
+
     private void logTuples(List<Tuple> tuples) {
         tuples.forEach(t -> log.info("{}", t));
     }

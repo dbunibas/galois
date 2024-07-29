@@ -122,7 +122,7 @@ public class TestParseGroupBy {
     @Test
     public void testGroupByOrderByLimit() {
         int limitSize = 10;
-        String sql = String.format("select t.dept, count(t.dept) as numDepts from %s t group by t.dept order by t.numDepts desc limit %s", TABLE_NAME, limitSize);
+        String sql = String.format("select t.dept, count(t.dept) as numDepts from %s t group by t.dept order by numDepts desc limit %s", TABLE_NAME, limitSize);
 
         IAlgebraOperator root = new SQLQueryParser().parse(sql);
         assertNotNull(root);

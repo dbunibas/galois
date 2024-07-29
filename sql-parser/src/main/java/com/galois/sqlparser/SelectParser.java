@@ -98,10 +98,10 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                 SelectItem<?> item = plainSelect.getSelectItems().get(i);
                 AttributeRef attributeRef = projectionAttributes.get(i).getAttributeRef();
                 AttributeRef newAttribute = attributeRef;
-                if(item.getAlias() != null){
-                    if(attributeRef instanceof VirtualAttributeRef){
+                if (item.getAlias() != null) {
+                    if (attributeRef instanceof VirtualAttributeRef) {
                         newAttribute = new VirtualAttributeRef(tableAlias, item.getAlias().getName(), ((VirtualAttributeRef) attributeRef).getType());
-                    }else {
+                    } else {
                         newAttribute = new AttributeRef(tableAlias, item.getAlias().getName());
                     }
                 }
@@ -174,11 +174,45 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
             groupBy.addChild(currentRoot);
             currentRoot = groupBy;
         }
+        boolean shouldAddFullProject = true;
         if (orderBy != null) {
+            // Check if orderBy needs partial aliased projection attributes
+            if (project != null) {
+                boolean isProjectionAggregative = projectionAttributes.stream().anyMatch(ProjectionAttribute::isAggregative);
+                List<AttributeRef> projectAttributes = project.getAttributes(null, null);
+                List<AttributeRef> newAttributes = project.getNewAttributes();
+
+                List<AttributeRef> orderByExclusiveAttributes = orderBy.getAttributes(null, null).stream()
+                        .filter(a -> projectAttributes.stream().noneMatch(pa -> pa.equalsModuloClass(a)) && newAttributes.stream().noneMatch(na -> na.equalsModuloClass(a)))
+                        .toList();
+                log.info("Exclusive attributes {}", orderByExclusiveAttributes);
+
+                if (!orderByExclusiveAttributes.isEmpty()) {
+                    List<ProjectionAttribute> partialProjectionAttributes = Stream.concat(
+                            projectionAttributes.stream(),
+                            orderByExclusiveAttributes.stream().map(a -> isProjectionAggregative ? new ProjectionAttribute(new ValueAggregateFunction(a)) : new ProjectionAttribute(a))
+                    ).distinct().toList();
+                    List<AttributeRef> partialAliases = Stream.concat(
+                            project.getNewAttributes().stream(),
+                            orderByExclusiveAttributes.stream()
+                    ).distinct().toList();
+                    log.info("Partial projection attributes {}", partialProjectionAttributes);
+                    log.info("Partial aliases {}", partialAliases);
+
+                    Project partialProject = new Project(partialProjectionAttributes, partialAliases, false);
+                    partialProject.addChild(currentRoot);
+                    currentRoot = partialProject;
+                } else {
+                    shouldAddFullProject = false;
+                    project.addChild(currentRoot);
+                    currentRoot = project;
+                }
+            }
+
             orderBy.addChild(currentRoot);
             currentRoot = orderBy;
         }
-        if (project != null) {
+        if (project != null && shouldAddFullProject) {
             project.addChild(currentRoot);
             currentRoot = project;
         }
