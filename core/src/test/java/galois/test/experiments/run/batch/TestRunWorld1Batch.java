@@ -47,69 +47,110 @@ public class TestRunWorld1Batch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select m.originaltitle from target.movie m where m.director='Richard Thorpe'")
-                .prompt("List the title of the movies directed by Richard Thorpe")
+                .querySql("select c.name from target.city c where c.population > 160000 and c.population < 900000")
+                .prompt("What are the cities whose population is between 160000 and 900000?")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q2 = ExpVariant.builder()
                 .queryNum("Q2")
-                .querySql("select m.originaltitle from target.movie m where m.director='Steven Spielberg'")
-                .prompt("List the title of the movies directed by Steven Spielberg")
+                .querySql("select sum(SurfaceArea) from target.country where region='Caribbean'")
+                .prompt("What is the total surface area of the countries in the Caribbean region?")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("select m.originaltitle, m.startyear from target.movie m where m.director='Richard Thorpe' AND m.startyear > 1950")
-                .prompt("List the title and year of the movies directed by Richard Thorpe after the 1950")
+                .querySql("select distinct CountryCode from target.countrylanguage where language != 'English'")
+                .prompt("What are the country codes of countries where people use languages other than English?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q4 = ExpVariant.builder()
                 .queryNum("Q4")
-                .querySql("select m.originaltitle, m.startyear from target.movie m where m.director='Steven Spielberg' AND m.startyear > 2000")
-                .prompt("List the title and year of the movies directed by Steven Spielberg after the 2000")
+                .querySql("select sum(population), max(gnp) from target.country where continent='Asia'")
+                .prompt("What is the total population and maximum GNP in Asia?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q5 = ExpVariant.builder()
                 .queryNum("Q5")
-                .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear from target.movie m where m.director='Steven Spielberg' AND m.startyear > 2000")
-                .prompt("List the title, year, genres and birthyear of the movies directed by Steven Spielberg after the 2000")
+                .querySql("select sum(population) from target.city where district = 'Gerderland'")
+                .prompt("How many people live in Gelderland district?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
-                .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear, m.deathyear, m.runtimeminutes from target.movie m where m.director = 'Steven Spielberg' AND m.startyear > 1990 AND m.endyear < 2000")
-                .prompt("List the title, year, genres, birthyear, deathyear and runtimeminutes of the movies directed by Steven Spielberg between the 1990 and the 2000")
+                .querySql("select avg(LifeExpectancy) from target.country where continent = 'Africa' AND GovernmentForm = 'Republic'")
+                .prompt("What is the average life expectancy in African countries that are republics?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q7 = ExpVariant.builder()
                 .queryNum("Q7")
-                .querySql("select m.startyear, count(*) as numMovies from target.movie m where m.director = 'Steven Spielberg' AND m.startyear is not null group by m.startyear")
-                .prompt("List the year and the number of produced movies in that year directed by Steven Spielberg.")
+                .querySql("select count(distinct GovernmentForm) from target.country where continent = 'Africa'")
+                .prompt("How many type of governments are in Africa?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q8 = ExpVariant.builder()
                 .queryNum("Q8")
-                .querySql("select m.startyear, count(*) as count from target.movie m where m.director = 'Tim Burton' group by m.startyear order by count desc limit 1")
-                .prompt("Return the most prolific year of Tim Burton")
-                .optimizers(singleConditionOptimizers)
-                .build();
-
-        // FIXME: Which Speedy tree can execute this query?
-        ExpVariant q9 = ExpVariant.builder()
-                .queryNum("Q9")
-                .querySql("select m.director, (m.startyear - m.birthyear) as director_age from target.movie m where m.startyear is not null AND m.birthyear is not null order by director_age desc limit 1")
-                .prompt("Return the oldest film director")
+                .querySql("select name from target.country where IndepYear > 1950")
+                .prompt("What are the names of countries that became independent after 1950?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8);
+        ExpVariant q9 = ExpVariant.builder()
+                .queryNum("Q9")
+                .querySql("select avg(gnp), sum(population) from target.country where GovernmentForm = 'US Territory'")
+                .prompt("What is the average GNP and total population in all nations whose government is US territory?")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+//        ExpVariant q10 = ExpVariant.builder()
+//                .queryNum("Q10")
+//                .querySql("select t2.language from country as t1, countrylanguage as t2 where t1.code = t2.countrycode on t1.code = t2.countrycode where t1.name = 'Aruba' order by percentage desc limit 1")
+//                .prompt("Which language is the most popular in Aruba?")
+//                .optimizers(multipleConditionsOptimizers)
+//                .build();
+
+//        ExpVariant q11 = ExpVariant.builder()
+//                .queryNum("Q11")
+//                .querySql("select distinct t1.region from country as t1 join countrylanguage as t2 on t1.code = t2.countrycode where t2.language = 'English' or t2.language = 'Dutch'")
+//                .prompt("What are the regions that use English or Dutch?")
+//                .optimizers(multipleConditionsOptimizers)
+//                .build();
+
+//        ExpVariant q12 = ExpVariant.builder()
+//                .queryNum("Q12")
+//                .querySql("select t2.language from country as t1 join countrylanguage as t2 on t1.code = t2.countrycode where t1.headofstate = 'Beatrix' and t2.isofficial = 'T'")
+//                .prompt("What is the official language spoken in the country whose head of state is Beatrix?")
+//                .optimizers(multipleConditionsOptimizers)
+//                .build();
+
+//        ExpVariant q13 = ExpVariant.builder()
+//                .queryNum("Q13")
+//                .querySql("select count(distinct t1.continent) from country as t1 join countrylanguage as t2 on t1.code = t2.countrycode where t2.language = 'Chinese'")
+//                .prompt("What is the number of distinct continents where Chinese is spoken?")
+//                .optimizers(multipleConditionsOptimizers)
+//                .build();
+
+//        ExpVariant q14 = ExpVariant.builder()
+//                .queryNum("Q14")
+//                .querySql("select region from country as t1 join city as t2 on t1.code = t2.countrycode where t2.name = 'Kabul'")
+//                .prompt("Which region is the city Kabul located in?")
+//                .optimizers(multipleConditionsOptimizers)
+//                .build();
+
+//        ExpVariant q15 = ExpVariant.builder()
+//                .queryNum("Q15")
+//                .querySql("select count(*) from country as t1 join countrylanguage as t2 on t1.code = t2.countrycode where t1.name = 'Afghanistan' and isofficial = 'T'")
+//                .prompt("How many official languages does Afghanistan have?")
+//                .optimizers(multipleConditionsOptimizers)
+//                .build();
+
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9);
     }
 
     @Test
