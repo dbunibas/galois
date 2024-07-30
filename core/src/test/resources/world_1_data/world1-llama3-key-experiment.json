@@ -1,0 +1,192 @@
+{
+  "name": "World1-{{QN}} Experiment-key",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "optimizers": [
+    "AllConditionsPushdownOptimizer",
+    "SingleConditionsOptimizerFactory"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key",
+      "maxIterations": 10
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "world_1",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "city",
+          "attributes": [
+            {
+              "name": "ID",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "Name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "CountryCode",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "District",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Population",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "sqlite_sequence",
+          "attributes": [
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "seq",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "country",
+          "attributes": [
+            {
+              "name": "Code",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "Name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Continent",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Region",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "SurfaceArea",
+              "type": "FLOAT",
+              "nullable": false
+            },
+            {
+              "name": "IndepYear",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "Population",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "LifeExpectancy",
+              "type": "FLAOT",
+              "nullable": true
+            },
+            {
+              "name": "GNP",
+              "type": "FLOAT",
+              "nullable": true
+            },
+            {
+              "name": "GNPOld",
+              "type": "FLOAT",
+              "nullable": true
+            },
+            {
+              "name": "LocalName",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "GovernmentForm",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "HeadOfState",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "Capital",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "Code2",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "country_language",
+          "attributes": [
+            {
+              "name": "Country_Code",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "Language",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "IsOfficial",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Percentage",
+              "type": "FLOAT",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/world_1_data/world1-data"
+  }
+}
