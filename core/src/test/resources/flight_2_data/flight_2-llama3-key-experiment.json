@@ -1,0 +1,121 @@
+{
+  "name": "Flight_2-{{QN}} Experiment-key",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "optimizers": [
+    "AllConditionsPushdownOptimizer",
+    "SingleConditionsOptimizerFactory"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key",
+      "maxIterations": 10
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "flight_2",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "airlines",
+          "attributes": [
+            {
+              "name": "uid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "Airline",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Abbreviation",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Country",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "airports",
+          "attributes": [
+            {
+              "name": "City",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "AirportCode",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "AirportName",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "Country",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "CountryAbbrev",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "flights",
+          "attributes": [
+            {
+              "name": "Airline",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "FlightNo",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "SourceAirport",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "DestAirport",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+  },
+    "results": "/flight_2/flight_2-data"
+  }
+}

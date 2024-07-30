@@ -1,0 +1,180 @@
+{
+  "name": "Flight_4-{{QN}} Experiment-key-scan",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "optimizers": [
+    "AllConditionsPushdownOptimizer",
+    "SingleConditionsOptimizerFactory"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key-scan",
+      "maxIterations": 10
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "flight_4",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "airlines",
+          "attributes": [
+            {
+              "name": "alid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "iata",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "icao",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "callsign",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "country",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "active",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "airports",
+          "attributes": [
+            {
+              "name": "apid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "city",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "country",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "x",
+              "type": "DOUBLE",
+              "nullable": false
+            },
+            {
+              "name": "y",
+              "type": "DOUBLE",
+              "nullable": false
+            },
+            {
+              "name": "elevation",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "iata",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "icao",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "routes",
+          "attributes": [
+            {
+              "name": "read",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "dstp_apid",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "dst_apid",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "dst_ap",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "src_apid",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "src_ap",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "alid",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "airline",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "codeshare",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        }
+      ]
+  },
+    "results": "/flight_4/flight_4-data"
+  }
+}

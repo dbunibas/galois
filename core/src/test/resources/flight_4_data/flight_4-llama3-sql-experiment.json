@@ -1,5 +1,5 @@
 {
-  "name": "Flight 4 llama3 Experiment",
+  "name": "Flight_4-{{QN}} Experiment-sql",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -8,18 +8,22 @@
     "CellF1Score",
     "CellSimilarityF1Score",
     "TupleCardinality",
-    "TupleOrder",
     "TupleConstraint",
     "TupleSimilarityConstraint"
+  ],
+  "optimizers": [
+    "AllConditionsPushdownOptimizer",
+    "SingleConditionsOptimizerFactory"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "OllamaLlama3TableQueryExecutor"
+      "queryExecutor": "togetherai-llama3-nl",
+      "maxIterations": 10
     }
   },
   "query": {
-    "sql": "select * from target.olympics_tokyo_2021 o order by o.rank",
+    "sql": "{{QUERY-SQL}}",
     "schema": {
       "name": "flight_4",
       "schema": "target",
@@ -170,7 +174,7 @@
           ]
         }
       ]
-    },
-    "results": "/flight_4_data/flight_4"
+  },
+    "results": "/flight_4/flight_4-data"
   }
 }
