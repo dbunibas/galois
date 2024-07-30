@@ -52,7 +52,7 @@ public class TestParseSelect {
         assertEquals(table.getSize(), tuples.size());
         tuples.forEach(t -> assertEquals(table.getAttributes().size() + 1, t.getCells().size()));
 
-         logTuples(tuples);
+        logTuples(tuples);
     }
 
     @Test
@@ -188,6 +188,32 @@ public class TestParseSelect {
         assertEquals(100000.0, tuple.getCells().getFirst().getValue().getPrimitiveValue());
 
         logTuples(tuples);
+    }
+
+    @Test
+    public void testSelectUsingSubtraction() {
+        String sql = String.format("select (t.salary - t.salary) as difference from %s t", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+
+        tuples.forEach(t -> assertEquals(0.0, t.getCells().getLast().getValue().getPrimitiveValue()));
+    }
+
+    @Test
+    public void testSelectUsingSubtractionWithOrderBy() {
+        String sql = String.format("select (t.salary - t.salary) as difference from %s t order by difference", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+
+        tuples.forEach(t -> assertEquals(0.0, t.getCells().getLast().getValue().getPrimitiveValue()));
     }
 
     private void logTuples(List<Tuple> tuples) {

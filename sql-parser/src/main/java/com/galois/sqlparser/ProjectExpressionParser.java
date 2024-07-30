@@ -13,9 +13,8 @@ import speedy.model.algebra.aggregatefunctions.*;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.TableAlias;
 import speedy.model.database.VirtualAttributeRef;
+import speedy.model.expressions.ExpressionAttributeRef;
 import speedy.persistence.Types;
-
-import java.util.List;
 
 @Slf4j
 public class ProjectExpressionParser extends ExpressionVisitorAdapter<ProjectionAttribute> {
@@ -40,6 +39,62 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
                     function.getName()
             ));
         };
+    }
+
+    @Override
+    public <S> ProjectionAttribute visit(ExpressionList<? extends Expression> expressionList, S context) {
+        if (expressionList.size() > 1) {
+            throw new UnsupportedOperationException(String.format("Cannot parse project expression with size %d", expressionList.size()));
+        }
+        Expression expression = expressionList.getFirst();
+        ProjectionAttribute projectionAttribute = expression.accept(this, context);
+        if (projectionAttribute == null) {
+            throw new UnsupportedOperationException(String.format("Cannot parse expression %s", expression.getClass()));
+        }
+        return projectionAttribute;
+    }
+
+
+    // FIXME: Refactor using a common expression parser (similar to WhereParser.parseBinaryExpression)
+    @Override
+    public <S> ProjectionAttribute visit(Subtraction subtraction, S context) {
+        TableAlias tableAlias = contextToTableAlias(context);
+        Expression leftExpression = subtraction.getLeftExpression();
+        Expression rightExpression = subtraction.getRightExpression();
+        String sqlExpressionWithoutAliases = String.format(
+                "%s %s %s",
+                expressionToValue(leftExpression),
+                subtraction.getStringExpression(),
+                expressionToValue(rightExpression)
+        );
+        String jepExpression = sqlToJEPExpressionString(sqlExpressionWithoutAliases);
+        log.debug("Subtraction jepExpression {}", jepExpression);
+        speedy.model.expressions.Expression expression = new speedy.model.expressions.Expression(jepExpression);
+        setVariableDescription(leftExpression, expression, tableAlias);
+        setVariableDescription(rightExpression, expression, tableAlias);
+        ExpressionAttributeRef expressionAttributeRef = new ExpressionAttributeRef(expression, tableAlias, "diff", Types.REAL);
+        return new ProjectionAttribute(expressionAttributeRef);
+    }
+
+    private Object expressionToValue(net.sf.jsqlparser.expression.Expression expression) {
+        return expression instanceof Column ? ((Column) expression).getColumnName() : expression.toString();
+    }
+
+    private String sqlToJEPExpressionString(String sqlExpression) {
+        return sqlExpression
+                .replaceAll("'", "\"")
+                // Spaces make sure '=' is not replaced when used in conjunction with '>' o '<'
+                .replaceAll(" = ", " == ")
+                .replaceAll("<>", "!=");
+    }
+
+    private void setVariableDescription(Expression expression, speedy.model.expressions.Expression speedyExpression, TableAlias tableAlias) {
+        if (!(expression instanceof Column column)) {
+            return;
+        }
+        String name = column.getColumnName();
+        AttributeRef attributeRef = new AttributeRef(tableAlias, name);
+        speedyExpression.setVariableDescription(name, attributeRef);
     }
 
     private <S> TableAlias contextToTableAlias(S context) {

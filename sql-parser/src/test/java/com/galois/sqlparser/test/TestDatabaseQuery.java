@@ -72,8 +72,6 @@ public class TestDatabaseQuery {
     }
 
     @Test
-    @Disabled
-    // FIXME: Add support for aggregate functions with multiple attributes in project
     public void testComplexAggregateQuery() {
         String sql = String.format("select t.director, (t.startyear - t.birthyear) as director_age from %s t where t.startyear is not null and t.birthyear is not null order by director_age desc limit 1", TABLE_NAME);
 
@@ -82,8 +80,11 @@ public class TestDatabaseQuery {
 
         ITupleIterator tupleIterator = root.execute(null, db);
         List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
-        assertEquals(29, tuples.size());
+        assertEquals(1, tuples.size());
 
-        tuples.forEach(t -> log.info("{}", t));
+        Tuple tuple = tuples.getFirst();
+        assertEquals("Peter Lykke-Seest", tuple.getCells().get(1).getValue().getPrimitiveValue());
+        // By default, the subtraction expression attribute ref is computed using the type "real"
+        assertEquals(148.0, tuple.getCells().get(2).getValue().getPrimitiveValue());
     }
 }

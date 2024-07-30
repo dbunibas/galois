@@ -16,6 +16,7 @@ import speedy.model.algebra.aggregatefunctions.ValueAggregateFunction;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.TableAlias;
 import speedy.model.database.VirtualAttributeRef;
+import speedy.model.expressions.ExpressionAttributeRef;
 import speedy.persistence.Types;
 
 import java.util.*;
@@ -99,8 +100,10 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                 AttributeRef attributeRef = projectionAttributes.get(i).getAttributeRef();
                 AttributeRef newAttribute = attributeRef;
                 if (item.getAlias() != null) {
-                    if (attributeRef instanceof VirtualAttributeRef) {
-                        newAttribute = new VirtualAttributeRef(tableAlias, item.getAlias().getName(), ((VirtualAttributeRef) attributeRef).getType());
+                    if (attributeRef instanceof ExpressionAttributeRef expressionAttributeRef) {
+                        newAttribute = new ExpressionAttributeRef(expressionAttributeRef.getExpression(), tableAlias, item.getAlias().getName(), expressionAttributeRef.getType());
+                    } else if (attributeRef instanceof VirtualAttributeRef virtualAttributeRef) {
+                        newAttribute = new VirtualAttributeRef(tableAlias, item.getAlias().getName(), virtualAttributeRef.getType());
                     } else {
                         newAttribute = new AttributeRef(tableAlias, item.getAlias().getName());
                     }
@@ -185,7 +188,7 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                 List<AttributeRef> orderByExclusiveAttributes = orderBy.getAttributes(null, null).stream()
                         .filter(a -> projectAttributes.stream().noneMatch(pa -> pa.equalsModuloClass(a)) && newAttributes.stream().noneMatch(na -> na.equalsModuloClass(a)))
                         .toList();
-                log.info("Exclusive attributes {}", orderByExclusiveAttributes);
+                log.trace("Order by exclusive attributes {}", orderByExclusiveAttributes);
 
                 if (!orderByExclusiveAttributes.isEmpty()) {
                     List<ProjectionAttribute> partialProjectionAttributes = Stream.concat(
@@ -196,8 +199,8 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                             project.getNewAttributes().stream(),
                             orderByExclusiveAttributes.stream()
                     ).distinct().toList();
-                    log.info("Partial projection attributes {}", partialProjectionAttributes);
-                    log.info("Partial aliases {}", partialAliases);
+                    log.trace("Partial projection attributes {}", partialProjectionAttributes);
+                    log.trace("Partial aliases {}", partialAliases);
 
                     Project partialProject = new Project(partialProjectionAttributes, partialAliases, false);
                     partialProject.addChild(currentRoot);

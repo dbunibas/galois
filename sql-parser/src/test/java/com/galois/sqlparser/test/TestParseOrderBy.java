@@ -3,6 +3,7 @@ package com.galois.sqlparser.test;
 import com.galois.sqlparser.SQLQueryParser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Limit;
@@ -111,6 +112,21 @@ public class TestParseOrderBy {
         Tuple tuple = tuples.getFirst();
         assertEquals("oid", tuple.getCells().getFirst().getAttribute());
         assertEquals("RafaelNadal", tuple.getCells().getLast().getValue().getPrimitiveValue());
+    }
+
+    @Test
+    @Disabled
+    // FIXME: add support for ordering tuples using aliases
+    public void testOrderByUsingAlias() {
+        String sql = String.format("SELECT t.name as empName from %s t order by empName", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+
+        logTuples(tuples);
     }
 
     private void logTuples(List<Tuple> tuples) {
