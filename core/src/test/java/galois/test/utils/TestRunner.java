@@ -108,7 +108,7 @@ public class TestRunner {
                 sqlExecutor.setSql(variant.getQuerySql());
                 experiment.setOptimizers(null);
             } else {
-                experiment.setOptimizers(List.of(optimizer));
+                if (optimizer != null) experiment.setOptimizers(List.of(optimizer));
             }
             GaloisDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
             metrics.clear();
