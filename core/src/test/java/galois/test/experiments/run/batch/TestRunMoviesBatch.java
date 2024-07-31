@@ -82,7 +82,7 @@ public class TestRunMoviesBatch {
 
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
-                .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear, m.deathyear, m.runtimeminutes from target.movie m where m.director = 'Steven Spielberg' AND m.startyear > 1990 AND m.endyear < 2000")
+                .querySql("select m.originaltitle, m.startyear, m.genres, m.birthyear, m.deathyear, m.runtimeminutes from target.movie m where m.director = 'Steven Spielberg' AND m.startyear > 1990 AND m.startyear < 2000")
                 .prompt("List the title, year, genres, birthyear, deathyear and runtimeminutes of the movies directed by Steven Spielberg between the 1990 and the 2000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
@@ -109,7 +109,7 @@ public class TestRunMoviesBatch {
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8);
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9);
     }
 
     @Test
