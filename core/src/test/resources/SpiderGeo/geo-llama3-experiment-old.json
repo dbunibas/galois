@@ -1,0 +1,223 @@
+{
+  "name": "Geo llama3 Experiment",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleOrder",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "OllamaLlama3TableQueryExecutor"
+    }
+  },
+  "query": {
+    "sql": "SELECT * FROM target.state",
+    "schema": {
+      "name": "geo",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "state",
+          "attributes": [
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "population",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "area",
+              "type": "DOUBLE",
+              "nullable": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "capital",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "density",
+              "type": "DOUBLE",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "city",
+          "attributes": [
+            {
+              "name": "city_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "population",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            }
+          ]
+        },
+        {
+          "tableName": "border_info",
+          "attributes": [
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "border",
+              "type": "STRING",
+              "nullable": false,
+                "key": true
+            }
+          ]
+        },
+        {
+          "tableName": "highlow",
+          "attributes": [
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "highest_elevation",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "lowest_point",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "highest_point",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "lowest_elevation",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "lake",
+          "attributes": [
+            {
+              "name": "lake_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "area",
+              "type": "DOUBLE",
+              "nullable": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "mountain",
+          "attributes": [
+            {
+              "name": "mountain_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "mountain_altitude",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": false,
+                "key": true
+            }
+          ]
+        },
+        {
+          "tableName": "river",
+          "attributes": [
+            {
+              "name": "river_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "length",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "traverse",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/geo_data/spider_geo"
+  }
+}
