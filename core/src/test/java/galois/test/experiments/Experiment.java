@@ -16,6 +16,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +34,7 @@ import org.apache.commons.io.FileUtils;
 import speedy.exceptions.DAOException;
 import speedy.exceptions.DBMSException;
 import speedy.model.database.Attribute;
+import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
 import speedy.model.database.dbms.DBMSDB;
 import speedy.model.database.dbms.DBMSTupleIterator;
@@ -99,7 +101,7 @@ public final class Experiment {
         }
         return results;
     }
-    
+
     @SuppressWarnings("unchecked")
     public Map<String, ExperimentResults> executeSingle(IOptimizer optimizer) {
         Map<String, ExperimentResults> results = new HashMap<>();
@@ -151,52 +153,65 @@ public final class Experiment {
     }
 
     private DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {
-        ITable firstTable = query.getDatabase().getFirstTable();
+        IDatabase database = query.getDatabase();
+        List<String> tableNames = database.getTableNames();
+        URL resource = Experiment.class.getResource(query.getResultPath());
+        File[] files = new File(resource.getPath()).listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".csv") && !name.contains("_speedy");
+            }
+        });
+        Map<String, File> tableCSVFiles = new HashMap<>();
+        for (File file : files) {
+            String tableName = file.getName().replace(".csv", "");
+            log.debug("Table: " + tableName + " --- " + file);
+            tableCSVFiles.put(tableName, file);
+        }
         DBMSDB dbmsDatabase = null;
-        List<Attribute> attributes = firstTable.getAttributes();
-        if (firstTable.getSize() == 0) {
-            URL resource = Experiment.class.getResource(query.getResultPath());
-            File[] files = new File(resource.getPath()).listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return name.endsWith(".csv") && !name.contains("_speedy");
-                }
-            });
-
-            File file = files[0];
-            File speedyFile = new File(resource.getPath() + File.separator + file.getName().replace(".csv", "") + "_speedy.csv");
-            String textDelim = null;
-            try {
-                FileUtils.copyFile(file, speedyFile);
-                textDelim = replaceHeadersWithTypes(speedyFile, attributes);
-            } catch (IOException ioe) {
-                log.error("Unable to duplicate file: " + file + " to " + speedyFile);
-                log.error("Exception: " + ioe);
-                throw new IllegalStateException(ioe);
-            }
-            DAODBMSDatabase daoDatabase = new DAODBMSDatabase();
-            dbmsDatabase = daoDatabase.loadDatabase(query.getAccessConfiguration().getDriver(),
-                    query.getAccessConfiguration().getUri(),
-                    "public",
-                    query.getAccessConfiguration().getLogin(),
-                    query.getAccessConfiguration().getPassword());
-            dbmsDatabase.getInitDBConfiguration().setCreateTablesFromFiles(true);
-            CSVFile fileToImport = new CSVFile(speedyFile.getAbsolutePath());
-            System.out.println("File to import: " + speedyFile.getAbsolutePath());
-            fileToImport.setHasHeader(true);
-            fileToImport.setSeparator(',');
-            if (textDelim != null) {
-                fileToImport.setQuoteCharacter(textDelim.charAt(0));
-            }
-            dbmsDatabase.getInitDBConfiguration().addFileToImportForTable(firstTable.getName(), fileToImport);
-            dbmsDatabase.initDBMS();
-//            OperatorFactory.getInstance().getQueryRunner(dbmsDatabase);
-            if (speedyFile != null) {
+        DAODBMSDatabase daoDatabase = new DAODBMSDatabase();
+        dbmsDatabase = daoDatabase.loadDatabase(query.getAccessConfiguration().getDriver(),
+                query.getAccessConfiguration().getUri(),
+                "public",
+                query.getAccessConfiguration().getLogin(),
+                query.getAccessConfiguration().getPassword());
+        dbmsDatabase.getInitDBConfiguration().setCreateTablesFromFiles(true);
+        List<File> speedyFiles = new ArrayList<>();
+        for (String tableName : tableNames) {
+            ITable table = database.getTable(tableName);
+            List<Attribute> attributes = table.getAttributes();
+            if (table.getSize() == 0) {
+                // import table
+                File file = tableCSVFiles.get(tableName);
+                log.debug("Search for table: " + table + " found file: " + file);
+                File speedyFile = new File(resource.getPath() + File.separator + file.getName().replace(".csv", "") + "_speedy.csv");
+                String textDelim = null;
                 try {
-                    FileUtils.delete(speedyFile);
+                    FileUtils.copyFile(file, speedyFile);
+                    textDelim = replaceHeadersWithTypes(speedyFile, attributes);
                 } catch (IOException ioe) {
-                    log.error("Unable to delete: " + speedyFile);
+                    log.error("Unable to duplicate file: " + file + " to " + speedyFile);
+                    log.error("Exception: " + ioe);
+                    throw new IllegalStateException(ioe);
                 }
+                CSVFile fileToImport = new CSVFile(speedyFile.getAbsolutePath());
+                System.out.println("File to import: " + speedyFile.getAbsolutePath());
+                speedyFiles.add(speedyFile);
+                fileToImport.setHasHeader(true);
+                fileToImport.setSeparator(',');
+                if (textDelim != null) {
+                    log.debug("Text Delim: " + textDelim);
+                    fileToImport.setQuoteCharacter(textDelim.charAt(0));
+                }
+                dbmsDatabase.getInitDBConfiguration().addFileToImportForTable(tableName, fileToImport);
+            }
+        }
+        dbmsDatabase.initDBMS();
+        for (File speedyFile : speedyFiles) {
+            try {
+                FileUtils.delete(speedyFile);
+            } catch (IOException ioe) {
+                log.error("Unable to delete: " + speedyFile);
             }
         }
         return dbmsDatabase;
