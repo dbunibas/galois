@@ -33,6 +33,7 @@ public class TestRunFlight2Batch {
 
     private final List<ExpVariant> variants;
 
+
     public TestRunFlight2Batch() {
         List<String> singleConditionOptimizers = List.of(
                 "AllConditionsPushdownOptimizer",
@@ -47,7 +48,7 @@ public class TestRunFlight2Batch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select a.Abbreviation from target.airlines a where a.Airline='JetBlue Airways'")
+                .querySql("select abbreviation from target.airlines where airline='JetBlue Airways'")
                 .prompt("What is the abbreviation of Airline 'JetBlue Airways'?")
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -61,7 +62,7 @@ public class TestRunFlight2Batch {
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("select a.Airline from target.airlines a where a.Abbreviation='UAL'")
+                .querySql("select a.airline from target.airlines a where a.abbreviation='UAL'")
                 .prompt("Which airline has abbreviation 'UAL'?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();

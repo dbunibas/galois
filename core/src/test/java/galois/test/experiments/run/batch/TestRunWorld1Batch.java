@@ -47,7 +47,7 @@ public class TestRunWorld1Batch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select c.name from target.city c where c.population > 160000 and c.population < 900000")
+                .querySql("select c.Name from target.city c where c.Population > 160000 and c.Population < 900000")
                 .prompt("What are the cities whose population is between 160000 and 900000?")
                 .optimizers(singleConditionOptimizers)
                 .build();

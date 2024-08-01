@@ -47,7 +47,7 @@ public class TestRunFlight4Batch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select a.name from target.airports a where a.elevation < 50 and a.elevation > -50")
+                .querySql("select a.name from target.airports a where a.elevation between -50 and 50")
                 .prompt("Find the name of airports whose altitude is between -50 and 50")
                 .optimizers(singleConditionOptimizers)
                 .build();

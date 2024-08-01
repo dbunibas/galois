@@ -37,17 +37,17 @@
               "key": true
             },
             {
-              "name": "Airline",
+              "name": "airline",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "Abbreviation",
+              "name": "abbreviation",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "Country",
+              "name": "country",
               "type": "STRING",
               "nullable": false
             }
@@ -57,28 +57,28 @@
           "tableName": "airports",
           "attributes": [
             {
-              "name": "City",
+              "name": "city",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "AirportCode",
+              "name": "airportcode",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "AirportName",
+              "name": "airportname",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "Country",
+              "name": "country",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "CountryAbbrev",
+              "name": "countryabbrev",
               "type": "STRING",
               "nullable": false
             }
@@ -88,24 +88,24 @@
           "tableName": "flights",
           "attributes": [
             {
-              "name": "Airline",
+              "name": "airline",
               "type": "INTEGER",
               "nullable": false,
               "key": true
             },
             {
-              "name": "FlightNo",
+              "name": "flightno",
               "type": "INTEGER",
               "nullable": false,
               "key": true
             },
             {
-              "name": "SourceAirport",
+              "name": "sourceairport",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "DestAirport",
+              "name": "destairport",
               "type": "STRING",
               "nullable": false
             }

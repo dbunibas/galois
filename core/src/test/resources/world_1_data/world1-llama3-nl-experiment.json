@@ -35,28 +35,28 @@
           "tableName": "city",
           "attributes": [
             {
-              "name": "ID",
+              "name": "id",
               "type": "INTEGER",
               "nullable": false,
               "key": true
             },
             {
-              "name": "Name",
+              "name": "name",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "CountryCode",
+              "name": "countrycode",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "District",
+              "name": "district",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "Population",
+              "name": "population",
               "type": "INTEGER",
               "nullable": false
             }
@@ -82,78 +82,78 @@
           "tableName": "country",
           "attributes": [
             {
-              "name": "Code",
+              "name": "code",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "Name",
+              "name": "name",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "Continent",
+              "name": "continent",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "Region",
+              "name": "region",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "SurfaceArea",
+              "name": "surfacearea",
               "type": "FLOAT",
               "nullable": false
             },
             {
-              "name": "IndepYear",
+              "name": "indepyear",
               "type": "INTEGER",
               "nullable": true
             },
             {
-              "name": "Population",
+              "name": "population",
               "type": "INTEGER",
               "nullable": false
             },
             {
-              "name": "LifeExpectancy",
+              "name": "lifeexpectancy",
               "type": "FLAOT",
               "nullable": true
             },
             {
-              "name": "GNP",
+              "name": "gnp",
               "type": "FLOAT",
               "nullable": true
             },
             {
-              "name": "GNPOld",
+              "name": "gnpold",
               "type": "FLOAT",
               "nullable": true
             },
             {
-              "name": "LocalName",
+              "name": "localname",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "GovernmentForm",
+              "name": "governmentform",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "HeadOfState",
+              "name": "headofstate",
               "type": "STRING",
               "nullable": true
             },
             {
-              "name": "Capital",
+              "name": "capital",
               "type": "INTEGER",
               "nullable": true
             },
             {
-              "name": "Code2",
+              "name": "code2",
               "type": "STRING",
               "nullable": false
             }
@@ -163,24 +163,24 @@
           "tableName": "country_language",
           "attributes": [
             {
-              "name": "Country_Code",
+              "name": "country_code",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "Language",
+              "name": "language",
               "type": "STRING",
               "nullable": false,
               "key": true
             },
             {
-              "name": "IsOfficial",
+              "name": "isofficial",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "Percentage",
+              "name": "percentage",
               "type": "FLOAT",
               "nullable": false
             }

@@ -1,4 +1,4 @@
-CountryCode,Language,IsOfficial,Percentage
+countrycode,language,isofficial,percentage
 ABW,Dutch,T,5.3
 ABW,English,F,9.5
 ABW,Papiamento,F,76.7
