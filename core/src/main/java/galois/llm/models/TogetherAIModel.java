@@ -217,6 +217,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         } catch (Exception e) {
             if (e instanceof IOException) {
                 try {
+                    if (isValid(jsonRequest) && this.numRetry > 1) return null;
                     log.trace("Retry the request IOE: " + this.numRetry);
                     log.trace("Exception: " + e);
                     TimeUnit.SECONDS.sleep(this.waitTimeInSec);
