@@ -55,19 +55,32 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                     : getIterativePrompt().generate(table, primaryKey, getExpression(), schema);
             log.debug("Key prompt is: {}", userMessage);
             String response = "";
+            Boolean callGetResponse = null;
             try {
+                log.trace("Asking for response...");
+                callGetResponse = false;
                 response = getResponse(chain, userMessage, false);
+                callGetResponse = true;
                 log.debug("Response is: {}", response);
-                if (response.isBlank()) break; // avoid other requests
+                if (response == null || response.trim().isBlank()) break; // avoid other requests
                 List<String> currentKeys = getFirstPrompt().getKeyParser().parse(response);
                 log.debug("Parsed keys are: {}", currentKeys);
                 if (currentKeys.isEmpty()) break; // avoid other requests
                 String cleanedResponse = toCleanJsonList(response);
-                keys.addAll(currentKeys);
+                currentKeys = getFirstPrompt().getKeyParser().parse(cleanedResponse);
+                if (!currentKeys.isEmpty()) {
+                    keys.addAll(currentKeys);
+                } else {
+                    break;
+                }
             } catch (Exception e) {
-                log.debug("Key prompt is: \n" + userMessage);
-                log.debug("Response is: \n" + response);
-                log.debug("Exception: \n" + e);
+                log.trace("Exception - Key prompt is: {}", userMessage);
+                log.trace("Exception - Response is: {}", response);
+                log.trace("Exception: {}", e);
+                if (callGetResponse != null && !callGetResponse && e instanceof NullPointerException) {
+                    log.trace("Stop making request!!");
+                    break; // it is a failure of the model since in th request in get Response we already attempted!
+                }
             }
         }
         return keys;
