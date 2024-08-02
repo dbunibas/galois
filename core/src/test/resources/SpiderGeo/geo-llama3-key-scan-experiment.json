@@ -17,7 +17,7 @@
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-key-scan",
-      "maxIterations": 10
+      "maxIterations": 5
     }
   },
   "query": {
@@ -29,7 +29,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "state",
+          "tableName": "usa_state",
           "attributes": [
             {
               "name": "state_name",
@@ -65,7 +65,7 @@
           ]
         },
         {
-          "tableName": "city",
+          "tableName": "usa_city",
           "attributes": [
             {
               "name": "city_name",
@@ -92,7 +92,7 @@
           ]
         },
         {
-          "tableName": "border_info",
+          "tableName": "usa_border_info",
           "attributes": [
             {
               "name": "state_name",
@@ -109,7 +109,7 @@
           ]
         },
         {
-          "tableName": "highlow",
+          "tableName": "usa_highlow",
           "attributes": [
             {
               "name": "state_name",
@@ -140,7 +140,7 @@
           ]
         },
         {
-          "tableName": "lake",
+          "tableName": "usa_lake",
           "attributes": [
             {
               "name": "lake_name",
@@ -166,7 +166,7 @@
           ]
         },
         {
-          "tableName": "mountain",
+          "tableName": "usa_mountain",
           "attributes": [
             {
               "name": "mountain_name",
@@ -193,7 +193,7 @@
           ]
         },
         {
-          "tableName": "river",
+          "tableName": "usa_river",
           "attributes": [
             {
               "name": "river_name",
