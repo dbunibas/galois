@@ -3,6 +3,7 @@ package galois.llm.algebra;
 import galois.llm.database.LLMDB;
 import galois.llm.database.LLMTable;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.utils.QueryUtils;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +24,11 @@ import java.util.stream.Collectors;
 public class LLMScan extends Scan {
 
     private static final Logger logger = LoggerFactory.getLogger(LLMScan.class);
-
+    
     private final TableAlias tableAlias;
     private final IQueryExecutor queryExecutor;
     private List<AttributeRef> attributesSelect = null;
+    private String normalize = null;
 
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor) {
         super(tableAlias);
@@ -136,6 +138,9 @@ public class LLMScan extends Scan {
             if (!currentResult.isEmpty()) {
                 Tuple result = currentResult.get(currentIndex);
                 currentIndex++;
+                if (normalize != null) {
+                    result = QueryUtils.normalizeTextValues(result, normalize);
+                }
                 return result;
             }
 
@@ -145,6 +150,9 @@ public class LLMScan extends Scan {
             if (!currentResult.isEmpty()) {
                 Tuple result = currentResult.get(0);
                 currentIndex++;
+                if (normalize != null) {
+                    result = QueryUtils.normalizeTextValues(result, normalize);
+                }
                 return result;
             }
             return null;

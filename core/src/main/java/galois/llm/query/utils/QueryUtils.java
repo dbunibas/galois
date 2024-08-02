@@ -17,6 +17,9 @@ import static galois.utils.Mapper.asString;
 @Slf4j
 public class QueryUtils {
 
+    public static final String NORMALIZE_UPPER_CASE = "upperCase";
+    public static final String NORMALIZE_LOWER_CASE = "lowerCase";
+
     public static String getKeyAsString(Key key) {
         // TODO: Check composite key
         return key.getAttributes().stream()
@@ -155,6 +158,22 @@ public class QueryUtils {
         map.put("items", items);
 
         return asString(map);
+    }
+
+    public static Tuple normalizeTextValues(Tuple tuple, String normalization) {
+        Tuple cloned = tuple.clone();
+        for (Cell cell : cloned.getCells()) {
+            if (cell.getValue() instanceof NullValue) continue;
+            if (normalization.equalsIgnoreCase(NORMALIZE_LOWER_CASE)) {
+                IValue normalizedValue = new ConstantValue(cell.getValue().toString().toLowerCase());
+                cell.setValue(normalizedValue);
+            }
+            if (normalization.equalsIgnoreCase(NORMALIZE_UPPER_CASE)) {
+                IValue normalizedValue = new ConstantValue(cell.getValue().toString().toUpperCase());
+                cell.setValue(normalizedValue);
+            }
+        }
+        return cloned;
     }
 
     private static String getJsonSchemaTypeFromDBType(String type) {
