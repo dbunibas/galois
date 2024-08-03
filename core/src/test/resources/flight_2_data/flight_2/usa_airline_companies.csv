@@ -1,4 +1,4 @@
-uid, airline, abbreviation, country
+uid, airline, call_sign, country
 1,United Airlines,UAL,USA
 2,US Airways,USAir,USA
 3,Delta Airlines,Delta,USA

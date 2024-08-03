@@ -28,7 +28,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "airlines",
+          "tableName": "usa_airline_companies",
           "attributes": [
             {
               "name": "uid",
@@ -42,7 +42,7 @@
               "nullable": false
             },
             {
-              "name": "abbreviation",
+              "name": "call_sign",
               "type": "STRING",
               "nullable": false
             },
@@ -54,7 +54,7 @@
           ]
         },
         {
-          "tableName": "airports",
+          "tableName": "usa_airports",
           "attributes": [
             {
               "name": "city",
@@ -85,7 +85,7 @@
           ]
         },
         {
-          "tableName": "flights",
+          "tableName": "usa_flights",
           "attributes": [
             {
               "name": "airline",

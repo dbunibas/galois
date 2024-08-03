@@ -48,22 +48,22 @@ public class TestRunFlight2Batch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select abbreviation from target.airlines where airline='JetBlue Airways'")
-                .prompt("What is the abbreviation of Airline 'JetBlue Airways'?")
+                .querySql("select call_sign from target.usa_airline_companies where airline='JetBlue Airways'")
+                .prompt("What is the call sign of Airline 'JetBlue Airways'?")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q2 = ExpVariant.builder()
                 .queryNum("Q2")
-                .querySql("select count(*) from target.flights f")
+                .querySql("select count(*) from target.usa_flights f")
                 .prompt("How many flights do we have?")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("select a.airline from target.airlines a where a.abbreviation='UAL'")
-                .prompt("Which airline has abbreviation 'UAL'?")
+                .querySql("select a.airline from target.usa_airline_companies a where a.call_sign='UAL'")
+                .prompt("Which airline has call sign 'UAL'?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
