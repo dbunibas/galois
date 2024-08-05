@@ -19,7 +19,7 @@ public class AllConditionsPushdown implements IOptimization {
         Select select = (Select) query;
         LLMScan scan = (LLMScan) query.getChildren().get(0);
         IQueryExecutor optimizedScan = toOptimizedScan(scan, select);
-        return new LLMScan(scan.getTableAlias(), optimizedScan, scan.getAttributesSelect());
+        return new LLMScan(scan.getTableAlias(), optimizedScan, scan.getAttributesSelect(), scan.getNormalizationStrategy());
     }
 
     // TODO: Validate method

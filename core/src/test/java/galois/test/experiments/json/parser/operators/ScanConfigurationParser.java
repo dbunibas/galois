@@ -37,7 +37,7 @@ public class ScanConfigurationParser {
     );
 
     public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
-        return new ScanConfiguration(getExecutor(json, query));
+        return new ScanConfiguration(getExecutor(json, query), json.getNormalizationStrategy());
     }
 
     private static IQueryExecutor getExecutor(ScanConfigurationJSON json, Query query) {

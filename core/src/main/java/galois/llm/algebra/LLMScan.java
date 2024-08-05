@@ -28,19 +28,21 @@ public class LLMScan extends Scan {
     private final TableAlias tableAlias;
     private final IQueryExecutor queryExecutor;
     private List<AttributeRef> attributesSelect = null;
-    private String normalize = null;
+    private final String normalizationStrategy;
 
-    public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor) {
+    public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, String normalizationStrategy) {
         super(tableAlias);
         this.tableAlias = tableAlias;
         this.queryExecutor = queryExecutor;
+        this.normalizationStrategy = normalizationStrategy;
     }
 
-    public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect) {
+    public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect, String normalizationStrategy) {
         super(tableAlias);
         this.tableAlias = tableAlias;
         this.queryExecutor = queryExecutor;
         this.attributesSelect = attributesSelect;
+        this.normalizationStrategy = normalizationStrategy;
     }
 
     @Override
@@ -138,8 +140,8 @@ public class LLMScan extends Scan {
             if (!currentResult.isEmpty()) {
                 Tuple result = currentResult.get(currentIndex);
                 currentIndex++;
-                if (normalize != null) {
-                    result = QueryUtils.normalizeTextValues(result, normalize);
+                if (normalizationStrategy != null) {
+                    result = QueryUtils.normalizeTextValues(result, normalizationStrategy);
                 }
                 return result;
             }
@@ -150,8 +152,8 @@ public class LLMScan extends Scan {
             if (!currentResult.isEmpty()) {
                 Tuple result = currentResult.get(0);
                 currentIndex++;
-                if (normalize != null) {
-                    result = QueryUtils.normalizeTextValues(result, normalize);
+                if (normalizationStrategy != null) {
+                    result = QueryUtils.normalizeTextValues(result, normalizationStrategy);
                 }
                 return result;
             }

@@ -6,4 +6,5 @@ import lombok.Data;
 @Data
 public class ScanConfiguration {
     private final IQueryExecutor queryExecutor;
+    private final String normalizationStrategy;
 }

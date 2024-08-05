@@ -170,7 +170,7 @@ public class TestScanStrategies {
     private void testExecutor(IQueryExecutor executor) {
         // Query: SELECT * FROM film_director fd
         TableAlias tableAlias = new TableAlias("film_director", "fd");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
     }

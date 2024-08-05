@@ -141,7 +141,8 @@ public final class Experiment {
         SQLQueryParser sqlQueryParser = new SQLQueryParser();
         log.info("Parsing the query using SQLQueryParser - {}", sqlQueryParser.getClass());
         IQueryExecutor scanQueryExecutor = operatorsConfiguration.getScan().getQueryExecutor();
-        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, scanQueryExecutor, attributes);
+        String normalizationStrategy = operatorsConfiguration.getScan().getNormalizationStrategy();
+        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, scanQueryExecutor, attributes, normalizationStrategy);
 
         // If ignoreTree() returns true, only execute the LLMScan operation
         if (scanQueryExecutor.ignoreTree()) {

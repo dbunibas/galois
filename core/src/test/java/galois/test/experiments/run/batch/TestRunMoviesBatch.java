@@ -101,7 +101,6 @@ public class TestRunMoviesBatch {
                 .optimizers(singleConditionOptimizers)
                 .build();
 
-        // FIXME: Which Speedy tree can execute this query?
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
                 .querySql("select m.director, (m.startyear - m.birthyear) as director_age from target.movie m where m.startyear is not null AND m.birthyear is not null order by director_age desc limit 1")

@@ -11,4 +11,5 @@ public class ScanConfigurationJSON {
     private String attributesPrompt;
     private String naturalLanguagePrompt;
     private String sql;
+    private String normalizationStrategy;
 }

@@ -49,7 +49,7 @@ public class TestOptimizer {
     public void testConditionPushDown() {
         // Query: SELECT * FROM actor WHERE gender = 'male'
         TableAlias tableAlias = new TableAlias("actor", "a");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLlama3KeyScanQueryExecutor());
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLlama3KeyScanQueryExecutor(), null);
 
         Expression exp = new Expression("gender == \"Female\"");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
@@ -68,7 +68,7 @@ public class TestOptimizer {
     public void testConditionPushDownOrderBy() {
         // Query: SELECT * FROM actor WHERE gender = 'male' ORDER_BY name
         TableAlias tableAlias = new TableAlias("actor", "a");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLlama3KeyScanQueryExecutor());
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaLlama3KeyScanQueryExecutor(), null);
 
         Expression exp = new Expression("gender == \"Female\"");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
@@ -94,7 +94,7 @@ public class TestOptimizer {
         IQueryExecutor executor = OllamaLlama3KeyScanQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
 
         Expression exp = new Expression("gender == \"Female\" && birth_year > 1980");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
@@ -122,7 +122,7 @@ public class TestOptimizer {
         IQueryExecutor executor = OllamaLlama3KeyScanQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
 
         Expression exp = new Expression("gender == \"Female\" && birth_year > 1980");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
@@ -160,7 +160,7 @@ public class TestOptimizer {
         IQueryExecutor executor = OllamaLlama3KeyScanQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
 
         Expression exp = new Expression("gender == \"Female\" && birth_year > 1980 && name == \"Scarlett Johansson\"");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
@@ -199,7 +199,7 @@ public class TestOptimizer {
         IQueryExecutor executor = TogetheraiLlama3TableQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
 
         Expression exp = new Expression("gender == \"Female\" || birth_year > 1980");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
@@ -230,7 +230,7 @@ public class TestOptimizer {
         IQueryExecutor executor = TogetheraiLlama3TableQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
 
         Expression exp = new Expression("gender == \"Female\" && birth_year > 1980");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
@@ -261,7 +261,7 @@ public class TestOptimizer {
         IQueryExecutor executor = TogetheraiLlama3TableQueryExecutor.builder()
                 .maxIterations(2)
                 .build();
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
 
         Expression exp = new Expression("gender == \"Female\" || birth_year > 1980 || name == \"Robert De Niro\"");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));
