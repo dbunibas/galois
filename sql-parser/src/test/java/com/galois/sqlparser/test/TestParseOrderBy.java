@@ -115,8 +115,6 @@ public class TestParseOrderBy {
     }
 
     @Test
-    @Disabled
-    // FIXME: add support for ordering tuples using aliases
     public void testOrderByUsingAlias() {
         String sql = String.format("SELECT t.name as empName from %s t order by empName", TABLE_NAME);
 
