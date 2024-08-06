@@ -40,6 +40,7 @@ public class ParserWhere {
     private boolean stopAtFirst = false;
     private String operation = "";
     private List<Expression> expressions = new ArrayList<>();
+    private String whereExpression = "";
 
     public ParserWhere() {
         initParsers();
@@ -53,6 +54,10 @@ public class ParserWhere {
         return expressions;
     }
 
+    public String getWhereExpression() {
+        return whereExpression;
+    }
+   
     public void parseWhere(String sql) throws ParserException {
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
@@ -180,6 +185,7 @@ public class ParserWhere {
                     Expression where = plainSelect.getWhere();
                     try {
                         Expression expression = CCJSqlParserUtil.parseExpression(where.toString());
+                        whereExpression = where.toString();
                         return expression.accept(expressionVisitorAdapter, null);
                         //return plainSelect.getWhere().accept(expressionVisitorAdapter, null);
                     } catch (Exception e) {
