@@ -47,7 +47,7 @@ public class TestRunWorld1Batch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select c.Name from target.city c where c.Population > 160000 and c.Population < 900000")
+                .querySql("select c.name from target.city c where c.population > 160000 and c.population < 900000")
                 .prompt("What are the cities whose population is between 160000 and 900000?")
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -61,7 +61,7 @@ public class TestRunWorld1Batch {
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("select distinct CountryCode from target.countrylanguage where language != 'English'")
+                .querySql("select distinct countrycode from target.countrylanguage where language != 'English'")
                 .prompt("What are the country codes of countries where people use languages other than English?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
@@ -82,7 +82,7 @@ public class TestRunWorld1Batch {
 
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
-                .querySql("select avg(LifeExpectancy) from target.country where continent = 'Africa' AND GovernmentForm = 'Republic'")
+                .querySql("select avg(LifeExpectancy) from target.country where continent = 'Africa' and GovernmentForm = 'Republic'")
                 .prompt("What is the average life expectancy in African countries that are republics?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
@@ -103,7 +103,7 @@ public class TestRunWorld1Batch {
 
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
-                .querySql("select avg(gnp), sum(population) from target.country where GovernmentForm = 'US Territory'")
+                .querySql("select avg(gnp), sum(population) from target.country where governmentf orm = 'US Territory'")
                 .prompt("What is the average GNP and total population in all nations whose government is US territory?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
