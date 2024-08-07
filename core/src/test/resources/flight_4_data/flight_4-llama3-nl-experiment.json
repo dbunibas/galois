@@ -36,7 +36,7 @@
           "attributes": [
             {
               "name": "alid",
-              "type": "INTEGER",
+              "type": "REAL",
               "nullable": false,
               "key": true
             },
