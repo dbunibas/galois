@@ -72,7 +72,7 @@ public class Mapper {
         return false;
     }
 
-    private static String toCleanJsonObject(String response) {
+    public static String toCleanJsonObject(String response) {
         return getContentBetween(response, "{", "}");
     }
 

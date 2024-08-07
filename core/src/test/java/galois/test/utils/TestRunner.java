@@ -1,5 +1,6 @@
 package galois.test.utils;
 
+import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ISQLExecutor;

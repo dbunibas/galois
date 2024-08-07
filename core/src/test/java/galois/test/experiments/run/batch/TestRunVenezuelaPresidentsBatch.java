@@ -1,14 +1,21 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
+import galois.Constants;
+import galois.llm.models.TogetherAIModel;
+import galois.llm.query.utils.QueryUtils;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.parser.ParserWhere;
+import galois.test.experiments.Experiment;
 import galois.test.experiments.ExperimentResults;
+import galois.test.experiments.json.parser.ExperimentParser;
 import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
+import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
@@ -19,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import speedy.model.database.IDatabase;
+import speedy.model.database.ITable;
+import speedy.model.database.Key;
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
@@ -154,5 +164,59 @@ public class TestRunVenezuelaPresidentsBatch {
         IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
         testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
+    }
+
+    @Test
+    public void testRunExperiment() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        for (ExpVariant variant : variants) {
+            testRunner.execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String tableExp = "/presidents/presidents-llama3-table-experiment.json";
+            String keyExp = "/presidents/presidents-llama3-key-scan-experiment.json";
+            Double popularity = getPopularity(tableExp, "international_presidents", variant);
+            if (popularity >= 0.7) {
+                testRunner.execute(keyExp, "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            } else {
+                testRunner.execute(tableExp, "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            }
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+        log.info("Results\n{}", printMap(results));
+    }
+
+    private Double getPopularity(String expPath, String tableName, ExpVariant variant) {
+        Experiment experiment = null;
+        try {
+            experiment = ExperimentParser.loadAndParseJSON(expPath);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
+            return -1.0;
+        }
+        IDatabase database = experiment.getQuery().getDatabase();
+        ITable table = database.getTable(tableName);
+        List<Key> keys = database.getPrimaryKeys();
+        Key key = keys.get(0);
+        String jsonSchema = QueryUtils.generateJsonSchemaListFromAttributes(table, table.getAttributes());
+        ParserWhere parserWhere = new ParserWhere();
+        parserWhere.parseWhere(variant.getQuerySql());
+        String whereExpression = parserWhere.getWhereExpression();
+        String prompt = "Given the following JSON schema:\n";
+        prompt += jsonSchema + "\n";
+        prompt += "What is the popularity in your knowledge of " + key.toString() + " of " + tableName;
+        if (whereExpression != null && !whereExpression.trim().isEmpty()) {
+            prompt += " where " + whereExpression;
+        }
+        prompt += "?\n";
+        prompt += "Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.\n"
+                + "Respond with JSON only with a numerical property with name \"popularity\".";
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        String response = model.generate(prompt);
+        String cleanResponse = Mapper.toCleanJsonObject(response);
+        Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);
+        Double popularity = (Double) parsedResponse.getOrDefault("popularity", -1.0);
+        return popularity;
     }
 }
