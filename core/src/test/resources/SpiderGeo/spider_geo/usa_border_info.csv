@@ -5,7 +5,7 @@ alabama,florida
 alabama,mississippi
 arizona,utah
 arizona,colorado
-arizona,"new mexico"
+arizona,new mexico
 arizona,california
 arizona,nevada
 arkansas,missouri
@@ -20,22 +20,22 @@ california,arizona
 colorado,nebraska
 colorado,kansas
 colorado,oklahoma
-colorado,"new mexico"
+colorado,new mexico
 colorado,arizona
 colorado,utah
 colorado,wyoming
 connecticut,massachusetts
-connecticut,"rhode island"
-connecticut,"new york"
+connecticut,rhode island
+connecticut,new york
 delaware,pennsylvania
-delaware,"new jersey"
+delaware,new jersey
 delaware,maryland
-"district of columbia",maryland
-"district of columbia",virginia
+district of columbia,maryland
+district of columbia,virginia
 florida,georgia
 florida,alabama
-georgia,"north carolina"
-georgia,"south carolina"
+georgia,north carolina
+georgia,south carolina
 georgia,florida
 georgia,alabama
 georgia,tennessee
@@ -59,14 +59,14 @@ iowa,wisconsin
 iowa,illinois
 iowa,missouri
 iowa,nebraska
-iowa,"south dakota"
+iowa,south dakota
 kansas,nebraska
 kansas,missouri
 kansas,oklahoma
 kansas,colorado
 kentucky,indiana
 kentucky,ohio
-kentucky,"west virginia"
+kentucky,west virginia
 kentucky,virginia
 kentucky,tennessee
 kentucky,missouri
@@ -74,24 +74,24 @@ kentucky,illinois
 louisiana,arkansas
 louisiana,mississippi
 louisiana,texas
-maine,"new hampshire"
+maine,new hampshire
 maryland,pennsylvania
 maryland,delaware
 maryland,virginia
-maryland,"district of columbia"
-maryland,"west virginia"
-massachusetts,"new hampshire"
-massachusetts,"rhode island"
+maryland,district of columbia
+maryland,west virginia
+massachusetts,new hampshire
+massachusetts,rhode island
 massachusetts,connecticut
-massachusetts,"new york"
+massachusetts,new york
 massachusetts,vermont
 michigan,ohio
 michigan,indiana
 michigan,wisconsin
 minnesota,wisconsin
 minnesota,iowa
-minnesota,"south dakota"
-minnesota,"north dakota"
+minnesota,south dakota
+minnesota,north dakota
 mississippi,tennessee
 mississippi,alabama
 mississippi,louisiana
@@ -104,11 +104,11 @@ missouri,arkansas
 missouri,oklahoma
 missouri,kansas
 missouri,nebraska
-montana,"north dakota"
-montana,"south dakota"
+montana,north dakota
+montana,south dakota
 montana,wyoming
 montana,idaho
-nebraska,"south dakota"
+nebraska,south dakota
 nebraska,iowa
 nebraska,missouri
 nebraska,kansas
@@ -119,63 +119,63 @@ nevada,utah
 nevada,arizona
 nevada,california
 nevada,oregon
-"new hampshire",maine
-"new hampshire",massachusetts
-"new hampshire",vermont
-"new jersey","new york"
-"new jersey",delaware
-"new jersey",pennsylvania
-"new mexico",colorado
-"new mexico",oklahoma
-"new mexico",texas
-"new mexico",arizona
-"new mexico",utah
-"new york",vermont
-"new york",massachusetts
-"new york",connecticut
-"new york","new jersey"
-"new york",pennsylvania
-"north carolina",virginia
-"north carolina","south carolina"
-"north carolina",georgia
-"north carolina",tennessee
-"north dakota",minnesota
-"north dakota","south dakota"
-"north dakota",montana
+new hampshire,maine
+new hampshire,massachusetts
+new hampshire,vermont
+new jersey,new york
+new jersey,delaware
+new jersey,pennsylvania
+new mexico,colorado
+new mexico,oklahoma
+new mexico,texas
+new mexico,arizona
+new mexico,utah
+new york,vermont
+new york,massachusetts
+new york,connecticut
+new york,new jersey
+new york,pennsylvania
+north carolina,virginia
+north carolina,south carolina
+north carolina,georgia
+north carolina,tennessee
+north dakota,minnesota
+north dakota,south dakota
+north dakota,montana
 ohio,michigan
 ohio,pennsylvania
-ohio,"west virginia"
+ohio,west virginia
 ohio,kentucky
 ohio,indiana
 oklahoma,kansas
 oklahoma,missouri
 oklahoma,arkansas
 oklahoma,texas
-oklahoma,"new mexico"
+oklahoma,new mexico
 oklahoma,colorado
 oregon,washington
 oregon,idaho
 oregon,nevada
 oregon,california
-pennsylvania,"new york"
-pennsylvania,"new jersey"
+pennsylvania,new york
+pennsylvania,new jersey
 pennsylvania,delaware
 pennsylvania,maryland
-pennsylvania,"west virginia"
+pennsylvania,west virginia
 pennsylvania,ohio
-"rhode island",massachusetts
-"rhode island",connecticut
-"south carolina","north carolina"
-"south carolina",georgia
-"south dakota","north dakota"
-"south dakota",minnesota
-"south dakota",iowa
-"south dakota",nebraska
-"south dakota",wyoming
-"south dakota",montana
+rhode island,massachusetts
+rhode island,connecticut
+south carolina,north carolina
+south carolina,georgia
+south dakota,north dakota
+south dakota,minnesota
+south dakota,iowa
+south dakota,nebraska
+south dakota,wyoming
+south dakota,montana
 tennessee,kentucky
 tennessee,virginia
-tennessee,"north carolina"
+tennessee,north carolina
 tennessee,georgia
 tennessee,alabama
 tennessee,mississippi
@@ -184,35 +184,35 @@ tennessee,missouri
 texas,oklahoma
 texas,arkansas
 texas,louisiana
-texas,"new mexico"
+texas,new mexico
 utah,wyoming
 utah,colorado
-utah,"new mexico"
+utah,new mexico
 utah,arizona
 utah,nevada
 utah,idaho
-vermont,"new hampshire"
+vermont,new hampshire
 vermont,massachusetts
-vermont,"new york"
+vermont,new york
 virginia,maryland
-virginia,"district of columbia"
-virginia,"north carolina"
+virginia,district of columbia
+virginia,north carolina
 virginia,tennessee
 virginia,kentucky
-virginia,"west virginia"
+virginia,west virginia
 washington,idaho
 washington,oregon
-"west virginia",pennsylvania
-"west virginia",maryland
-"west virginia",virginia
-"west virginia",kentucky
-"west virginia",ohio
+west virginia,pennsylvania
+west virginia,maryland
+west virginia,virginia
+west virginia,kentucky
+west virginia,ohio
 wisconsin,michigan
 wisconsin,illinois
 wisconsin,iowa
 wisconsin,minnesota
 wyoming,montana
-wyoming,"south dakota"
+wyoming,south dakota
 wyoming,nebraska
 wyoming,colorado
 wyoming,utah

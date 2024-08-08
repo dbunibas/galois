@@ -3,7 +3,7 @@ iliamna,2675.0,usa,alaska
 becharof,1186.0,usa,alaska
 teshekpuk,816.0,usa,alaska
 naknek,630.0,usa,alaska
-"salton sea",932.0,usa,california
+salton sea,932.0,usa,california
 tahoe,497.0,usa,california
 okeechobee,1810.0,usa,florida
 michigan,58016.0,usa,illinois
@@ -13,20 +13,20 @@ superior,82362.0,usa,michigan
 huron,59570.0,usa,michigan
 michigan,58016.0,usa,michigan
 erie,25667.0,usa,michigan
-"st. clair",1119.0,usa,michigan
+st. clair,1119.0,usa,michigan
 superior,82362.0,usa,minnesota
-"lake of the woods",4391.0,usa,minnesota
+lake of the woods,4391.0,usa,minnesota
 red,1169.0,usa,minnesota
 rainy,932.0,usa,minnesota
-"mille lacs",536.0,usa,minnesota
+mille lacs,536.0,usa,minnesota
 flathead,510.0,usa,montana
 tahoe,497.0,usa,nevada
-erie,25667.0,usa,"new york"
-ontario,19684.0,usa,"new york"
-champlain,1114.0,usa,"new york"
+erie,25667.0,usa,new york
+ontario,19684.0,usa,new york
+champlain,1114.0,usa,new york
 erie,25667.0,usa,ohio
 erie,25667.0,usa,pennsylvania
-"great salt lake",5180.0,usa,utah
+great salt lake,5180.0,usa,utah
 champlain,1114.0,usa,vermont
 superior,82362.0,usa,wisconsin
 michigan,58016.0,usa,wisconsin
