@@ -70,6 +70,19 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
     }
 
     @Override
+    public <S> WhereParseResult visit(Between between, S context) {
+        TableAlias tableAlias = contextToTableAlias(context);
+
+        String startStringExpression = between.isNot() ? "<" : ">=";
+        String endStringExpression = between.isNot() ? ">" : "<=";
+        String complexStringExpression = between.isNot() ? "||" : "&&";
+
+        WhereParseResult startResult = parseBinaryExpression(between.getLeftExpression(), startStringExpression, between.getBetweenExpressionStart(), tableAlias);
+        WhereParseResult endResult = parseBinaryExpression(between.getLeftExpression(), endStringExpression, between.getBetweenExpressionEnd(), tableAlias);
+        return parseComplexExpression(startResult, complexStringExpression, endResult);
+    }
+
+    @Override
     public <S> WhereParseResult visit(ExpressionList<? extends net.sf.jsqlparser.expression.Expression> expressionList, S context) {
         List<WhereParseResult> whereParseResults = expressionList.stream()
                 .map(e -> e.accept(this, context))

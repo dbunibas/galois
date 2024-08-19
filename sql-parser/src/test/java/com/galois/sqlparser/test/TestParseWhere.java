@@ -220,6 +220,41 @@ public class TestParseWhere {
         logTuples(tuples);
     }
 
+    @Test
+    public void testBetween() {
+        String sql = String.format("select * from %s t where t.salary between 9998 and 100001", TABLE_NAME);
+        ITable table = db.getTable(TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        assertInstanceOf(Select.class, root);
+        Select select = (Select) root;
+        assertEquals(1, select.getSelections().size());
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        assertEquals(3, tuples.size());
+
+        logTuples(tuples);
+    }
+
+    @Test
+    public void testNotBetween() {
+        String sql = String.format("select * from %s t where t.salary not between 9998 and 100001", TABLE_NAME);
+        ITable table = db.getTable(TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        assertInstanceOf(Select.class, root);
+        Select select = (Select) root;
+        assertEquals(1, select.getSelections().size());
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        assertEquals(table.getSize() - 3, tuples.size());
+    }
 
     private void logTuples(List<Tuple> tuples) {
         tuples.forEach(t -> log.info("{}", t));
