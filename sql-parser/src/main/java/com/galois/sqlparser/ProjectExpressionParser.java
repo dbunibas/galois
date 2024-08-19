@@ -27,7 +27,7 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
     @Override
     public <S> ProjectionAttribute visit(Function function, S context) {
         TableAlias tableAlias = contextToTableAlias(context);
-        return switch (function.getName()) {
+        return switch (function.getName().toLowerCase()) {
             case "count" -> parseCount(function, tableAlias);
             case "avg" -> parseAggregateFunction(AvgAggregateFunction::new, function, tableAlias);
             case "min" -> parseAggregateFunction(MinAggregateFunction::new, function, tableAlias);
