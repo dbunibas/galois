@@ -140,9 +140,14 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     private String getKeyAsString(Map<String, Object> key, List<String> primaryKeyAttributes) {
         StringBuilder builder = new StringBuilder().append(key.get(primaryKeyAttributes.getFirst()));
+        builder.append(" ( ");
         for (int i = 1; i < primaryKeyAttributes.size(); i++) {
-            builder.append(" ( ").append(key.get(primaryKeyAttributes.get(i))).append(" )");
+            builder.append(key.get(primaryKeyAttributes.get(i)));
+            if (i + 1 < primaryKeyAttributes.size()) {
+                builder.append(", ");
+            }
         }
+        builder.append(" )");
         return builder.toString();
     }
 
