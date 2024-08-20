@@ -105,7 +105,7 @@ public class QueryUtils {
 //        return "[a-zA-Z0-9,. ]+";
     }
 
-    public static String generateJsonSchemaForKeys(ITable table) {
+    public static String generateJsonSchemaForPrimaryKey(ITable table) {
         Map<String, Object> map = new HashMap<>();
         map.put("title", table.getName());
         map.put("type", "array");
@@ -115,6 +115,13 @@ public class QueryUtils {
         map.put("items", items);
 
         return asString(map);
+    }
+
+    public static String generateJsonSchemaForCompositePrimaryKey(ITable table, Key primaryKey) {
+        List<Attribute> attributes = primaryKey.getAttributes().stream()
+                .map(a -> table.getAttribute(a.getName()))
+                .toList();
+        return generateJsonSchemaListFromAttributes(table, attributes);
     }
 
     public static String generateJsonSchemaFromAttribute(ITable table, Attribute attribute) {

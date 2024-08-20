@@ -9,9 +9,11 @@ import speedy.model.database.*;
 import java.util.*;
 
 import static galois.llm.query.utils.QueryUtils.*;
+
 import galois.prompt.EPrompts;
 import galois.utils.GaloisDebug;
 import galois.utils.Mapper;
+
 import static galois.utils.Mapper.toCleanJsonList;
 
 @Slf4j
@@ -37,7 +39,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         ITable table = database.getTable(tableAlias.getTableName());
 
         Key primaryKey = database.getPrimaryKey(table.getName());
-        Set<String> keyValues = getKeyValues(table, primaryKey, chain);
+        List<Map<String, Object>> keyValues = getKeyValues(table, primaryKey, chain);
 
         List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
         GaloisDebug.log("LLMScan results:");
@@ -45,9 +47,11 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         return tuples;
     }
 
-    private Set<String> getKeyValues(ITable table, Key primaryKey, ConversationalChain chain) {
-        Set<String> keys = new HashSet<>();
-        String schema = generateJsonSchemaForKeys(table);
+    private List<Map<String, Object>> getKeyValues(ITable table, Key primaryKey, ConversationalChain chain) {
+        List<Map<String, Object>> keys = new ArrayList<>();
+        String schema = primaryKey.isCompositeKey() ?
+                generateJsonSchemaForCompositePrimaryKey(table, primaryKey) :
+                generateJsonSchemaForPrimaryKey(table);
 
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
@@ -63,11 +67,12 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 callGetResponse = true;
                 log.debug("Response is: {}", response);
                 if (response == null || response.trim().isBlank()) break; // avoid other requests
-                List<String> currentKeys = getFirstPrompt().getKeyParser().parse(response);
+                List<Map<String, Object>> currentKeys = parseKeyResponse(response, table, primaryKey);
                 log.debug("Parsed keys are: {}", currentKeys);
                 if (currentKeys.isEmpty()) break; // avoid other requests
                 String cleanedResponse = toCleanJsonList(response);
-                currentKeys = getFirstPrompt().getKeyParser().parse(cleanedResponse);
+                log.debug("Cleaned response is : {}", cleanedResponse);
+                currentKeys = parseKeyResponse(cleanedResponse, table, primaryKey);
                 if (!currentKeys.isEmpty()) {
                     keys.addAll(currentKeys);
                 } else {
@@ -86,7 +91,21 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         return keys;
     }
 
-    private Tuple generateTupleFromKey(ITable table, TableAlias tableAlias, String keyValue, Key primaryKey, ConversationalChain chain) {
+    private List<Map<String, Object>> parseKeyResponse(String response, ITable table, Key primaryKey) {
+        List<Map<String, Object>> currentKeys = new ArrayList<>();
+        if (primaryKey.isCompositeKey()) {
+            currentKeys = getFirstPrompt().getEntitiesParser().parse(response, table);
+        } else {
+            List<String> keys = getFirstPrompt().getKeyParser().parse(response);
+            for (String key : keys) {
+                Map<String, Object> keyMap = Map.of(primaryKey.getAttributes().getFirst().getName(), key);
+                currentKeys.add(keyMap);
+            }
+        }
+        return currentKeys;
+    }
+
+    private Tuple generateTupleFromKey(ITable table, TableAlias tableAlias, Map<String, Object> keyValue, Key primaryKey, ConversationalChain chain) {
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream().map(AttributeRef::getName).toList();
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
         addCellForPrimaryKey(tuple, tableAlias, keyValue, primaryKeyAttributes);
@@ -104,17 +123,27 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                     .filter(a -> !a.getName().equals("oid") && !primaryKeyAttributes.contains(a.getName()))
                     .toList();
         }
-        return addValueFromAttributes(table, tableAlias, attributesQuery, tuple, keyValue, chain);
+        String keyAsString = getKeyAsString(keyValue, primaryKeyAttributes);
+        return addValueFromAttributes(table, tableAlias, attributesQuery, tuple, keyAsString, chain);
     }
 
-    private void addCellForPrimaryKey(Tuple tuple, TableAlias tableAlias, String key, List<String> primaryKeyAttributes) {
-        // TODO: Handle composite key
-        Cell keyCell = new Cell(
-                tuple.getOid(),
-                new AttributeRef(tableAlias, primaryKeyAttributes.get(0)),
-                new ConstantValue(key)
-        );
-        tuple.addCell(keyCell);
+    private void addCellForPrimaryKey(Tuple tuple, TableAlias tableAlias, Map<String, Object> key, List<String> primaryKeyAttributes) {
+        for (String attribute : primaryKeyAttributes) {
+            Cell keyCell = new Cell(
+                    tuple.getOid(),
+                    new AttributeRef(tableAlias, attribute),
+                    new ConstantValue(key.get(attribute))
+            );
+            tuple.addCell(keyCell);
+        }
+    }
+
+    private String getKeyAsString(Map<String, Object> key, List<String> primaryKeyAttributes) {
+        StringBuilder builder = new StringBuilder().append(key.get(primaryKeyAttributes.getFirst()));
+        for (int i = 1; i < primaryKeyAttributes.size(); i++) {
+            builder.append(" ( ").append(key.get(primaryKeyAttributes.get(i))).append(" )");
+        }
+        return builder.toString();
     }
 
     protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributesPrompt, String key, ConversationalChain chain) {
