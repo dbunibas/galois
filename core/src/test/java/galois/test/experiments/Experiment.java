@@ -229,6 +229,7 @@ public final class Experiment {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
         IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), query.getSql(), operator);
+        log.info("Optimized operator: {}", optimizedOperator);
         ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), query.getDatabase());
         return toExperimentResults(iterator, expectedResults, optimizer.getName());
     }

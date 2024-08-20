@@ -74,9 +74,9 @@ public class SingleConditionPushdown implements IOptimization {
         }
         TableAlias tableAlias = scan.getTableAlias();
         ITable table = database.getTable(tableAlias.getTableName());
-        String replaceAlias = tableAlias.getAlias() + ".";
+        String replaceAlias = (tableAlias.isAliased() ? tableAlias.getAlias() : tableAlias.getTableName()) + ".";
         String cleanOperation = cleanExpression(operation);
-        log.debug("Clean Operation: " + cleanOperation);
+        log.debug("Clean Operation: {}", cleanOperation);
         List<Expression> remainingConditionsSpeedy = toSpeedyExpression(remainingConditions, tableAlias);
         log.debug("Remaining Conditions Speedy: {}", remainingConditionsSpeedy);
         String conditionsAsString = remainingConditionsSpeedy.stream()
