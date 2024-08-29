@@ -60,7 +60,8 @@ public enum EPrompts {
 //    LIST_DIFFERENT_VALUES_JSON("List different values. Respond with JSON only.", null, null, null),
     LIST_DIFFERENT_VALUES_JSON("List more values if there are more, otherwise return an empty JSON. Respond with JSON only.", null, null, null),
 //    LIST_MORE_NO_REPEAT("List more values. Don't repeat the previous values.", null, null, null),
-    LIST_MORE_NO_REPEAT("List more values if there are more, otherwise return an empty response. Don't repeat the previous values.", null, null, null),
+//    LIST_MORE_NO_REPEAT("List more values if there are more, otherwise return an empty response. Don't repeat the previous values.", null, null, null),
+    LIST_MORE_NO_REPEAT("List more unique values if there are more, otherwise return an empty response. Don't repeat the previous values.", null, null, null),
     
     // JSON Error correction
     ERROR_JSON_FORMAT("Respond in an appropriate JSON format.", null, null, null),

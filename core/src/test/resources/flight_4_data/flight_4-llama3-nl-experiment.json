@@ -159,7 +159,7 @@
             },
             {
               "name": "alid",
-              "type": "INTEGER",
+              "type": "REAL",
               "nullable": true
             },
             {
