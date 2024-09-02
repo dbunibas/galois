@@ -86,6 +86,10 @@ public class SingleConditionPushdown implements IOptimization {
                 .collect(Collectors.joining(cleanOperation));
         log.debug("Condition as string: {}", conditionsAsString);
 //        Expression expression = new Expression(cleanExpression(conditionsAsString));
+        if (conditionsAsString.contains("UMinus")) {
+            conditionsAsString = conditionsAsString.replace("UMinus(", "-").replaceFirst("[)]", "");
+            log.debug("Condition as string: {}", conditionsAsString);
+        }
         Expression expression = new Expression(conditionsAsString);
         addAllAttributesToExpression(expression, table, tableAlias);
         log.debug("Optimized select expression: {}", expression);

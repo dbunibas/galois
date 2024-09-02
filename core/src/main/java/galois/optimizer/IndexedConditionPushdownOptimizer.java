@@ -42,8 +42,10 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
                     return currentNode;
                 }
                 List<Expression> expressions = parserWhere.getExpressions();
+                log.debug("Expressions is: {}", expressions);
                 pushdownCondition = expressions.remove(index);
                 log.debug("pushdownCondition is: {}", pushdownCondition);
+                log.debug("Remaining Expressions is: {}", expressions);
                 SingleConditionPushdown singleConditionPushdown = new SingleConditionPushdown(pushdownCondition, expressions, parserWhere.getOperation());
                 IAlgebraOperator optimizedNode = singleConditionPushdown.optimize(database, currentNode);
                 if (removeFromAlgebraTree) {
