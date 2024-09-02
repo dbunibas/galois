@@ -49,7 +49,7 @@ public class TestRunFlight4Batch {
                 .queryNum("Q1")
                 .querySql("select a.name from target.airports a where a.elevation >= -50 and a.elevation <= 50")
                 .prompt("Find the name of airports whose altitude is between -50 and 50")
-                .optimizers(singleConditionOptimizers)
+                .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q2 = ExpVariant.builder()
@@ -63,7 +63,7 @@ public class TestRunFlight4Batch {
                 .queryNum("Q3")
                 .querySql("select name, city, country, elevation from airports where city = 'New York'")
                 .prompt("Find the name, city, country, and altitude (or elevation) of the airports in the city of New York.")
-                .optimizers(multipleConditionsOptimizers)
+                .optimizers(singleConditionOptimizers)
                 .build();
 
         // FIXME: Which Speedy tree can execute this query?
@@ -104,16 +104,16 @@ public class TestRunFlight4Batch {
         // TO DEBUG single experiment
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
-        ExpVariant variant = variants.get(0);
-        String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";
-        String type = "TABLE";
+        ExpVariant variant = variants.get(2);
+        String configPath = "/flight_4_data/flight_4-llama3-sql-experiment.json";
+        String type = "SQL";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
         IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
         IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
         IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
-        testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
+        testRunner.executeSingle(configPath, type, variant, metrics, results, nullOptimizer);
     }
 
 }
