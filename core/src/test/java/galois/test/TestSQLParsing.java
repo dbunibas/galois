@@ -65,7 +65,6 @@ public class TestSQLParsing {
         ParserWhere parser = new ParserWhere();
         parser.parseExpression(expression, true);
         Assertions.assertTrue(parser.getOperation().equals("AND"));
-        System.out.println(parser.getExpressions().size());
         Assertions.assertTrue(parser.getExpressions().size() == 2);
     }
 

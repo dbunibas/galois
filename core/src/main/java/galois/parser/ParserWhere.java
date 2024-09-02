@@ -12,6 +12,7 @@ import net.sf.jsqlparser.expression.HexValue;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NotExpression;
 import net.sf.jsqlparser.expression.NullValue;
+import net.sf.jsqlparser.expression.SignedExpression;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.TimeValue;
 import net.sf.jsqlparser.expression.TimestampValue;
@@ -106,8 +107,8 @@ public class ParserWhere {
             public <S> Object visit(ExtractExpression expr, S context) {
                 logger.debug("Visit ExtractExpression: " + expr);
                 return super.visit(expr, context);
-            }            
-
+            }    
+            
             @Override
             protected <S> Object visitBinaryExpression(BinaryExpression expr, S context) {
                 logger.debug("Visit Binary: " + expr);
@@ -125,12 +126,18 @@ public class ParserWhere {
                     logger.debug("Create Leaf LLMScan on expr: " + expr);
                     logger.debug("Add LLMScan on the current");
                     expressions.add(expr);
-                    return null;
+//                    return null;
                 } else {
-                    return super.visitBinaryExpression(expr, context);
+                    logger.debug("Else - Visit: " + expr);
+                    logger.debug("Visit Left Expr: " + leftExpression);
+                    leftExpression.accept(this, context);
+                    logger.debug("Visit Right Expr: " + rightExpression);
+                    rightExpression.accept(this, context);
+//                    super.visitBinaryExpression(expr, context);
+//                    return null;
                 }
+                return null;
             }
-            
             
             @Override
             public <S> Object visit(OrExpression expr, S context) {
@@ -169,7 +176,8 @@ public class ParserWhere {
                         || (expression instanceof StringValue)
                         || (expression instanceof TimeValue)
                         || (expression instanceof TimeValue)
-                        || (expression instanceof TimestampValue)) {
+                        || (expression instanceof TimestampValue)
+                        || (expression instanceof SignedExpression)) {
                     return true;
                 }
                 return false;
