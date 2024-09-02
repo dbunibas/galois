@@ -18,7 +18,7 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-nl",
+      "queryExecutor": "togetherai-llama3-sql",
       "maxIterations": 10
     }
   },
