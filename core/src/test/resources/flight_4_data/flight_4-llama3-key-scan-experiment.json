@@ -19,7 +19,7 @@
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-key-scan",
-      "maxIterations": 10
+      "maxIterations": 1
     }
   },
   "query": {
@@ -97,12 +97,12 @@
             },
             {
               "name": "x",
-              "type": "DOUBLE",
+              "type": "REAL",
               "nullable": false
             },
             {
               "name": "y",
-              "type": "DOUBLE",
+              "type": "REAL",
               "nullable": false
             },
             {

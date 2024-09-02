@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import speedy.model.database.Attribute;
+import speedy.model.database.Cell;
+import speedy.model.database.ITable;
+import speedy.model.database.NullValue;
+import speedy.persistence.Types;
 
 @Getter
 public class LLMScan extends Scan {
@@ -29,6 +34,7 @@ public class LLMScan extends Scan {
     private final IQueryExecutor queryExecutor;
     private List<AttributeRef> attributesSelect = null;
     private final String normalizationStrategy;
+    private final boolean checkTypes = true;
 
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, String normalizationStrategy) {
         super(tableAlias);
@@ -143,6 +149,13 @@ public class LLMScan extends Scan {
                 if (normalizationStrategy != null) {
                     result = QueryUtils.normalizeTextValues(result, normalizationStrategy);
                 }
+                if (checkTypes) {
+                    boolean check = checkTupleTypes(result, database);
+                    if (!check)  {
+                        logger.warn("Ignoring tuple because has different types: " + result);
+                        return next();
+                    }
+                }
                 return result;
             }
 
@@ -155,9 +168,36 @@ public class LLMScan extends Scan {
                 if (normalizationStrategy != null) {
                     result = QueryUtils.normalizeTextValues(result, normalizationStrategy);
                 }
+                if (checkTypes) {
+                    boolean check = checkTupleTypes(result, database);
+                    if (!check)  {
+                        logger.warn("Ignoring tuple because has different types: " + result);
+                        return next();
+                    }
+                }
                 return result;
             }
             return null;
+        }
+
+        private boolean checkTupleTypes(Tuple tuple, IDatabase database) {
+            ITable table = database.getTable(tableAlias.getTableName());
+            for (Cell cell : tuple.getCells()) {
+                Attribute attribute = table.getAttribute(cell.getAttribute());
+                if (logger.isDebugEnabled()) logger.debug("Attribute " + attribute.getName() + " with type " + attribute.getType() + " - value: " + cell.getValue().getPrimitiveValue().toString());
+                if (logger.isDebugEnabled()) logger.debug("Numerical Attribute? " + Types.isNumerical(attribute.getType()));
+                if (logger.isDebugEnabled()) logger.debug("Type check: " + Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()));
+                if (Types.isNumerical(attribute.getType()) && (cell.getValue().getPrimitiveValue().toString().isBlank() || !Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()))) {
+                    if (attribute.getNullable()) {
+                        if (logger.isDebugEnabled()) logger.debug("Attribute is nullable - Set cell to 'null'");
+                        cell.setValue(new NullValue("null"));
+                    } else {
+                        if (logger.isDebugEnabled()) logger.debug("Skip check condition - Return false");
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

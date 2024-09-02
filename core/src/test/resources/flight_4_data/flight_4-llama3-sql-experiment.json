@@ -97,12 +97,12 @@
             },
             {
               "name": "x",
-              "type": "DOUBLE",
+              "type": "REAL",
               "nullable": false
             },
             {
               "name": "y",
-              "type": "DOUBLE",
+              "type": "REAL",
               "nullable": false
             },
             {
