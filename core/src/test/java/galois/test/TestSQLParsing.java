@@ -58,6 +58,16 @@ public class TestSQLParsing {
         Assertions.assertTrue(parser.getOperation().equals("OR"));
         Assertions.assertTrue(parser.getExpressions().size() == 4);
     }
+    
+    @Test
+    public void testExpressionANDSameVariable() {
+        String expression = "a.elevation >=-50 AND a.elevation <=50";
+        ParserWhere parser = new ParserWhere();
+        parser.parseExpression(expression, true);
+        Assertions.assertTrue(parser.getOperation().equals("AND"));
+        System.out.println(parser.getExpressions().size());
+        Assertions.assertTrue(parser.getExpressions().size() == 2);
+    }
 
     @Test
     public void testFrom1Table() {
