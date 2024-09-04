@@ -15,8 +15,9 @@
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-nl",
-      "maxIterations": 5,
-      "naturalLanguagePrompt": "{{PROMPT}}"
+      "maxIterations": 10,
+      "naturalLanguagePrompt": "{{PROMPT}}",
+      "normalizationStrategy": "lowerCase"
     }
   },
   "query": {

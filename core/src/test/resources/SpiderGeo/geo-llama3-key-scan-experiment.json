@@ -17,7 +17,8 @@
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-key-scan",
-      "maxIterations": 5
+      "maxIterations": 10,
+      "normalizationStrategy": "lowerCase"
     }
   },
   "query": {
