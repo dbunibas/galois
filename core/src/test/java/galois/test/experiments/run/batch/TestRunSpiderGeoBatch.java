@@ -61,7 +61,7 @@ public class TestRunSpiderGeoBatch {
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("SELECT COUNT ( capital ) FROM usa_state WHERE state_name = 'rhode island';")
+                .querySql("SELECT count(capital) FROM usa_state WHERE state_name = 'rhode island';")
                 .prompt("how many capitals does rhode island have")
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -71,127 +71,127 @@ public class TestRunSpiderGeoBatch {
                 .querySql("SELECT population FROM usa_city WHERE city_name = 'boulder';")
                 .prompt("how many people live in boulder")
                 .optimizers(singleConditionOptimizers)
-                .build();
+                .build();  // Population changed from 76k to 105k
 
         ExpVariant q5 = ExpVariant.builder()
                 .queryNum("Q5")
-                .querySql("SELECT COUNT ( state_name ) FROM usa_state; ")
+                .querySql("SELECT count(state_name) FROM usa_state; ")
                 .prompt("how many states are in the usa")
                 .optimizers(List.of())
-                .build();
+                .build(); // LLM return 57 instead of 51 due to iterations or 6 new invented states
 
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
                 .querySql("SELECT lake_name FROM usa_lake WHERE state_name = 'california';")
                 .prompt("give me the lakes in california")
                 .optimizers(singleConditionOptimizers)
-                .build();
+                .build(); // the query results from the expected do not contains any artificial lake, and also miss some other lakes like: lake berryessa
 
         ExpVariant q7 = ExpVariant.builder()
                 .queryNum("Q7")
-                .querySql("SELECT AVG ( population ) FROM usa_state;")
+                .querySql("SELECT avg(population) FROM usa_state;")
                 .prompt("what is the average population of the us by state")
                 .optimizers(List.of())
                 .build();
 
         ExpVariant q8 = ExpVariant.builder()
                 .queryNum("Q8")
-                .querySql("SELECT COUNT ( river_name ) FROM usa_river;")
+                .querySql("SELECT count(river_name) FROM usa_river;")
                 .prompt("how many rivers are there in us")
                 .optimizers(List.of())
-                .build();
+                .build(); // LLM return 390 instead of 149 due to duplicate river names (Prairie River too many times) with Table, and only 37 with Key
 
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
-                .querySql("SELECT LENGTH FROM usa_river WHERE river_name = 'rio grande';")
+                .querySql("SELECT r.lenght FROM usa_river r WHERE r.river_name = 'rio grande';")
                 .prompt("how long is the rio grande river")
                 .optimizers(singleConditionOptimizers)
-                .build();
+                .build(); //TODO execute again
 
         ExpVariant q10 = ExpVariant.builder()
                 .queryNum("Q10")
                 .querySql("SELECT traverse FROM usa_river;")
                 .prompt("which states have a river")
                 .optimizers(List.of())
+                .build(); // LLM return explanation of the traverse into the attribute traverse. Maybe is ambiguous
+
+        ExpVariant q11 = ExpVariant.builder()
+                .queryNum("Q11")
+                .querySql("SELECT lake_name FROM usa_lake;")
+                .prompt("name all the lakes of us")
+                .optimizers(List.of())
+                .build(); // the GT contains only 32 lakes with duplicate names...probably there are more in US. The LLM return "lake name" and is not captured by the similarity metric
+
+        ExpVariant q12 = ExpVariant.builder()
+                .queryNum("Q12")
+                .querySql("SELECT traverse FROM usa_river WHERE LENGTH > 750;")
+                .prompt("what states contain at least one major rivers")
+                .optimizers(singleConditionOptimizers)
+                .build(); // The LLM return river in the name of the river
+
+        ExpVariant q13 = ExpVariant.builder()
+                .queryNum("Q13")
+                .querySql("SELECT state_name FROM usa_city WHERE city_name = 'springfield';")
+                .prompt("what state is springfield in")
+                .optimizers(singleConditionOptimizers)
                 .build();
 
-//        ExpVariant q11 = ExpVariant.builder()
-//                .queryNum("Q11")
-//                .querySql("SELECT lake_name FROM lake;")
-//                .prompt("name all the lakes of us")
-//                .optimizers(List.of())
-//                .build();
-//
-//        ExpVariant q12 = ExpVariant.builder()
-//                .queryNum("Q12")
-//                .querySql("SELECT traverse FROM river WHERE LENGTH > 750;")
-//                .prompt("what states contain at least one major rivers")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
-//
-//        ExpVariant q13 = ExpVariant.builder()
-//                .queryNum("Q13")
-//                .querySql("SELECT state_name FROM city WHERE city_name = 'springfield';")
-//                .prompt("what state is springfield in")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
-//
-//        ExpVariant q14 = ExpVariant.builder()
-//                .queryNum("Q14")
-//                .querySql("SELECT lake_name FROM lake WHERE area > 750 AND state_name = 'michigan';")
-//                .prompt("name the major lakes in michigan")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
-//
-//        ExpVariant q15 = ExpVariant.builder()
-//                .queryNum("Q15")
-//                .querySql("SELECT lake_name FROM lake WHERE area > 750;")
-//                .prompt("what are the major lakes in united states")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
-//
-//        ExpVariant q16 = ExpVariant.builder()
-//                .queryNum("Q16")
-//                .querySql("SELECT state_name FROM city WHERE city_name = 'austin' AND population > 150000;")
-//                .prompt("which states have a major city named austin")
-//                .optimizers(multipleConditionsOptimizers)
-//                .build();
-//
-//        ExpVariant q17 = ExpVariant.builder()
-//                .queryNum("Q17")
-//                .querySql("SELECT COUNT ( state_name ) FROM city WHERE city_name = 'springfield';")
-//                .prompt("how many states have a city named springfield")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
-//
-//        ExpVariant q18 = ExpVariant.builder()
-//                .queryNum("Q18")
-//                .querySql("SELECT COUNT ( traverse ) FROM river WHERE LENGTH > 750;")
-//                .prompt("how many states have major rivers")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
+        ExpVariant q14 = ExpVariant.builder()
+                .queryNum("Q14")
+                .querySql("SELECT lake_name FROM usa_lake WHERE area > 750 AND state_name = 'michigan';")
+                .prompt("name the major lakes in michigan")
+                .optimizers(singleConditionOptimizers)
+                .build();
 
-//        ExpVariant q19 = ExpVariant.builder()
-//                .queryNum("Q19")
-//                .querySql("SELECT traverse FROM river WHERE LENGTH = ( SELECT MIN ( LENGTH ) FROM river );")
-//                .prompt("what states does the shortest river run through")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
+        ExpVariant q15 = ExpVariant.builder()
+                .queryNum("Q15")
+                .querySql("SELECT lake_name FROM usa_lake WHERE area > 750;")
+                .prompt("what are the major lakes in united states")
+                .optimizers(singleConditionOptimizers)
+                .build();
 
-//        ExpVariant q20 = ExpVariant.builder()
-//                .queryNum("Q20")
-//                .querySql("SELECT population FROM city WHERE city_name = 'seattle' AND state_name = 'washington';")
-//                .prompt("what is the population of seattle washington")
-//                .optimizers(multipleConditionsOptimizers)
-//                .build();
-//
-//        ExpVariant q21 = ExpVariant.builder()
-//                .queryNum("Q21")
-//                .querySql("SELECT COUNT ( DISTINCT traverse ) FROM river WHERE LENGTH > 750;")
-//                .prompt("how many states are next to major rivers")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
-//
+        ExpVariant q16 = ExpVariant.builder()
+                .queryNum("Q16")
+                .querySql("SELECT state_name FROM usa_city WHERE city_name = 'austin' AND population > 150000;")
+                .prompt("which states have a major city named austin")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q17 = ExpVariant.builder()
+                .queryNum("Q17")
+                .querySql("SELECT COUNT ( state_name ) FROM usa_city WHERE city_name = 'springfield';")
+                .prompt("how many states have a city named springfield")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q18 = ExpVariant.builder()
+                .queryNum("Q18")
+                .querySql("SELECT COUNT ( traverse ) FROM usa_river WHERE LENGTH > 750;")
+                .prompt("how many states have major rivers")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q19 = ExpVariant.builder()
+                .queryNum("Q19")
+                .querySql("SELECT traverse FROM usa_river WHERE LENGTH = ( SELECT MIN ( LENGTH ) FROM usa_river);")
+                .prompt("what states does the shortest river run through")
+                .optimizers(singleConditionOptimizers)
+                .build();
+                
+        ExpVariant q20 = ExpVariant.builder()
+                .queryNum("Q20")
+                .querySql("SELECT population FROM usa_city WHERE city_name = 'seattle' AND state_name = 'washington';")
+                .prompt("what is the population of seattle washington")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q21 = ExpVariant.builder()
+                .queryNum("Q21")
+                .querySql("SELECT COUNT ( DISTINCT traverse ) FROM usa_river WHERE LENGTH > 750;")
+                .prompt("how many states are next to major rivers")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
 //        ExpVariant q22 = ExpVariant.builder()
 //                .queryNum("Q22")
 //                .querySql("SELECT DISTINCT capital FROM state;")
@@ -285,14 +285,14 @@ public class TestRunSpiderGeoBatch {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         ExpVariant variant = variants.get(0);
-        String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
-        String type = "TABLE";
+        String configPath = "/SpiderGeo/geo-llama3-key-scan-experiment.json";
+        String type = "KEY-SCAN";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
         IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
         IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
         IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
-        testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
+        testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdownWithFilter);
     }
 }

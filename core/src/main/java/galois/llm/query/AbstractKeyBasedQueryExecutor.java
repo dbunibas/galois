@@ -48,7 +48,8 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     }
 
     private List<Map<String, Object>> getKeyValues(ITable table, Key primaryKey, ConversationalChain chain) {
-        List<Map<String, Object>> keys = new ArrayList<>();
+//        List<Map<String, Object>> keys = new ArrayList<>();
+        Set<Map<String, Object>> keys = new HashSet<>();
         String schema = primaryKey.isCompositeKey() ?
                 generateJsonSchemaForCompositePrimaryKey(table, primaryKey) :
                 generateJsonSchemaForPrimaryKey(table);
@@ -88,7 +89,13 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 }
             }
         }
-        return keys;
+//        boolean debug = true;
+//        int debugSize = 10;
+//        if (debug) {
+//            return keys.subList(0, debugSize);
+//        }
+//        return keys;
+        return new ArrayList<>(keys);
     }
 
     private List<Map<String, Object>> parseKeyResponse(String response, ITable table, Key primaryKey) {
