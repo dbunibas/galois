@@ -40,6 +40,8 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
         Key primaryKey = database.getPrimaryKey(table.getName());
         List<Map<String, Object>> keyValues = getKeyValues(table, primaryKey, chain);
+        GaloisDebug.log("Parsed keys are:");
+        GaloisDebug.log(keyValues);
 
         List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
         GaloisDebug.log("LLMScan results:");
@@ -130,6 +132,11 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                     .filter(a -> !a.getName().equals("oid") && !primaryKeyAttributes.contains(a.getName()))
                     .toList();
         }
+
+        if (attributesQuery.isEmpty()) {
+            return tuple;
+        }
+
         String keyAsString = getKeyAsString(keyValue, primaryKeyAttributes);
         return addValueFromAttributes(table, tableAlias, attributesQuery, tuple, keyAsString, chain);
     }
@@ -147,6 +154,10 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     private String getKeyAsString(Map<String, Object> key, List<String> primaryKeyAttributes) {
         StringBuilder builder = new StringBuilder().append(key.get(primaryKeyAttributes.getFirst()));
+        if (primaryKeyAttributes.size() == 1) {
+            return builder.toString();
+        }
+
         builder.append(" ( ");
         for (int i = 1; i < primaryKeyAttributes.size(); i++) {
             builder.append(key.get(primaryKeyAttributes.get(i)));
