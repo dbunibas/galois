@@ -256,6 +256,23 @@ public class TestParseWhere {
         assertEquals(table.getSize() - 3, tuples.size());
     }
 
+    @Test
+    public void testNegativeValue() {
+        String sql = String.format("select * from %s t where t.salary > -50000 and t.salary < 1000000", TABLE_NAME);
+        ITable table = db.getTable(TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        assertInstanceOf(Select.class, root);
+        Select select = (Select) root;
+        assertEquals(1, select.getSelections().size());
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        assertEquals(table.getSize(), tuples.size());
+    }
+
     private void logTuples(List<Tuple> tuples) {
         tuples.forEach(t -> log.info("{}", t));
     }

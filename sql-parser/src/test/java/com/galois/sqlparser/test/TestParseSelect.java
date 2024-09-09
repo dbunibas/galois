@@ -3,19 +3,21 @@ package com.galois.sqlparser.test;
 import com.galois.sqlparser.SQLQueryParser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Attr;
+import speedy.model.algebra.Distinct;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Project;
 import speedy.model.algebra.Scan;
 import speedy.model.algebra.operators.ITupleIterator;
-import speedy.model.database.ITable;
-import speedy.model.database.Tuple;
+import speedy.model.database.*;
 import speedy.model.database.mainmemory.MainMemoryDB;
 import speedy.persistence.DAOMainMemoryDatabase;
 
 import java.util.List;
 
+import static com.galois.sqlparser.test.TestUtils.toTupleList;
+import static com.galois.sqlparser.test.TestUtils.toTupleStream;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,7 +50,7 @@ public class TestParseSelect {
         assertEquals(0, scan.getChildren().size());
 
         ITupleIterator tupleIterator = root.execute(null, db);
-        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        List<Tuple> tuples = toTupleList(tupleIterator);
         assertEquals(table.getSize(), tuples.size());
         tuples.forEach(t -> assertEquals(table.getAttributes().size() + 1, t.getCells().size()));
 
@@ -76,7 +78,7 @@ public class TestParseSelect {
         assertEquals(0, scan.getChildren().size());
 
         ITupleIterator tupleIterator = root.execute(null, db);
-        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        List<Tuple> tuples = toTupleList(tupleIterator);
         assertEquals(table.getSize(), tuples.size());
         tuples.forEach(t -> assertEquals(1 + 1, t.getCells().size()));
 
@@ -104,7 +106,7 @@ public class TestParseSelect {
         assertEquals(0, scan.getChildren().size());
 
         ITupleIterator tupleIterator = root.execute(null, db);
-        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        List<Tuple> tuples = toTupleList(tupleIterator);
         assertEquals(table.getSize(), tuples.size());
         tuples.forEach(t -> assertEquals(2 + 1, t.getCells().size()));
 
@@ -132,7 +134,7 @@ public class TestParseSelect {
         assertEquals(0, scan.getChildren().size());
 
         ITupleIterator tupleIterator = root.execute(null, db);
-        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        List<Tuple> tuples = toTupleList(tupleIterator);
         assertEquals(1, tuples.size());
         Tuple tuple = tuples.getFirst();
         assertEquals(1, tuple.getCells().size());
@@ -162,7 +164,7 @@ public class TestParseSelect {
         assertEquals(0, scan.getChildren().size());
 
         ITupleIterator tupleIterator = root.execute(null, db);
-        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        List<Tuple> tuples = toTupleList(tupleIterator);
         assertEquals(1, tuples.size());
         Tuple tuple = tuples.getFirst();
         assertEquals(1, tuple.getCells().size());
@@ -180,7 +182,7 @@ public class TestParseSelect {
         assertNotNull(root);
 
         ITupleIterator tupleIterator = root.execute(null, db);
-        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        List<Tuple> tuples = toTupleList(tupleIterator);
         assertEquals(1, tuples.size());
         Tuple tuple = tuples.getFirst();
         assertEquals(1, tuple.getCells().size());
@@ -198,7 +200,7 @@ public class TestParseSelect {
         assertNotNull(root);
 
         ITupleIterator tupleIterator = root.execute(null, db);
-        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        List<Tuple> tuples = toTupleList(tupleIterator);
 
         tuples.forEach(t -> assertEquals(0.0, t.getCells().getLast().getValue().getPrimitiveValue()));
     }
@@ -211,9 +213,31 @@ public class TestParseSelect {
         assertNotNull(root);
 
         ITupleIterator tupleIterator = root.execute(null, db);
-        List<Tuple> tuples = TestUtils.toTupleList(tupleIterator);
+        List<Tuple> tuples = toTupleList(tupleIterator);
 
         tuples.forEach(t -> assertEquals(0.0, t.getCells().getLast().getValue().getPrimitiveValue()));
+    }
+
+    @Test
+    public void testDistinct() {
+        String sql = String.format("select distinct(t.name) from %s t", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        assertInstanceOf(Distinct.class, root);
+        assertEquals(1, root.getChildren().size());
+        assertInstanceOf(Project.class, root.getChildren().getFirst());
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = toTupleList(tupleIterator);
+
+        ITable table = db.getTable(TABLE_NAME);
+        List<String> distinctCells = toTupleStream(table.getTupleIterator())
+                .map(t -> t.getCell(new AttributeRef(TABLE_NAME, "name")).getValue().toString())
+                .distinct()
+                .toList();
+        assertEquals(distinctCells.size(), tuples.size());
     }
 
     private void logTuples(List<Tuple> tuples) {

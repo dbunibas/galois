@@ -7,6 +7,7 @@ import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.*;
 import speedy.SpeedyConstants;
+import speedy.model.algebra.Distinct;
 import speedy.model.algebra.Limit;
 import speedy.model.algebra.Select;
 import speedy.model.algebra.*;
@@ -140,6 +141,12 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
 //            currentRoot = limit;
         }
 
+        // Distinct
+        Distinct distinct = null;
+        if (plainSelect.getDistinct() != null) {
+            distinct = new Distinct();
+        }
+
         IAlgebraOperator currentRoot;
 
         // TODO: Refactor by adding attributes in each method
@@ -222,6 +229,10 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
         if (limit != null) {
             limit.addChild(currentRoot);
             currentRoot = limit;
+        }
+        if (distinct != null) {
+            distinct.addChild(currentRoot);
+            currentRoot = distinct;
         }
 
         return currentRoot;
