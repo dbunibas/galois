@@ -183,18 +183,22 @@ public class LLMScan extends Scan {
         private boolean checkTupleTypes(Tuple tuple, IDatabase database) {
             ITable table = database.getTable(tableAlias.getTableName());
             for (Cell cell : tuple.getCells()) {
-                Attribute attribute = table.getAttribute(cell.getAttribute());
-                if (logger.isDebugEnabled()) logger.debug("Attribute " + attribute.getName() + " with type " + attribute.getType() + " - value: " + cell.getValue().getPrimitiveValue().toString());
-                if (logger.isDebugEnabled()) logger.debug("Numerical Attribute? " + Types.isNumerical(attribute.getType()));
-                if (logger.isDebugEnabled()) logger.debug("Type check: " + Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()));
-                if (Types.isNumerical(attribute.getType()) && (cell.getValue().getPrimitiveValue().toString().isBlank() || !Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()))) {
-                    if (attribute.getNullable()) {
-                        if (logger.isDebugEnabled()) logger.debug("Attribute is nullable - Set cell to 'null'");
-                        cell.setValue(new NullValue("null"));
-                    } else {
-                        if (logger.isDebugEnabled()) logger.debug("Skip check condition - Return false");
-                        return false;
+                try {
+                    Attribute attribute = table.getAttribute(cell.getAttribute());
+                    if (logger.isDebugEnabled()) logger.debug("Attribute " + attribute.getName() + " with type " + attribute.getType() + " - value: " + cell.getValue().getPrimitiveValue().toString());
+                    if (logger.isDebugEnabled()) logger.debug("Numerical Attribute? " + Types.isNumerical(attribute.getType()));
+                    if (logger.isDebugEnabled()) logger.debug("Type check: " + Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()));
+                    if (Types.isNumerical(attribute.getType()) && (cell.getValue().getPrimitiveValue().toString().isBlank() || !Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()))) {
+                        if (attribute.getNullable()) {
+                            if (logger.isDebugEnabled()) logger.debug("Attribute is nullable - Set cell to 'null'");
+                            cell.setValue(new NullValue("null"));
+                        } else {
+                            if (logger.isDebugEnabled()) logger.debug("Skip check condition - Return false");
+                            return false;
+                        }
                     }
+                } catch (IllegalArgumentException iae) {
+                    // generated attribute from a function...just skip it
                 }
             }
             return true;

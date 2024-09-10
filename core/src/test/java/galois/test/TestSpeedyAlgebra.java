@@ -1,5 +1,6 @@
 package galois.test;
 
+import galois.llm.query.utils.QueryUtils;
 import galois.test.utils.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -21,6 +22,7 @@ import speedy.persistence.DAOMainMemoryDatabase;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import speedy.persistence.Types;
 
 @Slf4j
 public class TestSpeedyAlgebra {
@@ -162,5 +164,31 @@ public class TestSpeedyAlgebra {
         ITupleIterator iterator = join.execute(null, database);
         Stream<Tuple> stream = TestUtils.toTupleStream(iterator);
         Assertions.assertEquals(2, stream.count());
+    }
+    
+    @Test
+    public void testSimpleSelectFromWithNormalization() {
+        // SQL: SELECT * FROM table
+        ITable table = database.getTable(TABLE_NAME);
+        Assertions.assertNotNull(table, "Table is null!");
+
+        TableAlias tableAlias = new TableAlias(TABLE_NAME);
+        Scan scan = new Scan(tableAlias);
+
+        ITupleIterator iterator = scan.execute(null, database);
+        while(iterator.hasNext()) {
+            Tuple tuple = iterator.next();
+            Tuple normalized = QueryUtils.normalizeTextValues(tuple, QueryUtils.NORMALIZE_UPPER_CASE);
+            log.info("Tuple {}", tuple);
+            log.info("Normalized {}", normalized);
+        }
+    }
+    
+    @Test
+    public void testTypeCheck() {
+        Assertions.assertEquals(false, Types.checkType(Types.INTEGER, ""));
+        Assertions.assertEquals(false, Types.checkType(Types.DOUBLE_PRECISION, ""));
+        Assertions.assertEquals(true, Types.checkType(Types.INTEGER, "1"));
+        Assertions.assertEquals(true, Types.checkType(Types.DOUBLE_PRECISION, "1.0"));
     }
 }

@@ -42,7 +42,7 @@
               "nullable": true
             },
             {
-              "name": "area",
+              "name": "area_squared_miles",
               "type": "REAL",
               "nullable": true
             },
@@ -117,7 +117,7 @@
               "key": true
             },
             {
-              "name": "highest_elevation",
+              "name": "highest_elevation_in_meters",
               "type": "INTEGER",
               "nullable": true
             },
@@ -132,7 +132,7 @@
               "nullable": true
             },
             {
-              "name": "lowest_elevation",
+              "name": "lowest_elevation_in_meters",
               "type": "INTEGER",
               "nullable": true
             }
@@ -148,7 +148,7 @@
               "key": true
             },
             {
-              "name": "area",
+              "name": "area_squared_km",
               "type": "REAL",
               "nullable": true
             },
@@ -174,7 +174,7 @@
               "key": true
             },
             {
-              "name": "mountain_altitude",
+              "name": "mountain_altitude_in_meters",
               "type": "INTEGER",
               "nullable": true
             },
@@ -201,7 +201,7 @@
               "key": true
             },
             {
-              "name": "length",
+              "name": "length_in_km",
               "type": "INTEGER",
               "nullable": true
             },
@@ -211,7 +211,7 @@
               "nullable": false
             },
             {
-              "name": "traverse",
+              "name": "usa_state_traversed",
               "type": "STRING",
               "nullable": true
             }

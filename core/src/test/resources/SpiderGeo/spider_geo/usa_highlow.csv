@@ -1,4 +1,4 @@
-state_name,highest_elevation,lowest_point,highest_point,lowest_elevation
+state_name,highest_elevation_in_meters,lowest_point,highest_point,lowest_elevation_in_meters
 alabama,734,gulf of mexico,cheaha mountain,0
 alaska,6194,pacific ocean,mount mckinley,0
 arizona,3851,colorado river,humphreys peak,21
