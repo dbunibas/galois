@@ -1,6 +1,7 @@
 package com.galois.sqlparser;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
@@ -8,6 +9,7 @@ import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.*;
 import speedy.SpeedyConstants;
 import speedy.model.algebra.Distinct;
+import speedy.model.algebra.Join;
 import speedy.model.algebra.Limit;
 import speedy.model.algebra.Select;
 import speedy.model.algebra.*;
@@ -24,39 +26,54 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.galois.sqlparser.ParseUtils.contextToParseContext;
+
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
-    ScanNodeFactory scanNodeFactory;
+    private final ScanNodeFactory scanNodeFactory;
 
     @Override
     public <S> IAlgebraOperator visit(PlainSelect plainSelect, S context) {
+        ParseContext parseContext = new ParseContext();
+
         // From
         FromParser fromParser = new FromParser();
         FromItem fromItem = plainSelect.getFromItem();
         TableAlias tableAlias = fromItem.accept(fromParser, null);
-//        currentRoot = scanNodeFactory.createScanNode(tableAlias, List.of());
+        parseContext.addTableAlias(tableAlias);
+
+        // Join
+        Join join = null;
+        Scan joinRightScan = null;
+        if (plainSelect.getJoins() != null && !plainSelect.getJoins().isEmpty()) {
+            if (plainSelect.getJoins().size() > 1) {
+                throw new UnsupportedOperationException("Join with more than two tables are unsupported!");
+            }
+            JoinParser joinParser = new JoinParser();
+            net.sf.jsqlparser.statement.select.Join firstJoin = plainSelect.getJoins().getFirst();
+            TableAlias joinRightTableAlias = firstJoin.getFromItem().accept(fromParser, null);
+            parseContext.addTableAlias(joinRightTableAlias);
+            join = joinParser.parseJoin(firstJoin, tableAlias, joinRightTableAlias);
+            joinRightScan = scanNodeFactory.createScanNode(joinRightTableAlias, join.getRightAttributes());
+        }
 
         // Where
         WhereParser.WhereParseResult whereParseResult = null;
         Select select = null;
         if (plainSelect.getWhere() != null) {
             WhereParser whereParser = new WhereParser();
-            whereParseResult = plainSelect.getWhere().accept(whereParser, tableAlias);
+            whereParseResult = plainSelect.getWhere().accept(whereParser, parseContext);
             if (whereParseResult == null) {
                 throw new UnsupportedOperationException(String.format("Expression %s is unsupported!", plainSelect.getWhere().getClass()));
             }
             select = new Select(whereParseResult.expression());
-//            select.addChild(currentRoot);
-//            currentRoot = select;
         }
 
         // Group by
         GroupBy groupBy = null;
         if (plainSelect.getGroupBy() != null) {
-            groupBy = plainSelect.getGroupBy().accept(new GroupByParser(), tableAlias);
-//            groupBy.addChild(currentRoot);
-//            currentRoot = groupBy;
+            groupBy = plainSelect.getGroupBy().accept(new GroupByParser(), parseContext);
         }
 
         // Select
@@ -65,7 +82,7 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
         if (hasSelectItems(plainSelect)) {
             SelectItemParser selectItemParser = new SelectItemParser();
             projectionAttributes = plainSelect.getSelectItems().stream()
-                    .map(i -> i.accept(selectItemParser, tableAlias))
+                    .map(i -> i.accept(selectItemParser, parseContext))
                     .toList();
 
             // TODO: Refactor this (handles the compatibility with group by)
@@ -74,20 +91,18 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                         .filter(p -> p.isAggregative() && p.getAggregateFunction() instanceof CountAggregateFunction)
                         .findFirst()
                         .orElseThrow();
-                AttributeRef countRef = new VirtualAttributeRef(tableAlias, SpeedyConstants.COUNT, Types.INTEGER);
+                AttributeRef countRef = new VirtualAttributeRef(parseContext.getFromItemTableAlias(), SpeedyConstants.COUNT, Types.INTEGER);
                 List<IAggregateFunction> aggregateFunctions = Stream.concat(
                         groupBy.getAggregateFunctions().stream(),
                         Stream.of(new CountAggregateFunction(countRef))
                 ).toList();
                 groupBy = new GroupBy(groupBy.getGroupingAttributes(), aggregateFunctions);
-//                groupBy.addChild(currentRoot.getChildren().getFirst());
-//                currentRoot = groupBy;
                 projectionAttributes = projectionAttributes.stream()
                         .map(p -> p == groupByProjectionAttribute ? new ProjectionAttribute(countRef) : p)
                         .toList();
             }
 
-            // TODO: Refactor this (this makes pure attributes and aggregative functions compatible
+            // TODO: Refactor this (this makes pure attributes and aggregative functions compatible)
             if (projectionAttributes.stream().anyMatch(ProjectionAttribute::isAggregative)) {
                 projectionAttributes = projectionAttributes.stream()
                         .map(p -> !p.isAggregative() ? new ProjectionAttribute(new ValueAggregateFunction(p.getAttributeRef())) : p)
@@ -102,20 +117,19 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                 AttributeRef newAttribute = attributeRef;
                 if (item.getAlias() != null) {
                     if (attributeRef instanceof ExpressionAttributeRef expressionAttributeRef) {
-                        newAttribute = new ExpressionAttributeRef(expressionAttributeRef.getExpression(), tableAlias, item.getAlias().getName(), expressionAttributeRef.getType());
+                        newAttribute = new ExpressionAttributeRef(expressionAttributeRef.getExpression(), expressionAttributeRef.getTableAlias(), item.getAlias().getName(), expressionAttributeRef.getType());
                     } else if (attributeRef instanceof VirtualAttributeRef virtualAttributeRef) {
-                        newAttribute = new VirtualAttributeRef(tableAlias, item.getAlias().getName(), virtualAttributeRef.getType());
+                        newAttribute = new VirtualAttributeRef(virtualAttributeRef.getTableAlias(), item.getAlias().getName(), virtualAttributeRef.getType());
                     } else {
-                        newAttribute = new AttributeRef(tableAlias, item.getAlias().getName());
+                        newAttribute = new AttributeRef(attributeRef.getTableAlias(), item.getAlias().getName());
                     }
                 }
                 aliasAttributes.add(newAttribute);
             }
+
             log.trace("Parsed projection attributes: {} - aliases: {}", projectionAttributes, aliasAttributes);
 
             project = new Project(projectionAttributes, aliasAttributes, false);
-//            project.addChild(currentRoot);
-//            currentRoot = project;
         }
 
         // Order by
@@ -123,22 +137,18 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
         if (plainSelect.getOrderByElements() != null && !plainSelect.getOrderByElements().isEmpty()) {
             OrderByElementParser orderByElementParser = new OrderByElementParser();
             List<AttributeRef> orderByRefs = plainSelect.getOrderByElements().stream()
-                    .map(e -> e.accept(orderByElementParser, tableAlias))
+                    .map(e -> e.accept(orderByElementParser, parseContext))
                     .toList();
             orderBy = new OrderBy(orderByRefs);
             if (!plainSelect.getOrderByElements().getFirst().isAsc()) {
                 orderBy.setOrder(OrderBy.ORDER_DESC);
             }
-//            orderBy.addChild(currentRoot);
-//            currentRoot = orderBy;
         }
 
         // Limit
         Limit limit = null;
         if (plainSelect.getLimit() != null) {
             limit = new Limit(plainSelect.getLimit().getRowCount(LongValue.class).getValue());
-//            limit.addChild(currentRoot);
-//            currentRoot = limit;
         }
 
         // Distinct
@@ -151,6 +161,9 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
 
         // TODO: Refactor by adding attributes in each method
         Set<AttributeRef> attributeRefSet = new HashSet<>();
+        if (join != null) {
+            attributeRefSet.addAll(join.getLeftAttributes());
+        }
         if (whereParseResult != null) {
             attributeRefSet.addAll(whereParseResult.variableDescriptions().stream()
                     .map(WhereParser.VariableDescription::attributeRef)
@@ -175,10 +188,15 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                 .collect(Collectors.toUnmodifiableSet());
 
         // TODO: Refactor
-        currentRoot = scanNodeFactory.createScanNode(tableAlias, attributeRefSet.stream().toList());
+        currentRoot = scanNodeFactory.createScanNode(parseContext.getFromItemTableAlias(), attributeRefSet.stream().toList());
         if (select != null) {
             select.addChild(currentRoot);
             currentRoot = select;
+        }
+        if (join != null) {
+            join.addChild(currentRoot);
+            join.addChild(joinRightScan);
+            currentRoot = join;
         }
         if (groupBy != null) {
             groupBy.addChild(currentRoot);
@@ -257,10 +275,11 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
     private static class OrderByElementParser extends OrderByVisitorAdapter<AttributeRef> {
         @Override
         public <S> AttributeRef visit(OrderByElement orderBy, S context) {
+            ParseContext parseContext = contextToParseContext(context);
             Expression expression = orderBy.getExpression();
 
-            if (expression instanceof Column) {
-                return new AttributeRef((TableAlias) context, ((Column) expression).getColumnName());
+            if (expression instanceof Column column) {
+                return new AttributeRef(parseContext.getTableAliasFromColumn(column), column.getColumnName());
             }
 
             throw new UnsupportedOperationException(String.format("Order by element %s is unsupported!", expression.getClass()));

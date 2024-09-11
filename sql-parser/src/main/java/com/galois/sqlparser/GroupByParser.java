@@ -14,6 +14,8 @@ import speedy.model.database.TableAlias;
 
 import java.util.List;
 
+import static com.galois.sqlparser.ParseUtils.contextToParseContext;
+
 @Slf4j
 public class GroupByParser implements GroupByVisitor<GroupBy> {
     @Override
@@ -21,7 +23,7 @@ public class GroupByParser implements GroupByVisitor<GroupBy> {
         ExpressionList<?> groupByExpressionList = groupByElement.getGroupByExpressionList();
         GroupByExpressionParser groupByExpressionParser = new GroupByExpressionParser();
         List<ExpressionResult> expressionResults = groupByExpressionList.stream()
-                .map(exp -> exp.accept(groupByExpressionParser, contextToTableAlias(context)))
+                .map(exp -> exp.accept(groupByExpressionParser, context))
                 .toList();
         return new GroupBy(
                 expressionResults.stream().map(ExpressionResult::attributeRef).toList(),
@@ -34,18 +36,11 @@ public class GroupByParser implements GroupByVisitor<GroupBy> {
         throw new UnsupportedOperationException();
     }
 
-    private <S> TableAlias contextToTableAlias(S context) {
-        if (!(context instanceof TableAlias)) {
-            throw new IllegalArgumentException("Cannot parse group by without table alias!");
-        }
-        return (TableAlias) context;
-    }
-
     private static class GroupByExpressionParser extends ExpressionVisitorAdapter<ExpressionResult> {
         @Override
         public <S> ExpressionResult visit(Column column, S context) {
-            TableAlias tableAlias = (TableAlias) context;
-            AttributeRef attributeRef = new AttributeRef(tableAlias, column.getColumnName());
+            ParseContext parseContext = contextToParseContext(context);
+            AttributeRef attributeRef = new AttributeRef(parseContext.getTableAliasFromColumn(column), column.getColumnName());
             IAggregateFunction aggregateFunction = new ValueAggregateFunction(attributeRef);
             return new ExpressionResult(attributeRef, aggregateFunction);
         }

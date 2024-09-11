@@ -10,6 +10,7 @@ import org.junit.platform.suite.api.Suite;
         TestParseWhere.class,
         TestParseOrderBy.class,
         TestParseGroupBy.class,
+        TestParseJoin.class,
         TestComplexWhere.class,
 })
 public class SuiteParseOperators {

@@ -14,36 +14,38 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import static com.galois.sqlparser.ParseUtils.contextToParseContext;
+
 @Slf4j
 public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParseResult> {
     @Override
     public <S> WhereParseResult visit(EqualsTo exp, S context) {
-        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToTableAlias(context));
+        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToParseContext(context));
     }
 
     @Override
     public <S> WhereParseResult visit(NotEqualsTo exp, S context) {
-        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToTableAlias(context));
+        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToParseContext(context));
     }
 
     @Override
     public <S> WhereParseResult visit(GreaterThan exp, S context) {
-        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToTableAlias(context));
+        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToParseContext(context));
     }
 
     @Override
     public <S> WhereParseResult visit(GreaterThanEquals exp, S context) {
-        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToTableAlias(context));
+        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToParseContext(context));
     }
 
     @Override
     public <S> WhereParseResult visit(MinorThan exp, S context) {
-        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToTableAlias(context));
+        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToParseContext(context));
     }
 
     @Override
     public <S> WhereParseResult visit(MinorThanEquals exp, S context) {
-        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToTableAlias(context));
+        return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToParseContext(context));
     }
 
     @Override
@@ -51,7 +53,7 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
         Object value = expressionToValue(isNullExpression.getLeftExpression());
         String operator = isNullExpression.isNot() ? "isNotNull(%s)" : "isNull(%s)";
         Expression expression = new Expression(String.format(operator, value));
-        VariableDescription variableDescription = setVariableDescription(isNullExpression.getLeftExpression(), expression, contextToTableAlias(context));
+        VariableDescription variableDescription = setVariableDescription(isNullExpression.getLeftExpression(), expression, contextToParseContext(context));
         return new WhereParseResult(expression, List.of(variableDescription));
     }
 
@@ -71,14 +73,14 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
 
     @Override
     public <S> WhereParseResult visit(Between between, S context) {
-        TableAlias tableAlias = contextToTableAlias(context);
+        ParseContext parseContext = contextToParseContext(context);
 
         String startStringExpression = between.isNot() ? "<" : ">=";
         String endStringExpression = between.isNot() ? ">" : "<=";
         String complexStringExpression = between.isNot() ? "||" : "&&";
 
-        WhereParseResult startResult = parseBinaryExpression(between.getLeftExpression(), startStringExpression, between.getBetweenExpressionStart(), tableAlias);
-        WhereParseResult endResult = parseBinaryExpression(between.getLeftExpression(), endStringExpression, between.getBetweenExpressionEnd(), tableAlias);
+        WhereParseResult startResult = parseBinaryExpression(between.getLeftExpression(), startStringExpression, between.getBetweenExpressionStart(), parseContext);
+        WhereParseResult endResult = parseBinaryExpression(between.getLeftExpression(), endStringExpression, between.getBetweenExpressionEnd(), parseContext);
         return parseComplexExpression(startResult, complexStringExpression, endResult);
     }
 
@@ -117,7 +119,7 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
             net.sf.jsqlparser.expression.Expression leftExpression,
             String stringExpression,
             net.sf.jsqlparser.expression.Expression rightExpression,
-            TableAlias tableAlias
+            ParseContext parseContext
     ) {
         String sqlExpressionWithoutAliases = String.format(
                 "%s %s %s",
@@ -129,8 +131,8 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
         log.debug("Binary jepExpression {}", jepExpression);
         Expression expression = new Expression(jepExpression);
 
-        VariableDescription leftVariableDescription = setVariableDescription(leftExpression, expression, tableAlias);
-        VariableDescription rightVariableDescription = setVariableDescription(rightExpression, expression, tableAlias);
+        VariableDescription leftVariableDescription = setVariableDescription(leftExpression, expression, parseContext);
+        VariableDescription rightVariableDescription = setVariableDescription(rightExpression, expression, parseContext);
         List<VariableDescription> variableDescriptions = Stream.of(leftVariableDescription, rightVariableDescription)
                 .filter(Objects::nonNull)
                 .toList();
@@ -150,21 +152,14 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
                 .replaceAll("<>", "!=");
     }
 
-    private VariableDescription setVariableDescription(net.sf.jsqlparser.expression.Expression expression, Expression speedyExpression, TableAlias tableAlias) {
+    private VariableDescription setVariableDescription(net.sf.jsqlparser.expression.Expression expression, Expression speedyExpression, ParseContext parseContext) {
         if (!(expression instanceof Column column)) {
             return null;
         }
         String name = column.getColumnName();
-        AttributeRef attributeRef = new AttributeRef(tableAlias, name);
+        AttributeRef attributeRef = new AttributeRef(parseContext.getTableAliasFromColumn(column), name);
         speedyExpression.setVariableDescription(name, attributeRef);
         return new VariableDescription(name, attributeRef);
-    }
-
-    private <S> TableAlias contextToTableAlias(S context) {
-        if (!(context instanceof TableAlias)) {
-            throw new IllegalArgumentException("Cannot parse where item without table alias!");
-        }
-        return (TableAlias) context;
     }
 
     public record WhereParseResult(Expression expression, List<VariableDescription> variableDescriptions) {

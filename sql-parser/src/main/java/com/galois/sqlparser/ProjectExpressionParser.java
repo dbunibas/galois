@@ -16,24 +16,27 @@ import speedy.model.database.VirtualAttributeRef;
 import speedy.model.expressions.ExpressionAttributeRef;
 import speedy.persistence.Types;
 
+import static com.galois.sqlparser.ParseUtils.contextToParseContext;
+
 @Slf4j
 public class ProjectExpressionParser extends ExpressionVisitorAdapter<ProjectionAttribute> {
     @Override
     public <S> ProjectionAttribute visit(Column column, S context) {
-        AttributeRef attributeRef = new AttributeRef((TableAlias) context, column.getColumnName());
+        ParseContext parseContext = contextToParseContext(context);
+        AttributeRef attributeRef = new AttributeRef(parseContext.getTableAliasFromColumn(column), column.getColumnName());
         return new ProjectionAttribute(attributeRef);
     }
 
     @Override
     public <S> ProjectionAttribute visit(Function function, S context) {
-        TableAlias tableAlias = contextToTableAlias(context);
+        ParseContext parseContext = contextToParseContext(context);
         return switch (function.getName().toLowerCase()) {
-            case "count" -> parseCount(function, tableAlias);
-            case "avg" -> parseAggregateFunction(AvgAggregateFunction::new, function, tableAlias);
-            case "min" -> parseAggregateFunction(MinAggregateFunction::new, function, tableAlias);
-            case "max" -> parseAggregateFunction(MaxAggregateFunction::new, function, tableAlias);
-            case "stddev" -> parseAggregateFunction(StdDevAggregateFunction::new, function, tableAlias);
-            case "sum" -> parseAggregateFunction(SumAggregateFunction::new, function, tableAlias);
+            case "count" -> parseCount(function, parseContext);
+            case "avg" -> parseAggregateFunction(AvgAggregateFunction::new, function, parseContext);
+            case "min" -> parseAggregateFunction(MinAggregateFunction::new, function, parseContext);
+            case "max" -> parseAggregateFunction(MaxAggregateFunction::new, function, parseContext);
+            case "stddev" -> parseAggregateFunction(StdDevAggregateFunction::new, function, parseContext);
+            case "sum" -> parseAggregateFunction(SumAggregateFunction::new, function, parseContext);
             default -> throw new UnsupportedOperationException(String.format(
                     "Function %s is currently unsupported...",
                     function.getName()
@@ -54,13 +57,18 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
         return projectionAttribute;
     }
 
-
     // FIXME: Refactor using a common expression parser (similar to WhereParser.parseBinaryExpression)
     @Override
     public <S> ProjectionAttribute visit(Subtraction subtraction, S context) {
-        TableAlias tableAlias = contextToTableAlias(context);
+        ParseContext parseContext = contextToParseContext(context);
         Expression leftExpression = subtraction.getLeftExpression();
         Expression rightExpression = subtraction.getRightExpression();
+
+        // TODO: Change ExpressionAttributeRef so that an expression with two tables (t1.a - t2.b) is allowed
+        if (!(leftExpression instanceof Column) || !leftExpression.getClass().equals(rightExpression.getClass())) {
+            throw new UnsupportedOperationException("Cannot define a subtraction projection between attributes of different tables");
+        }
+
         String sqlExpressionWithoutAliases = String.format(
                 "%s %s %s",
                 expressionToValue(leftExpression),
@@ -70,9 +78,14 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
         String jepExpression = sqlToJEPExpressionString(sqlExpressionWithoutAliases);
         log.debug("Subtraction jepExpression {}", jepExpression);
         speedy.model.expressions.Expression expression = new speedy.model.expressions.Expression(jepExpression);
-        setVariableDescription(leftExpression, expression, tableAlias);
-        setVariableDescription(rightExpression, expression, tableAlias);
-        ExpressionAttributeRef expressionAttributeRef = new ExpressionAttributeRef(expression, tableAlias, "diff", Types.REAL);
+        setVariableDescription(leftExpression, expression, parseContext);
+        setVariableDescription(rightExpression, expression, parseContext);
+        ExpressionAttributeRef expressionAttributeRef = new ExpressionAttributeRef(
+                expression,
+                parseContext.getTableAliasFromColumn((Column) leftExpression),
+                "diff",
+                Types.REAL
+        );
         return new ProjectionAttribute(expressionAttributeRef);
     }
 
@@ -88,36 +101,35 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
                 .replaceAll("<>", "!=");
     }
 
-    private void setVariableDescription(Expression expression, speedy.model.expressions.Expression speedyExpression, TableAlias tableAlias) {
+    private void setVariableDescription(Expression expression, speedy.model.expressions.Expression speedyExpression, ParseContext parseContext) {
         if (!(expression instanceof Column column)) {
             return;
         }
         String name = column.getColumnName();
-        AttributeRef attributeRef = new AttributeRef(tableAlias, name);
+        AttributeRef attributeRef = new AttributeRef(parseContext.getTableAliasFromColumn(column), name);
         speedyExpression.setVariableDescription(name, attributeRef);
     }
 
-    private <S> TableAlias contextToTableAlias(S context) {
-        if (!(context instanceof TableAlias)) {
-            throw new IllegalArgumentException("Cannot parse select item without table alias!");
-        }
-        return (TableAlias) context;
-    }
-
-    private ProjectionAttribute parseCount(Function function, TableAlias tableAlias) {
-        String attributeName = function.getParameters().getFirst() instanceof Column ?
-                ((Column) function.getParameters().getFirst()).getColumnName() :
-                SpeedyConstants.COUNT;
+    private ProjectionAttribute parseCount(Function function, ParseContext parseContext) {
+        Expression exp = function.getParameters().getFirst();
+        String attributeName = exp instanceof Column ? ((Column) exp).getColumnName() : SpeedyConstants.COUNT;
+        TableAlias tableAlias = exp instanceof Column ?
+                parseContext.getTableAliasFromColumn((Column) exp) :
+                parseContext.getTableAliases().getFirst();
         AttributeRef attributeCount = new VirtualAttributeRef(tableAlias, attributeName, Types.INTEGER);
         return new ProjectionAttribute(new CountAggregateFunction(attributeCount));
     }
 
-    private ProjectionAttribute parseAggregateFunction(AggregateFunctionSupplier supplier, Function function, TableAlias tableAlias) {
-        if (function.getParameters() == null || function.getParameters().size() != 1 || !(function.getParameters().getFirst() instanceof Column)) {
+    private ProjectionAttribute parseAggregateFunction(AggregateFunctionSupplier supplier, Function function, ParseContext parseContext) {
+        if (function.getParameters() == null || function.getParameters().size() != 1 || !(function.getParameters().getFirst() instanceof Column column)) {
             throw new UnsupportedOperationException("Cannot parse aggregate function without a single parameter!");
         }
 
-        AttributeRef attributeRef = new VirtualAttributeRef(tableAlias, ((Column) function.getParameters().getFirst()).getColumnName(), Types.REAL);
+        AttributeRef attributeRef = new VirtualAttributeRef(
+                parseContext.getTableAliasFromColumn(column),
+                column.getColumnName(),
+                Types.REAL
+        );
         return new ProjectionAttribute(supplier.get(attributeRef));
     }
 
