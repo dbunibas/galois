@@ -118,6 +118,37 @@ public class TestParseJoin {
         logTuples(tuples);
     }
 
+    @Test
+    public void testJoinWithMax() {
+        String sql = String.format("select max(t1.salary) as max_salary from %s t1 join %s t2 on t1.manager = t2.name", TABLE_NAME, TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        log.info("root is {}", root);
+        assertNotNull(root);
+        assertInstanceOf(Project.class, root);
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = toTupleList(tupleIterator);
+        assertEquals(1, tuples.size());
+
+        logTuples(tuples);
+    }
+
+    @Test
+    public void testJoinWithOrderBy() {
+        String sql = String.format("select t1.name, t1.salary, t2.name from %s t1 join %s t2 on t1.manager = t2.name order by t1.salary desc limit 1", TABLE_NAME, TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+        assertInstanceOf(Limit.class, root);
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = toTupleList(tupleIterator);
+        assertEquals(1, tuples.size());
+
+        logTuples(tuples);
+    }
+
     private void logTuples(List<Tuple> tuples) {
         tuples.forEach(t -> log.info("{}", t));
     }
