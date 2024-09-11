@@ -237,34 +237,38 @@ public class TestRunSpiderGeoBatch {
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-//        ExpVariant q26 = ExpVariant.builder()
-//                .queryNum("Q26")
+        ExpVariant q26 = ExpVariant.builder()
+                .queryNum("Q26")
 //                .querySql("SELECT t2.capital FROM usa_state AS t2 JOIN usa_city AS t1 ON t2.state_name = t1.state_name WHERE t1.city_name = 'durham';")
-//                .prompt("name the major rivers in illinois")
-//                .optimizers(singleConditionOptimizers)
-//                .build();
+                .querySql("SELECT t2.capital FROM usa_city AS t1 JOIN usa_state AS t2 ON t1.state_name = t2.state_name WHERE t1.city_name = 'durham';")
+//                .prompt("name the major rivers") //? Incorrect
+                .prompt("the capital of the state where there is durham") //?
+                .optimizers(singleConditionOptimizers)
+                .build();
+
 //        ExpVariant q27 = ExpVariant.builder()
 //                .queryNum("Q27")
 //                .querySql("SELECT state_name FROM state WHERE state_name NOT IN ( SELECT traverse FROM river );")
 //                .prompt("what state has no rivers")
 //                .optimizers(singleConditionOptimizers)
 //                .build();
+
 //        ExpVariant q28 = ExpVariant.builder()
 //                .queryNum("Q28")
 //                .querySql("SELECT COUNT ( river_name ) FROM river WHERE traverse NOT IN ( SELECT state_name FROM state WHERE capital = 'albany' );")
 //                .prompt("how many rivers do not traverse the state with the capital albany")
 //                .optimizers(singleConditionOptimizers)
 //                .build();
+
         ExpVariant q29 = ExpVariant.builder()
                 .queryNum("Q29")
-                .querySql("SELECT t2.capital FROM usa_state AS t2 JOIN usa_city AS t1 ON t2.capital = t1.city_name WHERE t1.population <= 150000;")
+//                .querySql("SELECT t2.capital FROM usa_state AS t2 JOIN usa_city AS t1 ON t2.capital = t1.city_name WHERE t1.population <= 150000;")
+                .querySql("SELECT t2.capital FROM usa_city AS t1 JOIN usa_state AS t2 ON t1.city_name=t2.capital WHERE t1.population <= 150000;")
                 .prompt("which capitals are not major cities")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
-//        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10 ,q11, q12, q13, q14, q15, q16, q17, q18, q20, q21 , q22, q23, q24, q25, q29);
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q20, q21, q22, q23, q24, q25, q29);
-//        variants = List.of(q8, q10,q12,q15, q18, q21, q22, q23, q25);
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10 ,q11, q12, q13, q14, q15, q16, q17, q18, q20, q21 , q22, q23, q24, q25, q26, q29);
     }
 
     @Test
@@ -288,7 +292,7 @@ public class TestRunSpiderGeoBatch {
             testRunner.execute("/SpiderGeo/geo-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/SpiderGeo/geo-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/SpiderGeo/geo-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/SpiderGeo/geo-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/SpiderGeo/geo-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/SpiderGeo/geo-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
