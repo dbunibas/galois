@@ -45,17 +45,18 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
 
         // Join
         Join join = null;
-        Scan joinRightScan = null;
+        TableAlias joinRightTableAlias;
         if (plainSelect.getJoins() != null && !plainSelect.getJoins().isEmpty()) {
             if (plainSelect.getJoins().size() > 1) {
                 throw new UnsupportedOperationException("Join with more than two tables are unsupported!");
             }
             JoinParser joinParser = new JoinParser();
             net.sf.jsqlparser.statement.select.Join firstJoin = plainSelect.getJoins().getFirst();
-            TableAlias joinRightTableAlias = firstJoin.getFromItem().accept(fromParser, null);
+            joinRightTableAlias = firstJoin.getFromItem().accept(fromParser, null);
             parseContext.addTableAlias(joinRightTableAlias);
             join = joinParser.parseJoin(firstJoin, tableAlias, joinRightTableAlias);
-            joinRightScan = scanNodeFactory.createScanNode(joinRightTableAlias, join.getRightAttributes());
+        } else {
+            joinRightTableAlias = null;
         }
 
         // Where
@@ -163,6 +164,7 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
         Set<AttributeRef> attributeRefSet = new HashSet<>();
         if (join != null) {
             attributeRefSet.addAll(join.getLeftAttributes());
+            attributeRefSet.addAll(join.getRightAttributes());
         }
         if (whereParseResult != null) {
             attributeRefSet.addAll(whereParseResult.variableDescriptions().stream()
@@ -183,18 +185,21 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
             attributeRefSet.addAll(orderBy.getAttributes(null, null));
         }
 
-        attributeRefSet = attributeRefSet.stream()
-                .filter(a -> !a.isAliased())
-                .collect(Collectors.toUnmodifiableSet());
-
+        List<AttributeRef> attributeRef = attributeRefSet.stream()
+                .filter(a -> a.getTableAlias().equals(tableAlias))
+                .toList();
         // TODO: Refactor
-        currentRoot = scanNodeFactory.createScanNode(parseContext.getFromItemTableAlias(), attributeRefSet.stream().toList());
+        currentRoot = scanNodeFactory.createScanNode(parseContext.getFromItemTableAlias(), attributeRef);
         if (select != null) {
             select.addChild(currentRoot);
             currentRoot = select;
         }
         if (join != null) {
             join.addChild(currentRoot);
+            List<AttributeRef> joinRightAttributes = attributeRefSet.stream()
+                    .filter(a -> a.getTableAlias().equals(joinRightTableAlias))
+                    .toList();
+            Scan joinRightScan = scanNodeFactory.createScanNode(joinRightTableAlias, joinRightAttributes);
             join.addChild(joinRightScan);
             currentRoot = join;
         }

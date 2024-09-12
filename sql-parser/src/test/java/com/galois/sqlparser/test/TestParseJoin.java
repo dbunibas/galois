@@ -136,7 +136,7 @@ public class TestParseJoin {
 
     @Test
     public void testJoinWithOrderBy() {
-        String sql = String.format("select t1.name, t1.salary, t2.name from %s t1 join %s t2 on t1.manager = t2.name order by t1.salary desc limit 1", TABLE_NAME, TABLE_NAME);
+        String sql = String.format("select t1.name, t1.salary, t2.name as manager_name, t2.salary as manager_salary from %s as t1 join %s as t2 on t1.manager = t2.name order by t1.salary desc limit 1", TABLE_NAME, TABLE_NAME);
 
         IAlgebraOperator root = new SQLQueryParser().parse(sql);
         assertNotNull(root);

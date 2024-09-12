@@ -109,7 +109,7 @@ public class TestGalois {
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
         IQueryExecutor executor = new OllamaLlama3KeyQueryExecutor();
-        ScanConfiguration scanConfiguration = new ScanConfiguration(executor, null);
+        ScanConfiguration scanConfiguration = new ScanConfiguration(executor, OllamaLlama3KeyQueryExecutor::new, null);
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration, sql);
 
@@ -119,7 +119,7 @@ public class TestGalois {
         ITupleIterator iterator = optimizedQuery.execute(llmDB, null);
         TestUtils.toTupleStream(iterator).map(Tuple::toString).forEach(log::info);
     }
-    
+
     @Test
     public void testFullPipelineTogetherAI() {
         // TODO: This will be added in the executeQuery method once stable
@@ -131,7 +131,7 @@ public class TestGalois {
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
         IQueryExecutor executor = new TogetheraiLLama3KeyQueryExecutor();
-        ScanConfiguration scanConfiguration = new ScanConfiguration(executor, null);
+        ScanConfiguration scanConfiguration = new ScanConfiguration(executor, TogetheraiLLama3KeyQueryExecutor::new, null);
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration, sql);
 

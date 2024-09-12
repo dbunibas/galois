@@ -37,15 +37,8 @@ public class ScanConfigurationParser {
     );
 
     public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
-        return new ScanConfiguration(getExecutor(json, query), json.getNormalizationStrategy());
-    }
-
-    private static IQueryExecutor getExecutor(ScanConfigurationJSON json, Query query) {
-        String name = json.getQueryExecutor();
-        if (name == null || name.isEmpty() || !parserMap.containsKey(name))
-            throw new IllegalArgumentException("Invalid executor name: " + name + "!");
-        IQueryExecutorGenerator generator = parserMap.get(name);
-        return generator.create(
+        IQueryExecutorGenerator generator = getExecutor(json, query);
+        ScanConfiguration.IQueryExecutorFactory factory = () -> generator.create(
                 json.getFirstPrompt(),
                 json.getIterativePrompt(),
                 json.getMaxIterations(),
@@ -55,6 +48,14 @@ public class ScanConfigurationParser {
                         query.getSql() :
                         json.getSql()
         );
+        return new ScanConfiguration(factory.create(), factory, json.getNormalizationStrategy());
+    }
+
+    private static IQueryExecutorGenerator getExecutor(ScanConfigurationJSON json, Query query) {
+        String name = json.getQueryExecutor();
+        if (name == null || name.isEmpty() || !parserMap.containsKey(name))
+            throw new IllegalArgumentException("Invalid executor name: " + name + "!");
+        return parserMap.get(name);
     }
 
     private static Map<String, EPrompts> computePromptsMap() {
@@ -65,7 +66,7 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaLlama3NLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt);
     }
-    
+
     private static IQueryExecutor generateTogetheraiLlama3NLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new TogetheraiLlama3NLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt);
@@ -75,7 +76,7 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaLlama3SQLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, sql);
     }
-    
+
     private static IQueryExecutor generateTogetheraiLlama3SQLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new TogetheraiLlama3SQLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, sql);
@@ -85,6 +86,7 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaLlama3TableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null);
     }
+
     private static IQueryExecutor generateTogetheraiLlama3TableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new TogetheraiLlama3TableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null);
@@ -94,7 +96,7 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaLlama3KeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null);
     }
-    
+
     private static IQueryExecutor generateTogetheraiLlama3KeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new TogetheraiLLama3KeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null);
@@ -104,7 +106,7 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaLlama3KeyScanQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null);
     }
-    
+
     private static IQueryExecutor generateTogetheraiLlama3KeyScanQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new TogetheraiLlama3KeyScanQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null);
@@ -114,7 +116,7 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaMistralNLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt);
     }
-    
+
     @FunctionalInterface
     private interface IQueryExecutorGenerator {
         IQueryExecutor create(String firstPrompt, String iterativePrompt, int maxIterations,

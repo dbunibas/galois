@@ -11,31 +11,19 @@ import galois.optimizer.IOptimizer;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.utils.TestUtils;
 import galois.utils.GaloisDebug;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import speedy.model.algebra.IAlgebraOperator;
-import speedy.model.algebra.operators.ITupleIterator;
-import speedy.model.database.Tuple;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import speedy.exceptions.DAOException;
 import speedy.exceptions.DBMSException;
+import speedy.model.algebra.IAlgebraOperator;
+import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.database.Attribute;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
+import speedy.model.database.Tuple;
 import speedy.model.database.dbms.DBMSDB;
 import speedy.model.database.dbms.DBMSTupleIterator;
 import speedy.persistence.DAODBMSDatabase;
@@ -43,6 +31,13 @@ import speedy.persistence.Types;
 import speedy.persistence.file.CSVFile;
 import speedy.persistence.relational.AccessConfiguration;
 import speedy.persistence.relational.QueryManager;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.util.*;
 
 @AllArgsConstructor
 @Data
@@ -142,7 +137,7 @@ public final class Experiment {
         log.info("Parsing the query using SQLQueryParser - {}", sqlQueryParser.getClass());
         IQueryExecutor scanQueryExecutor = operatorsConfiguration.getScan().getQueryExecutor();
         String normalizationStrategy = operatorsConfiguration.getScan().getNormalizationStrategy();
-        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, scanQueryExecutor, attributes, normalizationStrategy);
+        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, operatorsConfiguration.getScan().createQueryExecutor(), attributes, normalizationStrategy);
 
         // If ignoreTree() returns true, only execute the LLMScan operation
         if (scanQueryExecutor.ignoreTree()) {
