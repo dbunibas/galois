@@ -38,19 +38,12 @@ public class AggregateConditionsPushdownOptimizer implements IOptimizer {
                     if (father == null) {
                         return optimizedNode;
                     }
-                    father.getChildren().clear();
-                    father.addChild(optimizedNode);
+                    IAlgebraOperator nodeToReplace = currentNode;
+                    father.getChildren().replaceAll(n -> n.equals(nodeToReplace) ? optimizedNode : n);
                     currentNode = optimizedNode;
                 } else {
                     currentNode.getChildren().clear();
                     currentNode.addChild(optimizedNode);
-                    IAlgebraOperator father = currentNode.getFather();
-                    if (father == null) {
-                        return currentNode;
-                    }
-                    father.getChildren().clear();
-                    father.addChild(currentNode);
-                    currentNode = optimizedNode;
                 }
             }
             currentNode = currentNode.getChildren().isEmpty() ? null : currentNode.getChildren().get(0);

@@ -53,14 +53,12 @@ public class IndexedConditionPushdownOptimizer implements IOptimizer {
                     if (father == null) {
                         return optimizedNode;
                     }
-                    // TODO: Add replace children?
-                    father.getChildren().clear();
-                    father.addChild(optimizedNode);
+                    IAlgebraOperator nodeToReplace = currentNode;
+                    father.getChildren().replaceAll(n -> n.equals(nodeToReplace) ? optimizedNode : n);
                     currentNode = optimizedNode;
                 } else {
                     currentNode.getChildren().clear();
                     currentNode.addChild(optimizedNode);
-                    currentNode = optimizedNode;
                 }
 
             }

@@ -6,6 +6,9 @@ import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Select;
 import speedy.model.database.IDatabase;
 
+import java.util.List;
+import java.util.Objects;
+
 @Slf4j
 public class AllConditionsPushdownOptimizer implements IOptimizer {
     private final AllConditionsPushdown allConditionsPushdown = new AllConditionsPushdown();
@@ -36,9 +39,8 @@ public class AllConditionsPushdownOptimizer implements IOptimizer {
                     if (father == null) {
                         return optimizedNode;
                     }
-                    // TODO: Add replace children?
-                    father.getChildren().clear();
-                    father.addChild(optimizedNode);
+                    IAlgebraOperator nodeToReplace = currentNode;
+                    father.getChildren().replaceAll(n -> n.equals(nodeToReplace) ? optimizedNode : n);
                     currentNode = optimizedNode;
                 } else {
                     currentNode.getChildren().clear();
