@@ -24,6 +24,7 @@ import speedy.model.database.Cell;
 import speedy.model.database.ITable;
 import speedy.model.database.NullValue;
 import speedy.persistence.Types;
+import speedy.utility.AlgebraUtility;
 
 @Getter
 public class LLMScan extends Scan {
@@ -35,6 +36,7 @@ public class LLMScan extends Scan {
     private List<AttributeRef> attributesSelect = null;
     private final String normalizationStrategy;
     private final boolean checkTypes = true;
+    private final boolean removeDuplicates = true;
 
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, String normalizationStrategy) {
         super(tableAlias);
@@ -159,7 +161,8 @@ public class LLMScan extends Scan {
                 return result;
             }
 
-            currentResult = queryExecutor.execute(database, tableAlias);
+            currentResult = new ArrayList<>(queryExecutor.execute(database, tableAlias));
+            if (removeDuplicates) AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
             currentTry++;
 
             if (!currentResult.isEmpty()) {
