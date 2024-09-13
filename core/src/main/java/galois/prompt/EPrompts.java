@@ -30,7 +30,8 @@ public enum EPrompts {
 //    LIST_KEY_JSON("List the ${key} of some ${table}s.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
     LIST_KEY_JSON("List the ${key} of ${table}s.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, JSONEntitiesParser::parse),
 //    LIST_KEY_JSON_CONDITION("List the ${key} of some ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
-    LIST_KEY_JSON_CONDITION("List the ${key} of ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, JSONEntitiesParser::parse),
+//    LIST_KEY_JSON_CONDITION("List the ${key} of ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, JSONEntitiesParser::parse),
+    LIST_KEY_JSON_CONDITION("List the ${key} of ${table}s where the following condition holds: ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, JSONEntitiesParser::parse),
 
     LIST_KEY_PIPE("List the ${key} of some ${table}s. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null),
     LIST_KEY_PIPE_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null),

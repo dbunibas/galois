@@ -2,7 +2,10 @@ package galois.llm.algebra;
 
 import galois.llm.database.LLMDB;
 import galois.llm.database.LLMTable;
+import galois.llm.query.AbstractEntityQueryExecutor;
+import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.ISQLExecutor;
 import galois.llm.query.utils.QueryUtils;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -162,7 +165,8 @@ public class LLMScan extends Scan {
             }
 
             currentResult = new ArrayList<>(queryExecutor.execute(database, tableAlias));
-            if (removeDuplicates) AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
+            boolean galoisInstances = (queryExecutor instanceof AbstractEntityQueryExecutor) || (queryExecutor instanceof AbstractKeyBasedQueryExecutor);
+            if (galoisInstances && removeDuplicates) AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
             currentTry++;
 
             if (!currentResult.isEmpty()) {

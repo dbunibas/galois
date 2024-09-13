@@ -8,6 +8,8 @@ import galois.llm.algebra.config.OperatorsConfiguration;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimizer;
+import galois.optimizer.LogicalPlanOptimizer;
+import galois.parser.ParserWhere;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.utils.TestUtils;
 import galois.utils.GaloisDebug;
@@ -38,6 +40,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.util.*;
+import net.sf.jsqlparser.expression.Expression;
 
 @AllArgsConstructor
 @Data
@@ -94,6 +97,32 @@ public final class Experiment {
             GaloisDebug.log(result.toDebugString());
             results.put(optimizer.getName(), result);
         }
+        return results;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Map<String, ExperimentResults> executeGalois(Map<ITable, Map<Attribute, Double>> dbConfidence, double threshold, boolean removeFromAlgebraTree) {
+        Map<String, ExperimentResults> results = new HashMap<>();
+        IAlgebraOperator operator = parse();
+        String sqlQuery = query.getSql();
+        IDatabase database = query.getDatabase();
+        LogicalPlanOptimizer optimizer = new LogicalPlanOptimizer();
+        operator = optimizer.optimizeByConfidence(operator, sqlQuery, database, dbConfidence, threshold, removeFromAlgebraTree);
+        String optimizations = optimizer.getOptimizations();
+        log.info("Query operator {}", operator);
+        DBMSDB dbmsDatabase = createDatabaseForExpected();
+        String queryToExecute = query.getSql().replace("target.", "public.");
+        log.debug("Query for results: \n" + queryToExecute);
+        ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
+        ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
+        List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
+        expectedITerator.close();
+        log.info("Expected size: " + expectedResults.size());
+        GaloisDebug.log("Galois Execution");
+        var galoisResults = executeUnoptimizedExperiment(operator, expectedResults);
+        GaloisDebug.log("Speedy Results:");
+        GaloisDebug.log(galoisResults.toDebugString());
+        results.put("Galois" + optimizations, galoisResults);
         return results;
     }
 

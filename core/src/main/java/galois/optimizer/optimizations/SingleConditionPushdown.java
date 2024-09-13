@@ -1,5 +1,6 @@
 package galois.optimizer.optimizations;
 
+import com.galois.sqlparser.ParseContext;
 import com.galois.sqlparser.WhereParser;
 import galois.llm.algebra.LLMScan;
 import galois.llm.query.IQueryExecutor;
@@ -52,7 +53,10 @@ public class SingleConditionPushdown implements IOptimization {
         String conditionAsString = pushdownCondition.toString();
         // TODO: Add this to utility (same code in FilterParser.java)
         log.debug("Condition as String: " + conditionAsString);
-        List<Expression> expressions = toSpeedyExpression(List.of(pushdownCondition), tableAlias);
+        List<net.sf.jsqlparser.expression.Expression> pushdownList = new ArrayList<>();
+        pushdownList.add(pushdownCondition);
+//        List<Expression> expressions = toSpeedyExpression(List.of(pushdownCondition), tableAlias);
+        List<Expression> expressions = toSpeedyExpression(pushdownList, tableAlias);
         Expression pushdownExpression = expressions.get(0);
 //        Expression pushdownExpression = new Expression(cleanExpression(conditionAsString));
         log.debug("Optimized pushdown expression: {}", pushdownExpression);
@@ -120,7 +124,9 @@ public class SingleConditionPushdown implements IOptimization {
             WhereParser parser = new WhereParser();
             ExpressionList<net.sf.jsqlparser.expression.Expression> el = new ExpressionList<>(List.of(remainingCondition));
             log.debug("Expression: " + remainingCondition);
-            WhereParser.WhereParseResult whereResult = parser.visit(el, List.of(tableAlias));
+            ParseContext context = new ParseContext();
+            context.addTableAlias(tableAlias);
+            WhereParser.WhereParseResult whereResult = parser.visit(el, context);
             log.debug("Parsed expression: " + whereResult.expression());
             speedyExpressions.add(whereResult.expression());
         }

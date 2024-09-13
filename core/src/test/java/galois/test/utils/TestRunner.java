@@ -1,12 +1,17 @@
 package galois.test.utils;
 
-import galois.llm.algebra.config.ScanConfiguration;
+import galois.Constants;
+import galois.llm.models.TogetherAIModel;
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ISQLExecutor;
+import galois.llm.query.utils.QueryUtils;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.optimizer.NullOptimizer;
+import galois.optimizer.estimators.ConfidenceEstimator;
 import galois.parser.ParserException;
+import galois.parser.ParserFrom;
 import galois.parser.ParserWhere;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.ExperimentResults;
@@ -15,6 +20,7 @@ import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.utils.GaloisDebug;
+import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedWriter;
@@ -23,10 +29,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Objects;
+import java.util.Set;
+import net.sf.jsqlparser.expression.Expression;
+import speedy.model.database.Attribute;
+import speedy.model.database.AttributeRef;
+import speedy.model.database.IDatabase;
+import speedy.model.database.ITable;
+import speedy.model.database.Key;
+import speedy.utility.SpeedyUtility;
 
 @Slf4j
 public class TestRunner {
@@ -91,6 +105,47 @@ public class TestRunner {
 //            throw new RuntimeException("Cannot run experiment: " + path, ioe);
         }
     }
+        
+    public void executeGalois(
+            String path,
+            String type,
+            ExpVariant variant,
+            List<IMetric> metrics,
+            Map<String, Map<String, ExperimentResults>> results,
+            String resultFileDir,
+            String resultFile,
+            Map<ITable, Map<Attribute, Double>> dbConfidence,
+            double confidenceThreshold,
+            boolean removeFromAlgebraTree
+    ) {
+        try {
+            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            log.debug("SQL query is {}", experiment.getQuery().getSql());
+
+            IQueryExecutor queryExecutor = experiment.getOperatorsConfiguration().getScan().getQueryExecutor();
+            if (queryExecutor instanceof INLQueryExectutor nlExecutor) {
+                nlExecutor.setNaturalLanguagePrompt(variant.getPrompt());
+                experiment.setOptimizers(null);
+            } else if (queryExecutor instanceof ISQLExecutor sqlExecutor) {
+                sqlExecutor.setSql(variant.getQuerySql());
+                experiment.setOptimizers(null);
+            }            
+            GaloisDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
+            metrics.clear();
+            metrics.addAll(experiment.getMetrics());
+            var expResults = experiment.executeGalois(dbConfidence, confidenceThreshold, removeFromAlgebraTree);
+            log.info("Results: {}", expResults);
+            for (String expKey : expResults.keySet()) {
+                queryResults.put(type + "-" + expKey, expResults.get(expKey));
+            }
+        } catch (Exception e) {
+            log.error("Unable to execute experiment {}", path, e);
+        }
+    }
 
     public void executeSingle(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, IOptimizer optimizer) {
         try {
@@ -109,7 +164,9 @@ public class TestRunner {
                 sqlExecutor.setSql(variant.getQuerySql());
                 experiment.setOptimizers(null);
             } else {
-                if (optimizer != null) experiment.setOptimizers(List.of(optimizer));
+                if (optimizer != null) {
+                    experiment.setOptimizers(List.of(optimizer));
+                }
             }
             GaloisDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
             metrics.clear();
