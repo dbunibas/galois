@@ -1,6 +1,6 @@
 package galois.parser;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +13,7 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.StatementVisitorAdapter;
-import net.sf.jsqlparser.statement.select.GroupByElement;
+import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.OrderByElement;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
@@ -31,6 +31,8 @@ public class ParserProvenance {
     private StatementVisitorAdapter statementVisitor;
     private Set<String> attributeProvenance = new HashSet<>();
     private Set<String> tablesProvenance = new HashSet<>();
+    private Set<String> attributesInSelect = new HashSet<>();
+    private Set<String> attributeInAggregate = new HashSet<>();
 
     public ParserProvenance() {
         initParsers();
@@ -56,6 +58,17 @@ public class ParserProvenance {
         return tablesProvenance;
     }
 
+    private boolean isColumn(Expression expression) {
+        return expression instanceof Column;
+    }
+
+    private String cleanAttribute(String attributeName) {
+        if (attributeName.contains(".")) {
+            return attributeName.substring(attributeName.indexOf(".") + 1);
+        }
+        return attributeName;
+    }
+
     private void initParsers() {
         this.expressionVisitorAdapter = new ExpressionVisitorAdapter<>() {
 
@@ -68,7 +81,7 @@ public class ParserProvenance {
             @Override
             public <S> Object visit(ExpressionList<?> expressionList, S context) {
                 logger.debug("Visit ExpressionList: " + expressionList);
-                attributeProvenance.add(expressionList.toString());
+                attributeProvenance.add(cleanAttribute(expressionList.toString()));
                 return super.visit(expressionList, context);
             }
 
@@ -77,7 +90,7 @@ public class ParserProvenance {
                 logger.debug("Visit ExtractExpression: " + expr);
                 return super.visit(expr, context);
             }
-            
+
             @Override
             protected <S> Object visitBinaryExpression(BinaryExpression expr, S context) {
                 logger.debug("Visit Binary: " + expr);
@@ -86,11 +99,11 @@ public class ParserProvenance {
                 if (isColumn(leftExpression)) {
                     String attrName = leftExpression.toString();
                     logger.debug("Attribute: " + attrName);
-                    attributeProvenance.add(attrName);
+                    attributeProvenance.add(cleanAttribute(attrName));
                 } else if (isColumn(rightExpression)) {
                     String attrName = rightExpression.toString();
                     logger.debug("Attribute: " + attrName);
-                    attributeProvenance.add(attrName);
+                    attributeProvenance.add(cleanAttribute(attrName));
                 } else {
                     logger.debug("Visit Left Expr: " + leftExpression);
                     leftExpression.accept(this, context);
@@ -98,10 +111,6 @@ public class ParserProvenance {
                     rightExpression.accept(this, context);
                 }
                 return null;
-            }
-
-            private boolean isColumn(Expression expression) {
-                return expression instanceof Column;
             }
 
         };
@@ -113,9 +122,17 @@ public class ParserProvenance {
                 logger.debug("Select Items: {}", selectItems);
                 for (SelectItem<?> selectItem : selectItems) {
                     if (selectItem.getExpression() != null) {
-                        selectItem.getExpression().accept(expressionVisitorAdapter, null);
+                        logger.debug("expression in select: {}", selectItem.getExpression());
+                        if (isColumn(selectItem.getExpression())) {
+                            attributeProvenance.add(cleanAttribute(selectItem.getExpression().toString()));
+                            attributesInSelect.add(cleanAttribute(selectItem.getExpression().toString()));
+                        } else {
+                            selectItem.getExpression().accept(expressionVisitorAdapter, null);
+                        }
                     } else {
-                        attributeProvenance.add(selectItem.toString());
+                        logger.info("Single attribute: {}", selectItem.toString());
+                        attributeProvenance.add(cleanAttribute(selectItem.toString()));
+                        attributesInSelect.add(cleanAttribute(selectItem.toString()));
                     }
                 }
                 if (plainSelect.getWhere() != null) {
@@ -147,7 +164,17 @@ public class ParserProvenance {
                     for (OrderByElement orderByElement : orderByElements) {
                         String orderName = orderByElement.toString();
                         String[] split = orderName.split(" ");
-                        attributeProvenance.add(split[0]);
+                        attributeProvenance.add(cleanAttribute(split[0]));
+                    }
+                }
+                if (plainSelect.getJoins() != null) {
+                    List<Join> joins = plainSelect.getJoins();
+                    logger.debug("Joins: {}", joins);
+                    for (Join join : joins) {
+                        Collection<Expression> onExpressions = join.getOnExpressions();
+                        for (Expression onExpression : onExpressions) {
+                            onExpression.accept(expressionVisitorAdapter);
+                        }
                     }
                 }
                 return super.visit(plainSelect, context);

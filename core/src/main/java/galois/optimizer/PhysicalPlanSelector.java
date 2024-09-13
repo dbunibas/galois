@@ -20,11 +20,12 @@ public class PhysicalPlanSelector {
         ParserProvenance parser = new ParserProvenance();
         parser.parse(sql);
         Set<String> attributeProvenance = parser.getAttributeProvenance();
+        Set<String> tables = parser.getTablesProvenance();
         for (String attributeName : attributeProvenance) {
             for (Key key : keys) {
                 List<AttributeRef> attributes = key.getAttributes();
                 for (AttributeRef attribute : attributes) {
-                    if (attribute.getName().equals(attributeName)) {
+                    if (attribute.getName().equals(attributeName) && tables.contains(attribute.getTableName())) {
                         log.debug("Attribute: {} is key, return KEY_SCAN", attributeName);
                         return PLAN_KEY_SCAN;
                     }

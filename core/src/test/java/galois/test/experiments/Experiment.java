@@ -122,7 +122,9 @@ public final class Experiment {
         var galoisResults = executeUnoptimizedExperiment(operator, expectedResults);
         GaloisDebug.log("Speedy Results:");
         GaloisDebug.log(galoisResults.toDebugString());
-        results.put("Galois" + optimizations, galoisResults);
+        String name = "Galois";
+        if (!optimizations.isEmpty()) name += " - " + optimizations;
+        results.put(name, galoisResults);
         return results;
     }
 

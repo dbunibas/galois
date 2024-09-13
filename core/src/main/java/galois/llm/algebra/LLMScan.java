@@ -163,10 +163,8 @@ public class LLMScan extends Scan {
                 }
                 return result;
             }
-
             currentResult = new ArrayList<>(queryExecutor.execute(database, tableAlias));
-            boolean galoisInstances = (queryExecutor instanceof AbstractEntityQueryExecutor) || (queryExecutor instanceof AbstractKeyBasedQueryExecutor);
-            if (galoisInstances && removeDuplicates) AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
+            if (removeDuplicates && !(queryExecutor instanceof ISQLExecutor)) AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
             currentTry++;
 
             if (!currentResult.isEmpty()) {
