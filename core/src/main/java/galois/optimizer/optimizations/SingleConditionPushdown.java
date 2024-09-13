@@ -118,9 +118,9 @@ public class SingleConditionPushdown implements IOptimization {
         List<Expression> speedyExpressions = new ArrayList<>();
         for (net.sf.jsqlparser.expression.Expression remainingCondition : remainingConditions) {
             WhereParser parser = new WhereParser();
-            ExpressionList el = new ExpressionList(List.of(remainingCondition));
+            ExpressionList<net.sf.jsqlparser.expression.Expression> el = new ExpressionList<>(List.of(remainingCondition));
             log.debug("Expression: " + remainingCondition);
-            WhereParser.WhereParseResult whereResult = parser.visit(el, tableAlias);
+            WhereParser.WhereParseResult whereResult = parser.visit(el, List.of(tableAlias));
             log.debug("Parsed expression: " + whereResult.expression());
             speedyExpressions.add(whereResult.expression());
         }
