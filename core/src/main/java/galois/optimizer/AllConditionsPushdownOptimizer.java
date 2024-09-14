@@ -45,6 +45,7 @@ public class AllConditionsPushdownOptimizer implements IOptimizer {
                 } else {
                     currentNode.getChildren().clear();
                     currentNode.addChild(optimizedNode);
+                    currentNode = optimizedNode;
                 }
             }
             currentNode = currentNode.getChildren().isEmpty() ? null : currentNode.getChildren().get(0);
