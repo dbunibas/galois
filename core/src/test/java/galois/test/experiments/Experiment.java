@@ -247,7 +247,7 @@ public final class Experiment {
     private ExperimentResults executeUnoptimizedExperiment(IAlgebraOperator operator, List<Tuple> expectedResults) {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
-        ITupleIterator iterator = operator.execute(query.getDatabase(), null);
+        ITupleIterator iterator = operator.execute(query.getDatabase(), query.getDatabase());
         return toExperimentResults(iterator, expectedResults, null);
     }
 
