@@ -122,7 +122,12 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         if (this.attributes != null && !this.attributes.isEmpty()) {
             attributesQuery = new ArrayList<>();
             for (AttributeRef aRef : this.attributes) {
-                // Ignore aliased attributes
+                // Ignore virtual / virtual expression attributes: those don't need to be scanned
+                if (aRef instanceof VirtualAttributeRef) {
+                    continue;
+                }
+
+                // Guardrail for existing attributes
                 Attribute attribute = table.getAttributes().stream()
                         .filter(a -> a.getName().equalsIgnoreCase(aRef.getName()))
                         .findFirst()
