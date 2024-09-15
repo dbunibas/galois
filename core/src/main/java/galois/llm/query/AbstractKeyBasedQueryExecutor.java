@@ -122,9 +122,13 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         if (this.attributes != null && !this.attributes.isEmpty()) {
             attributesQuery = new ArrayList<>();
             for (AttributeRef aRef : this.attributes) {
-                Attribute a = table.getAttribute(aRef.getName());
-                if (!a.getName().equals("oid") && !primaryKeyAttributes.contains(a.getName())) {
-                    attributesQuery.add(a);
+                // Ignore aliased attributes
+                Attribute attribute = table.getAttributes().stream()
+                        .filter(a -> a.getName().equalsIgnoreCase(aRef.getName()))
+                        .findFirst()
+                        .orElse(null);
+                if (attribute != null && !attribute.getName().equals("oid") && !primaryKeyAttributes.contains(attribute.getName())) {
+                    attributesQuery.add(attribute);
                 }
             }
         } else {

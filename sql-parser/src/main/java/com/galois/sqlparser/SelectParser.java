@@ -1,6 +1,5 @@
 package com.galois.sqlparser;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
@@ -23,7 +22,6 @@ import speedy.model.expressions.ExpressionAttributeRef;
 import speedy.persistence.Types;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.galois.sqlparser.ParseUtils.contextToParseContext;
