@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static galois.llm.query.utils.QueryUtils.*;
+
 import galois.prompt.EPrompts;
 import galois.utils.GaloisDebug;
 import speedy.model.expressions.Expression;
@@ -36,7 +37,21 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         log.trace("attributes: {}", attributes);
         if (this.attributes != null && !this.attributes.isEmpty()) {
             attributesExecution = new ArrayList<>();
-            for (AttributeRef attribute : this.attributes) {
+            for (AttributeRef aRef : this.attributes) {
+                // Ignore virtual / virtual expression attributes: those don't need to be scanned
+                if (aRef instanceof VirtualAttributeRef) {
+                    continue;
+                }
+
+                // Guardrail for existing attributes
+                Attribute attribute = table.getAttributes().stream()
+                        .filter(a -> a.getName().equalsIgnoreCase(aRef.getName()))
+                        .findFirst()
+                        .orElse(null);
+                if (attribute == null) {
+                    continue;
+                }
+
                 attributesExecution.add(table.getAttribute(attribute.getName()));
             }
         }
