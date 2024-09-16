@@ -17,7 +17,7 @@ public class PhysicalPlanSelector {
     //TODO return IQueryExecutor instance
     public String getPlanByKeyStrategy(IDatabase database, String sql) {
         List<Key> keys = database.getKeys();
-        ParserProvenance parser = new ParserProvenance();
+        ParserProvenance parser = new ParserProvenance(database);
         parser.parse(sql);
         Set<String> attributeProvenance = parser.getAttributeProvenance();
         Set<String> tables = parser.getTablesProvenance();

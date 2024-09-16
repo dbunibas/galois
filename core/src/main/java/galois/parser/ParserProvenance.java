@@ -21,6 +21,9 @@ import net.sf.jsqlparser.statement.select.SelectItem;
 import net.sf.jsqlparser.statement.select.SelectVisitorAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import speedy.model.database.Attribute;
+import speedy.model.database.IDatabase;
+import speedy.model.database.ITable;
 
 public class ParserProvenance {
 
@@ -33,18 +36,20 @@ public class ParserProvenance {
     private Set<String> tablesProvenance = new HashSet<>();
     private Set<String> attributesInSelect = new HashSet<>();
     private Set<String> attributeInAggregate = new HashSet<>();
+    private IDatabase database;
 
-    public ParserProvenance() {
+    public ParserProvenance(IDatabase database) {
         initParsers();
+        this.database = database;
     }
 
     public void parse(String sql) throws ParserException {
         try {
-            Statement statement = CCJSqlParserUtil.parse(sql);
-            statement.accept(statementVisitor);
             ParserFrom parserFrom = new ParserFrom();
             parserFrom.parseFrom(sql);
             this.tablesProvenance = new HashSet(parserFrom.getTables());
+            Statement statement = CCJSqlParserUtil.parse(sql);
+            statement.accept(statementVisitor);
         } catch (Exception e) {
             throw new ParserException("Error with parsing: " + sql + "\nMessage: " + e.getMessage());
         }
@@ -68,6 +73,29 @@ public class ParserProvenance {
         }
         return attributeName;
     }
+    
+    private boolean checkAttributeName(String attributeName) {
+        if (this.database == null) return false;
+        for (String tableName : tablesProvenance) {
+            ITable table = this.database.getTable(tableName);
+            if (table.getAttribute(attributeName) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private Set<String> getAllAttributes() {
+        if (this.database == null) return new HashSet<>();
+        Set<String> attributesInTables = new HashSet<>();
+        for (String tableName : tablesProvenance) {
+            ITable table = this.database.getTable(tableName);
+            for (Attribute attribute : table.getAttributes()) {
+                attributesInTables.add(attribute.getName());
+            }
+        }
+        return attributesInTables;
+    }
 
     private void initParsers() {
         this.expressionVisitorAdapter = new ExpressionVisitorAdapter<>() {
@@ -81,7 +109,12 @@ public class ParserProvenance {
             @Override
             public <S> Object visit(ExpressionList<?> expressionList, S context) {
                 logger.debug("Visit ExpressionList: " + expressionList);
-                attributeProvenance.add(cleanAttribute(expressionList.toString()));
+                String attribute = cleanAttribute(expressionList.toString());
+                if (attribute.equals("*")) {
+                    attributeProvenance.addAll(getAllAttributes());
+                } else {
+                   attributeProvenance.add(attribute);
+                }
                 return super.visit(expressionList, context);
             }
 
@@ -162,9 +195,14 @@ public class ParserProvenance {
                     List<OrderByElement> orderByElements = plainSelect.getOrderByElements();
                     logger.debug("Order by: {}", orderByElements);
                     for (OrderByElement orderByElement : orderByElements) {
+                        Expression expression = orderByElement.getExpression();
+                        logger.debug("Order by Expression: {}", expression);
                         String orderName = orderByElement.toString();
                         String[] split = orderName.split(" ");
-                        attributeProvenance.add(cleanAttribute(split[0]));
+                        String attrOrderByName = cleanAttribute(split[0]);
+                        if (database != null && checkAttributeName(attrOrderByName)) {
+                            attributeProvenance.add(attrOrderByName);
+                        } 
                     }
                 }
                 if (plainSelect.getJoins() != null) {

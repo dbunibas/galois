@@ -31,7 +31,7 @@ public class LogicalPlanOptimizer {
             log.debug("No expressions to optimize");
             return operator;
         }
-        ParserProvenance parserProvenance = new ParserProvenance();
+        ParserProvenance parserProvenance = new ParserProvenance(database);
         parserProvenance.parse(sqlQuery);
         Set<String> tablesInQuery = parserProvenance.getTablesProvenance();
         List<Integer> indexToOptimize = new ArrayList<>();
