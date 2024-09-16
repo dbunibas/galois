@@ -183,8 +183,18 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
             attributeRefSet.addAll(orderBy.getAttributes(null, null));
         }
 
+        // If there is no projection, always empty the scan attributes
+        if (project == null) {
+            attributeRefSet.clear();
+        }
+
         // Check for $all special projection attribute
-        if (project != null && attributeRefSet.stream().anyMatch(a -> a.getName().equals(ParseConstants.ALL_ATTRIBUTES))) {
+        AttributeRef allAttribute = attributeRefSet.stream()
+                .filter(a -> a.getName().equals(ParseConstants.ALL_ATTRIBUTES))
+                .findFirst()
+                .orElse(null);
+        if (project != null && allAttribute != null) {
+            // FIXME: Add support for multiple table project: (ex. t1.*, t2.attribute)
             List<ProjectionAttribute> cleanedProjectionAttributes = projectionAttributes.stream()
                     .filter(pa -> !pa.getAttributeRef().getName().equals(ParseConstants.ALL_ATTRIBUTES))
                     .toList();
@@ -195,7 +205,11 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                     null :
                     new Project(cleanedProjectionAttributes, cleanedAttributeRef, false);
 
-            attributeRefSet.clear();
+            if (allAttribute.getTableAlias() != null) {
+                attributeRefSet.removeIf(a -> a.getTableAlias().equals(allAttribute.getTableAlias()));
+            } else {
+                attributeRefSet.clear();
+            }
         }
 
         // Check for count(*) projection attribute
