@@ -2,6 +2,7 @@ package com.galois.sqlparser;
 
 import lombok.Data;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
 import speedy.model.database.TableAlias;
 
 import java.util.ArrayList;
@@ -28,6 +29,13 @@ public class ParseContext {
         String columnName = column.getTable().getName();
         return tableAliases.stream()
                 .filter(t -> columnName.equals(t.getTableName()) || columnName.equals(t.getAlias()))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    public TableAlias getTableAliasFromTable(Table table) {
+        return tableAliases.stream()
+                .filter(t -> table.getName().equals(t.getAlias()) || table.getName().equals(t.getTableName()))
                 .findFirst()
                 .orElseThrow();
     }

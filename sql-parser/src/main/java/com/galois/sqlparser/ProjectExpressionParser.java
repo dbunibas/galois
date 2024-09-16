@@ -7,6 +7,7 @@ import net.sf.jsqlparser.expression.Function;
 import net.sf.jsqlparser.expression.operators.arithmetic.Subtraction;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.statement.select.AllTableColumns;
 import speedy.SpeedyConstants;
 import speedy.model.algebra.ProjectionAttribute;
 import speedy.model.algebra.aggregatefunctions.*;
@@ -24,6 +25,13 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
     public <S> ProjectionAttribute visit(Column column, S context) {
         ParseContext parseContext = contextToParseContext(context);
         AttributeRef attributeRef = new AttributeRef(parseContext.getTableAliasFromColumn(column), column.getColumnName());
+        return new ProjectionAttribute(attributeRef);
+    }
+
+    @Override
+    public <S> ProjectionAttribute visit(AllTableColumns allTableColumns, S context) {
+        ParseContext parseContext = contextToParseContext(context);
+        AttributeRef attributeRef = new AttributeRef(parseContext.getTableAliasFromTable(allTableColumns.getTable()), ParseConstants.ALL_ATTRIBUTES);
         return new ProjectionAttribute(attributeRef);
     }
 

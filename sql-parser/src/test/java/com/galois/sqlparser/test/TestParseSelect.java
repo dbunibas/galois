@@ -4,13 +4,14 @@ import com.galois.sqlparser.SQLQueryParser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Attr;
 import speedy.model.algebra.Distinct;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Project;
 import speedy.model.algebra.Scan;
 import speedy.model.algebra.operators.ITupleIterator;
-import speedy.model.database.*;
+import speedy.model.database.AttributeRef;
+import speedy.model.database.ITable;
+import speedy.model.database.Tuple;
 import speedy.model.database.mainmemory.MainMemoryDB;
 import speedy.persistence.DAOMainMemoryDatabase;
 
@@ -32,7 +33,6 @@ public class TestParseSelect {
         String schema = requireNonNull(TestParseSelect.class.getResource("/employees/schema.xsd")).getFile();
         String instance = requireNonNull(TestParseSelect.class.getResource("/employees/50_emp.xml")).getFile();
         db = new DAOMainMemoryDatabase().loadXMLDatabase(schema, instance);
-        log.info("{}", db.getFirstTable().getAttributes());
     }
 
     @Test
@@ -41,6 +41,7 @@ public class TestParseSelect {
         ITable table = db.getTable(TABLE_NAME);
 
         IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        log.info("root is {}", root);
         assertNotNull(root);
 
         assertInstanceOf(Scan.class, root);
@@ -55,6 +56,22 @@ public class TestParseSelect {
         tuples.forEach(t -> assertEquals(table.getAttributes().size() + 1, t.getCells().size()));
 
         logTuples(tuples);
+    }
+
+    @Test
+    public void testSelectAliasStar() {
+        String sql = String.format("select t.* from %s t", TABLE_NAME);
+        ITable table = db.getTable(TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        log.info("root is {}", root);
+        assertNotNull(root);
+        assertInstanceOf(Scan.class, root);
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = toTupleList(tupleIterator);
+        assertEquals(table.getSize(), tuples.size());
+        tuples.forEach(t -> assertEquals(table.getAttributes().size() + 1, t.getCells().size()));
     }
 
     @Test
@@ -139,6 +156,37 @@ public class TestParseSelect {
         Tuple tuple = tuples.getFirst();
         assertEquals(1, tuple.getCells().size());
         assertEquals("count", tuple.getCells().getFirst().getAttribute());
+        assertEquals((int) table.getSize(), tuple.getCells().getFirst().getValue().getPrimitiveValue());
+
+//        logTuples(tuples);
+    }
+
+    @Test
+    public void testSelectCountAttribute() {
+        String sql = String.format("select count(name) from %s", TABLE_NAME);
+        ITable table = db.getTable(TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        assertInstanceOf(Project.class, root);
+        Project project = (Project) root;
+        assertEquals(1, project.getAggregateFunctions().size());
+        assertTrue(project.isAggregative());
+        assertEquals(1, project.getChildren().size());
+        assertInstanceOf(Scan.class, project.getChildren().getFirst());
+
+        Scan scan = (Scan) project.getChildren().getFirst();
+        assertEquals(TABLE_NAME, scan.getTableAlias().getTableName());
+        assertEquals("", scan.getTableAlias().getAlias());
+        assertEquals(0, scan.getChildren().size());
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = toTupleList(tupleIterator);
+        assertEquals(1, tuples.size());
+        Tuple tuple = tuples.getFirst();
+        assertEquals(1, tuple.getCells().size());
+        assertEquals("name", tuple.getCells().getFirst().getAttribute());
         assertEquals((int) table.getSize(), tuple.getCells().getFirst().getValue().getPrimitiveValue());
 
 //        logTuples(tuples);
@@ -238,6 +286,19 @@ public class TestParseSelect {
                 .distinct()
                 .toList();
         assertEquals(distinctCells.size(), tuples.size());
+    }
+
+    @Test
+    public void testProjectionWithAlias() {
+        String sql = String.format("select t.manager, count(t.manager) man from %s t group by t.manager order by man desc limit 1", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+        log.info("root is {}", root);
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = toTupleList(tupleIterator);
+        logTuples(tuples);
     }
 
     private void logTuples(List<Tuple> tuples) {

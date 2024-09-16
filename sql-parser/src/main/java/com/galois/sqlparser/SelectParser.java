@@ -183,6 +183,30 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
             attributeRefSet.addAll(orderBy.getAttributes(null, null));
         }
 
+        // Check for $all special projection attribute
+        if (project != null && attributeRefSet.stream().anyMatch(a -> a.getName().equals(ParseConstants.ALL_ATTRIBUTES))) {
+            List<ProjectionAttribute> cleanedProjectionAttributes = projectionAttributes.stream()
+                    .filter(pa -> !pa.getAttributeRef().getName().equals(ParseConstants.ALL_ATTRIBUTES))
+                    .toList();
+            List<AttributeRef> cleanedAttributeRef = project.getNewAttributes().stream()
+                    .filter(a -> !a.getName().equals(ParseConstants.ALL_ATTRIBUTES))
+                    .toList();
+            project = cleanedProjectionAttributes.isEmpty() ?
+                    null :
+                    new Project(cleanedProjectionAttributes, cleanedAttributeRef, false);
+
+            attributeRefSet.clear();
+        }
+
+        // Check for count(*) projection attribute
+        ProjectionAttribute countAttribute = projectionAttributes.stream()
+                .filter(pa -> pa.getAggregateFunction() instanceof CountAggregateFunction)
+                .findFirst()
+                .orElse(null);
+        if (project != null && countAttribute != null && countAttribute.getAttributeRef().getName().equals(SpeedyConstants.COUNT)) {
+            attributeRefSet.clear();
+        }
+
         List<AttributeRef> attributeRef = attributeRefSet.stream()
                 .filter(a -> a.getTableAlias().equals(tableAlias))
                 .toList();
