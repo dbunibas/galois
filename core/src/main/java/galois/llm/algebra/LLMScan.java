@@ -58,7 +58,7 @@ public class LLMScan extends Scan {
 
     @Override
     public String getName() {
-        return "SCAN_LLM(" + tableAlias + ")";
+        return "SCAN_LLM(" + tableAlias + " - " + attributesSelect + ")";
     }
 
     @Override

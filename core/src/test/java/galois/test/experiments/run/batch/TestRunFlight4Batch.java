@@ -1,6 +1,7 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
+import galois.llm.algebra.LLMScan;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
 import galois.test.experiments.ExperimentResults;
@@ -77,7 +78,7 @@ public class TestRunFlight4Batch {
         for (ExpVariant variant : variants) {
             log.info("Parsing query {}", variant.getQueryNum());
             assertDoesNotThrow(() -> {
-                IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql());
+                IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql(), ((tableAlias, attributes) -> new LLMScan(tableAlias, null, attributes, null)));
                 log.info("Parsed result:\n{}", result);
             });
         }

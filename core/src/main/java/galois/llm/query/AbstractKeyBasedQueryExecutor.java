@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static galois.llm.query.utils.QueryUtils.*;
 
@@ -43,7 +44,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         GaloisDebug.log("Parsed keys are:");
         GaloisDebug.log(keyValues);
 
-        List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
+        List<Tuple> tuples = keyValues.stream().limit(10).map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
         GaloisDebug.log("LLMScan results:");
         GaloisDebug.log(tuples);
         return tuples;
@@ -118,15 +119,10 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream().map(AttributeRef::getName).toList();
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
         addCellForPrimaryKey(tuple, tableAlias, keyValue, primaryKeyAttributes);
-        List<Attribute> attributesQuery = null;
+        Set<Attribute> attributesQuery = null;
         if (this.attributes != null && !this.attributes.isEmpty()) {
-            attributesQuery = new ArrayList<>();
+            attributesQuery = new HashSet<>();
             for (AttributeRef aRef : this.attributes) {
-                // Ignore virtual / virtual expression attributes: those don't need to be scanned
-                if (aRef instanceof VirtualAttributeRef) {
-                    continue;
-                }
-
                 // Guardrail for existing attributes
                 Attribute attribute = table.getAttributes().stream()
                         .filter(a -> a.getName().equalsIgnoreCase(aRef.getName()))
@@ -139,7 +135,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         } else {
             attributesQuery = table.getAttributes().stream()
                     .filter(a -> !a.getName().equals("oid") && !primaryKeyAttributes.contains(a.getName()))
-                    .toList();
+                    .collect(Collectors.toSet());
         }
 
         if (attributesQuery.isEmpty()) {
@@ -147,7 +143,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         }
 
         String keyAsString = getKeyAsString(keyValue, primaryKeyAttributes);
-        return addValueFromAttributes(table, tableAlias, attributesQuery, tuple, keyAsString, chain);
+        return addValueFromAttributes(table, tableAlias, new ArrayList<>(attributesQuery), tuple, keyAsString, chain);
     }
 
     private void addCellForPrimaryKey(Tuple tuple, TableAlias tableAlias, Map<String, Object> key, List<String> primaryKeyAttributes) {

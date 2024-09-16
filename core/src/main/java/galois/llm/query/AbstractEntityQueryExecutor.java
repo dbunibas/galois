@@ -5,9 +5,7 @@ import galois.llm.TokensEstimator;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static galois.llm.query.utils.QueryUtils.*;
 
@@ -33,16 +31,11 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
 
         ITable table = database.getTable(tableAlias.getTableName());
         log.trace("Table: {}", table);
-        List<Attribute> attributesExecution = getCleanAttributes(table);
         log.trace("attributes: {}", attributes);
+        Set<Attribute> attributesExecution = null;
         if (this.attributes != null && !this.attributes.isEmpty()) {
-            attributesExecution = new ArrayList<>();
+            attributesExecution = new HashSet<>();
             for (AttributeRef aRef : this.attributes) {
-                // Ignore virtual / virtual expression attributes: those don't need to be scanned
-                if (aRef instanceof VirtualAttributeRef) {
-                    continue;
-                }
-
                 // Guardrail for existing attributes
                 Attribute attribute = table.getAttributes().stream()
                         .filter(a -> a.getName().equalsIgnoreCase(aRef.getName()))
@@ -55,15 +48,19 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 attributesExecution.add(table.getAttribute(attribute.getName()));
             }
         }
-        log.trace("attributesExecution: {}", attributesExecution);
-        String jsonSchema = generateJsonSchemaListFromAttributes(table, attributesExecution);
+        List<Attribute> attributesExecutionList = attributesExecution == null ?
+                getCleanAttributes(table) :
+                new ArrayList<>(attributesExecution);
+        log.trace("attributesExecutionList: {}", attributesExecution);
+
+        String jsonSchema = generateJsonSchemaListFromAttributes(table, attributesExecutionList);
         Expression expression = getExpression();
         log.debug("Expression: {}", expression);
         List<Tuple> tuples = new ArrayList<>();
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
-                    ? generateFirstPrompt(table, attributesExecution, getExpression(), jsonSchema)
-                    : generateIterativePrompt(table, attributesExecution, jsonSchema);
+                    ? generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema)
+                    : generateIterativePrompt(table, attributesExecutionList, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
             try {
                 String response = getResponse(chain, userMessage, false);
@@ -74,7 +71,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     break; // no more iterations
                 }
                 for (Map<String, Object> map : parsedResponse) {
-                    Tuple tuple = mapToTuple(map, tableAlias, attributesExecution);
+                    Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
                     // TODO: Handle possible duplicates
                     if (tuple != null) tuples.add(tuple);
                 }
@@ -86,7 +83,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);
                     for (Map<String, Object> map : parsedResponse) {
-                        Tuple tuple = mapToTuple(map, tableAlias, attributesExecution);
+                        Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
                         // TODO: Handle possible duplicates
                         if (tuple != null) tuples.add(tuple);
                     }
