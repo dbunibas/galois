@@ -11,15 +11,12 @@
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
-  "optimizers": [
-    "AllConditionsPushdownOptimizer",
-    "SingleConditionsOptimizerFactory"
-  ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-sql",
-      "maxIterations": 10
+      "maxIterations": 10,
+      "normalizationStrategy": "lowerCase"
     }
   },
   "query": {
@@ -45,7 +42,7 @@
               "nullable": false
             },
             {
-              "name": "countrycode",
+              "name": "country_code_3_letters",
               "type": "STRING",
               "nullable": false
             },
@@ -81,7 +78,7 @@
           "tableName": "country",
           "attributes": [
             {
-              "name": "code",
+              "name": "code_3_letters",
               "type": "STRING",
               "nullable": false,
               "key": true
@@ -102,12 +99,12 @@
               "nullable": false
             },
             {
-              "name": "surfacearea",
-              "type": "FLOAT",
+              "name": "surface_area_in_km2",
+              "type": "REAL",
               "nullable": false
             },
             {
-              "name": "indepyear",
+              "name": "independence_year",
               "type": "INTEGER",
               "nullable": true
             },
@@ -117,32 +114,32 @@
               "nullable": false
             },
             {
-              "name": "lifeexpectancy",
-              "type": "FLAOT",
+              "name": "life_expectancy",
+              "type": "REAL",
               "nullable": true
             },
             {
               "name": "gnp",
-              "type": "FLOAT",
+              "type": "REAL",
               "nullable": true
             },
             {
-              "name": "gnpold",
-              "type": "FLOAT",
+              "name": "gnp_old",
+              "type": "REAL",
               "nullable": true
             },
             {
-              "name": "localname",
+              "name": "local_name",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "governmentform",
+              "name": "government_form",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "headofstate",
+              "name": "head_of_state",
               "type": "STRING",
               "nullable": true
             },
@@ -152,7 +149,7 @@
               "nullable": true
             },
             {
-              "name": "code2",
+              "name": "code_2_letters",
               "type": "STRING",
               "nullable": false
             }
@@ -162,7 +159,7 @@
           "tableName": "country_language",
           "attributes": [
             {
-              "name": "country_code",
+              "name": "country_code_3_letters",
               "type": "STRING",
               "nullable": false,
               "key": true
@@ -174,13 +171,13 @@
               "key": true
             },
             {
-              "name": "isofficial",
+              "name": "is_official",
               "type": "STRING",
               "nullable": false
             },
             {
               "name": "percentage",
-              "type": "FLOAT",
+              "type": "REAL",
               "nullable": false
             }
           ]

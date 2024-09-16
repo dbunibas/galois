@@ -1,4 +1,4 @@
-code,name,continent,region,surfacearea,indepyear,population,lifeexpectancy,gnp,gnpold,localname,governmentform,headofstate,capital,code2
+code_3_letters,name,continent,region,surface_area_in_km2,independence_year,population,life_expectancy,gnp,gnp_old,local_name,government_form,head_of_state,capital,code_2_letters
 ABW,Aruba,North America,Caribbean,193.0,nan,103000,78.4,828.0,793.0,Aruba,Nonmetropolitan Territory of The Netherlands,Beatrix,129.0,AW
 AFG,Afghanistan,Asia,Southern and Central Asia,652090.0,1919.0,22720000,45.9,5976.0,nan,Afganistan/Afqanestan,Islamic Emirate,Mohammad Omar,1.0,AF
 AGO,Angola,Africa,Central Africa,1246700.0,1975.0,12878000,38.3,6648.0,7984.0,Angola,Republic,José Eduardo dos Santos,56.0,AO
