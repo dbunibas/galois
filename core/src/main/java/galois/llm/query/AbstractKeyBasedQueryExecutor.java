@@ -44,7 +44,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         GaloisDebug.log("Parsed keys are:");
         GaloisDebug.log(keyValues);
 
-        List<Tuple> tuples = keyValues.stream().limit(10).map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
+        List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
         GaloisDebug.log("LLMScan results:");
         GaloisDebug.log(tuples);
         return tuples;
