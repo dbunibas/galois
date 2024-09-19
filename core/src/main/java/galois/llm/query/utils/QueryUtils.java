@@ -1,10 +1,13 @@
 package galois.llm.query.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xwpf.usermodel.ICell;
 import speedy.SpeedyConstants;
+import speedy.exceptions.DAOException;
 import speedy.model.database.*;
 import speedy.model.database.mainmemory.datasource.IntegerOIDGenerator;
 import speedy.model.expressions.Expression;
+import speedy.persistence.Types;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -58,17 +61,18 @@ public class QueryUtils {
 
     public static Tuple mapToTuple(Tuple tuple, Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
         for (Attribute attribute : attributes) {
-            IValue cellValue = null;
+            /*IValue cellValue = null;
             if (map.get(attribute.getName()) == null || map.get(attribute.getName()).toString().equalsIgnoreCase("null")) {
                 cellValue = new NullValue(SpeedyConstants.NULL_VALUE);
             } else {
                 cellValue = new ConstantValue(map.get(attribute.getName()));
             }
-            /*IValue cellValue = map.containsKey(attribute.getName()) &&
+            IValue cellValue = map.containsKey(attribute.getName()) &&
                     map.get(attribute.getName()) != null && 
                     !map.get(attribute.getName()).equals("null") ?
                     new ConstantValue(map.get(attribute.getName())) :
                     new NullValue(SpeedyConstants.NULL_VALUE); */
+            IValue cellValue = safelyParseCellValue(map, attribute);
             Cell currentCell = new Cell(
                     tuple.getOid(),
                     new AttributeRef(tableAlias, attribute.getName()),
@@ -78,6 +82,40 @@ public class QueryUtils {
         }
         if (tuple.getCells().size() <= 1) return null;
         return tuple;
+    }
+
+    private static IValue safelyParseCellValue(Map<String, Object> map, Attribute attribute) {
+        if (map.get(attribute.getName()) == null || map.get(attribute.getName()).toString().equalsIgnoreCase("null")) {
+            return new NullValue(SpeedyConstants.NULL_VALUE);
+        }
+
+        Object value = map.get(attribute.getName());
+        if (!Types.isNumerical(attribute.getType())) {
+            return new ConstantValue(value);
+        }
+
+        String valueAsString = value.toString();
+        // Replace commas with dots
+        if (valueAsString.contains(",")) {
+            valueAsString = valueAsString.replaceAll(",", ".");
+        }
+        // Replace K (or k) with 000
+        if (valueAsString.contains("K") || valueAsString.contains("k")) {
+            valueAsString = valueAsString.replaceAll("K", "000");
+            valueAsString = valueAsString.replaceAll("k", "000");
+        }
+        // Replace M (or m) with 000000
+        if (valueAsString.contains("M") || valueAsString.contains("m")) {
+            valueAsString = valueAsString.replaceAll("M", "000000");
+            valueAsString = valueAsString.replaceAll("m", "000000");
+        }
+
+        try {
+            Object typedValue = Types.getTypedValue(attribute.getType(), valueAsString);
+            return new ConstantValue(typedValue);
+        } catch (DAOException e) {
+            return new ConstantValue(valueAsString);
+        }
     }
 
     public static Tuple mapToTupleIgnoreMissingAttributes(Map<String, Object> map, TableAlias tableAlias) {
