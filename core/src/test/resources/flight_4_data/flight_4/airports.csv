@@ -1,4 +1,4 @@
-apid,name,city,country,x,y,elevation,iata,icao
+apid,name,city,country,x,y,elevation_in_ft,iata,icao
 1,Goroka Airport,Goroka,Papua New Guinea,145.391998291,-6.08168983459,5282,GKA,AYGA
 2,Madang Airport,Madang,Papua New Guinea,145.789001465,-5.20707988739,20,MAG,AYMD
 3,Mount Hagen Kagamuga Airport,Mount Hagen,Papua New Guinea,144.296005249023,-5.82678985595703,5388,HGU,AYMH

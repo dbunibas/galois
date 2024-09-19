@@ -107,7 +107,7 @@
               "nullable": false
             },
             {
-              "name": "elevation",
+              "name": "elevation_in_ft",
               "type": "INTEGER",
               "nullable": false
             },

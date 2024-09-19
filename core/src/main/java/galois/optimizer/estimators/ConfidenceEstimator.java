@@ -21,7 +21,8 @@ public class ConfidenceEstimator {
 //    private String togetherAIModelName = TogetherAIModel.MODEL_LLAMA3_1_70B;
     
     public Map<ITable, Map<Attribute, Double>> getEstimation(IDatabase database) {
-        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return the results in JSON with the properties \"attribute\" and \"confidence\"";
+//        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return the results in JSON with the properties \"attribute\" and \"confidence\"";
+        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return an higher score if you are able to return accurate and factual data. Return a lower score if you can't return accurate and factual data. Return the results in JSON with the properties \"attribute\" and \"confidence\"";
         Map<ITable, Map<Attribute, Double>> confidenceForDB = new HashMap<>();
         for (String tableName : database.getTableNames()) {
             ITable table = database.getTable(tableName);
@@ -45,6 +46,26 @@ public class ConfidenceEstimator {
             confidenceForDB.put(table, confidenceForTable);
         }
         return confidenceForDB;
+    }
+    
+    public void getEstimationForQuery(IDatabase database, List<String> tableNames, String querySQL) {
+        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, in populating the data given a SQL query. Give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return a higher score if you are able to return accurate and factual data. Return a lower score if you can't return accurate and factual data or you may not have information on all the data. Return the results in JSON with the property \"confidence\".\n"
+                + "\n"
+                + "SQL query: ${sqlQuery}";
+        String relationalSchema = "";
+        for (String tableName : tableNames) {
+            ITable table = database.getTable(tableName);
+            List<Attribute> attributes = table.getAttributes();
+            String schema = getRelationalSchema(attributes,tableName);
+            relationalSchema += schema + " ";
+        }
+        relationalSchema = relationalSchema.trim();
+        String promptTable = prompt.replace("${relationalSchema}", relationalSchema);
+        promptTable = promptTable.replace("${sqlQuery}", querySQL);
+        if (log.isDebugEnabled()) log.debug(promptTable);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+        String response = model.generate(promptTable);   
+        if (log.isDebugEnabled()) log.debug(response);
     }
     
     public Map<ITable, Map<Attribute, Double>> getEstimation(IDatabase database, List<String> tableNames, String querySQL) {

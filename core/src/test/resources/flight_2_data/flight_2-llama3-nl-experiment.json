@@ -16,7 +16,8 @@
     "scan": {
       "queryExecutor": "togetherai-llama3-nl",
       "maxIterations": 10,
-      "naturalLanguagePrompt": "{{PROMPT}}"
+      "naturalLanguagePrompt": "{{PROMPT}}",
+      "normalizationStrategy": "lowerCase"
     }
   },
   "query": {
