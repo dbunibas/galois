@@ -44,7 +44,8 @@ public class TogetheraiLlama3TableQueryExecutor extends AbstractEntityQueryExecu
 
     @Override
     protected ConversationalChain getConversationalChain() {
-        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+//        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_1_8B);
 //        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);
     }
 

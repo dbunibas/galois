@@ -203,6 +203,30 @@ public class TestRunner {
         }
         return null;
     }
+    
+    public void executeConfidenceEstimatorQuery(String path, ExpVariant variant) {
+        try {
+            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            log.debug("SQL query is {}", experiment.getQuery().getSql());
+            IDatabase database = experiment.getQuery().getDatabase();
+            ParserFrom parserFrom = new ParserFrom();
+            parserFrom.parseFrom(experiment.getQuery().getSql());
+            List<String> tables = parserFrom.getTables();
+            ConfidenceEstimator estimator = new ConfidenceEstimator();
+            String query = experiment.getQuery().getSql();
+            int indexOfFrom = query.indexOf("FROM", 0);
+            String queryFrom = query.substring(indexOfFrom).trim();
+            query = "SELECT * " + queryFrom;
+            query = query.replace("target.", "");
+            estimator.getEstimationForQuery(database, tables, query);
+//            Map<ITable, Map<Attribute, Double>> dbConfidence = estimator.getEstimation(database, tables, experiment.getQuery().getSql());
+        } catch (Exception ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+        }
+    }
 
     public Double getPopularity(String expPath, ExpVariant variant) {
         Experiment experiment = null;

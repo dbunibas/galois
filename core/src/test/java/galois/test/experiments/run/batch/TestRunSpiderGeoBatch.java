@@ -2,16 +2,21 @@ package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
 import galois.Constants;
+import galois.llm.algebra.LLMScan;
 import galois.llm.models.IModel;
 import galois.llm.models.TogetherAIModel;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.optimizer.PhysicalPlanSelector;
+import galois.test.experiments.Experiment;
 import galois.test.experiments.ExperimentResults;
+import galois.test.experiments.json.parser.ExperimentParser;
 import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
@@ -22,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import speedy.model.database.Attribute;
+import speedy.model.database.IDatabase;
+import speedy.model.database.ITable;
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
@@ -129,14 +137,15 @@ public class TestRunSpiderGeoBatch {
         ExpVariant q11 = ExpVariant.builder()
                 .queryNum("Q11")
                 //                .querySql("SELECT lake_name FROM usa_lake;")
-                .querySql("SELECT DISTINCT lake_name FROM usa_lake;")
+                .querySql("SELECT DISTINCT lake_name FROM usa_lake WHERE area_squared_km > 450;")
                 .prompt("name all the lakes of us")
                 .optimizers(List.of())
                 .build();
 
         ExpVariant q12 = ExpVariant.builder()
                 .queryNum("Q12")
-                .querySql("SELECT usa_state_traversed FROM usa_river WHERE length_in_km > 750;")
+                //                .querySql("SELECT usa_state_traversed FROM usa_river WHERE length_in_km > 750;")
+                .querySql("SELECT DISTINCT usa_state_traversed FROM usa_river WHERE length_in_km > 750;")
                 .prompt("what states contain at least one major rivers")
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -188,13 +197,12 @@ public class TestRunSpiderGeoBatch {
                 .optimizers(singleConditionOptimizers)
                 .build();
 
-        ExpVariant q19 = ExpVariant.builder()
-                .queryNum("Q19")
-                .querySql("SELECT usa_state_traversed FROM usa_river WHERE length_in_km = ( SELECT MIN ( length_in_km ) FROM usa_river);")
-                .prompt("what states does the shortest river run through")
-                .optimizers(singleConditionOptimizers)
-                .build(); // NESTED QUERY WE DON'T MANAGE IT!
-
+//        ExpVariant q19 = ExpVariant.builder()
+//                .queryNum("Q19")
+//                .querySql("SELECT usa_state_traversed FROM usa_river WHERE length_in_km = ( SELECT MIN ( length_in_km ) FROM usa_river);")
+//                .prompt("what states does the shortest river run through")
+//                .optimizers(singleConditionOptimizers)
+//                .build(); // NESTED QUERY WE DON'T MANAGE IT!
         ExpVariant q20 = ExpVariant.builder()
                 .queryNum("Q20")
                 .querySql("SELECT population FROM usa_city WHERE city_name = 'seattle' AND state_name = 'washington';")
@@ -239,9 +247,9 @@ public class TestRunSpiderGeoBatch {
 
         ExpVariant q26 = ExpVariant.builder()
                 .queryNum("Q26")
-//                .querySql("SELECT t2.capital FROM usa_state AS t2 JOIN usa_city AS t1 ON t2.state_name = t1.state_name WHERE t1.city_name = 'durham';")
+                //                .querySql("SELECT t2.capital FROM usa_state AS t2 JOIN usa_city AS t1 ON t2.state_name = t1.state_name WHERE t1.city_name = 'durham';")
                 .querySql("SELECT t2.capital FROM usa_city AS t1 JOIN usa_state AS t2 ON t1.state_name = t2.state_name WHERE t1.city_name = 'durham';")
-//                .prompt("name the major rivers") //? Incorrect
+                //                .prompt("name the major rivers") //? Incorrect
                 .prompt("the capital of the state where there is durham") //?
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -252,23 +260,21 @@ public class TestRunSpiderGeoBatch {
 //                .prompt("what state has no rivers")
 //                .optimizers(singleConditionOptimizers)
 //                .build();
-
 //        ExpVariant q28 = ExpVariant.builder()
 //                .queryNum("Q28")
 //                .querySql("SELECT COUNT ( river_name ) FROM river WHERE traverse NOT IN ( SELECT state_name FROM state WHERE capital = 'albany' );")
 //                .prompt("how many rivers do not traverse the state with the capital albany")
 //                .optimizers(singleConditionOptimizers)
 //                .build();
-
         ExpVariant q29 = ExpVariant.builder()
                 .queryNum("Q29")
-//                .querySql("SELECT t2.capital FROM usa_state AS t2 JOIN usa_city AS t1 ON t2.capital = t1.city_name WHERE t1.population <= 150000;")
+                //                .querySql("SELECT t2.capital FROM usa_state AS t2 JOIN usa_city AS t1 ON t2.capital = t1.city_name WHERE t1.population <= 150000;")
                 .querySql("SELECT t2.capital FROM usa_city AS t1 JOIN usa_state AS t2 ON t1.city_name=t2.capital WHERE t1.population <= 150000;")
                 .prompt("which capitals are not major cities")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10 ,q11, q12, q13, q14, q15, q16, q17, q18, q20, q21 , q22, q23, q24, q25, q26, q29);
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q20, q21, q22, q23, q24, q25, q26, q29);
     }
 
     @Test
@@ -277,7 +283,7 @@ public class TestRunSpiderGeoBatch {
         for (ExpVariant variant : variants) {
             log.info("Parsing query {}", variant.getQueryNum());
             assertDoesNotThrow(() -> {
-                IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql());
+                IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql(), ((tableAlias, attributes) -> new LLMScan(tableAlias, null, attributes, null)));
                 log.info("Parsed result:\n{}", result);
             });
         }
@@ -304,9 +310,9 @@ public class TestRunSpiderGeoBatch {
         // TO DEBUG single experiment
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
-        ExpVariant variant = variants.get(19);
-        String configPath = "/SpiderGeo/geo-llama3-nl-experiment.json";
-        String type = "NL";
+        ExpVariant variant = variants.get(1);
+        String configPath = "/SpiderGeo/geo-llama3-key-scan-experiment.json";
+        String type = "KEY-SCAN";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
         IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
@@ -322,7 +328,54 @@ public class TestRunSpiderGeoBatch {
 //            ExpVariant variant = variants.get(0);
             String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
             testRunner.executeConfidenceEstimator(configPath, variant);
+            break;
         }
+    }
+    
+    @Test
+    public void testConfidenceEstimatorQuery() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimatorQuery(configPath, variant);
+//            break;
+        }
+    }
 
+    @Test
+    public void testGalois() {
+        double threshold = 0.9;
+        boolean removeFromAlgebraTree = true;
+        ExpVariant variantForConfidence = variants.get(0); //we need only one
+        String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+        Map<ITable, Map<Attribute, Double>> dbConfidence = testRunner.executeConfidenceEstimator(configPath, variantForConfidence);
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IDatabase database = null;
+        try {
+            Experiment experiment = ExperimentParser.loadAndParseJSON("/SpiderGeo/geo-llama3-sql-experiment.json");
+            database = experiment.getQuery().getDatabase();
+        } catch (IOException ioe) {
+            log.error("Unable to parse JSON to extract Database Object");
+            return;
+        }
+        for (ExpVariant variant : variants) {
+            // Baseline Execution
+            testRunner.execute("/SpiderGeo/geo-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/SpiderGeo/geo-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            // Galois Execution
+            PhysicalPlanSelector physicalPlanSelector = new PhysicalPlanSelector();
+            String selectedPlan = physicalPlanSelector.getPlanByKeyStrategy(database, variant.getQuerySql());
+            log.info("Query {} selected plan: {}", variant.getQuerySql(), selectedPlan);
+            if (selectedPlan.equals(PhysicalPlanSelector.PLAN_TABLE)) {
+                testRunner.executeGalois("/SpiderGeo/geo-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE, dbConfidence, threshold, removeFromAlgebraTree);
+            }
+            if (selectedPlan.equals(PhysicalPlanSelector.PLAN_KEY_SCAN)) {
+                testRunner.executeGalois("/SpiderGeo/geo-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE, dbConfidence, threshold, removeFromAlgebraTree);
+            }
+//            testRunner.execute("/SpiderGeo/geo-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+        log.info("Results\n{}", printMap(results));       
     }
 }

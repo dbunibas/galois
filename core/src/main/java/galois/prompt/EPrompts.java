@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static galois.llm.query.utils.QueryUtils.*;
-import static galois.utils.Mapper.fromJsonToListOfMaps;
 
 @Getter
 @AllArgsConstructor
@@ -42,7 +41,8 @@ public enum EPrompts {
     // Attributes
     ATTRIBUTES_PIPE("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by | without any additional comments.", null, PipeAttributesParser::parse, null),
     ATTRIBUTES_COMMA("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by comma without any additional comments.", null, CommaAttributesParser::parse, null),
-    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
+//    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
+    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only. Return all numerical attributes in valid numerical format. Don't use the comma in the numerical values. Use the dot for floating numbers.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
     // TODO: Add attributes prompt with auto-generated example from the table attributes
 
     // Entities

@@ -2,6 +2,7 @@ package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
 import galois.Constants;
+import galois.llm.algebra.LLMScan;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.query.utils.QueryUtils;
 import galois.optimizer.IOptimizer;
@@ -57,63 +58,63 @@ public class TestRunVenezuelaPresidentsBatch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("SELECT p.name, p.party from target.international_presidents p WHERE p.country='Venezuela'")
+                .querySql("SELECT p.name, p.party FROM target.world_presidents p WHERE p.country='Venezuela'")
                 .prompt("List the name and party of Venezuela presidents.")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q2 = ExpVariant.builder()
                 .queryNum("Q2")
-                .querySql("SELECT p.name, p.party from target.international_presidents p WHERE p.country='Venezuela' AND p.party='Liberal'")
+                .querySql("SELECT p.name, p.party FROM target.world_presidents p WHERE p.country='Venezuela' AND p.party='Liberal'")
                 .prompt("List the name and party of Venezuela presidents where party is Liberal")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("SELECT count(p.party) as party from target.international_presidents p WHERE p.country='Venezuela' AND p.party='Liberal'")
+                .querySql("SELECT count(p.party) as party FROM target.world_presidents p WHERE p.country='Venezuela' AND p.party='Liberal'")
                 .prompt("Count the number of Venezuela presidents where party is Liberal")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q4 = ExpVariant.builder()
                 .queryNum("Q4")
-                .querySql("SELECT p.name from target.international_presidents p WHERE p.country='Venezuela' AND p.party='Liberal'")
+                .querySql("SELECT p.name FROM target.world_presidents p WHERE p.country='Venezuela' AND p.party='Liberal'")
                 .prompt("List the name of Venezuela presidents where party is Liberal")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q5 = ExpVariant.builder()
                 .queryNum("Q5")
-                .querySql("SELECT p.name from target.international_presidents p WHERE p.country='Venezuela' AND p.party='Liberal' AND p.start_year > 1858")
+                .querySql("SELECT p.name FROM target.world_presidents p WHERE p.country='Venezuela' AND p.party='Liberal' AND p.start_year > 1858")
                 .prompt("List the name of Venezuela presidents after 1858 where party is Liberal")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
-                .querySql("SELECT p.name, p.start_year, p.end_year, p.cardinal_number, p.party from target.international_presidents p WHERE p.country='Venezuela'")
+                .querySql("SELECT p.name, p.start_year, p.end_year, p.cardinal_number, p.party FROM target.world_presidents p WHERE p.country='Venezuela'")
                 .prompt("List the name, the start year, the end year, the number of president and the party of Venezuela presidents")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q7 = ExpVariant.builder()
                 .queryNum("Q7")
-                .querySql("SELECT p.party, count(p.party) num from target.international_presidents p WHERE p.country='Venezuela' group by p.party order by num desc limit 1")
+                .querySql("SELECT p.party, count(p.party) num FROM target.world_presidents p WHERE p.country='Venezuela' group by p.party order by num desc limit 1")
                 .prompt("List the party name and the number of presidents of the party with more Venezuela presidents")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q8 = ExpVariant.builder()
                 .queryNum("Q8")
-                .querySql("SELECT count(*) from target.international_presidents p where p.country='Venezuela' AND p.start_year >= 1990  AND p.start_year < 2000")
+                .querySql("SELECT count(*) FROM target.world_presidents p where p.country='Venezuela' AND p.start_year >= 1990  AND p.start_year < 2000")
                 .prompt("count Venezuela presidents who began their terms in the 1990 and finish it in 2000.")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
-                .querySql("SELECT p.name from target.international_presidents p where p.country='Venezuela' AND p.party = 'Military' order by p.end_year desc limit 1")
+                .querySql("SELECT p.name FROM target.world_presidents p where p.country='Venezuela' AND p.party = 'Military' order by p.end_year desc limit 1")
                 .prompt("List the name of the last Venezuela president where party is Military")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
@@ -127,7 +128,7 @@ public class TestRunVenezuelaPresidentsBatch {
         for (ExpVariant variant : variants) {
             log.info("Parsing query {}", variant.getQueryNum());
             assertDoesNotThrow(() -> {
-                IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql());
+                IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql(), ((tableAlias, attributes) -> new LLMScan(tableAlias, null, attributes, null)));
                 log.info("Parsed result:\n{}", result);
             });
         }
@@ -142,11 +143,20 @@ public class TestRunVenezuelaPresidentsBatch {
             testRunner.execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/presidents/presidents-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/presidents/presidents-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/presidents/presidents-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/presidents/presidents-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
+    }
+    
+    @Test
+    public void testConfidenceEstimatorQuery() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/presidents/presidents-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimatorQuery(configPath, variant);
+//            break;
+        }
     }
 
     @Test
@@ -176,11 +186,20 @@ public class TestRunVenezuelaPresidentsBatch {
             testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             String tableExp = "/presidents/presidents-llama3-table-experiment.json";
             String keyExp = "/presidents/presidents-llama3-key-scan-experiment.json";
-            Double popularity = getPopularity(tableExp, "international_presidents", variant);
+            //            Double popularity = getPopularity(tableExp, "usa_state", variant);
+            Double popularity = testRunner.getPopularity(tableExp, variant);
             if (popularity >= 0.7) {
-                testRunner.execute(keyExp, "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+                log.info("Run KEY-CAN");
+//                IOptimizer optimizer = testRunner.getOptimizerBasedOnCardinality(tableExp, variant);
+                IOptimizer optimizer = testRunner.getOptimizerBasedOnLLMOptimization(tableExp, variant);
+                testRunner.executeSingle(keyExp, "KEY-SCAN", variant, metrics, results, optimizer);
+//                testRunner.execute(keyExp, "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             } else {
-                testRunner.execute(tableExp, "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+                log.info("Run TABLE");
+//                IOptimizer optimizer = testRunner.getOptimizerBasedOnCardinality(tableExp, variant);
+                IOptimizer optimizer = testRunner.getOptimizerBasedOnLLMOptimization(tableExp, variant);
+                testRunner.executeSingle(tableExp, "TABLE", variant, metrics, results, optimizer);
+//                testRunner.execute(tableExp, "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }

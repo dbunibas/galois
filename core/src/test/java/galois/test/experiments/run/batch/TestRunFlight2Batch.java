@@ -49,22 +49,22 @@ public class TestRunFlight2Batch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select call_sign from target.usa_airline_companies where airline='JetBlue Airways'")
+                .querySql("SELECT call_sign FROM target.usa_airline_companies WHERE airline='jetblue airways'")
                 .prompt("What is the call sign of Airline 'JetBlue Airways'?")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q2 = ExpVariant.builder()
                 .queryNum("Q2")
-                .querySql("select count(*) from target.usa_flights f")
-                .prompt("How many flights do we have?")
+                .querySql("SELECT count(*) FROM target.usa_flights f")
+                .prompt("How many flights do we have in US?")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("select a.airline from target.usa_airline_companies a where a.call_sign='UAL'")
-                .prompt("Which airline has call sign 'UAL'?")
+                .querySql("SELECT a.airline FROM target.usa_airline_companies a WHERE a.call_sign='ual'")
+                .prompt("Which airline has call sign 'ual'?")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
@@ -94,7 +94,7 @@ public class TestRunFlight2Batch {
             testRunner.execute("/flight_2_data/flight_2-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/flight_2_data/flight_2-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/flight_2_data/flight_2-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_2_data/flight_2-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/flight_2_data/flight_2-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/flight_2_data/flight_2-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
@@ -116,6 +116,15 @@ public class TestRunFlight2Batch {
         IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
         testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
+    }
+    
+    @Test
+    public void testConfidenceEstimatorQuery() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/flight_2_data/flight_2-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimatorQuery(configPath, variant);
+//            break;
+        }
     }
 
 }

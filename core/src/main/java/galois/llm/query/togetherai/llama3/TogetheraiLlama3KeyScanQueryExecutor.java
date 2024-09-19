@@ -59,13 +59,16 @@ public class TogetheraiLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryE
 
     @Override
     protected ConversationalChain getConversationalChain() {
-        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+//        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_1_8B);
 //        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);
     }
 
     @Override
     protected ChatLanguageModel getChatLanguageModel() {
-        return buildTogetherAiChatLanguageModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+//        return buildTogetherAiChatLanguageModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        return buildTogetherAiChatLanguageModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_1_8B);
+        
 //        return buildTogetherAiChatLanguageModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_70B);
     }
 

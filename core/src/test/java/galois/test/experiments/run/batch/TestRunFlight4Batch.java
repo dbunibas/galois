@@ -48,21 +48,21 @@ public class TestRunFlight4Batch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select a.name from target.airports a where a.elevation >= -50 and a.elevation <= 50")
+                .querySql("SELECT a.name FROM target.airports a WHERE a.elevation_in_ft >= -50 and a.elevation_in_ft <= 50")
                 .prompt("Find the name of airports whose altitude is between -50 and 50")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q2 = ExpVariant.builder()
                 .queryNum("Q2")
-                .querySql("select max(elevation) from target.airports where country = 'Iceland'")
+                .querySql("SELECT max(elevation_in_ft) FROM target.airports WHERE country = 'Iceland'")
                 .prompt("What is the maximum elevation of all airports in the country of Iceland?")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("select name, city, country, elevation from airports where city = 'New York'")
+                .querySql("SELECT name, city, country, elevation_in_ft FROM airports WHERE city = 'New York'")
                 .prompt("Find the name, city, country, and altitude (or elevation) of the airports in the city of New York.")
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -93,7 +93,7 @@ public class TestRunFlight4Batch {
             testRunner.execute("/flight_4_data/flight_4-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/flight_4_data/flight_4-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/flight_4_data/flight_4-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_4_data/flight_4-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/flight_4_data/flight_4-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/flight_4_data/flight_4-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
@@ -115,6 +115,15 @@ public class TestRunFlight4Batch {
         IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
         testRunner.executeSingle(configPath, type, variant, metrics, results, nullOptimizer);
+    }
+    
+    @Test
+    public void testConfidenceEstimatorQuery() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimatorQuery(configPath, variant);
+//            break;
+        }
     }
 
 }
