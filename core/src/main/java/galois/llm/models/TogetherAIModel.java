@@ -22,6 +22,7 @@ import dev.langchain4j.data.message.ChatMessageType;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.model.output.TokenUsage;
+import galois.Constants;
 import galois.llm.models.togetherai.Choice;
 import galois.llm.models.togetherai.Message;
 import galois.llm.models.togetherai.ResponseTogetherAI;
@@ -52,7 +53,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private ObjectMapper objectMapper = new ObjectMapper();
     private int inputTokens = 0;
     private int outputTokens = 0;
-    private int waitTimeInSec = 1;
+    private int waitTime = Constants.WAIT_TIME_MS_TOGETHERAI; // time in ms
     private int connectionTimeout = 5 * 60 * 1000;
     private int numRetry = 0;
     private int maxRetry = 10;
@@ -185,7 +186,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             return null;
         }
         try {
-            Thread.sleep(1000); // 1 req per second
+            TimeUnit.MILLISECONDS.sleep(waitTime);
             URL url = URI.create(this.endPoint).toURL();
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(this.connectionTimeout);
@@ -222,7 +223,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                     if (isValid(jsonRequest) && this.numRetry > 1) return null;
                     log.trace("Retry the request IOE: " + this.numRetry);
                     log.trace("Exception: " + e);
-                    TimeUnit.SECONDS.sleep(this.waitTimeInSec);
+                    TimeUnit.MILLISECONDS.sleep(waitTime);
                     this.numRetry++;
                     return makeRequest(jsonRequest, authorizationValue);
                 } catch (InterruptedException ie) {

@@ -273,8 +273,72 @@ public class TestRunSpiderGeoBatch {
                 .prompt("which capitals are not major cities")
                 .optimizers(singleConditionOptimizers)
                 .build();
+        
+        ExpVariant q30 = ExpVariant.builder()
+                .queryNum("Q30")
+                .querySql("SELECT state_name, population, area_squared_miles FROM usa_state")
+                .prompt("List the state name, population and area from USA states")
+                .optimizers(List.of())
+                .build();
 
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q20, q21, q22, q23, q24, q25, q26, q29);
+        ExpVariant q31 = ExpVariant.builder()
+                .queryNum("Q31")
+                .querySql("SELECT us.state_name, us.capital, us.area_squared_miles FROM target.usa_state us")
+                .prompt("List the state name, capital and area from USA states")
+                .optimizers(List.of())
+                .build();
+
+        ExpVariant q32 = ExpVariant.builder()
+                .queryNum("Q32")
+                .querySql("SELECT state_name, population, area_squared_miles FROM usa_state WHERE capital = 'frankfort'")
+                .prompt("List the state name, population and area from USA states where the capital is Frankfort")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q33 = ExpVariant.builder()
+                .queryNum("Q33")
+                .querySql("SELECT us.state_name, us.population, us.capital FROM usa_state us WHERE us.population > 5000000")
+                .prompt("List the state name, population and capital from USA states where the population is greater than 5000000")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q34 = ExpVariant.builder()
+                .queryNum("Q34")
+                .querySql("SELECT us.state_name, us.capital FROM usa_state us WHERE us.population > 5000000 AND us.density < 1000")
+                .prompt("List the state name and capital from USA states where the population is greater than 5000000 and the density is lower than 1000")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q35 = ExpVariant.builder()
+                .queryNum("Q35")
+                .querySql("SELECT us.state_name, us.capital, us.density, us.population FROM usa_state us WHERE us.population > 5000000 AND us.density < 1000 AND us.area_squared_miles < 50000")
+                .prompt("List the state name, capital, density and population from USA states where the population is greater than 5000000, the density is lower than 1000 and the area is lower than 50000")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q36 = ExpVariant.builder()
+                .queryNum("Q36")
+                .querySql("SELECT us.state_name, us.capital FROM usa_state us WHERE us.population > 3000000 AND us.area_squared_miles > 50000 order by us.capital")
+                .prompt("List the state name and capital ordered by capital from USA states where the population is greater than 3000000 and the area is greater than 50000")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q37 = ExpVariant.builder()
+                .queryNum("Q37")
+                .querySql("SELECT us.state_name, us.capital, us.population FROM usa_state us WHERE us.population > 3000000 AND us.population < 8000000 AND us.area_squared_miles > 50000 order by us.population")
+                .prompt("List the state name capital and population ordered by population from USA states where the population is greater than 3000000 and lower than 8000000 and the area is greater than 50000")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q38 = ExpVariant.builder()
+                .queryNum("Q38")
+                .querySql("SELECT us.state_name, us.capital, us.population, us.area_squared_miles FROM usa_state us WHERE us.population = 4700000 AND us.area_squared_miles=56153")
+                .prompt("List the state name, the capital, the popoulation and the area from USA states where the population is 4700000 and the are is 56153")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q20, q21, q22, q23, q24, q25, q26, q29, q30, q31, q32, q33, q34, q35, q36, q37, q38);
+//        variants = List.of(q32);
     }
 
     @Test

@@ -148,7 +148,7 @@ public class LLMScan extends Scan {
 
         @Override
         public Tuple next() {
-            if (!currentResult.isEmpty()) {
+            if (!currentResult.isEmpty() && currentResult.size() > currentIndex) {
                 Tuple result = currentResult.get(currentIndex);
                 currentIndex++;
                 if (normalizationStrategy != null) {
@@ -203,6 +203,8 @@ public class LLMScan extends Scan {
                         }
                     }
                 } catch (IllegalArgumentException iae) {
+                    if (logger.isDebugEnabled()) logger.debug("Exception: {}", iae);
+
                     // generated attribute from a function...just skip it
                 }
             }

@@ -18,14 +18,19 @@ import galois.utils.excelreport.*;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.*;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import speedy.utility.SpeedyUtility;
 
 @Slf4j
 public class DAOReportExcel {
@@ -37,6 +42,62 @@ public class DAOReportExcel {
     }
 
     public DAOReportExcel() {
+    }
+
+    public void readResultsForDataset(File filePath, List<String> queriesName, List<String> statsToExport, List<String> metricsToAverage) {
+        try {
+            Map<String, Map<String, Map<String, Double>>> results = new HashMap<>();
+            Workbook workbook = new XSSFWorkbook(filePath);
+            for (String qName : queriesName) {
+                Sheet sheet = workbook.getSheet(qName);
+                log.debug("Query: " + qName);
+                Map<String, Map<String, Double>> statisticsForQuery = getStatistics(sheet);
+                results.put(qName, statisticsForQuery);
+            }
+            List<List<String>> queriesStats = new ArrayList<>();
+            queriesStats.add(List.of("","NL", "SQL", "KEY", "TABLE"));
+            for (String qName : queriesName) {
+                Map<String, Map<String, Double>> resultsForQuery = results.get(qName);
+                Map<String, Double> resultsForNL = resultsForQuery.get("NL-Unoptimized");
+                Map<String, Double> resultsForSQL = resultsForQuery.get("SQL-Unoptimized");
+                String bestStrategyForKeyScan = getBestResultsAveragedFor("KEY-SCAN", resultsForQuery, metricsToAverage);
+                Map<String, Double> resultsForBestKeyScan = resultsForQuery.get(bestStrategyForKeyScan);
+                String bestStrategyForTable = getBestResultsAveragedFor("TABLE", resultsForQuery, metricsToAverage);
+                Map<String, Double> resultsForBestTable = resultsForQuery.get(bestStrategyForTable);
+                log.info("QUERY: {}", qName);
+                log.info("NL: {}", SpeedyUtility.printMap(resultsForNL));
+                log.info("SQL: {}", SpeedyUtility.printMap(resultsForSQL));
+                log.info("KEY-SCAN: ({}) {}", bestStrategyForKeyScan, SpeedyUtility.printMap(resultsForBestKeyScan));
+                log.info("TABLE: ({}) {}", bestStrategyForTable, SpeedyUtility.printMap(resultsForBestTable));
+                List<String> query = new ArrayList<>();
+                query.add(qName);
+                for (String statName : statsToExport) {
+                    if (statName.equals("avg")) {
+                        double avgNL = computeAverage(resultsForNL, metricsToAverage);
+                        double avgSQL = computeAverage(resultsForSQL, metricsToAverage);
+                        double avgKeyScan = computeAverage(resultsForBestKeyScan, metricsToAverage);
+                        double avgTable = computeAverage(resultsForBestTable, metricsToAverage);
+                        query.add((avgNL + "").replace(".", ","));
+                        query.add((avgSQL + "").replace(".", ","));
+                        query.add((avgKeyScan + "").replace(".", ","));
+                        query.add((avgTable + "").replace(".", ","));
+                    } else {
+                        double valNL = resultsForNL.get(statName);
+                        double valSQL = resultsForSQL.get(statName);
+                        double valKeyScan = resultsForBestKeyScan.get(statName);
+                        double valTable = resultsForBestTable.get(statName);
+                        query.add((valNL + "").replace(".", ","));
+                        query.add((valSQL + "").replace(".", ","));
+                        query.add((valKeyScan + "").replace(".", ","));
+                        query.add((valTable + "").replace(".", ","));
+                    }
+                }
+                queriesStats.add(query);
+            }
+            exportToCSV(queriesStats, filePath);
+        } catch (Exception e) {
+            log.error("Unable to open " + filePath + " * Exception: ", e);
+        }
     }
 
     public void saveReport(ReportExcel report, File file) {
@@ -402,6 +463,112 @@ public class DAOReportExcel {
 
     public static File getTempFile(String extension) throws IOException {
         return File.createTempFile("report", "." + extension);
+    }
+
+    private Map<String, Map<String, Double>> getStatistics(Sheet sheet) {
+        Map<String, Map<String, Double>> stats = new HashMap<>();
+        String[] metricNames = {
+            "CellPrecision",
+            "CellSimilarityPrecision",
+            "CellRecall",
+            "CellSimilarityRecall",
+            "F1ScoreMetric",
+            "CellSimilarityF1Score",
+            "TupleCardinality",
+            "TupleConstraint",
+            "TupleSimilarityConstraint",
+            "LLM Total Requests",
+            "LLM Total Input Tokens",
+            "LLM Total Output Tokens",
+            "LLM Total Tokens",
+            "LLM Time (ms)"
+        };
+        Row strategyRows = sheet.getRow(0);
+        for (Cell strategyCell : strategyRows) {
+            if (!strategyCell.getStringCellValue().trim().isEmpty()) {
+                int columnIndex = strategyCell.getColumnIndex();
+                String strategy = strategyCell.getStringCellValue().trim();
+                log.debug("Strategy: " + strategy);
+                Map<String, Double> resultsForStrategy = new HashMap<>();
+                for (int i = 1; i <= metricNames.length; i++) {
+                    String metricName = metricNames[i-1];
+                    Row metricRow = sheet.getRow(i);
+                    Cell cellMetric = metricRow.getCell(columnIndex);
+                    double metric = 0;
+                    try {
+                        if (cellMetric.getCellType().equals(CellType.NUMERIC)) {
+                            metric = cellMetric.getNumericCellValue();
+                        } else {
+                            String stringCellValue = cellMetric.getStringCellValue();
+                            stringCellValue = stringCellValue.replace(",", ".");
+                            metric = Double.parseDouble(stringCellValue);
+                        }
+                    } catch (Exception e) {
+                        log.error("Exception: " + e + " with parsing of " + cellMetric);
+                    }
+                    log.debug("Metric: " + metricName + " value: " + metric);
+                    resultsForStrategy.put(metricName, metric);
+                }
+                stats.put(strategy, resultsForStrategy);
+            }
+        }  
+        return stats;
+    }
+
+    private String getBestResultsAveragedFor(String strategyName, Map<String, Map<String, Double>> resultsForQuery, List<String> metricsToAverage) {
+        String bestStrategy = "";
+        Double maxValue = 0.0;
+        for (String key : resultsForQuery.keySet()) {
+            if (key.startsWith(strategyName)) {
+                Map<String, Double> metrics = resultsForQuery.get(key);
+                if (bestStrategy.isEmpty()) {
+                    bestStrategy = key;
+                    maxValue = computeAverage(metrics, metricsToAverage);
+                } else {
+                    double currentValue = computeAverage(metrics, metricsToAverage);
+                    if (currentValue > maxValue) {
+                        maxValue = currentValue;
+                        bestStrategy = key;
+                    }
+                }
+            }
+         }
+        return bestStrategy;
+    }
+
+    private Double computeAverage(Map<String, Double> metrics, List<String> metricsToAverage) {
+        if (metrics == null || metrics.isEmpty()) {
+            return -1.0;
+        }
+        double sum = 0.0;
+        for (String mName : metricsToAverage) {
+            sum += metrics.get(mName);
+        }
+        return sum / metricsToAverage.size();
+    }
+
+    private void exportToCSV(List<List<String>> queriesStats, File filePath) {
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setDelimiter("\t").build();
+        String newFilePath = filePath.getAbsolutePath();
+        newFilePath = newFilePath.replace(".xlsx", ".csv");
+        CSVPrinter printer = null;
+        try {
+            Appendable output = new FileWriter(newFilePath);
+            printer = new CSVPrinter(output, csvFormat);
+            for (List<String> queriesStat : queriesStats) {
+                printer.printRecord(queriesStat);
+            }
+        } catch (Exception e) {
+            log.error("Exception in writing {}: {}", newFilePath, e);
+        } finally {
+            if (printer != null) {
+                try {
+                    printer.close();
+                } catch (Exception e) {
+                    
+                }
+            }
+        }
     }
 
 }

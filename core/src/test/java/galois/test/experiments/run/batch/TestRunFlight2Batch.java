@@ -65,7 +65,7 @@ public class TestRunFlight2Batch {
                 .queryNum("Q3")
                 .querySql("SELECT a.airline FROM target.usa_airline_companies a WHERE a.call_sign='ual'")
                 .prompt("Which airline has call sign 'ual'?")
-                .optimizers(multipleConditionsOptimizers)
+                .optimizers(singleConditionOptimizers)
                 .build();
 
         // FIXME: Which Speedy tree can execute this query?

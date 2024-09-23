@@ -16,6 +16,7 @@
     "scan": {
       "queryExecutor": "togetherai-llama3-key",
       "maxIterations": 1
+      "maxIterations": 10
     }
   },
   "query": {
