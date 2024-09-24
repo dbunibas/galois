@@ -151,11 +151,29 @@ public class TestRunVenezuelaPresidentsBatch {
     }
     
     @Test
+    public void testConfidenceEstimatorSchema() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/presidents/presidents-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimatorSchema(configPath, variant);
+            break;
+        }
+    }
+    
+    @Test
+    public void testConfidenceEstimator() {
+        // confidence for every attribute
+        for (ExpVariant variant : variants) {
+            String configPath = "/presidents/presidents-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimator(configPath, variant);
+            break;
+        }
+    }
+        
+    @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
             String configPath = "/presidents/presidents-llama3-table-experiment.json";
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
-//            break;
         }
     }
 

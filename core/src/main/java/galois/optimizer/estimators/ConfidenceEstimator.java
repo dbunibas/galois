@@ -4,7 +4,6 @@ import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.utils.Mapper;
 import static galois.utils.Mapper.toCleanJsonList;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,13 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.Attribute;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
-import speedy.utility.SpeedyUtility;
 
 @Slf4j
 public class ConfidenceEstimator {
     
-    private String togetherAIModelName = TogetherAIModel.MODEL_LLAMA3_1_8B;
-//    private String togetherAIModelName = TogetherAIModel.MODEL_LLAMA3_1_70B;
+//    private String togetherAIModelName = TogetherAIModel.MODEL_LLAMA3_8B;
+    private String togetherAIModelName = TogetherAIModel.MODEL_LLAMA3_1_70B;
     
     public Map<ITable, Map<Attribute, Double>> getEstimation(IDatabase database) {
 //        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return the results in JSON with the properties \"attribute\" and \"confidence\"";
@@ -44,6 +42,26 @@ public class ConfidenceEstimator {
                 confidenceForTable.put(attribute, confidence);
             }
             confidenceForDB.put(table, confidenceForTable);
+        }
+        return confidenceForDB;
+    }
+    
+    public Map<ITable, Double> getEstimationSchema(IDatabase database) {
+//        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return the results in JSON with the properties \"attribute\" and \"confidence\"";
+        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence in popolating such schema based on your internal knowledge. Give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return an higher score if you are able to return accurate and factual data. Return a lower score if you can't return accurate and factual data. Return the result in JSON with the property \"confidence\"";
+        Map<ITable, Double> confidenceForDB = new HashMap<>();
+        for (String tableName : database.getTableNames()) {
+            ITable table = database.getTable(tableName);
+            List<Attribute> attributes = table.getAttributes();
+            String schema = getRelationalSchema(attributes,tableName);
+            String promptTable = prompt.replace("${relationalSchema}", schema);
+            if (log.isDebugEnabled()) log.debug(promptTable);
+            TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+            String response = model.generate(promptTable);            
+            if (log.isDebugEnabled()) log.debug(response);
+            String cleanedResponse = Mapper.toCleanJsonObject(response);
+            if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedResponse);
+
         }
         return confidenceForDB;
     }

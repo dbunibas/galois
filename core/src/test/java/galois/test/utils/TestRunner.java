@@ -204,6 +204,28 @@ public class TestRunner {
         return null;
     }
     
+    public Map<ITable, Double> executeConfidenceEstimatorSchema(String path, ExpVariant variant) {
+        try {
+            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            log.debug("SQL query is {}", experiment.getQuery().getSql());
+            IDatabase database = experiment.getQuery().getDatabase();
+            ParserFrom parserFrom = new ParserFrom();
+            parserFrom.parseFrom(experiment.getQuery().getSql());
+            List<String> tables = parserFrom.getTables();
+            ConfidenceEstimator estimator = new ConfidenceEstimator();
+            Map<ITable, Double> dbConfidence = estimator.getEstimationSchema(database);
+//            Map<ITable, Map<Attribute, Double>> dbConfidence = estimator.getEstimation(database, tables, experiment.getQuery().getSql());
+            return dbConfidence;
+        } catch (Exception ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+//            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+        }
+        return null;
+    }
+    
     public void executeConfidenceEstimatorQuery(String path, ExpVariant variant) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());

@@ -118,6 +118,27 @@ public class TestRunFlight4Batch {
     }
     
     @Test
+    public void testConfidenceEstimatorSchema() {
+        for (ExpVariant variant : variants) {
+//            ExpVariant variant = variants.get(0);
+            String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimatorSchema(configPath, variant);
+            break;
+        }
+    }
+    
+    @Test
+    public void testConfidenceEstimator() {
+        // confidence for every attribute
+        for (ExpVariant variant : variants) {
+//            ExpVariant variant = variants.get(0);
+            String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimator(configPath, variant);
+            break;
+        }
+    }
+        
+    @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
             String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";

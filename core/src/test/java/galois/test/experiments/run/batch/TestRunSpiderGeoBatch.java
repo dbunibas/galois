@@ -248,9 +248,9 @@ public class TestRunSpiderGeoBatch {
         ExpVariant q26 = ExpVariant.builder()
                 .queryNum("Q26")
                 //                .querySql("SELECT t2.capital FROM usa_state AS t2 JOIN usa_city AS t1 ON t2.state_name = t1.state_name WHERE t1.city_name = 'durham';")
-                .querySql("SELECT t2.capital FROM usa_city AS t1 JOIN usa_state AS t2 ON t1.state_name = t2.state_name WHERE t1.city_name = 'durham';")
+                .querySql("SELECT t2.capital FROM usa_city AS t1 JOIN usa_state AS t2 ON t1.state_name = t2.state_name WHERE t1.city_name = 'tempe';")
                 //                .prompt("name the major rivers") //? Incorrect
-                .prompt("the capital of the state where there is durham") //?
+                .prompt("the capital of the state where there is tempe") //?
                 .optimizers(singleConditionOptimizers)
                 .build();
 
@@ -383,25 +383,33 @@ public class TestRunSpiderGeoBatch {
         IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
         IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
-        testRunner.executeSingle(configPath, type, variant, metrics, results, nullOptimizer);
+        testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdown);
     }
-
+    
     @Test
-    public void testConfidenceEstimator() {
+    public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
-//            ExpVariant variant = variants.get(0);
             String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
-            testRunner.executeConfidenceEstimator(configPath, variant);
+            testRunner.executeConfidenceEstimatorSchema(configPath, variant);
             break;
         }
     }
     
     @Test
+    public void testConfidenceEstimator() {
+        // confidence for every attribute
+        for (ExpVariant variant : variants) {
+            String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimator(configPath, variant);
+            break;
+        }
+    }
+        
+    @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
             String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
-//            break;
         }
     }
 

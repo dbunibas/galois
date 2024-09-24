@@ -168,6 +168,25 @@ public class TestRunMoviesBatch {
     }
     
     @Test
+    public void testConfidenceEstimatorSchema() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/movies/movies-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimatorSchema(configPath, variant);
+            break;
+        }
+    }
+    
+    @Test
+    public void testConfidenceEstimator() {
+        // confidence for every attribute
+        for (ExpVariant variant : variants) {
+            String configPath = "/movies/movies-llama3-table-experiment.json";
+            testRunner.executeConfidenceEstimator(configPath, variant);
+            break;
+        }
+    }
+        
+    @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
             String configPath = "/movies/movies-llama3-table-experiment.json";
