@@ -8,9 +8,11 @@ import galois.test.experiments.Experiment;
 import galois.test.experiments.json.parser.ExperimentParser;
 import galois.test.model.ExpVariant;
 import galois.utils.Mapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.expression.Expression;
 import org.junit.jupiter.api.Test;
 import speedy.model.database.Attribute;
 import speedy.model.database.IDatabase;
@@ -343,7 +345,6 @@ public class TestPopularity {
 //        String tableName = "international_presidents";
 //        List<ExpVariant> variants = getUSAPresidentsVariants();
 //        List<ExpVariant> variants = getVenezuelaPresidentsVariants();
-
         String expPath = "/movies/movies-llama3-table-experiment.json";
         String tableName = "movie";
         List<ExpVariant> variants = getMoviesVariants();
@@ -389,6 +390,87 @@ public class TestPopularity {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    @Test
+    public void testCardinality() {
+//        String expPath = "/geo_data/geo-llama3-table-experiment.json";
+//        String tableName = "usa_state";
+//        List<ExpVariant> variants = getGEOVariants();
+
+//        String expPath = "/presidents/presidents-llama3-table-experiment.json";
+//        String tableName = "international_presidents";
+//        List<ExpVariant> variants = getUSAPresidentsVariants();
+//        List<ExpVariant> variants = getVenezuelaPresidentsVariants();
+        String expPath = "/movies/movies-llama3-table-experiment.json";
+        String tableName = "movie";
+        List<ExpVariant> variants = getMoviesVariants();
+        try {
+            for (ExpVariant variant : variants) {
+                Experiment experiment = ExperimentParser.loadAndParseJSON(expPath);
+                IDatabase database = experiment.getQuery().getDatabase();
+                ITable table = database.getTable(tableName);
+//                System.out.println("Table: " + table);
+                List<Key> keys = database.getPrimaryKeys();
+                Key key = keys.get(0);
+//                System.out.println("key: " + key);
+//                String jsonForKeys = QueryUtils.generateJsonSchemaForKeys(table);
+                String jsonSchema = QueryUtils.generateJsonSchemaListFromAttributes(table, table.getAttributes());
+//                System.out.println(jsonSchema);
+                ParserWhere parserWhere = new ParserWhere();
+                parserWhere.parseWhere(variant.getQuerySql());
+                String whereExpression = parserWhere.getWhereExpression();
+                String prompt = "Given the following JSON schema:\n";
+                prompt += jsonSchema + "\n";
+                prompt += "Estimate the cardinality of " + key.toString() + " of " + tableName;
+                String promptAllConditionPushDown = prompt;
+                List<String> promptSinglePushDown = new ArrayList<>();
+                for (Expression expression : parserWhere.getExpressions()) {
+                    String singleCondition = prompt + " where " + expression.toString();
+                    promptSinglePushDown.add(singleCondition);
+                }
+                if (whereExpression != null && !whereExpression.trim().isEmpty()) {
+                    promptAllConditionPushDown += " where " + whereExpression;
+                }
+                String endPrompt = "\n";
+                endPrompt += """
+                          Respond with JSON only with a numerical property with name "cardinality".""";
+
+                String promptNoPushDown = prompt + endPrompt;
+                promptAllConditionPushDown += endPrompt;
+                List<String> promptSingleConditionPushDown = new ArrayList<>();
+                for (String single : promptSinglePushDown) {
+                    promptSingleConditionPushDown.add(single + endPrompt);
+                }
+                System.out.println(variant.getQuerySql());
+                Integer cardinalityNoPushDown = getCardinality(promptNoPushDown);
+                System.out.println(promptNoPushDown);
+                System.out.println("Cardinality No Push Down: " + cardinalityNoPushDown);
+                if (whereExpression != null && !whereExpression.trim().isEmpty()) {
+                    Integer cardinalityAllConditionPushDown = getCardinality(promptAllConditionPushDown);
+                    System.out.println(promptAllConditionPushDown);
+                    System.out.println("Cardinality All Condition Push Down: " + cardinalityAllConditionPushDown);
+                    if (parserWhere.getExpressions() != null && parserWhere.getExpressions().size() > 1) {
+                        for (String singleCondition : promptSingleConditionPushDown) {
+                            Integer cardinalitySingleCondition = getCardinality(singleCondition);
+                            System.out.println(singleCondition);
+                            System.out.println("Cardinality Single Condition Push Down: " + cardinalitySingleCondition);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    private Integer getCardinality(String prompt) {
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        String response = model.generate(prompt);
+        String cleanResponse = Mapper.toCleanJsonObject(response);
+        Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);
+        Integer cardinality = (Integer) parsedResponse.getOrDefault("cardinality", -1.0);
+        return cardinality;
     }
 
 }
