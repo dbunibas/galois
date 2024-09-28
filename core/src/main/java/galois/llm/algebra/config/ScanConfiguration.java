@@ -9,12 +9,12 @@ public class ScanConfiguration {
     private final IQueryExecutorFactory queryExecutorFactory;
     private final String normalizationStrategy;
 
-    public IQueryExecutor createQueryExecutor() {
-        return queryExecutorFactory.create();
+    public IQueryExecutor createQueryExecutor(IQueryExecutor base) {
+        return queryExecutorFactory.create(base);
     }
 
     @FunctionalInterface
     public interface IQueryExecutorFactory {
-        IQueryExecutor create();
+        IQueryExecutor create(IQueryExecutor base);
     }
 }

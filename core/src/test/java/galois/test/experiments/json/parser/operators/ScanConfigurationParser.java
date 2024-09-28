@@ -1,6 +1,7 @@
 package galois.test.experiments.json.parser.operators;
 
 import galois.llm.algebra.config.ScanConfiguration;
+import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
 import galois.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
@@ -38,17 +39,23 @@ public class ScanConfigurationParser {
 
     public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
         IQueryExecutorGenerator generator = getExecutor(json, query);
-        ScanConfiguration.IQueryExecutorFactory factory = () -> generator.create(
-                json.getFirstPrompt(),
-                json.getIterativePrompt(),
-                json.getMaxIterations(),
-                json.getAttributesPrompt(),
-                json.getNaturalLanguagePrompt(),
-                json.getSql() == null || json.getSql().isBlank() ?
-                        query.getSql() :
-                        json.getSql()
-        );
-        return new ScanConfiguration(factory.create(), factory, json.getNormalizationStrategy());
+        ScanConfiguration.IQueryExecutorFactory factory = (IQueryExecutor base) -> {
+            String naturalLanguagePrompt = json.getNaturalLanguagePrompt();
+            // Override nl prompt if base is not null - TestRunner .execute set it before
+            if (base instanceof INLQueryExectutor nlQueryExecutor) {
+                naturalLanguagePrompt = nlQueryExecutor.getNaturalLanguagePrompt();
+            }
+            return generator.create(
+                    json.getFirstPrompt(),
+                    json.getIterativePrompt(),
+                    json.getMaxIterations(),
+                    json.getAttributesPrompt(),
+                    naturalLanguagePrompt,
+                    // Always use query sql - TestRunner .execute set it before
+                    query.getSql()
+            );
+        };
+        return new ScanConfiguration(factory.create(null), factory, json.getNormalizationStrategy());
     }
 
     private static IQueryExecutorGenerator getExecutor(ScanConfigurationJSON json, Query query) {

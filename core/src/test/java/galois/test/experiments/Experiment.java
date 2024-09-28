@@ -168,7 +168,7 @@ public final class Experiment {
         log.info("Parsing the query using SQLQueryParser - {}", sqlQueryParser.getClass());
         IQueryExecutor scanQueryExecutor = operatorsConfiguration.getScan().getQueryExecutor();
         String normalizationStrategy = operatorsConfiguration.getScan().getNormalizationStrategy();
-        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, operatorsConfiguration.getScan().createQueryExecutor(), attributes, normalizationStrategy);
+        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, operatorsConfiguration.getScan().createQueryExecutor(scanQueryExecutor), attributes, normalizationStrategy);
 
         // If ignoreTree() returns true, only execute the LLMScan operation
         if (scanQueryExecutor.ignoreTree()) {
@@ -247,6 +247,7 @@ public final class Experiment {
     private ExperimentResults executeUnoptimizedExperiment(IAlgebraOperator operator, List<Tuple> expectedResults) {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
+        log.info("Unoptimized operator - {}", operator.getClass());
         ITupleIterator iterator = operator.execute(query.getDatabase(), query.getDatabase());
         return toExperimentResults(iterator, expectedResults, null);
     }

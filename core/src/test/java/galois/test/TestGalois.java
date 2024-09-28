@@ -109,7 +109,7 @@ public class TestGalois {
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
         IQueryExecutor executor = new OllamaLlama3KeyQueryExecutor();
-        ScanConfiguration scanConfiguration = new ScanConfiguration(executor, OllamaLlama3KeyQueryExecutor::new, null);
+        ScanConfiguration scanConfiguration = new ScanConfiguration(executor, (ignored) -> new OllamaLlama3KeyQueryExecutor(), null);
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration, sql);
 
@@ -131,7 +131,7 @@ public class TestGalois {
 
         IQueryPlanParser<Document> parser = new PostgresXMLParser();
         IQueryExecutor executor = new TogetheraiLLama3KeyQueryExecutor();
-        ScanConfiguration scanConfiguration = new ScanConfiguration(executor, TogetheraiLLama3KeyQueryExecutor::new, null);
+        ScanConfiguration scanConfiguration = new ScanConfiguration(executor, (ignored) -> new OllamaLlama3KeyQueryExecutor(), null);
         OperatorsConfiguration operatorsConfiguration = new OperatorsConfiguration(scanConfiguration);
         IAlgebraOperator operator = parser.parse(queryPlan, llmDB, operatorsConfiguration, sql);
 
