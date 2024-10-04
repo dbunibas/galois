@@ -1,5 +1,6 @@
 package galois.llm.query.ollama.phi3;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import galois.llm.query.AbstractEntityQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
@@ -46,7 +47,7 @@ public class OllamaPhi3SQLQueryExecutor extends AbstractEntityQueryExecutor {
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
+    protected Chain<String, String> getConversationalChain() {
         return buildOllamaPhi3ConversationalChain();
     }
 

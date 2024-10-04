@@ -2,6 +2,7 @@ package galois.test.utils;
 
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
+import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ISQLExecutor;
@@ -283,7 +284,7 @@ public class TestRunner {
         prompt += "Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.\n"
                 + "Respond with JSON only with a numerical property with name \"popularity\".";
         log.debug("Prompt Populatity: {}", prompt);
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);
@@ -458,7 +459,7 @@ public class TestRunner {
     }
 
     private Integer getCardinality(String prompt) {
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B);
         String response = model.generate(prompt);
         log.debug("Cardinality prompt: " + prompt);
         log.debug("Cardinality response: " + response);
@@ -474,7 +475,7 @@ public class TestRunner {
     }
 
     private Integer getOptimizerNumber(String prompt, int maxIndex) {
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B);
         String response = model.generate(prompt);
         log.debug("LLMOptimization prompt: " + prompt);
         log.debug("LLMOptimization response: " + response);

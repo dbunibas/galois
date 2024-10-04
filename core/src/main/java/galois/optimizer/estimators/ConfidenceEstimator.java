@@ -2,6 +2,7 @@ package galois.optimizer.estimators;
 
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
+import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.utils.Mapper;
 import static galois.utils.Mapper.toCleanJsonList;
 import java.util.HashMap;
@@ -15,8 +16,8 @@ import speedy.model.database.ITable;
 @Slf4j
 public class ConfidenceEstimator {
     
-//    private String togetherAIModelName = TogetherAIModel.MODEL_LLAMA3_8B;
-    private String togetherAIModelName = TogetherAIModel.MODEL_LLAMA3_1_70B;
+//    private String togetherAIModelName = TogetherAIConstants.MODEL_LLAMA3_8B;
+    private String togetherAIModelName = TogetherAIConstants.MODEL_LLAMA3_1_70B;
     
     public Map<ITable, Map<Attribute, Double>> getEstimation(IDatabase database) {
 //        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return the results in JSON with the properties \"attribute\" and \"confidence\"";

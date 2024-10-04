@@ -1,5 +1,6 @@
 package galois.llm.query.ollama.mistral;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import galois.llm.query.AbstractEntityQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
@@ -41,7 +42,7 @@ public class OllamaMistralTableQueryExecutor extends AbstractEntityQueryExecutor
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
+    protected Chain<String, String> getConversationalChain() {
         return buildOllamaMistralConversationalChain();
     }
 

@@ -1,5 +1,6 @@
 package galois.llm.query.ollama.phi3;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
@@ -58,7 +59,7 @@ public class OllamaPhi3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
+    protected Chain<String, String> getConversationalChain() {
         return buildOllamaPhi3ConversationalChain();
     }
 
@@ -68,7 +69,7 @@ public class OllamaPhi3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
     }
 
     @Override
-    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
+    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, Chain<String, String> chain) {
         Map<String, Object> attributesMap = new HashMap<>();
         for (Attribute attribute : attributes) {
             List<Attribute> currentAttributesList = List.of(attribute);

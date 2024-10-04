@@ -1,5 +1,6 @@
 package galois.llm.query;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
@@ -7,22 +8,24 @@ import galois.llm.models.TogetherAIModel;
 
 import java.time.Duration;
 
+import static galois.Constants.OLLAMA_MODEL;
+
 public class ConversationalChainFactory {
 
-    public static ConversationalChain buildOllamaLlama3ConversationalChain() {
-        return buildOllamaConversationalChain("llama3");
+    public static Chain<String, String> buildOllamaLlama3ConversationalChain() {
+        return buildOllamaConversationalChain(OLLAMA_MODEL);
     }
 
-    public static ConversationalChain buildOllamaMistralConversationalChain() {
+    public static Chain<String, String> buildOllamaMistralConversationalChain() {
         return buildOllamaConversationalChain("mistral");
     }
 
-    public static ConversationalChain buildOllamaPhi3ConversationalChain() {
+    public static Chain<String, String> buildOllamaPhi3ConversationalChain() {
         return buildOllamaConversationalChain("phi3");
     }
     
     public static ChatLanguageModel buildOllamaLlama3ChatLanguageModel() {
-        return buildOllamaChatLangageModel("llama3");
+        return buildOllamaChatLangageModel(OLLAMA_MODEL);
     }
 
     public static ChatLanguageModel buildOllamaMistralChatLanguageModel() {
@@ -52,7 +55,7 @@ public class ConversationalChainFactory {
         return chatModel;
     }
 
-    private static ConversationalChain buildOllamaConversationalChain(String modelName) {
+    private static Chain<String, String> buildOllamaConversationalChain(String modelName) {
         ChatLanguageModel chatModel = buildOllamaChatLangageModel(modelName);
         return ConversationalChain.builder().chatLanguageModel(chatModel).build();
     }

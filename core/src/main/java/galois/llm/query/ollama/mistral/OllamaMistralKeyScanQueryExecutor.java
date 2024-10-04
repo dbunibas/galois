@@ -1,5 +1,6 @@
 package galois.llm.query.ollama.mistral;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
@@ -57,7 +58,7 @@ public class OllamaMistralKeyScanQueryExecutor extends AbstractKeyBasedQueryExec
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
+    protected Chain<String, String> getConversationalChain() {
         return buildOllamaMistralConversationalChain();
     }
 
@@ -67,7 +68,7 @@ public class OllamaMistralKeyScanQueryExecutor extends AbstractKeyBasedQueryExec
     }
 
     @Override
-    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
+    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, Chain<String, String> chain) {
         Map<String, Object> attributesMap = getAttributesValues(table, attributes, key, chain);
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
     }

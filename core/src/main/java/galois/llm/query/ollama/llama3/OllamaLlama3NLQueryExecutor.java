@@ -1,6 +1,7 @@
 package galois.llm.query.ollama.llama3;
 
-import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.chain.Chain;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.*;
 import galois.prompt.EPrompts;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import speedy.model.expressions.Expression;
 import java.util.List;
 
 import static galois.llm.query.ConversationalChainFactory.buildOllamaLlama3ConversationalChain;
+import static galois.llm.query.ConversationalRetrievalChainFactory.buildOllamaLlama3ConversationalRetrivalChain;
 import static galois.utils.FunctionalUtils.orElse;
 
 @Slf4j
@@ -23,12 +25,14 @@ public class OllamaLlama3NLQueryExecutor extends AbstractEntityQueryExecutor imp
     private final EPrompts iterativePrompt;
     private final int maxIterations;
     private String naturalLanguagePrompt;
+    private final ContentRetriever contentRetriever;
 
     public OllamaLlama3NLQueryExecutor(String naturalLanguagePrompt) {
         this.firstPrompt = EPrompts.NATURAL_LANGUAGE_JSON;
         this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES;
         this.maxIterations = 10;
         this.naturalLanguagePrompt = naturalLanguagePrompt;
+        this.contentRetriever = null;
     }
 
     public OllamaLlama3NLQueryExecutor(
@@ -37,12 +41,23 @@ public class OllamaLlama3NLQueryExecutor extends AbstractEntityQueryExecutor imp
             Integer maxIterations,
             String naturalLanguagePrompt
     ) {
+        this(firstPrompt, iterativePrompt, maxIterations, naturalLanguagePrompt, null);
+    }
+
+    public OllamaLlama3NLQueryExecutor(
+            EPrompts firstPrompt,
+            EPrompts iterativePrompt,
+            Integer maxIterations,
+            String naturalLanguagePrompt,
+            ContentRetriever contentRetriever
+    ) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.NATURAL_LANGUAGE_JSON);
         this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES);
         this.maxIterations = maxIterations;
         if (naturalLanguagePrompt == null || naturalLanguagePrompt.isBlank())
             throw new IllegalArgumentException("naturalLanguagePrompt cannot be null or blank!");
         this.naturalLanguagePrompt = naturalLanguagePrompt;
+        this.contentRetriever = contentRetriever;
     }
 
     @Override
@@ -51,8 +66,12 @@ public class OllamaLlama3NLQueryExecutor extends AbstractEntityQueryExecutor imp
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
-        return buildOllamaLlama3ConversationalChain();
+    protected Chain<String, String> getConversationalChain() {
+        if(contentRetriever == null) {
+            return buildOllamaLlama3ConversationalChain();
+        }else {
+            return buildOllamaLlama3ConversationalRetrivalChain(contentRetriever);
+        }
     }
 
     @Override
@@ -71,9 +90,15 @@ public class OllamaLlama3NLQueryExecutor extends AbstractEntityQueryExecutor imp
 
     public static class OllamaLlama3NLQueryExecutorBuilder extends AbstractQueryExecutorBuilder {
         private String naturalLanguagePrompt;
+        private ContentRetriever contentRetriever;
 
         public OllamaLlama3NLQueryExecutorBuilder naturalLanguagePrompt(String naturalLanguagePrompt) {
             this.naturalLanguagePrompt = naturalLanguagePrompt;
+            return this;
+        }
+
+        public OllamaLlama3NLQueryExecutorBuilder contentRetriever(ContentRetriever contentRetriever) {
+            this.contentRetriever = contentRetriever;
             return this;
         }
 
@@ -83,7 +108,8 @@ public class OllamaLlama3NLQueryExecutor extends AbstractEntityQueryExecutor imp
                     getFirstPrompt(),
                     getIterativePrompt(),
                     getMaxIterations(),
-                    naturalLanguagePrompt
+                    naturalLanguagePrompt,
+                    contentRetriever
             );
         }
     }

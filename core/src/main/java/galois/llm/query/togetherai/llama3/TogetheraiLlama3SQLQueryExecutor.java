@@ -1,8 +1,9 @@
 package galois.llm.query.togetherai.llama3;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.Constants;
-import galois.llm.models.TogetherAIModel;
 import galois.llm.query.AbstractEntityQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
@@ -19,6 +20,8 @@ import java.util.List;
 import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
 import galois.llm.query.ISQLExecutor;
 import galois.llm.query.utils.QueryUtils;
+
+import static galois.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
 import static galois.llm.query.utils.QueryUtils.generateJsonSchemaListFromAttributes;
 import static galois.llm.query.utils.QueryUtils.getCleanAttributes;
 import static galois.utils.FunctionalUtils.orElse;
@@ -40,18 +43,21 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
     private final EPrompts iterativePrompt;
     private final int maxIterations;
     private String sql;
+    private final ContentRetriever contentRetriever;
 
     public TogetheraiLlama3SQLQueryExecutor(String sql) {
         this.firstPrompt = EPrompts.FROM_SQL_JSON;
         this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES_JSON;
         this.maxIterations = 10;
         this.sql = sql;
+        this.contentRetriever = null;
     }
 
-    public TogetheraiLlama3SQLQueryExecutor(EPrompts firstPrompt, EPrompts iterativePrompt, Integer maxIterations, String sql) {
+    public TogetheraiLlama3SQLQueryExecutor(EPrompts firstPrompt, EPrompts iterativePrompt, Integer maxIterations, String sql, ContentRetriever contentRetriever) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.FROM_SQL_JSON);
         this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES_JSON);
         this.maxIterations = maxIterations;
+        this.contentRetriever = contentRetriever;
         if (sql == null || sql.isBlank()) {
             throw new IllegalArgumentException("sql cannot be null or blank!");
         }
@@ -60,7 +66,7 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
-        ConversationalChain chain = getConversationalChain();
+        Chain<String, String> chain = getConversationalChain();
 
         ITable table = database.getTable(tableAlias.getTableName());
 
@@ -120,8 +126,12 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
-        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+    protected Chain<String, String> getConversationalChain() {
+        if(contentRetriever == null) {
+            return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+        }else {
+            return buildTogetherAIConversationalRetrivalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, contentRetriever);
+        }
     }
 
     @Override
@@ -153,7 +163,8 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                     getFirstPrompt(),
                     getIterativePrompt(),
                     getMaxIterations(),
-                    sql
+                    sql,
+                    getContentRetriever()
             );
         }
     }

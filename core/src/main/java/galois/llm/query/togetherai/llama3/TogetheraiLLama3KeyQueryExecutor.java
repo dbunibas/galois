@@ -1,15 +1,17 @@
 package galois.llm.query.togetherai.llama3;
 
-import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.Constants;
-import galois.llm.models.TogetherAIModel;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
-import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
-import static galois.llm.query.ConversationalChainFactory.buildTogetherAiChatLanguageModel;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.IQueryExecutorBuilder;
+
+import static galois.llm.query.ConversationalChainFactory.*;
+import static galois.llm.query.ConversationalRetrievalChainFactory.buildOllamaLlama3ConversationalRetrivalChain;
+import static galois.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
 import static galois.llm.query.utils.QueryUtils.mapToTuple;
 import galois.prompt.EPrompts;
 import static galois.utils.FunctionalUtils.orElse;
@@ -33,6 +35,7 @@ public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecu
     private final EPrompts attributesPrompt;
     private final int maxIterations;
     private final Expression expression;
+    private final ContentRetriever contentRetriever;
 
     public TogetheraiLLama3KeyQueryExecutor() {
         this.firstPrompt = EPrompts.LIST_KEY_JSON;
@@ -40,6 +43,7 @@ public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecu
         this.attributesPrompt = EPrompts.ATTRIBUTES_JSON;
         this.maxIterations = 10;
         this.expression = null;
+        this.contentRetriever = null;
     }
 
     public TogetheraiLLama3KeyQueryExecutor(
@@ -47,18 +51,23 @@ public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecu
             EPrompts iterativePrompt,
             EPrompts attributesPrompt,
             int maxIterations,
-            Expression expression
+            Expression expression, ContentRetriever contentRetriever
     ) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.LIST_KEY_JSON);
         this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_MORE_NO_REPEAT);
         this.attributesPrompt = orElse(attributesPrompt, EPrompts.ATTRIBUTES_JSON);
         this.maxIterations = maxIterations;
         this.expression = expression;
+        this.contentRetriever = contentRetriever;
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
-        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+    protected Chain<String, String> getConversationalChain() {
+        if(contentRetriever == null) {
+            return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+        }else {
+            return buildTogetherAIConversationalRetrivalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, contentRetriever);
+        }
     }
     
     @Override
@@ -67,7 +76,7 @@ public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecu
     }
 
     @Override
-    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
+    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, Chain<String, String> chain) {
         Map<String, Object> attributesMap = new HashMap<>();
         for (Attribute attribute : attributes) {
             List<Attribute> currentAttributesList = List.of(attribute);
@@ -95,7 +104,8 @@ public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecu
                     getIterativePrompt(),
                     getAttributesPrompt(),
                     getMaxIterations(),
-                    getExpression()
+                    getExpression(),
+                    getContentRetriever()
             );
         }
     }

@@ -1,5 +1,6 @@
 package galois.llm.query;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.llm.TokensEstimator;
@@ -22,11 +23,11 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     private List<AttributeRef> attributes = null;
 
-    abstract protected ConversationalChain getConversationalChain();
+    abstract protected Chain<String, String> getConversationalChain();
 
     abstract protected ChatLanguageModel getChatLanguageModel();
 
-    protected abstract Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain);
+    protected abstract Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, Chain<String, String> chain);
 
     @Override
     public void setAttributes(List<AttributeRef> attributes) {
@@ -35,7 +36,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
-        ConversationalChain chain = getConversationalChain();
+        Chain<String, String> chain = getConversationalChain();
 
         ITable table = database.getTable(tableAlias.getTableName());
 
@@ -50,7 +51,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         return tuples;
     }
 
-    private List<Map<String, Object>> getKeyValues(ITable table, Key primaryKey, ConversationalChain chain) {
+    private List<Map<String, Object>> getKeyValues(ITable table, Key primaryKey, Chain<String, String> chain) {
 //        List<Map<String, Object>> keys = new ArrayList<>();
         Set<Map<String, Object>> keys = new HashSet<>();
         String schema = primaryKey.isCompositeKey() ?
@@ -115,7 +116,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         return currentKeys;
     }
 
-    private Tuple generateTupleFromKey(ITable table, TableAlias tableAlias, Map<String, Object> keyValue, Key primaryKey, ConversationalChain chain) {
+    private Tuple generateTupleFromKey(ITable table, TableAlias tableAlias, Map<String, Object> keyValue, Key primaryKey, Chain<String, String> chain) {
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream().map(AttributeRef::getName).toList();
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
         addCellForPrimaryKey(tuple, tableAlias, keyValue, primaryKeyAttributes);
@@ -174,12 +175,12 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         return builder.toString();
     }
 
-    protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributesPrompt, String key, ConversationalChain chain) {
+    protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributesPrompt, String key, Chain<String, String> chain) {
         String jsonSchema = generateJsonSchemaFromAttributes(table, attributesPrompt);
         String prompt = getAttributesPrompt().generate(table, key, attributesPrompt, jsonSchema);
         log.debug("Attribute prompt is: {}", prompt);
         String response = "";
-        ConversationalChain newChain = null;
+        Chain<String, String> newChain = null;
         try {
             ChatLanguageModel chatLanguageModel = getChatLanguageModel();
             response = chatLanguageModel.generate(prompt);
@@ -218,7 +219,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         }
     }
 
-    private String getResponse(ConversationalChain chain, String userMessage, boolean ignoreTokens) {
+    private String getResponse(Chain<String, String> chain, String userMessage, boolean ignoreTokens) {
         String response = null;
         try {
             TokensEstimator estimator = new TokensEstimator();

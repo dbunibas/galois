@@ -1,5 +1,6 @@
 package galois.llm.query;
 
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.prompt.EPrompts;
 import lombok.Getter;
 import speedy.model.expressions.Expression;
@@ -11,6 +12,7 @@ public abstract class AbstractQueryExecutorBuilder implements IQueryExecutorBuil
     private EPrompts attributesPrompt;
     private int maxIterations = 10;
     private Expression expression = null;
+    private ContentRetriever contentRetriever;
 
     @Override
     public IQueryExecutorBuilder firstPrompt(EPrompts firstPrompt) {
@@ -39,6 +41,12 @@ public abstract class AbstractQueryExecutorBuilder implements IQueryExecutorBuil
     @Override
     public IQueryExecutorBuilder expression(Expression expression) {
         this.expression = expression;
+        return this;
+    }
+
+    @Override
+    public IQueryExecutorBuilder contentRetriever(ContentRetriever contentRetriever) {
+        this.contentRetriever = contentRetriever;
         return this;
     }
 }
