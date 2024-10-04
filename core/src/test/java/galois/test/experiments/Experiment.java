@@ -183,6 +183,9 @@ public final class Experiment {
         IDatabase database = query.getDatabase();
         List<String> tableNames = database.getTableNames();
         URL resource = Experiment.class.getResource(query.getResultPath());
+        if(resource == null){
+            throw new RuntimeException("Unable to load expected " + query.getResultPath());
+        }
         File[] files = new File(resource.getPath()).listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {

@@ -1,0 +1,67 @@
+{
+  "name": "RAG-PremierLeague-{{QN}} Experiment-nl",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-nl",
+      "maxIterations": 10,
+      "naturalLanguagePrompt": "{{NL-PROMPT}}",
+      "contentRetriever": {
+        "embeddingStoreCollectionName": "rag_premierleague",
+        "embeddingModelEngine": "togetherai",
+        "embeddingModel": "WhereIsAI/UAE-Large-V1",
+        "maxSegmentSizeInTokens": 64,
+        "maxOverlapSizeInTokens": 32,
+        "documentsToLoad": "/Users/donatello/Projects/research/galois/core/src/test/resources/rag/BBC-PremierLeague2024-2025/"
+      }
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "rag_premierleague",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "premier_league_2024_2025_arsenal_matches",
+          "attributes": [
+            {
+              "name": "opponent_team",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "match_date_year",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "match_date_month",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "match_date_day",
+              "type": "INTEGER",
+              "nullable": true
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/rag-premierleague/premier_league_2024_2025_arsenal_matches"
+  }
+}

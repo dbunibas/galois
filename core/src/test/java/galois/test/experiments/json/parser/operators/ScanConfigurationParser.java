@@ -1,21 +1,33 @@
 package galois.test.experiments.json.parser.operators;
 
+import dev.langchain4j.data.document.Document;
+import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
+import dev.langchain4j.data.document.splitter.DocumentSplitters;
+import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.HuggingFaceTokenizer;
+import dev.langchain4j.model.ollama.OllamaEmbeddingModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
+import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.store.embedding.EmbeddingStore;
+import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
+import dev.langchain4j.store.embedding.chroma.ChromaEmbeddingStore;
+import galois.Constants;
 import galois.llm.algebra.config.ScanConfiguration;
+import galois.llm.models.TogetherAIEmbeddingModel;
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
 import galois.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
-import galois.llm.query.togetherai.llama3.TogetheraiLLama3KeyQueryExecutor;
-import galois.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor;
-import galois.llm.query.togetherai.llama3.TogetheraiLlama3NLQueryExecutor;
-import galois.llm.query.togetherai.llama3.TogetheraiLlama3SQLQueryExecutor;
-import galois.llm.query.togetherai.llama3.TogetheraiLlama3TableQueryExecutor;
+import galois.llm.query.togetherai.llama3.*;
 import galois.prompt.EPrompts;
 import galois.test.experiments.Query;
+import galois.test.experiments.json.config.ContentRetrieverConfigurationJSON;
 import galois.test.experiments.json.config.ScanConfigurationJSON;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
@@ -46,7 +58,7 @@ public class ScanConfigurationParser {
             if (base instanceof INLQueryExectutor nlQueryExecutor) {
                 naturalLanguagePrompt = nlQueryExecutor.getNaturalLanguagePrompt();
             }
-            ContentRetriever contentRetriever = null; //TODO: Read content retriever info from json
+            ContentRetriever contentRetriever = loadContentRetriever(json.getContentRetriever());
             return generator.create(
                     json.getFirstPrompt(),
                     json.getIterativePrompt(),
@@ -59,6 +71,89 @@ public class ScanConfigurationParser {
             );
         };
         return new ScanConfiguration(factory.create(null), factory, json.getNormalizationStrategy());
+    }
+
+    private static ContentRetriever loadContentRetriever(ContentRetrieverConfigurationJSON contentRetrieverConf) {
+        if (contentRetrieverConf == null) {
+            return null;
+        }
+        EmbeddingModel embeddingModel = buildEmbeddingModel(contentRetrieverConf);
+        EmbeddingStore<TextSegment> embeddingStore = buildEmbeddingStore(contentRetrieverConf);
+        EmbeddingStoreIngestor embeddingStoreIngestor = buildEmbeddingStoreIngestor(contentRetrieverConf, embeddingModel, embeddingStore);
+        ContentRetriever contentRetriever = buildContentRetriver(contentRetrieverConf, embeddingModel, embeddingStore);
+        //TODO: TOGGLE TO IMPORT DATA
+//        embeddingStore.removeAll();
+//        loadDocuments(contentRetrieverConf, embeddingStoreIngestor);
+        return contentRetriever;
+    }
+
+    private static EmbeddingModel buildEmbeddingModel(ContentRetrieverConfigurationJSON contentRetrieverConf) {
+        if (contentRetrieverConf.getEmbeddingModelEngine().equalsIgnoreCase("ollama")) {
+            return OllamaEmbeddingModel.builder()
+                    .baseUrl("http://127.0.0.1:11434")
+                    .modelName(contentRetrieverConf.getEmbeddingModel())
+                    .build();
+        } else if (contentRetrieverConf.getEmbeddingModelEngine().equalsIgnoreCase("togetherai")) {
+            return TogetherAIEmbeddingModel.builder()
+                    .toghetherAiAPI(Constants.TOGETHERAI_API)
+                    .modelName(contentRetrieverConf.getEmbeddingModel())
+                    .build();
+        }
+        throw new IllegalArgumentException("Unknown EmbeddingModelEngine " + contentRetrieverConf.getEmbeddingModelEngine());
+    }
+
+    private static EmbeddingStore<TextSegment> buildEmbeddingStore(ContentRetrieverConfigurationJSON contentRetrieverConf) {
+        EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore
+                .builder()
+                .baseUrl("http://localhost:8000")
+                .collectionName(contentRetrieverConf.getEmbeddingStoreCollectionName())
+                .logRequests(true)
+                .logResponses(true)
+                .build();
+        return embeddingStore;
+    }
+
+    private static EmbeddingStoreIngestor buildEmbeddingStoreIngestor(ContentRetrieverConfigurationJSON contentRetrieverConf,
+                                                                      EmbeddingModel embeddingModel,
+                                                                      EmbeddingStore<TextSegment> embeddingStore) {
+        return EmbeddingStoreIngestor.builder()
+                .documentSplitter(DocumentSplitters.recursive(contentRetrieverConf.getMaxSegmentSizeInTokens(),
+                        contentRetrieverConf.getMaxOverlapSizeInTokens(),
+                        new HuggingFaceTokenizer()))
+//                .documentSplitter(new DocumentByParagraphSplitter(512, 128))
+                .documentTransformer(document -> {
+                    document.metadata().put("ingested_data", LocalDateTime.now().toString());
+                    return document;
+                })
+                .textSegmentTransformer(textSegment -> TextSegment.from(
+                        textSegment.metadata("file_name") + "\n" + textSegment.text(),
+                        textSegment.metadata()
+                ))
+                .embeddingModel(embeddingModel)
+                .embeddingStore(embeddingStore)
+                .build();
+    }
+
+    private static EmbeddingStoreContentRetriever buildContentRetriver(ContentRetrieverConfigurationJSON contentRetrieverConf,
+                                                                       EmbeddingModel embeddingModel,
+                                                                       EmbeddingStore<TextSegment> embeddingStore) {
+        return EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore)
+                .embeddingModel(embeddingModel)
+                .maxResults(200)
+                .minScore(0.75)
+                .build();
+    }
+
+    private static void loadDocuments(ContentRetrieverConfigurationJSON contentRetrieverConf, EmbeddingStoreIngestor embeddingStoreIngestor) {
+        File folder = new File(contentRetrieverConf.getDocumentsToLoad());
+        for (File file : folder.listFiles()) {
+            if (file.isDirectory() || file.isHidden()) continue;
+            log.info("Reading file {}", file.getName());
+            Document document = FileSystemDocumentLoader.loadDocument(file.getPath());
+            log.info("Document Metadata {}", document.metadata());
+            embeddingStoreIngestor.ingest(document);
+        }
     }
 
     private static IQueryExecutorGenerator getExecutor(ScanConfigurationJSON json, Query query) {
@@ -79,7 +174,7 @@ public class ScanConfigurationParser {
 
     private static IQueryExecutor generateTogetheraiLlama3NLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
-        return new TogetheraiLlama3NLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt, contentRetriever );
+        return new TogetheraiLlama3NLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt, contentRetriever);
     }
 
     private static IQueryExecutor generateOllamaLlama3SQLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
@@ -89,7 +184,7 @@ public class ScanConfigurationParser {
 
     private static IQueryExecutor generateTogetheraiLlama3SQLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
-        return new TogetheraiLlama3SQLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, sql, contentRetriever );
+        return new TogetheraiLlama3SQLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, sql, contentRetriever);
     }
 
     private static IQueryExecutor generateOllamaLlama3TableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
@@ -129,7 +224,7 @@ public class ScanConfigurationParser {
 
     @FunctionalInterface
     private interface IQueryExecutorGenerator {
-            IQueryExecutor create(String firstPrompt, String iterativePrompt, int maxIterations,
-                                  String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever);
+        IQueryExecutor create(String firstPrompt, String iterativePrompt, int maxIterations,
+                              String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever);
     }
 }

@@ -21,6 +21,7 @@ import galois.llm.algebra.LLMScan;
 import galois.llm.database.LLMDB;
 import galois.llm.models.TogetherAIEmbeddingModel;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.ollama.llama3.OllamaLlama3NLQueryExecutor;
 import galois.llm.query.togetherai.llama3.TogetheraiLlama3NLQueryExecutor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -47,9 +48,14 @@ public class TestRAG {
     private static final String EXP_NAME = "BBC-PremierLeague2024-2025";
     private static final String EXT = ".MD";
 
-    private static final String NL_PROMPT = "Player of the match";
-    //    private static final String NL_PROMPT = "List the Player of the Match for each Premier League match in the 2024-25 season";
-    private static final String SQL = "select * from premier_league_2024_2025_player_of_the_match";
+//    private static final String NL_PROMPT = "Player of the match";
+//private static final String NL_PROMPT = "List the Player of the Match for each Premier League match in the 2024-25 season";
+//    private static final String SQL = "select * from premier_league_2024_2025_player_of_the_match";
+
+    private static final String NL_PROMPT = "List the date (year, month, day, day of the week) and opponent for each of Arsenal's 2024-25 Premier League season matches";
+    private static final String SQL = "select * from premier_league_2024_2025_arsenal_matches";
+
+
     private IDatabase llmDB;
     private EmbeddingModel embeddingModel;
     private EmbeddingStoreIngestor embeddingStoreIngestor;
@@ -65,9 +71,10 @@ public class TestRAG {
                 .embeddingModelEngine(EEmbeddingModelEngine.T_AI)
 //                .embeddingModel("mxbai-embed-large") //OLLAMA
                 .embeddingModel("WhereIsAI/UAE-Large-V1") //T_AI
+//                .embeddingModel("togethercomputer/m2-bert-80M-32k-retrieval") //T_AI
                 //Ingestor
-                .maxSegmentSizeInTokens(128)
-                .maxOverlapSizeInTokens(64)
+                .maxSegmentSizeInTokens(64)
+                .maxOverlapSizeInTokens(32)
                 .build();
         log.info("Experiment {}-{}", EXP_NAME, config.toString());
         configureDB();
@@ -77,23 +84,14 @@ public class TestRAG {
         contentRetriever = buildContentRetriver();
         //
 //        embeddingStore.removeAll();
-        loadDocuments();
-    }
-
-    @Test
-    public void testContentRetriever() {
-        List<Content> retrieved = contentRetriever.retrieve(Query.from(NL_PROMPT));
-        log.info("Retrived contents: {}", retrieved.size());
-        for (Content content : retrieved) {
-            log.info("### Content {}", content.toString());
-        }
+//        loadDocuments();
     }
 
     @Test
     public void testEmbeddingStore() {
         Embedding queryEmbedding = embeddingModel.embed(NL_PROMPT).content();
         log.trace("Embedded query: {}", queryEmbedding);
-        List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 100);
+        List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 10);
         log.info("Relevant documents {}", relevant.size());
         Set<String> documents = new HashSet<>();
         int retrived = 0;
@@ -107,19 +105,36 @@ public class TestRAG {
     }
 
     @Test
+    public void testContentRetriever() {
+        //Used to choose the best configuration
+        // testEmbeddingStore vs testContentRetriever should give the same score
+        List<Content> retrieved = contentRetriever.retrieve(Query.from(NL_PROMPT));
+        log.info("Relevant documents {}", retrieved.size());
+        Set<String> documents = new HashSet<>();
+        int retrived = 0;
+        for (int i = 0; i < retrieved.size(); i++) {
+            Content content = retrieved.get(i);
+            log.info("Result {}:\n\tText: {}", i, content.textSegment().text());
+            if(content.textSegment().text().toUpperCase().contains(NL_PROMPT.toUpperCase())) retrived++;
+            documents.add(content.textSegment().metadata().getString("file_name"));
+        }
+        log.info("Configuration: {}\nDocuments with prompt: {}\nDifferent documents: {}", config,retrived,documents.size());
+    }
+
+    @Test
     public void executeNL() {
         IQueryExecutor executor = TogetheraiLlama3NLQueryExecutor.builder()
 //        IQueryExecutor executor = OllamaLlama3NLQueryExecutor.builder()
                 .naturalLanguagePrompt(NL_PROMPT)
                 .contentRetriever(contentRetriever)
-                .maxIterations(2)
+                .maxIterations(1)
                 .build();
         testExecutor(executor);
     }
 
-
     private void testExecutor(IQueryExecutor executor) {
-        TableAlias tableAlias = new TableAlias("premier_league_2024_2025_player_of_the_match", "potm");
+//        TableAlias tableAlias = new TableAlias("premier_league_2024_2025_player_of_the_match", "potm");
+        TableAlias tableAlias = new TableAlias("premier_league_2024_2025_arsenal_matches", "potm");
         IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
@@ -192,7 +207,7 @@ public class TestRAG {
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
                 .embeddingModel(embeddingModel)
-                .maxResults(10)
+                .maxResults(200)
 //                .dynamicMaxResults(query -> 3)
                 .minScore(0.75)
 //                .dynamicMinScore(query -> 0.75)
