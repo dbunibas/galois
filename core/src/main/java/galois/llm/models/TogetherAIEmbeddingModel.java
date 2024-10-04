@@ -115,6 +115,8 @@ public class TogetherAIEmbeddingModel extends DimensionAwareEmbeddingModel {
         OutputStream os = connection.getOutputStream();
         byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
         os.write(input, 0, input.length);
+        os.flush();
+        connection.connect();
         if(connection.getResponseCode() != 200){
             log.error("Error response: {}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())));
         }

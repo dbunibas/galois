@@ -217,11 +217,13 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
 //            String prettyJsonString = gson.toJson(je);
 //            log.trace("Request: \n" + prettyJsonString);
 //            log.trace("Is JSON valid: " + isValid(jsonRequest));
+        byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
+        os.write(input, 0, input.length);
+        os.flush();
+        connection.connect();
         if(connection.getResponseCode() != 200){
             log.error("Error response: {}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())));
         }
-        byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
-        os.write(input, 0, input.length);
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
         StringBuilder response = new StringBuilder();
         String responseLine = null;
