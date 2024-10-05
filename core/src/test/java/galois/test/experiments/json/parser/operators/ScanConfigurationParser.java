@@ -35,6 +35,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class ScanConfigurationParser {
+
+    private static ContentRetrieverConfigurationParser contentRetrieverConfigurationParser = new ContentRetrieverConfigurationParser();
+
     private static final Map<String, IQueryExecutorGenerator> parserMap = Map.ofEntries(
             // Ollama - Llama3
             Map.entry("ollama-llama3-nl", ScanConfigurationParser::generateOllamaLlama3NLQueryExecutor),
@@ -58,7 +61,7 @@ public class ScanConfigurationParser {
             if (base instanceof INLQueryExectutor nlQueryExecutor) {
                 naturalLanguagePrompt = nlQueryExecutor.getNaturalLanguagePrompt();
             }
-            ContentRetriever contentRetriever = loadContentRetriever(json.getContentRetriever());
+            ContentRetriever contentRetriever = contentRetrieverConfigurationParser.loadContentRetriever(json.getContentRetriever());
             return generator.create(
                     json.getFirstPrompt(),
                     json.getIterativePrompt(),
@@ -71,89 +74,6 @@ public class ScanConfigurationParser {
             );
         };
         return new ScanConfiguration(factory.create(null), factory, json.getNormalizationStrategy());
-    }
-
-    private static ContentRetriever loadContentRetriever(ContentRetrieverConfigurationJSON contentRetrieverConf) {
-        if (contentRetrieverConf == null) {
-            return null;
-        }
-        EmbeddingModel embeddingModel = buildEmbeddingModel(contentRetrieverConf);
-        EmbeddingStore<TextSegment> embeddingStore = buildEmbeddingStore(contentRetrieverConf);
-        EmbeddingStoreIngestor embeddingStoreIngestor = buildEmbeddingStoreIngestor(contentRetrieverConf, embeddingModel, embeddingStore);
-        ContentRetriever contentRetriever = buildContentRetriver(contentRetrieverConf, embeddingModel, embeddingStore);
-        //TODO: TOGGLE TO IMPORT DATA
-//        embeddingStore.removeAll();
-//        loadDocuments(contentRetrieverConf, embeddingStoreIngestor);
-        return contentRetriever;
-    }
-
-    private static EmbeddingModel buildEmbeddingModel(ContentRetrieverConfigurationJSON contentRetrieverConf) {
-        if (contentRetrieverConf.getEmbeddingModelEngine().equalsIgnoreCase("ollama")) {
-            return OllamaEmbeddingModel.builder()
-                    .baseUrl("http://127.0.0.1:11434")
-                    .modelName(contentRetrieverConf.getEmbeddingModel())
-                    .build();
-        } else if (contentRetrieverConf.getEmbeddingModelEngine().equalsIgnoreCase("togetherai")) {
-            return TogetherAIEmbeddingModel.builder()
-                    .toghetherAiAPI(Constants.TOGETHERAI_API)
-                    .modelName(contentRetrieverConf.getEmbeddingModel())
-                    .build();
-        }
-        throw new IllegalArgumentException("Unknown EmbeddingModelEngine " + contentRetrieverConf.getEmbeddingModelEngine());
-    }
-
-    private static EmbeddingStore<TextSegment> buildEmbeddingStore(ContentRetrieverConfigurationJSON contentRetrieverConf) {
-        EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore
-                .builder()
-                .baseUrl("http://localhost:8000")
-                .collectionName(contentRetrieverConf.getEmbeddingStoreCollectionName())
-                .logRequests(true)
-                .logResponses(true)
-                .build();
-        return embeddingStore;
-    }
-
-    private static EmbeddingStoreIngestor buildEmbeddingStoreIngestor(ContentRetrieverConfigurationJSON contentRetrieverConf,
-                                                                      EmbeddingModel embeddingModel,
-                                                                      EmbeddingStore<TextSegment> embeddingStore) {
-        return EmbeddingStoreIngestor.builder()
-                .documentSplitter(DocumentSplitters.recursive(contentRetrieverConf.getMaxSegmentSizeInTokens(),
-                        contentRetrieverConf.getMaxOverlapSizeInTokens(),
-                        new HuggingFaceTokenizer()))
-//                .documentSplitter(new DocumentByParagraphSplitter(512, 128))
-                .documentTransformer(document -> {
-                    document.metadata().put("ingested_data", LocalDateTime.now().toString());
-                    return document;
-                })
-                .textSegmentTransformer(textSegment -> TextSegment.from(
-                        textSegment.metadata("file_name") + "\n" + textSegment.text(),
-                        textSegment.metadata()
-                ))
-                .embeddingModel(embeddingModel)
-                .embeddingStore(embeddingStore)
-                .build();
-    }
-
-    private static EmbeddingStoreContentRetriever buildContentRetriver(ContentRetrieverConfigurationJSON contentRetrieverConf,
-                                                                       EmbeddingModel embeddingModel,
-                                                                       EmbeddingStore<TextSegment> embeddingStore) {
-        return EmbeddingStoreContentRetriever.builder()
-                .embeddingStore(embeddingStore)
-                .embeddingModel(embeddingModel)
-                .maxResults(200)
-                .minScore(0.75)
-                .build();
-    }
-
-    private static void loadDocuments(ContentRetrieverConfigurationJSON contentRetrieverConf, EmbeddingStoreIngestor embeddingStoreIngestor) {
-        File folder = new File(contentRetrieverConf.getDocumentsToLoad());
-        for (File file : folder.listFiles()) {
-            if (file.isDirectory() || file.isHidden()) continue;
-            log.info("Reading file {}", file.getName());
-            Document document = FileSystemDocumentLoader.loadDocument(file.getPath());
-            log.info("Document Metadata {}", document.metadata());
-            embeddingStoreIngestor.ingest(document);
-        }
     }
 
     private static IQueryExecutorGenerator getExecutor(ScanConfigurationJSON json, Query query) {

@@ -18,12 +18,12 @@
       "maxIterations": 10,
       "naturalLanguagePrompt": "{{NL-PROMPT}}",
       "contentRetriever": {
-        "embeddingStoreCollectionName": "rag_premierleague",
+        "embeddingStoreCollectionName": "rag_premierleague_64_32_UAELarge",
         "embeddingModelEngine": "togetherai",
         "embeddingModel": "WhereIsAI/UAE-Large-V1",
         "maxSegmentSizeInTokens": 64,
         "maxOverlapSizeInTokens": 32,
-        "documentsToLoad": "/Users/donatello/Projects/research/galois/core/src/test/resources/rag/BBC-PremierLeague2024-2025/"
+        "documentsToLoad": "./src/test/resources/rag/BBC-PremierLeague2024-2025/"
       }
     }
   },
