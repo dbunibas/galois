@@ -4,6 +4,8 @@ import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModelName;
 import galois.llm.models.TogetherAIModel;
 
 import java.time.Duration;
@@ -23,7 +25,7 @@ public class ConversationalChainFactory {
     public static Chain<String, String> buildOllamaPhi3ConversationalChain() {
         return buildOllamaConversationalChain("phi3");
     }
-    
+
     public static ChatLanguageModel buildOllamaLlama3ChatLanguageModel() {
         return buildOllamaChatLangageModel(OLLAMA_MODEL);
     }
@@ -40,11 +42,23 @@ public class ConversationalChainFactory {
         TogetherAIModel model = new TogetherAIModel(apiKey, modelName);
         return ConversationalChain.builder().chatLanguageModel(model).build();
     }
-    
+
     public static ChatLanguageModel buildTogetherAiChatLanguageModel(String apiKey, String modelName) {
         return new TogetherAIModel(apiKey, modelName);
     }
-    
+
+    public static ConversationalChain buildOpenAIConversationalChain(String apiKey, OpenAiChatModelName modelName) {
+        ChatLanguageModel model = buildOpenAIChatLanguageModel(apiKey, modelName);
+        return ConversationalChain.builder().chatLanguageModel(model).build();
+    }
+
+    public static ChatLanguageModel buildOpenAIChatLanguageModel(String apiKey, OpenAiChatModelName modelName) {
+        return OpenAiChatModel.builder()
+                .apiKey(apiKey)
+                .modelName(modelName)
+                .build();
+    }
+
     private static ChatLanguageModel buildOllamaChatLangageModel(String modelName) {
         OllamaChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")
@@ -59,6 +73,6 @@ public class ConversationalChainFactory {
         ChatLanguageModel chatModel = buildOllamaChatLangageModel(modelName);
         return ConversationalChain.builder().chatLanguageModel(chatModel).build();
     }
-    
-    
+
+
 }
