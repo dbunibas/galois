@@ -33,8 +33,8 @@ public class ContentRetrieverConfigurationParser {
         EmbeddingStore<TextSegment> embeddingStore = buildEmbeddingStore(contentRetrieverConf);
         EmbeddingStoreIngestor embeddingStoreIngestor = buildEmbeddingStoreIngestor(contentRetrieverConf, embeddingModel, embeddingStore);
         ContentRetriever contentRetriever = buildContentRetriver(contentRetrieverConf, embeddingModel, embeddingStore);
-        //TODO: THE FOLLOW LINE IS FOR DEBUG ONLY
-        embeddingStore.removeAll(); //TO FORCE IMPORT
+//        //TODO: THE FOLLOW LINE IS FOR DEBUG ONLY
+//        embeddingStore.removeAll(); //TO FORCE IMPORT
         if (isEmpty(embeddingStore, embeddingModel)) {
             log.debug("The embedding store is empty. Loading content...");
             loadDocuments(contentRetrieverConf, embeddingStoreIngestor);
