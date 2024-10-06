@@ -249,6 +249,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + "    \"stop\": [\n"
                 + "        \"<|eot_id|>\"\n"
                 + "    ],\n"
+//                + "    \"stream\": true,\n"
                 + "    \"messages\": {$MESSAGES$}\n"
                 + "}";
         jsonReturn = jsonReturn.replace("{$MODEL_NAME$}", this.modelName);

@@ -194,6 +194,15 @@ public class TestRunMoviesBatch {
 //            break;
         }
     }
+    
+    @Test
+    public void testCardinalityEstimatorQuery() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/movies/movies-llama3-table-experiment.json";
+            testRunner.executeCardinalityEstimatorQuery(configPath, variant);
+//            break;
+        }
+    }
 
     @Test
     public void testRunExperiment() {

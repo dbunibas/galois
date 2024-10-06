@@ -147,5 +147,14 @@ public class TestRunFlight2Batch {
 //            break;
         }
     }
+    
+    @Test
+    public void testCardinalityEstimatorQuery() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/flight_2_data/flight_2-llama3-table-experiment.json";
+            testRunner.executeCardinalityEstimatorQuery(configPath, variant);
+//            break;
+        }
+    }
 
 }

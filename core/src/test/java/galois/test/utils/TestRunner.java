@@ -66,6 +66,7 @@ public class TestRunner {
             IQueryExecutor queryExecutor = experiment.getOperatorsConfiguration().getScan().getQueryExecutor();
             if (queryExecutor instanceof INLQueryExectutor nlExecutor) {
                 nlExecutor.setNaturalLanguagePrompt(variant.getPrompt());
+                log.debug("NL Executor Prompt: {}", nlExecutor.getNaturalLanguagePrompt());
                 experiment.setOptimizers(null);
             } else if (queryExecutor instanceof ISQLExecutor sqlExecutor) {
                 sqlExecutor.setSql(variant.getQuerySql());
@@ -244,6 +245,27 @@ public class TestRunner {
             query = "SELECT * " + queryFrom;
             query = query.replace("target.", "");
             estimator.getEstimationForQuery(database, tables, query);
+//            Map<ITable, Map<Attribute, Double>> dbConfidence = estimator.getEstimation(database, tables, experiment.getQuery().getSql());
+        } catch (Exception ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+        }
+    }
+    
+    public void executeCardinalityEstimatorQuery(String path, ExpVariant variant) {
+        try {
+            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            log.debug("SQL query is {}", experiment.getQuery().getSql());
+            IDatabase database = experiment.getQuery().getDatabase();
+            ParserFrom parserFrom = new ParserFrom();
+            parserFrom.parseFrom(experiment.getQuery().getSql());
+            List<String> tables = parserFrom.getTables();
+            ConfidenceEstimator estimator = new ConfidenceEstimator();
+            String query = experiment.getQuery().getSql();
+            query = query.replace("target.", "");
+            estimator.getCardinalityEstimationForQuery(database, tables, query);
 //            Map<ITable, Map<Attribute, Double>> dbConfidence = estimator.getEstimation(database, tables, experiment.getQuery().getSql());
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);

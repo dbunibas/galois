@@ -48,15 +48,22 @@ public class DAOReportExcel {
         try {
             Map<String, Map<String, Map<String, Double>>> results = new HashMap<>();
             Workbook workbook = new XSSFWorkbook(filePath);
+            Set<String> missingQueries = new HashSet<>();
             for (String qName : queriesName) {
                 Sheet sheet = workbook.getSheet(qName);
                 log.debug("Query: " + qName);
+                if (sheet == null) {
+                    log.error("Missing sheet for query: " + qName);
+                    missingQueries.add(qName);
+                    continue;
+                }
                 Map<String, Map<String, Double>> statisticsForQuery = getStatistics(sheet);
                 results.put(qName, statisticsForQuery);
             }
             List<List<String>> queriesStats = new ArrayList<>();
             queriesStats.add(List.of("","NL", "SQL", "KEY", "TABLE"));
             for (String qName : queriesName) {
+                if (missingQueries.contains(qName)) continue;
                 Map<String, Map<String, Double>> resultsForQuery = results.get(qName);
                 Map<String, Double> resultsForNL = resultsForQuery.get("NL-Unoptimized");
                 Map<String, Double> resultsForSQL = resultsForQuery.get("SQL-Unoptimized");

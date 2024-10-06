@@ -412,6 +412,15 @@ public class TestRunSpiderGeoBatch {
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
         }
     }
+    
+    @Test
+    public void testCardinalityEstimatorQuery() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+            testRunner.executeCardinalityEstimatorQuery(configPath, variant);
+//            break;
+        }
+    }
 
     @Test
     public void testGalois() {

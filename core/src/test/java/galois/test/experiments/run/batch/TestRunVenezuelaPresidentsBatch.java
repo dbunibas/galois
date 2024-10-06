@@ -176,22 +176,31 @@ public class TestRunVenezuelaPresidentsBatch {
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
         }
     }
+    
+    @Test
+    public void testCardinalityEstimatorQuery() {
+        for (ExpVariant variant : variants) {
+            String configPath = "/presidents/presidents-llama3-table-experiment.json";
+            testRunner.executeCardinalityEstimatorQuery(configPath, variant);
+//            break;
+        }
+    }
 
     @Test
     public void testSingle() {
         // TO DEBUG single experiment
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
-        ExpVariant variant = variants.get(0);
-        String configPath = "/presidents/presidents-llama3-table-experiment.json";
-        String type = "TABLE";
+        ExpVariant variant = variants.get(4);
+        String configPath = "/presidents/presidents-llama3-key-scan-experiment.json";
+        String type = "KEY-SCAN";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
         IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
         IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
         IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
-        testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
+        testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDownRemoveAlgebraTree);
     }
 
     @Test

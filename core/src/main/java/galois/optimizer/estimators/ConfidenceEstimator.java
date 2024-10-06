@@ -2,12 +2,15 @@ package galois.optimizer.estimators;
 
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
+import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.parser.ParserWhere;
 import galois.utils.Mapper;
 import static galois.utils.Mapper.toCleanJsonList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.expression.Expression;
 import speedy.model.database.Attribute;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
@@ -80,6 +83,45 @@ public class ConfidenceEstimator {
         relationalSchema = relationalSchema.trim();
         String promptTable = prompt.replace("${relationalSchema}", relationalSchema);
         promptTable = promptTable.replace("${sqlQuery}", querySQL);
+        if (log.isDebugEnabled()) log.debug(promptTable);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+        String response = model.generate(promptTable);   
+        if (log.isDebugEnabled()) log.debug(response);
+    }
+    
+    public void getCardinalityEstimationForQuery(IDatabase database, List<String> tableNames, String querySQL) {
+        ParserWhere parserWhere = new ParserWhere();
+        parserWhere.parseWhere(querySQL);
+        if (parserWhere.getExpressions().isEmpty()) return;
+        String prompt = "Assuming that you have the knowledge of the full table(s) of ${tables} with the following schema: ${relationalSchema}."
+                + "\nConsidering the following query: ${sqlQuery}. \n"
+                + "What is your estimation about the cardinality (low, medium, high) of ${conditions}. Answer in json format returning the condition and the cardinality.";
+        String relationalSchema = "";
+        String tables = "";
+        for (String tableName : tableNames) {
+            ITable table = database.getTable(tableName);
+            List<Attribute> attributes = table.getAttributes();
+            String schema = getRelationalSchema(attributes,tableName);
+            relationalSchema += schema + " ";
+            tables += tableName+ " ";
+        }
+        relationalSchema = relationalSchema.trim();
+        tables = tables.trim();
+        String conditions = "";
+        for(int i = 0; i < parserWhere.getExpressions().size(); i++) {
+            if (i == 0) {
+                conditions += parserWhere.getExpressions().get(i);
+            } else {
+                conditions += " and what is the cardinality of " + parserWhere.getExpressions().get(i);
+            }
+        }
+        if (parserWhere.getExpressions().size() > 1) {
+            conditions += " and what is the cardinality of all conditions";
+        }
+        String promptTable = prompt.replace("${tables}", tables);
+        promptTable = promptTable.replace("${relationalSchema}", relationalSchema);
+        promptTable = promptTable.replace("${sqlQuery}", querySQL);
+        promptTable = promptTable.replace("${conditions}", conditions);       
         if (log.isDebugEnabled()) log.debug(promptTable);
         TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
         String response = model.generate(promptTable);   

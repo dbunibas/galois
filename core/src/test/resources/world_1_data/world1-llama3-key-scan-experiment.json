@@ -15,8 +15,7 @@
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-key-scan",
-      "maxIterations": 10,
-        "normalizationStrategy": "lowerCase"
+      "maxIterations": 10
     }
   },
   "query": {
@@ -101,17 +100,17 @@
             {
               "name": "surface_area_in_km2",
               "type": "REAL",
-              "nullable": false
+              "nullable": true
             },
             {
               "name": "independence_year",
-              "type": "INTEGER",
+              "type": "REAL",
               "nullable": true
             },
             {
               "name": "population",
               "type": "INTEGER",
-              "nullable": false
+              "nullable": true
             },
             {
               "name": "life_expectancy",
@@ -145,7 +144,7 @@
             },
             {
               "name": "capital",
-              "type": "INTEGER",
+              "type": "REAL",
               "nullable": true
             },
             {

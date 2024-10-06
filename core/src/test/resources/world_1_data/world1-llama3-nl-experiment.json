@@ -16,8 +16,7 @@
     "scan": {
       "queryExecutor": "togetherai-llama3-nl",
       "maxIterations": 10,
-      "naturalLanguagePrompt": "{{PROMPT}}",
-      "normalizationStrategy": "lowerCase"
+      "naturalLanguagePrompt": "{{PROMPT}}"
     }
   },
   "query": {
@@ -27,7 +26,7 @@
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
-      "tables": [
+        "tables": [
         {
           "tableName": "city",
           "attributes": [
@@ -43,7 +42,7 @@
               "nullable": false
             },
             {
-              "name": "country_code",
+              "name": "country_code_3_letters",
               "type": "STRING",
               "nullable": false
             },
@@ -79,7 +78,7 @@
           "tableName": "country",
           "attributes": [
             {
-              "name": "code",
+              "name": "code_3_letters",
               "type": "STRING",
               "nullable": false,
               "key": true
@@ -102,17 +101,17 @@
             {
               "name": "surface_area_in_km2",
               "type": "REAL",
-              "nullable": false
+              "nullable": true
             },
             {
               "name": "independence_year",
-              "type": "INTEGER",
+              "type": "REAL",
               "nullable": true
             },
             {
               "name": "population",
               "type": "INTEGER",
-              "nullable": false
+              "nullable": true
             },
             {
               "name": "life_expectancy",
@@ -146,7 +145,7 @@
             },
             {
               "name": "capital",
-              "type": "INTEGER",
+              "type": "REAL",
               "nullable": true
             },
             {
