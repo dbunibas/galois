@@ -21,6 +21,7 @@ import static galois.utils.Mapper.toCleanJsonList;
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     private List<AttributeRef> attributes = null;
+    private boolean skipKeyRequest = false; // for DEBUG put it to true
 
     abstract protected ConversationalChain getConversationalChain();
 
@@ -49,10 +50,17 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         GaloisDebug.log(tuples);
         return tuples;
     }
+    
+    private List<Map<String, Object>> getStaticKeys(ITable table, Key primaryKey) {
+        String cleanedResponse = "[]"; // insert here the keys
+        List<Map<String, Object>> currentKeys = parseKeyResponse(cleanedResponse, table, primaryKey);
+        return currentKeys;
+    }
 
     private List<Map<String, Object>> getKeyValues(ITable table, Key primaryKey, ConversationalChain chain) {
 //        List<Map<String, Object>> keys = new ArrayList<>();
         Set<Map<String, Object>> keys = new HashSet<>();
+        if (skipKeyRequest) return getStaticKeys(table, primaryKey);
         String schema = primaryKey.isCompositeKey() ?
                 generateJsonSchemaForCompositePrimaryKey(table, primaryKey) :
                 generateJsonSchemaForPrimaryKey(table);
