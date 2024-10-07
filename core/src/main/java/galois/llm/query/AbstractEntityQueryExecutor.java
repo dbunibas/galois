@@ -79,9 +79,9 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
                     if(tuple != null && !isAlreadyContained(tuple, tuples)){
                         tuples.add(tuple);
-                        log.info("Adding new tuple {}", tuple);
+                        log.trace("Adding new tuple {}", tuple);
                     }else{
-                        log.info("Skipping duplicated tuple {}", tuple);
+                        log.trace("Skipping duplicated tuple {}", tuple);
                     }
                 }
                 log.info("Tuples after {} iterations: {}", i, tuples.size());

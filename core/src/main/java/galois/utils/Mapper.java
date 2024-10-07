@@ -88,7 +88,12 @@ public class Mapper {
             response = "[" + response + "]";
         }
         String cleanContent = getContentBetween(response, "[", "]");
-        if (isBetween(cleanContent, "[", "]")) return cleanContent;
+        if (isBetween(cleanContent, "[", "]")) {
+            if(removeDuplicates) {
+                cleanContent = removeDuplicates(cleanContent);
+            }
+            return cleanContent;
+        }
         String substring = "";
         if (cleanContent.contains("}") && cleanContent.contains("[")) {
             substring = cleanContent.substring(cleanContent.indexOf("["), cleanContent.lastIndexOf("}") + 1);
@@ -108,7 +113,9 @@ public class Mapper {
         }
         String jsonList = substring + "]";
         log.debug("Repaired json list: {}", jsonList);
-        jsonList = removeDuplicates(jsonList);
+        if(removeDuplicates) {
+            jsonList = removeDuplicates(jsonList);
+        }
         return jsonList;
     }
 
