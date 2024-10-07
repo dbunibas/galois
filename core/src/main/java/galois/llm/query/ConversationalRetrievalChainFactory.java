@@ -4,12 +4,14 @@ import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalRetrievalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModelName;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.models.TogetherAIModel;
 
 import java.time.Duration;
 
 import static galois.Constants.OLLAMA_MODEL;
+import static galois.llm.query.ConversationalChainFactory.buildOpenAIChatLanguageModel;
 
 public class ConversationalRetrievalChainFactory {
 
@@ -24,7 +26,7 @@ public class ConversationalRetrievalChainFactory {
     public static Chain<String, String> buildOllamaPhi3ConversationalChain(ContentRetriever contentRetriever) {
         return buildOllamaConversationalChain("phi3", contentRetriever);
     }
-    
+
     public static ChatLanguageModel buildOllamaLlama3ChatLanguageModel(ContentRetriever contentRetriever) {
         return buildOllamaChatLangageModel(OLLAMA_MODEL);
     }
@@ -44,11 +46,19 @@ public class ConversationalRetrievalChainFactory {
                 .contentRetriever(contentRetriever)
                 .build();
     }
-    
+
+    public static Chain<String, String> buildOpenAIConversationalRetrievalChain(String apiKey, OpenAiChatModelName modelName, ContentRetriever contentRetriever) {
+        ChatLanguageModel model = buildOpenAIChatLanguageModel(apiKey, modelName);
+        return ConversationalRetrievalChain.builder()
+                .chatLanguageModel(model)
+                .contentRetriever(contentRetriever)
+                .build();
+    }
+
     public static ChatLanguageModel buildTogetherAiChatLanguageModel(String apiKey, String modelName, ContentRetriever contentRetriever) {
         return new TogetherAIModel(apiKey, modelName);
     }
-    
+
     private static ChatLanguageModel buildOllamaChatLangageModel(String modelName) {
         OllamaChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")
@@ -66,6 +76,6 @@ public class ConversationalRetrievalChainFactory {
                 .contentRetriever(contentRetriever)
                 .build();
     }
-    
-    
+
+
 }

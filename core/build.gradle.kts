@@ -24,6 +24,7 @@ dependencies {
     implementation("dev.langchain4j:langchain4j-ollama:0.35.0")
     implementation("dev.langchain4j:langchain4j-easy-rag:0.35.0")
     implementation("dev.langchain4j:langchain4j-chroma:0.35.0")
+    implementation("dev.langchain4j:langchain4j-open-ai:0.35.0")
 
     implementation("com.fasterxml.jackson.core:jackson-core:2.17.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
