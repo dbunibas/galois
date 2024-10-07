@@ -64,7 +64,36 @@ public class TestRunRAGPremierLeagueBatch {
                 .optimizers(singleConditionOptimizers)
                 .build();
 
-        variants = List.of(q1);
+        ExpVariant q2 = ExpVariant.builder()
+                .queryNum("Q2")
+                .querySql("select count(*) from premier_league_2024_2025_arsenal_matches m where m.match_date_month = 8")
+                .prompt("Count the number of Arsenal matches in the Premier League for the month of August during the 2024-2025 season")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q3 = ExpVariant.builder()
+                .queryNum("Q3")
+                .querySql("select player_name from premier_league_2024_2025_player_of_the_match potm")
+                .prompt("List the names of the players who were awarded 'Player of the Match' during the 2024-2025 Premier League season")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q4 = ExpVariant.builder()
+                .queryNum("Q4")
+                .querySql("select player_name, player_team from premier_league_2024_2025_player_of_the_match potm where potm.player_team = 'Manchester United'")
+                .prompt("List the names of the players who were awarded 'Player of the Match' while playing for Manchester United during the 2024-2025 Premier League season")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q5 = ExpVariant.builder()
+                .queryNum("Q5")
+                .querySql("select home_team,away_team,home_goals,away_goals from premier_league_2024_2025_match_result")
+                .prompt("Retrieve the match details from the 2024-2025 Premier League season, including the home team, away team, and the number of goals scored by both teams")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+//        variants = List.of(q1, q2, q3, q4, q5);
+        variants = List.of(q2);
     }
 
     @Test
@@ -85,11 +114,11 @@ public class TestRunRAGPremierLeagueBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/rag-premierleague/pl2425-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/rag-premierleague/pl2425-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/rag-premierleague/pl2425-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/rag-premierleague/pl2425-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/rag-premierleague/pl2425-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
 //            testRunner.execute("/rag-premierleague/pl2425-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/rag-premierleague/pl2425-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/rag-premierleague/pl2425-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -100,7 +129,7 @@ public class TestRunRAGPremierLeagueBatch {
         // TO DEBUG single experiment
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
-        ExpVariant variant = variants.get(0);
+        ExpVariant variant = variants.get(4);
         String configPath = "/rag-premierleague/pl2425-llama3-table-experiment.json";
         String type = "TABLE";
         int indexSingleCondition = 0;

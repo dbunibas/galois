@@ -106,8 +106,8 @@ public class ContentRetrieverConfigurationParser {
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
                 .embeddingModel(embeddingModel)
-                .maxResults(200)
-                .minScore(0.75)
+                .maxResults(contentRetrieverConf.getMaxResults())
+                .minScore(contentRetrieverConf.getMinScore())
                 .build();
     }
 

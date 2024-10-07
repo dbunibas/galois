@@ -2,6 +2,7 @@ package galois.llm.query.ollama.mistral;
 
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.*;
 import galois.prompt.EPrompts;
 import lombok.Getter;
@@ -54,6 +55,11 @@ public class OllamaMistralNLQueryExecutor extends AbstractEntityQueryExecutor im
     @Override
     protected Chain<String, String> getConversationalChain() {
         return buildOllamaMistralConversationalChain();
+    }
+
+    @Override
+    public ContentRetriever getContentRetriever() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 
     @Override

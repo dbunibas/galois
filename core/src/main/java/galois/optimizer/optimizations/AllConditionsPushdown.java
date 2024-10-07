@@ -36,6 +36,7 @@ public class AllConditionsPushdown implements IOptimization {
                 .iterativePrompt(optimizePrompt(executor.getIterativePrompt()))
                 .attributesPrompt(optimizePrompt(executor.getAttributesPrompt()))
                 .expression(select.getSelections().get(0))
+                .contentRetriever(executor.getContentRetriever())
                 .build();
     }
 }

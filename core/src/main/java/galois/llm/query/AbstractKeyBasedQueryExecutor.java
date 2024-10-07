@@ -45,7 +45,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         GaloisDebug.log("Parsed keys are:");
         GaloisDebug.log(keyValues);
 
-        List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).toList();
+        List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).filter(Objects::nonNull).toList();
         GaloisDebug.log("LLMScan results:");
         GaloisDebug.log(tuples);
         return tuples;
@@ -119,6 +119,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     private Tuple generateTupleFromKey(ITable table, TableAlias tableAlias, Map<String, Object> keyValue, Key primaryKey, Chain<String, String> chain) {
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream().map(AttributeRef::getName).toList();
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
+        if(hasNullInKeys(tuple, tableAlias, keyValue, primaryKeyAttributes)){
+            return null;
+        }
         addCellForPrimaryKey(tuple, tableAlias, keyValue, primaryKeyAttributes);
         Set<Attribute> attributesQuery = null;
         if (this.attributes != null && !this.attributes.isEmpty()) {
@@ -145,6 +148,16 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
         String keyAsString = getKeyAsString(keyValue, primaryKeyAttributes);
         return addValueFromAttributes(table, tableAlias, new ArrayList<>(attributesQuery), tuple, keyAsString, chain);
+    }
+
+    private boolean hasNullInKeys(Tuple tuple, TableAlias tableAlias, Map<String, Object> key, List<String> primaryKeyAttributes) {
+        for (String attribute : primaryKeyAttributes) {
+            Object value = key.get(attribute);
+            if(value == null || (value.toString().isBlank())){
+               return true;
+           }
+        }
+        return false;
     }
 
     private void addCellForPrimaryKey(Tuple tuple, TableAlias tableAlias, Map<String, Object> key, List<String> primaryKeyAttributes) {

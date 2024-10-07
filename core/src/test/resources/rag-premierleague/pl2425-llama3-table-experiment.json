@@ -21,9 +21,11 @@
       "queryExecutor": "togetherai-llama3-table",
       "maxIterations": 10,
       "contentRetriever": {
-        "embeddingStoreCollectionName": "rag_premierleague",
+        "embeddingStoreCollectionName": "rag_premierleague_64_32_UAELarge",
         "embeddingModelEngine": "togetherai",
         "embeddingModel": "WhereIsAI/UAE-Large-V1",
+        "maxResults": 200,
+        "minScore": 0.75,
         "maxSegmentSizeInTokens": 64,
         "maxOverlapSizeInTokens": 32,
         "documentsToLoad": "/Users/donatello/Projects/research/galois/core/src/test/resources/rag/BBC-PremierLeague2024-2025/"
@@ -62,9 +64,64 @@
               "nullable": true
             }
           ]
+        },
+        {
+          "tableName": "premier_league_2024_2025_match_result",
+          "attributes": [
+            {
+              "name": "date",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "home_team",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "away_team",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "home_goals",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "away_goals",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "premier_league_2024_2025_player_of_the_match",
+          "attributes": [
+            {
+              "name": "player_number",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "player_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "match",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "player_team",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
         }
       ]
     },
-    "results": "/rag-premierleague/premier_league_2024_2025_arsenal_matches"
+    "results": "/rag-premierleague/premier_league_2024_2025"
   }
 }

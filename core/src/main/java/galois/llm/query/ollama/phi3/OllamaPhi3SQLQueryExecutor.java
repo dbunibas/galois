@@ -2,6 +2,7 @@ package galois.llm.query.ollama.phi3;
 
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.AbstractEntityQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
@@ -39,6 +40,11 @@ public class OllamaPhi3SQLQueryExecutor extends AbstractEntityQueryExecutor {
         this.maxIterations = maxIterations;
         if (sql == null || sql.isBlank()) throw new IllegalArgumentException("sql cannot be null or blank!");
         this.sql = sql;
+    }
+
+    @Override
+    public ContentRetriever getContentRetriever() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 
     @Override

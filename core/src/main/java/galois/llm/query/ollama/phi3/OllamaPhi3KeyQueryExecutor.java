@@ -3,6 +3,7 @@ package galois.llm.query.ollama.phi3;
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
@@ -77,6 +78,11 @@ public class OllamaPhi3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
             attributesMap.putAll(map);
         }
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
+    }
+
+    @Override
+    public ContentRetriever getContentRetriever() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 
     public static OllamaPhi3KeyQueryExecutorBuilder builder() {

@@ -2,6 +2,7 @@ package galois.llm.query.ollama.phi3;
 
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.*;
 import galois.prompt.EPrompts;
 import lombok.Getter;
@@ -44,6 +45,11 @@ public class OllamaPhi3NLQueryExecutor extends AbstractEntityQueryExecutor imple
         if (naturalLanguagePrompt == null || naturalLanguagePrompt.isBlank())
             throw new IllegalArgumentException("naturalLanguagePrompt cannot be null or blank!");
         this.naturalLanguagePrompt = naturalLanguagePrompt;
+    }
+
+    @Override
+    public ContentRetriever getContentRetriever() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 
     @Override

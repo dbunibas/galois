@@ -3,6 +3,7 @@ package galois.llm.query.ollama.mistral;
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import static galois.llm.query.ConversationalChainFactory.buildOllamaMistralChatLanguageModel;
@@ -71,6 +72,11 @@ public class OllamaMistralKeyScanQueryExecutor extends AbstractKeyBasedQueryExec
     protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, Chain<String, String> chain) {
         Map<String, Object> attributesMap = getAttributesValues(table, attributes, key, chain);
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
+    }
+
+    @Override
+    public ContentRetriever getContentRetriever() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 
     public static OllamaMistralKeyScanQueryExecutorBuilder builder() {

@@ -90,7 +90,7 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                 log.debug("Response is: {}", response);
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                 log.debug("Parsed response is: {}", parsedResponse);
-                if (parsedResponse.isEmpty()) {
+                if (parsedResponse == null || parsedResponse.isEmpty()) {
                     break; // no more iterations
                 }
                 for (Map<String, Object> map : parsedResponse) {
@@ -99,6 +99,7 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                     tuples.add(tuple);
                 }
             } catch (Exception e) {
+                log.debug("Exception", e);
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
                     String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true);

@@ -143,7 +143,7 @@ public class TestRAG {
     private void configureDB() {
         AccessConfiguration accessConfiguration = new AccessConfiguration();
         String driver = "org.postgresql.Driver";
-        String uri = "jdbc:postgresql:galois_rag";
+        String uri = "jdbc:postgresql:llm_rag_premierleague";
         String schemaName = "target";
         String username = "pguser";
         String password = "pguser";

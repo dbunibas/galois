@@ -1,5 +1,6 @@
 package galois.llm.query;
 
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.prompt.EPrompts;
 import speedy.model.database.IDatabase;
 import speedy.model.database.TableAlias;
@@ -42,6 +43,11 @@ public class UnsupportedQueryExecutor implements IQueryExecutor {
 
     @Override
     public IQueryExecutorBuilder toBuilder() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
+    }
+
+    @Override
+    public ContentRetriever getContentRetriever() {
         throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 }

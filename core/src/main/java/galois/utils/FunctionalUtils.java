@@ -17,6 +17,7 @@ public class FunctionalUtils {
         try {
             return executable.execute();
         } catch (Exception e) {
+            log.warn("Exception during process", e);
             throw exceptionSupplier.apply(e);
         }
     }
