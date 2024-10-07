@@ -1,34 +1,26 @@
 package galois.llm.query.togetherai.llama3;
 
 import dev.langchain4j.chain.Chain;
-import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.Constants;
 import galois.llm.query.*;
+import galois.llm.query.utils.QueryUtils;
 import galois.prompt.EPrompts;
+import galois.utils.GaloisDebug;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import speedy.model.database.Attribute;
-import speedy.model.database.ITable;
+import speedy.model.database.*;
+import speedy.model.expressions.Expression;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
-import galois.llm.query.utils.QueryUtils;
-
 import static galois.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
-import static galois.llm.query.utils.QueryUtils.generateJsonSchemaListFromAttributes;
-import static galois.llm.query.utils.QueryUtils.getCleanAttributes;
+import static galois.llm.query.utils.QueryUtils.*;
 import static galois.utils.FunctionalUtils.orElse;
-import galois.utils.GaloisDebug;
-import java.util.ArrayList;
-import java.util.Map;
-import speedy.model.database.AttributeRef;
-import speedy.model.database.IDatabase;
-import speedy.model.database.TableAlias;
-import speedy.model.database.Tuple;
-import speedy.model.expressions.Expression;
 
 @Slf4j
 @Getter
@@ -96,14 +88,17 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
                 if (parsedResponse.isEmpty()) {
                     break; // no more iterations
                 }
+                int initialTuples = tuples.size();
                 for (Map<String, Object> map : parsedResponse) {
                     log.debug("Try to parse: " + speedy.utility.SpeedyUtility.printMapCompact(map));
                     Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
-                    // TODO: Handle possible duplicates
-                    if (tuple != null ) {
-                        log.debug("Add tuple: " + tuple);
+                    if(!isAlreadyContained(tuple, tuples)){
                         tuples.add(tuple);
                     }
+                }
+                if(tuples.size() == initialTuples){
+                    log.info("Iteration {} did not add any new tuples. Avoid proceeding with further iterations", i);
+                    return tuples;
                 }
             } catch (Exception e) {
                 try {
@@ -115,9 +110,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
                     for (Map<String, Object> map : parsedResponse) {
                         log.debug("Second Try to parse: " + speedy.utility.SpeedyUtility.printMapCompact(map));
                         Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
-                        // TODO: Handle possible duplicates
-                        if (tuple != null) {
-                           log.debug("Add tuple: " + tuple);
+                        if(!isAlreadyContained(tuple, tuples)){
                             tuples.add(tuple);
                         }
                     }

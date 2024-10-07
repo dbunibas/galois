@@ -22,8 +22,8 @@ import galois.llm.query.ISQLExecutor;
 import galois.llm.query.utils.QueryUtils;
 
 import static galois.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
-import static galois.llm.query.utils.QueryUtils.generateJsonSchemaListFromAttributes;
-import static galois.llm.query.utils.QueryUtils.getCleanAttributes;
+import static galois.llm.query.utils.QueryUtils.*;
+import static galois.llm.query.utils.QueryUtils.isAlreadyContained;
 import static galois.utils.FunctionalUtils.orElse;
 import galois.utils.GaloisDebug;
 import java.util.ArrayList;
@@ -93,10 +93,16 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                 if (parsedResponse == null || parsedResponse.isEmpty()) {
                     break; // no more iterations
                 }
+                int initialTuples = tuples.size();
                 for (Map<String, Object> map : parsedResponse) {
                     Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
-                    // TODO: Handle possible duplicates
-                    tuples.add(tuple);
+                    if(!isAlreadyContained(tuple, tuples)){
+                        tuples.add(tuple);
+                    }
+                }
+                if(tuples.size() == initialTuples){
+                    log.info("Iteration {} did not add any new tuples. Avoid proceeding with further iterations", i);
+                    return tuples;
                 }
             } catch (Exception e) {
                 log.debug("Exception", e);
@@ -108,8 +114,9 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                     log.debug("Parsed response is: {}", parsedResponse);
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
-                        // TODO: Handle possible duplicates
-                        tuples.add(tuple);
+                        if(!isAlreadyContained(tuple, tuples)){
+                            tuples.add(tuple);
+                        }
                     }
                 } catch (Exception internal) {
                     // do nothing

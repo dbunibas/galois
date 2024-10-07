@@ -1,9 +1,11 @@
 package galois.llm.query;
 
 import dev.langchain4j.chain.Chain;
-import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.llm.TokensEstimator;
+import galois.prompt.EPrompts;
+import galois.utils.GaloisDebug;
+import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
@@ -11,11 +13,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static galois.llm.query.utils.QueryUtils.*;
-
-import galois.prompt.EPrompts;
-import galois.utils.GaloisDebug;
-import galois.utils.Mapper;
-
 import static galois.utils.Mapper.toCleanJsonList;
 
 @Slf4j

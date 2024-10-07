@@ -4,12 +4,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static galois.utils.FunctionalUtils.orElseThrow;
-import java.util.ArrayList;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -101,7 +99,55 @@ public class Mapper {
         }
         String jsonList = substring + "]";
         log.debug("Repaired json list: {}", jsonList);
+        jsonList = removeDuplicates(jsonList);
         return jsonList;
+    }
+
+    private static String removeDuplicates(String jsonList) {
+        if(jsonList == null || jsonList.isBlank()){
+            return jsonList;
+        }
+        if(!isBetween(jsonList, "[", "]")){
+            return jsonList;
+        }
+        if(jsonList.contains("{")){
+            return removeDuplicatesFromArrayOfObjects(jsonList);
+        }else{
+            return removeDuplicatesFromArrayOfStrings(jsonList);
+        }
+    }
+    private static String removeDuplicatesFromArrayOfStrings(String jsonList) {
+        try{
+            List<String> listWithDuplicates = mapper.readValue(jsonList, new TypeReference<>() {});
+            Set<String> addedObject = new HashSet<>();
+            List<String> listWithoutDuplicates = new ArrayList<>();
+            for (String obj : listWithDuplicates) {
+                if(addedObject.contains(obj)) continue;
+                addedObject.add(obj);
+                listWithoutDuplicates.add(obj);
+            }
+            return mapper.writeValueAsString(listWithoutDuplicates);
+        }catch (Exception e){
+            log.warn("Unable to remove duplicates from json list: {}", jsonList, e);
+            return jsonList;
+        }
+    }
+    private static String removeDuplicatesFromArrayOfObjects(String jsonList) {
+        try{
+            List<Map<String, Object>> listWithDuplicates = mapper.readValue(jsonList, new TypeReference<>() {});
+            Set<String> addedObject = new HashSet<>();
+            List<Map<String, Object>> listWithoutDuplicates = new ArrayList<>();
+            for (Map<String, Object> obj : listWithDuplicates) {
+                String objSign = obj.toString();
+                if(addedObject.contains(objSign)) continue;
+                addedObject.add(objSign);
+                listWithoutDuplicates.add(obj);
+            }
+            return mapper.writeValueAsString(listWithoutDuplicates);
+        }catch (Exception e){
+            log.warn("Unable to remove duplicates from json list: {}", jsonList, e);
+            return jsonList;
+        }
     }
 
     private static String getContentBetween(String response, String firstValue, String secondValue) {

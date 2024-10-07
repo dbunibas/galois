@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static galois.llm.query.utils.QueryUtils.*;
 
@@ -62,7 +63,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             String userMessage = i == 0
                     ? generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema)
                     : generateIterativePrompt(table, attributesExecutionList, jsonSchema);
-            log.debug("Prompt is: {}", userMessage);
+            log.debug("Iteration {} - Prompt is: {}", i, userMessage);
             try {
                 String response = getResponse(chain, userMessage, false);
                 log.debug("Response is: {}", response);
@@ -73,10 +74,20 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     GaloisDebug.log(tuples);
                     return tuples;
                 }
+                int initialTuples = tuples.size();
                 for (Map<String, Object> map : parsedResponse) {
                     Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
-                    // TODO: Handle possible duplicates
-                    if (tuple != null) tuples.add(tuple);
+                    if(tuple != null && !isAlreadyContained(tuple, tuples)){
+                        tuples.add(tuple);
+                        log.info("Adding new tuple {}", tuple);
+                    }else{
+                        log.info("Skipping duplicated tuple {}", tuple);
+                    }
+                }
+                log.info("Tuples after {} iterations: {}", i, tuples.size());
+                if(tuples.size() == initialTuples){
+                    log.info("Iteration {} did not add any new tuples. Avoid proceeding with further iterations", i);
+                    return tuples;
                 }
             } catch (Exception e) {
                 try {
@@ -87,8 +98,9 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     log.debug("Parsed response is: {}", parsedResponse);
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
-                        // TODO: Handle possible duplicates
-                        if (tuple != null) tuples.add(tuple);
+                        if(tuple != null && !isAlreadyContained(tuple, tuples)){
+                            tuples.add(tuple);
+                        }
                     }
                 } catch (Exception internal) {
                     // do nothing

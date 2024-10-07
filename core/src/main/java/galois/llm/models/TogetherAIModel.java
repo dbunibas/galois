@@ -108,7 +108,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 Usage usage = responseAPI.getUsage();
                 this.inputTokens += usage.getPromptTokens();
                 this.outputTokens += usage.getCompletionTokens();
-                log.trace("Add Assistant Message in getResponse: " + newMessage);
+                log.trace("Add Assistant Message in getResponse: {}", newMessage);
                 this.messages.add(newMessage);
                 this.messages.add(message);
             }
@@ -147,7 +147,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 mex.setRole(TogetherAIConstants.ASSISTANT);
                 mex.setContent(Mapper.toCleanJsonList(message.text()));
                 //mex.setContent(message.text());
-                log.trace("Add Assistant message: " + mex.getContent());
+                log.trace("Add Assistant message: {}", mex);
                 this.messages.add(mex);
             }
             lastTextMessage = message.text();

@@ -228,4 +228,8 @@ public class QueryUtils {
             default -> "string";
         };
     }
+
+    public static boolean isAlreadyContained(Tuple tuple, List<Tuple> tuples) {
+        return tuples.stream().map(Tuple::toStringNoOID).collect(Collectors.toSet()).contains(tuple.toStringNoOID());
+    }
 }
