@@ -43,22 +43,26 @@
             {
               "name": "opponent_team",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "match_date_year",
               "type": "INTEGER",
-              "nullable": true
+              "nullable": false,
+              "key": true
             },
             {
               "name": "match_date_month",
               "type": "INTEGER",
-              "nullable": true
+              "nullable": false,
+              "key": true
             },
             {
               "name": "match_date_day",
               "type": "INTEGER",
-              "nullable": true
+              "nullable": false,
+              "key": true
             }
           ]
         },
@@ -73,12 +77,14 @@
             {
               "name": "home_team",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "away_team",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "home_goals",
@@ -108,7 +114,8 @@
             {
               "name": "match",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "player_team",

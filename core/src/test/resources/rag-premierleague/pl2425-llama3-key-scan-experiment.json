@@ -28,7 +28,7 @@
         "minScore": 0.75,
         "maxSegmentSizeInTokens": 64,
         "maxOverlapSizeInTokens": 32,
-        "documentsToLoad": "/Users/donatello/Projects/research/galois/core/src/test/resources/rag/BBC-PremierLeague2024-2025/"
+        "documentsToLoad": "./src/test/resources/rag/BBC-PremierLeague2024-2025/"
       }
     }
   },
@@ -39,29 +39,33 @@
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
-       "tables": [
+      "tables": [
         {
           "tableName": "premier_league_2024_2025_arsenal_matches",
           "attributes": [
             {
               "name": "opponent_team",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "match_date_year",
               "type": "INTEGER",
-              "nullable": true
+              "nullable": false,
+              "key": true
             },
             {
               "name": "match_date_month",
               "type": "INTEGER",
-              "nullable": true
+              "nullable": false,
+              "key": true
             },
             {
               "name": "match_date_day",
               "type": "INTEGER",
-              "nullable": true
+              "nullable": false,
+              "key": true
             }
           ]
         },
@@ -76,12 +80,14 @@
             {
               "name": "home_team",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "away_team",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "home_goals",
@@ -111,7 +117,8 @@
             {
               "name": "match",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "player_team",
