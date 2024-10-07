@@ -219,10 +219,10 @@ public class TestRunVenezuelaPresidentsBatch {
             }
             if (confidenceKeys != null && confidenceKeys > threshold) {
                 // Execute KEY-SCAN
-                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, singleConditionPushDownRemoveAlgebraTree);
+                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
             } else {
                 // Execute TABLE
-                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, singleConditionPushDownRemoveAlgebraTree);
+                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
             break;
