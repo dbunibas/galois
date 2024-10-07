@@ -145,7 +145,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             } else {
                 Message mex = new Message();
                 mex.setRole(TogetherAIConstants.ASSISTANT);
-                mex.setContent(Mapper.toCleanJsonList(message.text()));
+                mex.setContent(Mapper.toCleanJsonList(message.text(), true));
                 //mex.setContent(message.text());
                 log.trace("Add Assistant message: {}", mex);
                 this.messages.add(mex);

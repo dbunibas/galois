@@ -68,7 +68,7 @@ public class TestParserJSONResponse {
                 + "	 	\"value\": 3\n"
                 + "	 }\n"
                 + "]";
-        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response);
+        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response, true);
         log.debug("Parsed: {}", parsed);
         Assertions.assertEquals(3, parsed.size());
 
@@ -89,7 +89,7 @@ public class TestParserJSONResponse {
                 + "		\"name\": \"n3\",\n"
                 + "	 	\"value\": 3\n"
                 + "	 }\n";
-        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response);
+        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response, true);
         log.debug("Parsed: {}", parsed);
         Assertions.assertEquals(3, parsed.size());
     }
@@ -108,7 +108,7 @@ public class TestParserJSONResponse {
                 + "	 {\n"
                 + "		\"name\": \"n3\",\n"
                 + "	 	\"value\": 3\n";
-        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response);
+        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response, true);
         log.debug("Parsed: {}", parsed);
         Assertions.assertEquals(2, parsed.size());
     }
@@ -124,7 +124,7 @@ public class TestParserJSONResponse {
                 + "		\"name\": \"n2\",\n"
                 + "	 	\"value\": 2\n"
                 + "	 },\n";
-        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response);
+        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response, true);
         log.debug("Parsed: {}", parsed);
         Assertions.assertEquals(2, parsed.size());
 
@@ -720,7 +720,7 @@ public class TestParserJSONResponse {
                     "opponent_team": "Leicester",
                     "match_date_year": 2024
                 """;
-        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response);
+        List<Map<String, Object>> parsed = Mapper.fromJsonToListOfMaps(response, true);
         log.debug("Parsed: {}", parsed);
         Assertions.assertEquals(2, parsed.size());
     }

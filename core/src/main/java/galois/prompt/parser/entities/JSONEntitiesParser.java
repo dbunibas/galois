@@ -8,7 +8,12 @@ import java.util.Map;
 import static galois.utils.Mapper.fromJsonToListOfMaps;
 
 public class JSONEntitiesParser {
+
     public static List<Map<String, Object>> parse(String response, ITable table) {
-        return fromJsonToListOfMaps(response);
+        return fromJsonToListOfMaps(response, false);
+    }
+
+    public static List<Map<String, Object>> parseAndRemoveDuplicates(String response, ITable table) {
+        return fromJsonToListOfMaps(response, true);
     }
 }

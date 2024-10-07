@@ -43,10 +43,19 @@ public class Mapper {
         );
     }
 
-    public static List<Map<String, Object>> fromJsonToListOfMaps(String value) {
+    public static List<Map<String, Object>> fromJsonToListOfMaps(String value, boolean removeDuplicates) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(toCleanJsonList(value), LIST_OF_JSON_REF) :
+                        mapper.readValue(toCleanJsonList(value, removeDuplicates), LIST_OF_JSON_REF) :
+                        null,
+                MapperException::new
+        );
+    }
+
+    public static List<String> fromJsonListToListAndRemoveDuplicates(String value) {
+        return orElseThrow(
+                () -> value != null ?
+                        mapper.readValue(toCleanJsonList(value, true), LIST_STRING_REF) :
                         null,
                 MapperException::new
         );
@@ -55,7 +64,7 @@ public class Mapper {
     public static List<String> fromJsonListToList(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(toCleanJsonList(value), LIST_STRING_REF) :
+                        mapper.readValue(toCleanJsonList(value, false), LIST_STRING_REF) :
                         null,
                 MapperException::new
         );
@@ -63,7 +72,7 @@ public class Mapper {
     
     public static boolean isJSON(String response) {
         String responseList = "";
-        if (response.contains("[")) responseList = toCleanJsonList(response);
+        if (response.contains("[")) responseList = toCleanJsonList(response, false);
         String responseJson = toCleanJsonObject(response);
         if (isBetween(responseList, "[", "]")) return true;
         if (isBetween(responseJson, "{", "}")) return true;
@@ -74,7 +83,7 @@ public class Mapper {
         return getContentBetween(response, "{", "}");
     }
 
-    public static String toCleanJsonList(String response) {
+    public static String toCleanJsonList(String response, boolean removeDuplicates) {
         if(!response.contains("[") && !response.contains("]") && isBetween(response, "{", "}")){ //Single object
             response = "[" + response + "]";
         }

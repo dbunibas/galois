@@ -80,7 +80,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 List<Map<String, Object>> currentKeys = parseKeyResponse(response, table, primaryKey);
                 log.debug("Parsed keys are: {}", currentKeys);
                 if (currentKeys.isEmpty()) break; // avoid other requests
-                String cleanedResponse = toCleanJsonList(response);
+                String cleanedResponse = toCleanJsonList(response, true);
                 log.debug("Cleaned response is : {}", cleanedResponse);
                 currentKeys = parseKeyResponse(cleanedResponse, table, primaryKey);
                 if (!currentKeys.isEmpty()) {

@@ -35,9 +35,9 @@ public class ConfidenceEstimator {
             TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
             String response = model.generate(promptTable);            
             if (log.isDebugEnabled()) log.debug(response);
-            String cleanedResponse = toCleanJsonList(response);
+            String cleanedResponse = toCleanJsonList(response, true);
             if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedResponse);
-            List<Map<String, Object>> fromJsonToListOfMaps = Mapper.fromJsonToListOfMaps(cleanedResponse);
+            List<Map<String, Object>> fromJsonToListOfMaps = Mapper.fromJsonToListOfMaps(cleanedResponse, true);
             Map<Attribute, Double> confidenceForTable = new HashMap<>();
             for (Map<String, Object> json : fromJsonToListOfMaps) {
                 String attributeName = json.get("attribute").toString();
