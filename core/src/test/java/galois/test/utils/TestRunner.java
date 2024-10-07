@@ -10,6 +10,7 @@ import galois.llm.query.utils.QueryUtils;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
 import galois.optimizer.NullOptimizer;
+import galois.optimizer.QueryPlan;
 import galois.optimizer.estimators.ConfidenceEstimator;
 import galois.parser.ParserException;
 import galois.parser.ParserFrom;
@@ -252,6 +253,52 @@ public class TestRunner {
         }
     }
     
+    public QueryPlan planEstimation(String path, ExpVariant variant) {
+        try {
+            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            log.debug("SQL query is {}", experiment.getQuery().getSql());
+            IDatabase database = experiment.getQuery().getDatabase();
+            ParserFrom parserFrom = new ParserFrom();
+            parserFrom.parseFrom(experiment.getQuery().getSql());
+            List<String> tables = parserFrom.getTables();
+//            String query = experiment.getQuery().getSql();
+//            int indexOfFrom = query.indexOf("FROM", 0);
+//            String queryFrom = query.substring(indexOfFrom).trim();
+//            query = "SELECT * " + queryFrom;
+//            query = query.replace("target.", "");
+            String query = experiment.getQuery().getSql();
+            query = query.replace("target.", "");
+            ConfidenceEstimator estimator = new ConfidenceEstimator();
+            Map<String, String> estimation = estimator.getEstimationForQuery2(database, tables, query);
+            ParserWhere parserWhere = new ParserWhere();
+            parserWhere.parseWhere(experiment.getQuery().getSql());
+            List<Expression> expressions = parserWhere.getExpressions();
+            List<Expression> expressionPushDown = new ArrayList<>();
+            int indexPushDown = 0;
+            List<Integer> indexes = new ArrayList<>();
+            for (Expression expression : expressions) {
+                for (String attr : estimation.keySet()) {
+                    if (estimation.get(attr).contains("high") && expression.toString().contains(attr)) { // TOOO add more values
+                        expressionPushDown.add(expression);
+                        indexes.add(indexPushDown);
+                    }
+                }
+                indexPushDown++;
+            }
+            log.info("Pushdown: {}", expressionPushDown);
+            Double confidence = estimator.getEstimationConfidence(database, tables, query, expressionPushDown);
+            log.info("Confidence Keys: {}", confidence);
+            QueryPlan plan = new QueryPlan(expressionPushDown, confidence, expressions.size(), indexes);
+            return plan;
+        } catch (Exception ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+            return null;
+        }
+    }
+    
     public void executeCardinalityEstimatorQuery(String path, ExpVariant variant) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -306,7 +353,7 @@ public class TestRunner {
         prompt += "Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.\n"
                 + "Respond with JSON only with a numerical property with name \"popularity\".";
         log.debug("Prompt Populatity: {}", prompt);
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_1_70B);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);
@@ -481,7 +528,7 @@ public class TestRunner {
     }
 
     private Integer getCardinality(String prompt) {
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_1_70B);
         String response = model.generate(prompt);
         log.debug("Cardinality prompt: " + prompt);
         log.debug("Cardinality response: " + response);
@@ -497,7 +544,7 @@ public class TestRunner {
     }
 
     private Integer getOptimizerNumber(String prompt, int maxIndex) {
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_1_70B);
         String response = model.generate(prompt);
         log.debug("LLMOptimization prompt: " + prompt);
         log.debug("LLMOptimization response: " + response);

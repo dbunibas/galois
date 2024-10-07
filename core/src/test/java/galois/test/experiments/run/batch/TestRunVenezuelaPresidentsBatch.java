@@ -8,6 +8,7 @@ import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.QueryUtils;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.optimizer.QueryPlan;
 import galois.parser.ParserWhere;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.ExperimentResults;
@@ -184,6 +185,47 @@ public class TestRunVenezuelaPresidentsBatch {
             String configPath = "/presidents/presidents-llama3-table-experiment.json";
             testRunner.executeCardinalityEstimatorQuery(configPath, variant);
 //            break;
+        }
+    }
+    
+    @Test
+    public void testPlanSelection() {
+        double threshold = 0.9;
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        for (ExpVariant variant : variants) {
+//            testRunner.execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String configPathTable = "/presidents/presidents-llama3-table-experiment.json";
+            String configPathKey = "/presidents/presidents-llama3-key-scan-experiment.json";
+            QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
+            log.info("Plan Estimated: {}", planEstimation);
+            String pushDownStrategy = planEstimation.computePushdown();
+            Double confidenceKeys = planEstimation.getConfidenceKeys();
+            Integer indexPushDown = planEstimation.getIndexPushDown();
+            IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra false
+            IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+            IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
+            IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexPushDown, false);
+            IOptimizer optimizer = null;
+            if (pushDownStrategy.equals(QueryPlan.PUSHDOWN_ALL_CONDITION)) {
+//                optimizer = allConditionPushdown;
+                optimizer = allConditionPushdownWithFilter;
+            }
+            if (pushDownStrategy.startsWith(QueryPlan.PUSHDOWN_SINGLE_CONDITION)) {
+//                optimizer = singleConditionPushDown;
+                optimizer = singleConditionPushDownRemoveAlgebraTree;
+            }
+            if (confidenceKeys != null && confidenceKeys > threshold) {
+                // Execute KEY-SCAN
+                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, singleConditionPushDownRemoveAlgebraTree);
+            } else {
+                // Execute TABLE
+                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, singleConditionPushDownRemoveAlgebraTree);
+            }
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+            break;
         }
     }
 

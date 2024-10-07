@@ -63,6 +63,10 @@ public class ParserProvenance {
         return tablesProvenance;
     }
 
+    public Set<String> getAttributesInSelect() {
+        return attributesInSelect;
+    }
+    
     private boolean isColumn(Expression expression) {
         return expression instanceof Column;
     }
@@ -76,11 +80,15 @@ public class ParserProvenance {
     
     private boolean checkAttributeName(String attributeName) {
         if (this.database == null) return false;
-        for (String tableName : tablesProvenance) {
-            ITable table = this.database.getTable(tableName);
-            if (table.getAttribute(attributeName) != null) {
-                return true;
+        try {
+            for (String tableName : tablesProvenance) {
+                ITable table = this.database.getTable(tableName);
+                if (table.getAttribute(attributeName) != null) {
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }
@@ -200,7 +208,9 @@ public class ParserProvenance {
                         String orderName = orderByElement.toString();
                         String[] split = orderName.split(" ");
                         String attrOrderByName = cleanAttribute(split[0]);
+                        logger.debug("Order by to Check: {}", attrOrderByName);
                         if (database != null && checkAttributeName(attrOrderByName)) {
+                            logger.debug("Order by add: {}", attrOrderByName);
                             attributeProvenance.add(attrOrderByName);
                         } 
                     }

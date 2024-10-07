@@ -1,7 +1,5 @@
 package galois.llm.models.togetherai;
 
-import galois.Constants;
-
 public class TogetherAIConstants {
     //    public static final String MODEL_LLAMA3_8B = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo";
     public static final String MODEL_LLAMA3_8B = "meta-llama/Llama-3-8b-chat-hf";
