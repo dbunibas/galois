@@ -70,12 +70,12 @@ public final class Experiment {
         log.info("Query operator {}", operator);
         DBMSDB dbmsDatabase = createDatabaseForExpected();
         String queryToExecute = query.getSql().replace("target.", "public.");
-        log.debug("Query for results: \n" + queryToExecute);
+        log.debug("Query for results:\n{}", queryToExecute);
         ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
         ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
         List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
         expectedITerator.close();
-        log.info("Expected size: " + expectedResults.size());
+        log.info("Expected size: {}", expectedResults.size());
 //        log.info("Expected");
 //        log.info("Query: " + query.getSql());
 //        for (Tuple expectedResult : expectedResults) {
@@ -183,6 +183,9 @@ public final class Experiment {
         IDatabase database = query.getDatabase();
         List<String> tableNames = database.getTableNames();
         URL resource = Experiment.class.getResource(query.getResultPath());
+        if(resource == null){
+            throw new RuntimeException("Unable to load expected " + query.getResultPath());
+        }
         File[] files = new File(resource.getPath()).listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -210,6 +213,9 @@ public final class Experiment {
             if (table.getSize() == 0) {
                 // import table
                 File file = tableCSVFiles.get(tableName);
+                if(file == null){
+                    throw new IllegalArgumentException("Unknown csv for table " + tableName + " - Existing files: " + tableCSVFiles);
+                }
                 log.debug("Search for table: " + table + " found file: " + file);
                 File speedyFile = new File(resource.getPath() + File.separator + file.getName().replace(".csv", "") + "_speedy.csv");
                 String textDelim = null;

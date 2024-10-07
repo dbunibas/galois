@@ -1,5 +1,6 @@
 package galois.llm.query;
 
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.prompt.EPrompts;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.IDatabase;
@@ -31,6 +32,8 @@ public interface IQueryExecutor {
     default boolean ignoreTree() {
         return false;
     }
+
+    ContentRetriever getContentRetriever();
 
     IQueryExecutorBuilder getBuilder();
 

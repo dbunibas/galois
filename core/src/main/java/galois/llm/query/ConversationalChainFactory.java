@@ -1,28 +1,33 @@
 package galois.llm.query;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModelName;
 import galois.llm.models.TogetherAIModel;
 
 import java.time.Duration;
 
+import static galois.Constants.OLLAMA_MODEL;
+
 public class ConversationalChainFactory {
 
-    public static ConversationalChain buildOllamaLlama3ConversationalChain() {
-        return buildOllamaConversationalChain("llama3");
+    public static Chain<String, String> buildOllamaLlama3ConversationalChain() {
+        return buildOllamaConversationalChain(OLLAMA_MODEL);
     }
 
-    public static ConversationalChain buildOllamaMistralConversationalChain() {
+    public static Chain<String, String> buildOllamaMistralConversationalChain() {
         return buildOllamaConversationalChain("mistral");
     }
 
-    public static ConversationalChain buildOllamaPhi3ConversationalChain() {
+    public static Chain<String, String> buildOllamaPhi3ConversationalChain() {
         return buildOllamaConversationalChain("phi3");
     }
-    
+
     public static ChatLanguageModel buildOllamaLlama3ChatLanguageModel() {
-        return buildOllamaChatLangageModel("llama3");
+        return buildOllamaChatLangageModel(OLLAMA_MODEL);
     }
 
     public static ChatLanguageModel buildOllamaMistralChatLanguageModel() {
@@ -37,11 +42,23 @@ public class ConversationalChainFactory {
         TogetherAIModel model = new TogetherAIModel(apiKey, modelName);
         return ConversationalChain.builder().chatLanguageModel(model).build();
     }
-    
+
     public static ChatLanguageModel buildTogetherAiChatLanguageModel(String apiKey, String modelName) {
         return new TogetherAIModel(apiKey, modelName);
     }
-    
+
+    public static ConversationalChain buildOpenAIConversationalChain(String apiKey, OpenAiChatModelName modelName) {
+        ChatLanguageModel model = buildOpenAIChatLanguageModel(apiKey, modelName);
+        return ConversationalChain.builder().chatLanguageModel(model).build();
+    }
+
+    public static ChatLanguageModel buildOpenAIChatLanguageModel(String apiKey, OpenAiChatModelName modelName) {
+        return OpenAiChatModel.builder()
+                .apiKey(apiKey)
+                .modelName(modelName)
+                .build();
+    }
+
     private static ChatLanguageModel buildOllamaChatLangageModel(String modelName) {
         OllamaChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")
@@ -52,10 +69,10 @@ public class ConversationalChainFactory {
         return chatModel;
     }
 
-    private static ConversationalChain buildOllamaConversationalChain(String modelName) {
+    private static Chain<String, String> buildOllamaConversationalChain(String modelName) {
         ChatLanguageModel chatModel = buildOllamaChatLangageModel(modelName);
         return ConversationalChain.builder().chatLanguageModel(chatModel).build();
     }
-    
-    
+
+
 }

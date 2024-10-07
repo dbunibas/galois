@@ -1,6 +1,8 @@
 package galois.llm.query.ollama.phi3;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.AbstractEntityQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
@@ -41,12 +43,17 @@ public class OllamaPhi3SQLQueryExecutor extends AbstractEntityQueryExecutor {
     }
 
     @Override
+    public ContentRetriever getContentRetriever() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
+    }
+
+    @Override
     public boolean ignoreTree() {
         return true;
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
+    protected Chain<String, String> getConversationalChain() {
         return buildOllamaPhi3ConversationalChain();
     }
 

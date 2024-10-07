@@ -77,10 +77,13 @@ public class Mapper {
     }
 
     public static String toCleanJsonList(String response) {
+        if(!response.contains("[") && !response.contains("]") && isBetween(response, "{", "}")){ //Single object
+            response = "[" + response + "]";
+        }
         String cleanContent = getContentBetween(response, "[", "]");
         if (isBetween(cleanContent, "[", "]")) return cleanContent;
         String substring = "";
-        if (cleanContent.contains("}")) {
+        if (cleanContent.contains("}") && cleanContent.contains("[")) {
             substring = cleanContent.substring(cleanContent.indexOf("["), cleanContent.lastIndexOf("}") + 1);
         } else {
             Pattern pattern = Pattern.compile("\"(.*?)\"");

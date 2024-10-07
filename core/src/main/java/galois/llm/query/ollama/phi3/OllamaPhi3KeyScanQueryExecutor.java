@@ -1,7 +1,9 @@
 package galois.llm.query.ollama.phi3;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import static galois.llm.query.ConversationalChainFactory.buildOllamaPhi3ChatLanguageModel;
@@ -57,7 +59,7 @@ public class OllamaPhi3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecuto
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
+    protected Chain<String, String> getConversationalChain() {
         return buildOllamaPhi3ConversationalChain();
     }
 
@@ -67,9 +69,14 @@ public class OllamaPhi3KeyScanQueryExecutor extends AbstractKeyBasedQueryExecuto
     }
 
     @Override
-    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
+    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, Chain<String, String> chain) {
         Map<String, Object> attributesMap = getAttributesValues(table, attributes, key, chain);
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
+    }
+
+    @Override
+    public ContentRetriever getContentRetriever() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 
     public static OllamaPhi3KeyScanQueryExecutorBuilder builder() {

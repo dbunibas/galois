@@ -1,8 +1,9 @@
 package galois.llm.query.togetherai.llama3;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.Constants;
-import galois.llm.models.TogetherAIModel;
 import galois.llm.query.*;
 import galois.prompt.EPrompts;
 import lombok.Getter;
@@ -15,6 +16,8 @@ import java.util.List;
 
 import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
 import galois.llm.query.utils.QueryUtils;
+
+import static galois.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
 import static galois.llm.query.utils.QueryUtils.generateJsonSchemaListFromAttributes;
 import static galois.llm.query.utils.QueryUtils.getCleanAttributes;
 import static galois.utils.FunctionalUtils.orElse;
@@ -36,23 +39,26 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
     private final EPrompts iterativePrompt;
     private final int maxIterations;
     private String naturalLanguagePrompt;
+    private final ContentRetriever contentRetriever;
 
     public TogetheraiLlama3NLQueryExecutor(String naturalLanguagePrompt) {
         this.firstPrompt = EPrompts.NATURAL_LANGUAGE_JSON;
         this.iterativePrompt = EPrompts.LIST_DIFFERENT_VALUES_JSON;
         this.maxIterations = 10;
         this.naturalLanguagePrompt = naturalLanguagePrompt;
+        this.contentRetriever = null;
     }
 
     public TogetheraiLlama3NLQueryExecutor(
             EPrompts firstPrompt,
             EPrompts iterativePrompt,
             Integer maxIterations,
-            String naturalLanguagePrompt
+            String naturalLanguagePrompt, ContentRetriever contentRetriever
     ) {
         this.firstPrompt = orElse(firstPrompt, EPrompts.NATURAL_LANGUAGE_JSON);
         this.iterativePrompt = orElse(iterativePrompt, EPrompts.LIST_DIFFERENT_VALUES_JSON);
         this.maxIterations = maxIterations;
+        this.contentRetriever = contentRetriever;
         if (naturalLanguagePrompt == null || naturalLanguagePrompt.isBlank()) {
             throw new IllegalArgumentException("naturalLanguagePrompt cannot be null or blank!");
         }
@@ -66,7 +72,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
-        ConversationalChain chain = getConversationalChain();
+        Chain<String, String> chain = getConversationalChain();
         ITable table = database.getTable(tableAlias.getTableName());
         List<Attribute> attributesExecution = getCleanAttributes(table);
         if (this.attributes != null && !this.attributes.isEmpty()) {
@@ -126,8 +132,12 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
-        return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+    protected Chain<String, String> getConversationalChain() {
+        if(contentRetriever == null) {
+            return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+        }else {
+            return buildTogetherAIConversationalRetrivalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, contentRetriever);
+        }
     }
 
     @Override
@@ -159,7 +169,8 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
                     getFirstPrompt(),
                     getIterativePrompt(),
                     getMaxIterations(),
-                    naturalLanguagePrompt
+                    naturalLanguagePrompt,
+                    getContentRetriever()
             );
         }
     }

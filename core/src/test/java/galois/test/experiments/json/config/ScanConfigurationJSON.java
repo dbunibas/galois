@@ -12,4 +12,7 @@ public class ScanConfigurationJSON {
     private String naturalLanguagePrompt;
     private String sql;
     private String normalizationStrategy;
+    private ContentRetrieverConfigurationJSON contentRetriever;
+
 }
+

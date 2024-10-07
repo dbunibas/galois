@@ -7,8 +7,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import galois.llm.models.togetherai.*;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -23,11 +27,10 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.model.output.TokenUsage;
 import galois.Constants;
-import galois.llm.models.togetherai.Choice;
-import galois.llm.models.togetherai.Message;
-import galois.llm.models.togetherai.ResponseTogetherAI;
-import galois.llm.models.togetherai.Usage;
 import galois.utils.Mapper;
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,14 +39,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class TogetherAIModel implements IModel, ChatLanguageModel {
 
-    public static final String MODEL_LLAMA3_8B = "meta-llama/Llama-3-8b-chat-hf";
-    public static final String MODEL_LLAMA3_70B = "meta-llama/Llama-3-70b-chat-hf";
-    public static final String MODEL_LLAMA3_1_8B = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo";
-    public static final String MODEL_LLAMA3_1_70B = "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo";
-    public static final String USER = "user";
-    public static final String ASSISTANT = "assistant";
-
-    private String endPoint = "https://api.together.xyz/v1/chat/completions";
     private String toghetherAiAPI;
     private String modelName;
     private int maxTokens = 4096; // max returned tokens
@@ -53,10 +48,6 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private ObjectMapper objectMapper = new ObjectMapper();
     private int inputTokens = 0;
     private int outputTokens = 0;
-    private int waitTime = Constants.WAIT_TIME_MS_TOGETHERAI; // time in ms
-    private int connectionTimeout = 5 * 60 * 1000;
-    private int numRetry = 0;
-    private int maxRetry = 10;
     private boolean checkJSON = true;
     private boolean checkJSONResponseContent = false;
     private Map<String, String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
@@ -81,7 +72,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
 
     public ResponseTogetherAI getResponse(String prompt) {
         Message newMessage = new Message();
-        newMessage.setRole(USER);
+        newMessage.setRole(TogetherAIConstants.USER);
         newMessage.setContent(prompt);
         String jsonRequest = getJsonForRequest();
         if (jsonRequest.isEmpty()) {
@@ -89,7 +80,6 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             return null;
         }
         String authorizationValue = "Bearer " + this.toghetherAiAPI;
-        this.numRetry = 0;
         log.trace("Reset retry to 0");
         String response = this.inMemoryCache.get(jsonRequest);
         if (response == null && !this.inMemoryCache.containsKey(jsonRequest)) {
@@ -148,13 +138,13 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         for (ChatMessage message : messages) {
             if (message.type().equals(ChatMessageType.USER)) {
                 Message mex = new Message();
-                mex.setRole(USER);
+                mex.setRole(TogetherAIConstants.USER);
                 mex.setContent(message.text());
                 log.trace("Add User Message: " + mex.getContent());
                 this.messages.add(mex);
             } else {
                 Message mex = new Message();
-                mex.setRole(ASSISTANT);
+                mex.setRole(TogetherAIConstants.ASSISTANT);
                 mex.setContent(Mapper.toCleanJsonList(message.text()));
                 //mex.setContent(message.text());
                 log.trace("Add Assistant message: " + mex.getContent());
@@ -181,61 +171,67 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     }
 
     private String makeRequest(String jsonRequest, String authorizationValue) {
-        if (this.numRetry >= this.maxRetry) {
-            log.trace("Return null because reached max retry: " + this.numRetry + " over attempts " + this.maxRetry);
-            return null;
+        int numRetry = 0;
+        while (numRetry < TogetherAIConstants.MAX_RETRY) {
+            HttpURLConnection connection = null;
+            try {
+                TimeUnit.MILLISECONDS.sleep(Constants.WAIT_TIME_MS_TOGETHERAI);
+                URL url = URI.create(TogetherAIConstants.BASE_ENDPOINT + "chat/completions").toURL();
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setConnectTimeout(TogetherAIConstants.CONNECTION_TIMEOUT);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setRequestProperty("Authorization", authorizationValue);
+                connection.setDoOutput(true);
+                String responseText = getString(jsonRequest, connection);
+                log.trace("Response: \n{}", responseText);
+                if (checkJSON && !Mapper.isJSON(responseText)) {
+                    log.trace("The response is not a JSON: \n{}. Retrying", responseText);
+                    numRetry++;
+                    continue;
+                }
+                return responseText;
+            } catch (Exception e) {
+                if (e instanceof IOException) {
+                    log.trace("Request attempt number {} failed with exception: {}", numRetry, e.getMessage(), e);
+                    numRetry++;
+                } else {
+                    log.error("Generic Exception with the request. Skipping retry", e);
+                    return null;
+                }
+            }finally{
+                if(connection != null){
+                    connection.disconnect();
+                }
+            }
         }
-        try {
-            TimeUnit.MILLISECONDS.sleep(waitTime);
-            URL url = URI.create(this.endPoint).toURL();
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(this.connectionTimeout);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Authorization", authorizationValue);
-            connection.setDoOutput(true);
-            OutputStream os = connection.getOutputStream();
+        log.error("Return null because reached max retry: {}", TogetherAIConstants.MAX_RETRY);
+        return null;
+    }
+
+    private static @NotNull String getString(String jsonRequest, HttpURLConnection connection) throws IOException {
+        OutputStream os = connection.getOutputStream();
 //            Gson gson = new GsonBuilder().setPrettyPrinting().create();
 //            JsonElement je = JsonParser.parseString​(jsonRequest);
 //            String prettyJsonString = gson.toJson(je);
 //            log.trace("Request: \n" + prettyJsonString);
 //            log.trace("Is JSON valid: " + isValid(jsonRequest));
-            byte[] input = jsonRequest.getBytes("utf-8");
-            os.write(input, 0, input.length);
-            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            String responseText = response.toString().trim();
-            log.trace("Response: \n" + responseText);
-            if (checkJSON && !Mapper.isJSON(responseText)) {
-                log.trace("Return null because the response is not a JSON: \n" + responseText);
-                return null;
-            }
-            connection.disconnect();
-            return responseText;
-        } catch (Exception e) {
-            if (e instanceof IOException) {
-                try {
-                    if (isValid(jsonRequest) && this.numRetry > 1) return null;
-                    log.trace("Retry the request IOE: " + this.numRetry);
-                    log.trace("Exception: " + e);
-                    TimeUnit.MILLISECONDS.sleep(waitTime);
-                    this.numRetry++;
-                    return makeRequest(jsonRequest, authorizationValue);
-                } catch (InterruptedException ie) {
-                    log.trace("Retry the request in catch");
-                    this.numRetry++;
-                }
-            } else {
-                log.error("Exception with the request: " + e);
-                return null;
-            }
+        byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
+        os.write(input, 0, input.length);
+        os.flush();
+        connection.connect();
+        if(connection.getResponseCode() != 200){
+            log.error("Error response: {}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())));
         }
-        return "";
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+        StringBuilder response = new StringBuilder();
+        String responseLine = null;
+        while ((responseLine = br.readLine()) != null) {
+            response.append(responseLine.trim());
+        }
+        String responseText = response.toString().trim();
+        return responseText;
     }
 
     private String getJsonForRequest() {
@@ -276,5 +272,4 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         }
         return true;
     }
-
 }

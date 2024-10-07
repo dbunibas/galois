@@ -10,6 +10,7 @@ import speedy.model.expressions.Expression;
 
 import java.util.Map;
 
+import static galois.Constants.OLLAMA_MODEL;
 import static galois.utils.Mapper.fromJsonToMap;
 
 @Slf4j
@@ -21,7 +22,7 @@ public class LLMCardinalityEstimator implements IEstimator {
     private final EEstimatorPrompt conditionalEstimatorPrompt = EEstimatorPrompt.JSON_CONDITIONAL_CARDINALITY_ESTIMATOR;
     // TODO: Models should not be configurable from the builder (even in the query executors)!
     @Builder.Default
-    private final IModel model = new OllamaModel("llama3");
+    private final IModel model = new OllamaModel(OLLAMA_MODEL);
 
     @Override
     public double estimate(ITable table) {

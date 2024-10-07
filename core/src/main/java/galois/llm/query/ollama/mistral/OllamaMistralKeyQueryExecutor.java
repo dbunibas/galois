@@ -1,7 +1,9 @@
 package galois.llm.query.ollama.mistral;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
@@ -57,7 +59,7 @@ public class OllamaMistralKeyQueryExecutor extends AbstractKeyBasedQueryExecutor
     }
 
     @Override
-    protected ConversationalChain getConversationalChain() {
+    protected Chain<String, String> getConversationalChain() {
         return buildOllamaMistralConversationalChain();
     }
 
@@ -67,7 +69,7 @@ public class OllamaMistralKeyQueryExecutor extends AbstractKeyBasedQueryExecutor
     }
 
     @Override
-    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, ConversationalChain chain) {
+    protected Tuple addValueFromAttributes(ITable table, TableAlias tableAlias, List<Attribute> attributes, Tuple tuple, String key, Chain<String, String> chain) {
         Map<String, Object> attributesMap = new HashMap<>();
         for (Attribute attribute : attributes) {
             List<Attribute> currentAttributesList = List.of(attribute);
@@ -75,6 +77,11 @@ public class OllamaMistralKeyQueryExecutor extends AbstractKeyBasedQueryExecutor
             attributesMap.putAll(map);
         }
         return mapToTuple(tuple, attributesMap, tableAlias, attributes);
+    }
+
+    @Override
+    public ContentRetriever getContentRetriever() {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 
     public static OllamaMistralKeyQueryExecutorBuilder builder() {

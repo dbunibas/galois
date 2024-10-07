@@ -68,6 +68,7 @@ public class SingleConditionPushdown implements IOptimization {
                 .iterativePrompt(optimizePrompt(executor.getIterativePrompt()))
                 .attributesPrompt(optimizePrompt(executor.getAttributesPrompt()))
                 .expression(pushdownExpression)
+                .contentRetriever(executor.getContentRetriever())
                 .build();
         return new LLMScan(scan.getTableAlias(), optimizedExecutor, scan.getAttributesSelect(), scan.getNormalizationStrategy());
     }

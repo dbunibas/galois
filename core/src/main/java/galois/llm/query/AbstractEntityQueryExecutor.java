@@ -1,5 +1,6 @@
 package galois.llm.query;
 
+import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import galois.llm.TokensEstimator;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
 
     protected List<AttributeRef> attributes = null;
 
-    abstract protected ConversationalChain getConversationalChain();
+    abstract protected Chain<String, String> getConversationalChain();
 
     @Override
     public void setAttributes(List<AttributeRef> attributes) {
@@ -27,7 +28,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
 
     @Override
     public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
-        ConversationalChain chain = getConversationalChain();
+        Chain<String, String> chain = getConversationalChain();
 
         ITable table = database.getTable(tableAlias.getTableName());
         log.trace("Table: {}", table);
@@ -99,7 +100,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         return tuples;
     }
 
-    protected String getResponse(ConversationalChain chain, String userMessage, boolean ignoreTokens) {
+    protected String getResponse(Chain<String, String> chain, String userMessage, boolean ignoreTokens) {
         String response = null;
         try {
             TokensEstimator estimator = new TokensEstimator();

@@ -2,6 +2,7 @@ package galois.test;
 
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
+import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.QueryUtils;
 import galois.parser.ParserWhere;
 import galois.test.experiments.Experiment;
@@ -378,7 +379,7 @@ public class TestPopularity {
                           Respond with JSON only with a numerical property with name "popularity".""";
                 System.out.println(variant.getQuerySql());
 //                System.out.println("Prompt: " + prompt);
-                TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+                TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B);
                 String response = model.generate(prompt);
 //                System.out.println("Response: " + response);
                 String cleanResponse = Mapper.toCleanJsonObject(response);
@@ -465,7 +466,7 @@ public class TestPopularity {
     }
 
     private Integer getCardinality(String prompt) {
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIModel.MODEL_LLAMA3_8B);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);
