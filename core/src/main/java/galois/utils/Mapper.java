@@ -21,7 +21,7 @@ public class Mapper {
     private static final TypeReference<List<String>> LIST_STRING_REF = new TypeReference<>() {
     };
 
-    private static final ObjectMapper mapper = new ObjectMapper()
+    public static final ObjectMapper MAPPER = new ObjectMapper()
             .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
             .configure(JsonParser.Feature.ALLOW_YAML_COMMENTS, true)
             .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
@@ -29,7 +29,7 @@ public class Mapper {
 
     public static String asString(Object value) {
         return orElseThrow(
-                () -> mapper.writeValueAsString(value),
+                () -> MAPPER.writeValueAsString(value),
                 MapperException::new
         );
     }
@@ -37,7 +37,7 @@ public class Mapper {
     public static Map<String, Object> fromJsonToMap(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(toCleanJsonObject(value), JSON_REF) :
+                        MAPPER.readValue(toCleanJsonObject(value), JSON_REF) :
                         null,
                 MapperException::new
         );
@@ -46,7 +46,7 @@ public class Mapper {
     public static List<Map<String, Object>> fromJsonToListOfMaps(String value, boolean removeDuplicates) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(toCleanJsonList(value, removeDuplicates), LIST_OF_JSON_REF) :
+                        MAPPER.readValue(toCleanJsonList(value, removeDuplicates), LIST_OF_JSON_REF) :
                         null,
                 MapperException::new
         );
@@ -55,7 +55,7 @@ public class Mapper {
     public static List<String> fromJsonListToListAndRemoveDuplicates(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(toCleanJsonList(value, true), LIST_STRING_REF) :
+                        MAPPER.readValue(toCleanJsonList(value, true), LIST_STRING_REF) :
                         null,
                 MapperException::new
         );
@@ -64,7 +64,7 @@ public class Mapper {
     public static List<String> fromJsonListToList(String value) {
         return orElseThrow(
                 () -> value != null ?
-                        mapper.readValue(toCleanJsonList(value, false), LIST_STRING_REF) :
+                        MAPPER.readValue(toCleanJsonList(value, false), LIST_STRING_REF) :
                         null,
                 MapperException::new
         );
@@ -134,7 +134,7 @@ public class Mapper {
     }
     private static String removeDuplicatesFromArrayOfStrings(String jsonList) {
         try{
-            List<String> listWithDuplicates = mapper.readValue(jsonList, new TypeReference<>() {});
+            List<String> listWithDuplicates = MAPPER.readValue(jsonList, new TypeReference<>() {});
             Set<String> addedObject = new HashSet<>();
             List<String> listWithoutDuplicates = new ArrayList<>();
             for (String obj : listWithDuplicates) {
@@ -142,7 +142,7 @@ public class Mapper {
                 addedObject.add(obj);
                 listWithoutDuplicates.add(obj);
             }
-            return mapper.writeValueAsString(listWithoutDuplicates);
+            return MAPPER.writeValueAsString(listWithoutDuplicates);
         }catch (Exception e){
             log.warn("Unable to remove duplicates from json list: {}", jsonList, e);
             return jsonList;
@@ -150,7 +150,7 @@ public class Mapper {
     }
     private static String removeDuplicatesFromArrayOfObjects(String jsonList) {
         try{
-            List<Map<String, Object>> listWithDuplicates = mapper.readValue(jsonList, new TypeReference<>() {});
+            List<Map<String, Object>> listWithDuplicates = MAPPER.readValue(jsonList, new TypeReference<>() {});
             Set<String> addedObject = new HashSet<>();
             List<Map<String, Object>> listWithoutDuplicates = new ArrayList<>();
             for (Map<String, Object> obj : listWithDuplicates) {
@@ -159,7 +159,7 @@ public class Mapper {
                 addedObject.add(objSign);
                 listWithoutDuplicates.add(obj);
             }
-            return mapper.writeValueAsString(listWithoutDuplicates);
+            return MAPPER.writeValueAsString(listWithoutDuplicates);
         }catch (Exception e){
             log.warn("Unable to remove duplicates from json list: {}", jsonList, e);
             return jsonList;

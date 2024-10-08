@@ -67,6 +67,10 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             try {
                 String response = getResponse(chain, userMessage, false);
                 log.debug("Response is: {}", response);
+                if(response == null){
+                    log.warn("Error during LLM request.");
+                    break;
+                }
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                 log.debug("Parsed response is: {}", parsedResponse);
                 if (parsedResponse.isEmpty()) {

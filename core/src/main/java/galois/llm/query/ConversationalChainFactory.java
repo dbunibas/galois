@@ -7,6 +7,7 @@ import dev.langchain4j.model.ollama.OllamaChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModelName;
 import galois.llm.models.TogetherAIModel;
+import galois.llm.models.togetherai.TogetherAIConstants;
 
 import java.time.Duration;
 
@@ -39,12 +40,12 @@ public class ConversationalChainFactory {
     }
 
     public static ConversationalChain buildTogetherAIConversationalChain(String apiKey, String modelName) {
-        TogetherAIModel model = new TogetherAIModel(apiKey, modelName);
+        TogetherAIModel model = new TogetherAIModel(apiKey, modelName, TogetherAIConstants.STREAM_MODE);
         return ConversationalChain.builder().chatLanguageModel(model).build();
     }
 
     public static ChatLanguageModel buildTogetherAiChatLanguageModel(String apiKey, String modelName) {
-        return new TogetherAIModel(apiKey, modelName);
+        return new TogetherAIModel(apiKey, modelName, TogetherAIConstants.STREAM_MODE);
     }
 
     public static ConversationalChain buildOpenAIConversationalChain(String apiKey, OpenAiChatModelName modelName) {

@@ -38,7 +38,7 @@ public class ConfidenceEstimator {
             String schema = getRelationalSchema(attributes,tableName);
             String promptTable = prompt.replace("${relationalSchema}", schema);
             if (log.isDebugEnabled()) log.debug(promptTable);
-            TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+            TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
             String response = model.generate(promptTable);            
             if (log.isDebugEnabled()) log.debug(response);
             String cleanedResponse = toCleanJsonList(response, true);
@@ -66,7 +66,7 @@ public class ConfidenceEstimator {
             String schema = getRelationalSchema(attributes,tableName);
             String promptTable = prompt.replace("${relationalSchema}", schema);
             if (log.isDebugEnabled()) log.debug(promptTable);
-            TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+            TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
             String response = model.generate(promptTable);            
             if (log.isDebugEnabled()) log.debug(response);
             String cleanedResponse = Mapper.toCleanJsonObject(response);
@@ -111,7 +111,7 @@ public class ConfidenceEstimator {
         String whereExpression = parserWhere.getWhereExpression().trim();
         promptTable = promptTable.replace("${conditions}", whereExpression);
         if (log.isDebugEnabled()) log.debug("Request:\n {}", promptTable);
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(promptTable);   
         if (log.isDebugEnabled()) log.debug("Response:\n {}", response);
     }
@@ -172,7 +172,7 @@ public class ConfidenceEstimator {
         String attrsString = "(" + as + ")";
         promptTable = promptTable.replace("${attrs}", attrsString);        
         if (log.isDebugEnabled()) log.debug("Prompt: \n {}", promptTable);
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response: \n {}", response);
         
@@ -251,7 +251,7 @@ public class ConfidenceEstimator {
         }
         promptTable = promptTable.replace("${conditions}", conditionExpression);
         if (log.isDebugEnabled()) log.debug("Request:\n {}", promptTable);
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response JSON:\n {}", response);
         String cleanedJson = Mapper.toCleanJsonObject(response);
@@ -304,7 +304,7 @@ public class ConfidenceEstimator {
         promptTable = promptTable.replace("${sqlQuery}", querySQL);
         promptTable = promptTable.replace("${conditions}", conditions);       
         if (log.isDebugEnabled()) log.debug(promptTable);
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(promptTable);   
         if (log.isDebugEnabled()) log.debug(response);
     }
@@ -328,7 +328,7 @@ public class ConfidenceEstimator {
             String promptTable = prompt.replace("${relationalSchema}", schema);
             promptTable = promptTable.replace("${query}", querySQL);
             if (log.isDebugEnabled()) log.debug(promptTable);
-            TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName);
+            TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
             String response = model.generate(promptTable);            
             if (log.isDebugEnabled()) log.debug(response);
         }

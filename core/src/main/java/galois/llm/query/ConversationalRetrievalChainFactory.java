@@ -7,6 +7,7 @@ import dev.langchain4j.model.ollama.OllamaChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModelName;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.models.TogetherAIModel;
+import galois.llm.models.togetherai.TogetherAIConstants;
 
 import java.time.Duration;
 
@@ -40,7 +41,7 @@ public class ConversationalRetrievalChainFactory {
     }
 
     public static Chain<String, String> buildTogetherAIConversationalRetrivalChain(String apiKey, String modelName, ContentRetriever contentRetriever) {
-        TogetherAIModel model = new TogetherAIModel(apiKey, modelName);
+        TogetherAIModel model = new TogetherAIModel(apiKey, modelName, TogetherAIConstants.STREAM_MODE);
         return ConversationalRetrievalChain.builder()
                 .chatLanguageModel(model)
                 .contentRetriever(contentRetriever)
@@ -56,7 +57,7 @@ public class ConversationalRetrievalChainFactory {
     }
 
     public static ChatLanguageModel buildTogetherAiChatLanguageModel(String apiKey, String modelName, ContentRetriever contentRetriever) {
-        return new TogetherAIModel(apiKey, modelName);
+        return new TogetherAIModel(apiKey, modelName, TogetherAIConstants.STREAM_MODE);
     }
 
     private static ChatLanguageModel buildOllamaChatLangageModel(String modelName) {

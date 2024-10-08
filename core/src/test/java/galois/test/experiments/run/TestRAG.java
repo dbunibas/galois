@@ -52,9 +52,12 @@ public class TestRAG {
 //private static final String NL_PROMPT = "List the Player of the Match for each Premier League match in the 2024-25 season";
 //    private static final String SQL = "select * from premier_league_2024_2025_player_of_the_match";
 
-    private static final String NL_PROMPT = "List the date (year, month, day, day of the week) and opponent for each of Arsenal's 2024-25 Premier League season matches";
-    private static final String SQL = "select * from premier_league_2024_2025_arsenal_matches";
 
+//    private static final String NL_PROMPT = "List the date (year, month, day, day of the week) and opponent for each of Arsenal's 2024-25 Premier League season matches";
+//    private static final String SQL = "select * from premier_league_2024_2025_arsenal_matches";
+
+    private static final String TEXT_TO_CHECK = "Match date:";
+    private static final String NL_PROMPT = "Given the following query, populate the table with actual values.\\nquery: select opponent_team and match_date_year and match_date_month and match_date_day from premier_league_2024_2025_arsenal_matches where match_date_month == 8.\\nRespond with JSON only. Don't add any comment.\\nUse the following JSON schema:\\n{\\\"title\\\":\\\"premier_league_2024_2025_arsenal_matches\\\",\\\"type\\\":\\\"array\\\",\\\"items\\\":{\\\"type\\\":\\\"object\\\",\\\"properties\\\":{\\\"opponent_team\\\":{\\\"title\\\":\\\"opponent_team\\\",\\\"type\\\":\\\"string\\\"},\\\"match_date_month\\\":{\\\"title\\\":\\\"match_date_month\\\",\\\"type\\\":\\\"integer\\\"},\\\"match_date_year\\\":{\\\"title\\\":\\\"match_date_year\\\",\\\"type\\\":\\\"integer\\\"},\\\"match_date_day\\\":{\\\"title\\\":\\\"match_date_day\\\",\\\"type\\\":\\\"integer\\\"}}}}\\n\\n";
 
     private IDatabase llmDB;
     private EmbeddingModel embeddingModel;
@@ -71,10 +74,10 @@ public class TestRAG {
                 .embeddingModelEngine(EEmbeddingModelEngine.T_AI)
 //                .embeddingModel("mxbai-embed-large") //OLLAMA
                 .embeddingModel("WhereIsAI/UAE-Large-V1") //T_AI
-//                .embeddingModel("togethercomputer/m2-bert-80M-32k-retrieval") //T_AI
+//                .embeddingModel("togethercomputer/m2-bert-80M-8k-retrieval") //T_AI
                 //Ingestor
-                .maxSegmentSizeInTokens(64)
-                .maxOverlapSizeInTokens(32)
+                .maxSegmentSizeInTokens(128)
+                .maxOverlapSizeInTokens(64)
                 .build();
         log.info("Experiment {}-{}", EXP_NAME, config.toString());
         configureDB();
@@ -83,8 +86,8 @@ public class TestRAG {
         embeddingStoreIngestor = buildEmbeddingStoreIngestor();
         contentRetriever = buildContentRetriver();
         //
-//        embeddingStore.removeAll();
-//        loadDocuments();
+        embeddingStore.removeAll();
+        loadDocuments();
     }
 
     @Test
@@ -109,13 +112,15 @@ public class TestRAG {
         //Used to choose the best configuration
         // testEmbeddingStore vs testContentRetriever should give the same score
         List<Content> retrieved = contentRetriever.retrieve(Query.from(NL_PROMPT));
+//        List<Content> retrieved = contentRetriever.retrieve(Query.from(TEXT_TO_CHECK));
         log.info("Relevant documents {}", retrieved.size());
         Set<String> documents = new HashSet<>();
         int retrived = 0;
         for (int i = 0; i < retrieved.size(); i++) {
             Content content = retrieved.get(i);
             log.info("Result {}:\n\tText: {}", i, content.textSegment().text());
-            if(content.textSegment().text().toUpperCase().contains(NL_PROMPT.toUpperCase())) retrived++;
+            if(content.textSegment().text().toUpperCase().contains(TEXT_TO_CHECK.toUpperCase())) retrived++;
+//            if(content.textSegment().text().toUpperCase().contains(NL_PROMPT.toUpperCase())) retrived++;
             documents.add(content.textSegment().metadata().getString("file_name"));
         }
         log.info("Configuration: {}\nDocuments with prompt: {}\nDifferent documents: {}", config,retrived,documents.size());
@@ -179,7 +184,8 @@ public class TestRAG {
         EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore
                 .builder()
                 .baseUrl("http://localhost:8000")
-                .collectionName(EXP_NAME + "-" + config.toString().hashCode())
+                .collectionName("rag_premierleague_128_64_m2-bert-80M-8k")
+//                .collectionName(EXP_NAME + "-" + config.toString().hashCode())
                 .logRequests(true)
                 .logResponses(true)
                 .build();

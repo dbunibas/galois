@@ -1,23 +1,7 @@
 package galois.llm.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
-import galois.llm.models.togetherai.*;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import dev.langchain4j.data.message.AiMessage;
@@ -27,12 +11,24 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.model.output.TokenUsage;
 import galois.Constants;
+import galois.llm.models.togetherai.*;
+import galois.llm.query.LLMQueryStatManager;
 import galois.utils.Mapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -41,20 +37,26 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
 
     private String toghetherAiAPI;
     private String modelName;
+    private boolean streamMode;
     private int maxTokens = 4096; // max returned tokens
     private double temperature = 0.0; // 0.0 deterministic
     private double topP = 0.0; // 0.0 deterministic
     private List<Message> messages = new ArrayList<>();
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = Mapper.MAPPER;
     private int inputTokens = 0;
     private int outputTokens = 0;
     private boolean checkJSON = true;
     private boolean checkJSONResponseContent = false;
     private Map<String, String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
 
-    public TogetherAIModel(String toghetherAiAPI, String modelName) {
+//    public TogetherAIModel(String toghetherAiAPI, String modelName) {
+//        this(toghetherAiAPI, modelName, false);
+//    }
+
+    public TogetherAIModel(String toghetherAiAPI, String modelName, boolean streamMode) {
         this.toghetherAiAPI = toghetherAiAPI;
         this.modelName = modelName;
+        this.streamMode = streamMode;
     }
 
     @Override
@@ -81,6 +83,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         }
         String authorizationValue = "Bearer " + this.toghetherAiAPI;
         log.trace("Reset retry to 0");
+        long start = System.currentTimeMillis();
         String response = this.inMemoryCache.get(jsonRequest);
         if (response == null && !this.inMemoryCache.containsKey(jsonRequest)) {
             response = this.makeRequest(jsonRequest, authorizationValue);
@@ -106,6 +109,10 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                     }
                 }
                 Usage usage = responseAPI.getUsage();
+                LLMQueryStatManager.getInstance().updateBaseLLMRequest(1);
+                LLMQueryStatManager.getInstance().updateBaseLLMTokensInput(usage.getPromptTokens());
+                LLMQueryStatManager.getInstance().updateBaseLLMTokensOutput(usage.getCompletionTokens());
+                LLMQueryStatManager.getInstance().updateBaseTimeMs((System.currentTimeMillis() - start));
                 this.inputTokens += usage.getPromptTokens();
                 this.outputTokens += usage.getCompletionTokens();
                 log.trace("Add Assistant Message in getResponse: {}", newMessage);
@@ -114,8 +121,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             }
             return responseAPI;
         } catch (Exception e) {
-            log.error("Exception with parsing response: " + response);
-            log.error("Exception: " + e);
+            log.error("Exception with parsing response: " + response, e);
         }
         log.trace("Return null because there was an exception.");
         return null;
@@ -175,7 +181,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         while (numRetry < TogetherAIConstants.MAX_RETRY) {
             HttpURLConnection connection = null;
             try {
-                TimeUnit.MILLISECONDS.sleep(Constants.WAIT_TIME_MS_TOGETHERAI);
+                TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI * (numRetry + 1));
                 URL url = URI.create(TogetherAIConstants.BASE_ENDPOINT + "chat/completions").toURL();
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setConnectTimeout(TogetherAIConstants.CONNECTION_TIMEOUT);
@@ -184,8 +190,12 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 connection.setRequestProperty("Accept", "application/json");
                 connection.setRequestProperty("Authorization", authorizationValue);
                 connection.setDoOutput(true);
-                String responseText = getString(jsonRequest, connection);
-                log.trace("Response: \n{}", responseText);
+                String responseText;
+                if(streamMode) {
+                    responseText = getStringStreamMode(jsonRequest, connection);
+                }else{
+                    responseText = getStringStandardMode(jsonRequest, connection);
+                }
                 if (checkJSON && !Mapper.isJSON(responseText)) {
                     log.trace("The response is not a JSON: \n{}. Retrying", responseText);
                     numRetry++;
@@ -200,8 +210,8 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                     log.error("Generic Exception with the request. Skipping retry", e);
                     return null;
                 }
-            }finally{
-                if(connection != null){
+            } finally {
+                if (connection != null) {
                     connection.disconnect();
                 }
             }
@@ -210,18 +220,49 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         return null;
     }
 
-    private static @NotNull String getString(String jsonRequest, HttpURLConnection connection) throws IOException {
+    private @NotNull String getStringStreamMode(String jsonRequest, HttpURLConnection connection) throws IOException {
+        log.trace("# API Request [{}] - {}\nBody: {}", connection.getRequestMethod(), connection.getURL(), jsonRequest);
         OutputStream os = connection.getOutputStream();
-//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//            JsonElement je = JsonParser.parseString​(jsonRequest);
-//            String prettyJsonString = gson.toJson(je);
-//            log.trace("Request: \n" + prettyJsonString);
-//            log.trace("Is JSON valid: " + isValid(jsonRequest));
         byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
         os.write(input, 0, input.length);
         os.flush();
         connection.connect();
-        if(connection.getResponseCode() != 200){
+        if (connection.getResponseCode() != 200) {
+            log.error("Error response: {}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())));
+            throw new IOException("Error response " + connection.getErrorStream());
+        }
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+        ResponseTogetherAI finalResponse = new ResponseTogetherAI();
+        Choice choice = new Choice();
+        Message message = new Message();
+        message.setContent("");
+        choice.setMessage(message);
+        finalResponse.setChoices(new ArrayList<>());
+        finalResponse.getChoices().add(0, choice);
+        String responseLine;
+        while ((responseLine = br.readLine()) != null) {
+            if (!responseLine.startsWith("data: ")) continue;
+            String dataChunk = responseLine.substring("data: ".length());
+            if (dataChunk.equals("[DONE]")) {
+                break;
+            }
+            StreamResponse streamResponse = objectMapper.readValue(dataChunk, StreamResponse.class);
+            finalResponse.setUsage(streamResponse.getUsage());
+            message.setContent(message.getContent() + streamResponse.choices.get(0).delta.content);
+        }
+        String responseText = objectMapper.writeValueAsString(finalResponse);
+        log.trace("# API Response {}: \n{}", connection.getResponseCode(), responseText);
+        return responseText;
+    }
+
+    private @NotNull String getStringStandardMode(String jsonRequest, HttpURLConnection connection) throws IOException {
+        log.trace("# API Request [{}] - {}\nBody: {}", connection.getRequestMethod(), connection.getURL(), jsonRequest);
+        OutputStream os = connection.getOutputStream();
+        byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
+        os.write(input, 0, input.length);
+        os.flush();
+        connection.connect();
+        if (connection.getResponseCode() != 200) {
             log.error("Error response: {}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())));
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
@@ -231,6 +272,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             response.append(responseLine.trim());
         }
         String responseText = response.toString().trim();
+        log.trace("# API Response {}: \n{}", connection.getResponseCode(), responseText);
         return responseText;
     }
 
@@ -245,6 +287,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + "    \"stop\": [\n"
                 + "        \"<|eot_id|>\"\n"
                 + "    ],\n"
+                + (streamMode ? "\"stream_tokens\": true,\n" : "")
 //                + "    \"stream\": true,\n"
                 + "    \"messages\": {$MESSAGES$}\n"
                 + "}";
@@ -254,13 +297,14 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         jsonReturn = jsonReturn.replace("{$TOP_P$}", this.topP + "");
         try {
             String jsonMessages = objectMapper.writeValueAsString(this.messages);
-            log.trace("Json Messages: " + jsonMessages);
+//            log.trace("Json Messages: " + jsonMessages);
             jsonReturn = jsonReturn.replace("{$MESSAGES$}", jsonMessages);
-            log.trace("JsonReturn: \n " + jsonReturn);
+//            log.trace("JsonReturn: \n " + jsonReturn);
             return jsonReturn.trim();
         } catch (JsonProcessingException jpe) {
             log.error("Error generating the json: " + jpe);
         }
+        String s = "{  \"$id\": \"https://example.com/person.schema.json\",  \"$schema\": \"https://json-schema.org/draft/2020-12/schema\",  \"title\": \"Person\",  \"type\": \"object\",  \"properties\": {    \"firstName\": {      \"type\": \"string\",      \"description\": \"The person's first name.\"    },    \"lastName\": {      \"type\": \"string\",      \"description\": \"The person's last name.\"    },    \"age\": {      \"description\": \"Age in years which must be equal to or greater than zero.\",      \"type\": \"integer\",      \"minimum\": 0    }  }}";
         return null;
     }
 

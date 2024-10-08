@@ -33,10 +33,10 @@ public class ExperimentResults {
     private final String optimizerName;
     private boolean exportActualResults = true;
     private boolean exportResults = true;
-    private int llmRequest = LLMQueryStatManager.getInstance().getLLMRequest();
-    private double llmTokensInput = LLMQueryStatManager.getInstance().getLLMTokensInput();
-    private double llmTokensOutput = LLMQueryStatManager.getInstance().getLLMTokensOutput();
-    private long timeMs = LLMQueryStatManager.getInstance().getTimeMs();
+    private int llmRequest = LLMQueryStatManager.getInstance().getBaseLLMRequest() > 0 ? LLMQueryStatManager.getInstance().getBaseLLMRequest() : LLMQueryStatManager.getInstance().getLLMRequest();
+    private double llmTokensInput = LLMQueryStatManager.getInstance().getBaseLLMTokensInput() > 0 ?  LLMQueryStatManager.getInstance().getBaseLLMTokensInput():  LLMQueryStatManager.getInstance().getLLMTokensInput();
+    private double llmTokensOutput = LLMQueryStatManager.getInstance().getBaseLLMTokensOutput() > 0 ? LLMQueryStatManager.getInstance().getBaseLLMTokensOutput() : LLMQueryStatManager.getInstance().getLLMTokensOutput();
+    private long timeMs = LLMQueryStatManager.getInstance().getBasetimeMs() > 0 ? LLMQueryStatManager.getInstance().getBasetimeMs() : LLMQueryStatManager.getInstance().getTimeMs();
 
     @Override
     public String toString() {
