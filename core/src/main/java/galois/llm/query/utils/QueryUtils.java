@@ -85,7 +85,7 @@ public class QueryUtils {
     }
 
     private static IValue safelyParseCellValue(Map<String, Object> map, Attribute attribute) {
-        if (map.get(attribute.getName()) == null || map.get(attribute.getName()).toString().equalsIgnoreCase("null")) {
+        if (map == null || map.get(attribute.getName()) == null || map.get(attribute.getName()).toString().equalsIgnoreCase("null")) {
             return new NullValue(SpeedyConstants.NULL_VALUE);
         }
 
