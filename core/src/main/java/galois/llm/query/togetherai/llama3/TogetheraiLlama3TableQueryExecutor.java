@@ -56,6 +56,11 @@ public class TogetheraiLlama3TableQueryExecutor extends AbstractEntityQueryExecu
         }
     }
 
+    @Override
+    public boolean ensureKeyInAttributes() {
+        return true;
+    }
+
     public static TogetheraiLlama3TableQueryExecutorBuilder builder() {
         return new TogetheraiLlama3TableQueryExecutorBuilder();
     }

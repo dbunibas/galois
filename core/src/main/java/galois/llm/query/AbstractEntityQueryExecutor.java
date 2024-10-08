@@ -1,19 +1,16 @@
 package galois.llm.query;
 
 import dev.langchain4j.chain.Chain;
-import dev.langchain4j.chain.ConversationalChain;
 import galois.llm.TokensEstimator;
-import lombok.extern.slf4j.Slf4j;
-import speedy.model.database.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static galois.llm.query.utils.QueryUtils.*;
-
 import galois.prompt.EPrompts;
 import galois.utils.GaloisDebug;
+import lombok.extern.slf4j.Slf4j;
+import speedy.model.database.*;
 import speedy.model.expressions.Expression;
+
+import java.util.*;
+
+import static galois.llm.query.utils.QueryUtils.*;
 
 @Slf4j
 public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
@@ -49,7 +46,15 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
 
                 attributesExecution.add(table.getAttribute(attribute.getName()));
             }
+
+            if (ensureKeyInAttributes()) {
+                Key primaryKey = database.getPrimaryKey(table.getName());
+                for (AttributeRef attribute : primaryKey.getAttributes()) {
+                    attributesExecution.add(table.getAttribute(attribute.getName()));
+                }
+            }
         }
+
         List<Attribute> attributesExecutionList = attributesExecution == null ?
                 getCleanAttributes(table) :
                 new ArrayList<>(attributesExecution);
@@ -81,15 +86,15 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 int initialTuples = tuples.size();
                 for (Map<String, Object> map : parsedResponse) {
                     Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
-                    if(tuple != null && !isAlreadyContained(tuple, tuples)){
+                    if (tuple != null && !isAlreadyContained(tuple, tuples)) {
                         tuples.add(tuple);
                         log.trace("Adding new tuple {}", tuple);
-                    }else{
+                    } else {
                         log.trace("Skipping duplicated tuple {}", tuple);
                     }
                 }
                 log.info("Tuples after {} iterations: {}", i, tuples.size());
-                if(tuples.size() == initialTuples){
+                if (tuples.size() == initialTuples) {
                     log.info("Iteration {} did not add any new tuples. Avoid proceeding with further iterations", i);
                     return tuples;
                 }
@@ -102,7 +107,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     log.debug("Parsed response is: {}", parsedResponse);
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
-                        if(tuple != null && !isAlreadyContained(tuple, tuples)){
+                        if (tuple != null && !isAlreadyContained(tuple, tuples)) {
                             tuples.add(tuple);
                         }
                     }

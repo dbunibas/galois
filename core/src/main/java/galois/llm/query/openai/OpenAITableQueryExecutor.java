@@ -56,6 +56,11 @@ public class OpenAITableQueryExecutor extends AbstractEntityQueryExecutor {
         }
     }
 
+    @Override
+    public boolean ensureKeyInAttributes() {
+        return true;
+    }
+
     public static OpenAITableQueryExecutorBuilder builder() {
         return new OpenAITableQueryExecutorBuilder();
     }

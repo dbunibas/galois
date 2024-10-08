@@ -33,6 +33,10 @@ public interface IQueryExecutor {
         return false;
     }
 
+    default boolean ensureKeyInAttributes() {
+        return false;
+    }
+
     ContentRetriever getContentRetriever();
 
     IQueryExecutorBuilder getBuilder();
