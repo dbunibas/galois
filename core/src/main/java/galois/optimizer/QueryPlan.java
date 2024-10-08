@@ -6,7 +6,7 @@ import net.sf.jsqlparser.expression.Expression;
 
 public class QueryPlan {
     public static final String PUSHDOWN_ALL_CONDITION = "Pushdown-All";
-    public static final String PUSHDOWN_SINGLE_CONDITION = "Pushdown-";
+    public static final String PUSHDOWN_SINGLE_CONDITION = "Pushdown-Single-";
     public static final String PUSHDOWN_UNOPTIMIZED = "Unoptimized";
     
     private List<Expression> expressionPushdown;

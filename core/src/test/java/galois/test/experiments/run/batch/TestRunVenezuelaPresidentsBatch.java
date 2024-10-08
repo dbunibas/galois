@@ -60,7 +60,7 @@ public class TestRunVenezuelaPresidentsBatch {
 
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("SELECT p.name, p.party FROM target.world_presidents p WHERE p.country='Venezuela'")
+                .querySql("SELECT DISTINCT p.name, p.party FROM target.world_presidents p WHERE p.country='Venezuela'")
                 .prompt("List the name and party of Venezuela presidents.")
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -143,10 +143,10 @@ public class TestRunVenezuelaPresidentsBatch {
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
             testRunner.execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/presidents/presidents-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/presidents/presidents-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
 //            testRunner.execute("/presidents/presidents-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/presidents/presidents-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/presidents/presidents-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -191,6 +191,7 @@ public class TestRunVenezuelaPresidentsBatch {
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
+        boolean executeAllPlans = false;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
@@ -206,8 +207,12 @@ public class TestRunVenezuelaPresidentsBatch {
             Integer indexPushDown = planEstimation.getIndexPushDown();
             IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra false
             IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-            IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
-            IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexPushDown, false);
+            IOptimizer singleConditionPushDownRemoveAlgebraTree = null;
+            IOptimizer singleConditionPushDown = null;
+            if (indexPushDown != null) {
+                singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
+                singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexPushDown, false);
+            }
             IOptimizer optimizer = null;
             if (pushDownStrategy.equals(QueryPlan.PUSHDOWN_ALL_CONDITION)) {
 //                optimizer = allConditionPushdown;
@@ -217,15 +222,19 @@ public class TestRunVenezuelaPresidentsBatch {
 //                optimizer = singleConditionPushDown;
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
-            if (confidenceKeys != null && confidenceKeys > threshold) {
-                // Execute KEY-SCAN
+            if (executeAllPlans) {
+                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
                 testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
             } else {
-                // Execute TABLE
-                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                if (confidenceKeys != null && confidenceKeys > threshold) {
+                    // Execute KEY-SCAN
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                } else {
+                    // Execute TABLE
+                    testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                }
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
-            break;
         }
     }
 

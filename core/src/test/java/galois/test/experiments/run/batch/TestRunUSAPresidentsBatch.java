@@ -7,6 +7,7 @@ import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.QueryUtils;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.optimizer.QueryPlan;
 import galois.parser.ParserWhere;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.ExperimentResults;
@@ -119,7 +120,8 @@ public class TestRunUSAPresidentsBatch {
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9);
+//        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9);
+        variants = List.of(q4, q5, q6, q7, q8, q9);
     }
 
     @Test
@@ -148,6 +150,59 @@ public class TestRunUSAPresidentsBatch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
+    }
+    
+        @Test
+    public void testPlanSelection() {
+        double threshold = 0.9;
+        boolean executeAllPlans = false;
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        for (ExpVariant variant : variants) {
+//            testRunner.execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String configPathTable = "/presidents/presidents-llama3-table-experiment.json";
+            String configPathKey = "/presidents/presidents-llama3-key-scan-experiment.json";
+            QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
+            log.info("Plan Estimated: {}", planEstimation);
+            String pushDownStrategy = planEstimation.computePushdown();
+            Double confidenceKeys = planEstimation.getConfidenceKeys();
+            Integer indexPushDown = planEstimation.getIndexPushDown();
+            IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra false
+            IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+            IOptimizer singleConditionPushDownRemoveAlgebraTree = null;
+            IOptimizer singleConditionPushDown = null;
+            if (indexPushDown != null) {
+                singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
+                singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexPushDown, false);
+            }
+            IOptimizer optimizer = null;
+            log.info("Pushdown Strategy: {}", pushDownStrategy);
+            log.info("Pushdown constants: {}", QueryPlan.PUSHDOWN_ALL_CONDITION);
+            if (pushDownStrategy.equals(QueryPlan.PUSHDOWN_ALL_CONDITION)) {
+//                optimizer = allConditionPushdown;
+                optimizer = allConditionPushdownWithFilter;
+            }
+            if (pushDownStrategy.startsWith(QueryPlan.PUSHDOWN_SINGLE_CONDITION)) {
+//                optimizer = singleConditionPushDown;
+                optimizer = singleConditionPushDownRemoveAlgebraTree;
+            }
+            log.info("Optimizer: {}", optimizer);
+            if (executeAllPlans) {
+                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+            } else {
+                if (confidenceKeys != null && confidenceKeys > threshold) {
+                    // Execute KEY-SCAN
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                } else {
+                    // Execute TABLE
+                    testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                }
+            }
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
     }
 
     @Test

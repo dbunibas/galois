@@ -8,6 +8,7 @@ import galois.llm.models.TogetherAIModel;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
 import galois.optimizer.PhysicalPlanSelector;
+import galois.optimizer.QueryPlan;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.ExperimentResults;
 import galois.test.experiments.json.parser.ExperimentParser;
@@ -273,7 +274,7 @@ public class TestRunSpiderGeoBatch {
                 .prompt("which capitals are not major cities")
                 .optimizers(singleConditionOptimizers)
                 .build();
-        
+
         ExpVariant q30 = ExpVariant.builder()
                 .queryNum("Q30")
                 .querySql("SELECT state_name, population, area_squared_miles FROM usa_state")
@@ -337,9 +338,7 @@ public class TestRunSpiderGeoBatch {
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-//        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q20, q21, q22, q23, q24, q25, q26, q29, q30, q31, q32, q33, q34, q35, q36, q37, q38);
-        variants = List.of( q30, q31, q32, q33, q34, q35, q36, q37, q38);
-//        variants = List.of(q29);
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q20, q21, q22, q23, q24, q25, q26, q29, q30, q31, q32, q33, q34, q35, q36, q37, q38);
     }
 
     @Test
@@ -371,6 +370,56 @@ public class TestRunSpiderGeoBatch {
     }
 
     @Test
+    public void testPlanSelection() {
+        double threshold = 0.9;
+        boolean executeAllPlans = false;
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        for (ExpVariant variant : variants) {
+            testRunner.execute("/SpiderGeo/geo-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/SpiderGeo/geo-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String configPathTable = "/SpiderGeo/geo-llama3-table-experiment.json";
+            String configPathKey = "/SpiderGeo/geo-llama3-key-scan-experiment.json";
+            QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
+            log.info("Plan Estimated: {}", planEstimation);
+            String pushDownStrategy = planEstimation.computePushdown();
+            Double confidenceKeys = planEstimation.getConfidenceKeys();
+            Integer indexPushDown = planEstimation.getIndexPushDown();
+            IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra false
+            IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+            IOptimizer singleConditionPushDownRemoveAlgebraTree = null;
+            IOptimizer singleConditionPushDown = null;
+            if (indexPushDown != null) {
+                singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
+                singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexPushDown, false);
+            }
+            IOptimizer optimizer = null;
+            if (pushDownStrategy.equals(QueryPlan.PUSHDOWN_ALL_CONDITION)) {
+//                optimizer = allConditionPushdown;
+                optimizer = allConditionPushdownWithFilter;
+            }
+            if (pushDownStrategy.startsWith(QueryPlan.PUSHDOWN_SINGLE_CONDITION)) {
+//                optimizer = singleConditionPushDown;
+                optimizer = singleConditionPushDownRemoveAlgebraTree;
+            }
+            if (executeAllPlans) {
+                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+            } else {
+                if (confidenceKeys != null && confidenceKeys > threshold) {
+                    // Execute KEY-SCAN
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                } else {
+                    // Execute TABLE
+                    testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                }
+            }
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+    }
+
+    @Test
     public void testSingle() {
         // TO DEBUG single experiment
         List<IMetric> metrics = new ArrayList<>();
@@ -386,7 +435,7 @@ public class TestRunSpiderGeoBatch {
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
         testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdown);
     }
-    
+
     @Test
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
@@ -395,7 +444,7 @@ public class TestRunSpiderGeoBatch {
             break;
         }
     }
-    
+
     @Test
     public void testConfidenceEstimator() {
         // confidence for every attribute
@@ -405,7 +454,7 @@ public class TestRunSpiderGeoBatch {
             break;
         }
     }
-        
+
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
@@ -413,7 +462,7 @@ public class TestRunSpiderGeoBatch {
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
         }
     }
-    
+
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
@@ -458,6 +507,6 @@ public class TestRunSpiderGeoBatch {
 //            testRunner.execute("/SpiderGeo/geo-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
-        log.info("Results\n{}", printMap(results));       
+        log.info("Results\n{}", printMap(results));
     }
 }

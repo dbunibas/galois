@@ -4,6 +4,7 @@ import com.galois.sqlparser.SQLQueryParser;
 import galois.llm.algebra.LLMScan;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
+import galois.optimizer.QueryPlan;
 import galois.test.experiments.ExperimentResults;
 import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
@@ -92,13 +93,63 @@ public class TestRunFlight2Batch {
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
             testRunner.execute("/flight_2_data/flight_2-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/flight_2_data/flight_2-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/flight_2_data/flight_2-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_2_data/flight_2-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_2_data/flight_2-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
 //            testRunner.execute("/flight_2_data/flight_2-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/flight_2_data/flight_2-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_2_data/flight_2-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
+    }
+    
+    @Test
+    public void testPlanSelection() {
+        double threshold = 0.9;
+        boolean executeAllPlans = false;
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        for (ExpVariant variant : variants) {
+            testRunner.execute("/flight_2_data/flight_2-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_2_data/flight_2-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String configPathTable = "/flight_2_data/flight_2-llama3-table-experiment.json";
+            String configPathKey = "/flight_2_data/flight_2-llama3-key-scan-experiment.json";
+            QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
+            log.info("Plan Estimated: {}", planEstimation);
+            String pushDownStrategy = planEstimation.computePushdown();
+            Double confidenceKeys = planEstimation.getConfidenceKeys();
+            Integer indexPushDown = planEstimation.getIndexPushDown();
+            IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra false
+            IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+            IOptimizer singleConditionPushDownRemoveAlgebraTree = null;
+            IOptimizer singleConditionPushDown = null;
+            if (indexPushDown != null) {
+                singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
+                singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexPushDown, false);
+            }
+            IOptimizer optimizer = null;
+            if (pushDownStrategy.equals(QueryPlan.PUSHDOWN_ALL_CONDITION)) {
+//                optimizer = allConditionPushdown;
+                optimizer = allConditionPushdownWithFilter;
+            }
+            if (pushDownStrategy.startsWith(QueryPlan.PUSHDOWN_SINGLE_CONDITION)) {
+//                optimizer = singleConditionPushDown;
+                optimizer = singleConditionPushDownRemoveAlgebraTree;
+            }
+            if (executeAllPlans) {
+                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+            } else {
+                if (confidenceKeys != null && confidenceKeys > threshold) {
+                    // Execute KEY-SCAN
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                } else {
+                    // Execute TABLE
+                    testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                }
+            }
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
     }
 
     @Test
