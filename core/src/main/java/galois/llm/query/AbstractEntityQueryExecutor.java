@@ -67,7 +67,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             try {
                 String response = getResponse(chain, userMessage, false);
                 log.debug("Response is: {}", response);
-                if(response == null){
+                if (response == null || response.trim().isBlank()) {
                     log.warn("Error during LLM request.");
                     break;
                 }

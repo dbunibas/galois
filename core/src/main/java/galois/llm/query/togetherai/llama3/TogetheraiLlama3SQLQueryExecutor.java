@@ -88,6 +88,10 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
             try {
                 String response = super.getResponse(chain, userMessage, false);
                 log.debug("Response is: {}", response);
+                if (response == null || response.trim().isBlank()) {
+                    log.warn("Error during LLM request.");
+                    break;
+                }
                 List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                 log.debug("Parsed response is: {}", parsedResponse);
                 if (parsedResponse == null || parsedResponse.isEmpty()) {
