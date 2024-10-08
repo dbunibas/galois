@@ -161,7 +161,7 @@ public class Mapper {
             }
             return MAPPER.writeValueAsString(listWithoutDuplicates);
         }catch (Exception e){
-            log.warn("Unable to remove duplicates from json list: {}", jsonList, e);
+            log.debug("Unable to remove duplicates from json list: {}", jsonList);
             return jsonList;
         }
     }

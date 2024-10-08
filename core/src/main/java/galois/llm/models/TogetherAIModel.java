@@ -221,7 +221,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     }
 
     private @NotNull String getStringStreamMode(String jsonRequest, HttpURLConnection connection) throws IOException {
-        log.trace("# API Request [{}] - {}\nBody: {}", connection.getRequestMethod(), connection.getURL(), jsonRequest);
+        log.debug("# API Request [{}] - {}\nBody: {}", connection.getRequestMethod(), connection.getURL(), jsonRequest);
         OutputStream os = connection.getOutputStream();
         byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
         os.write(input, 0, input.length);
@@ -233,12 +233,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
         ResponseTogetherAI finalResponse = new ResponseTogetherAI();
-        Choice choice = new Choice();
-        Message message = new Message();
-        message.setContent("");
-        choice.setMessage(message);
-        finalResponse.setChoices(new ArrayList<>());
-        finalResponse.getChoices().add(0, choice);
+        StringBuilder messageContent = new StringBuilder();
         String responseLine;
         while ((responseLine = br.readLine()) != null) {
             if (!responseLine.startsWith("data: ")) continue;
@@ -248,15 +243,23 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             }
             StreamResponse streamResponse = objectMapper.readValue(dataChunk, StreamResponse.class);
             finalResponse.setUsage(streamResponse.getUsage());
-            message.setContent(message.getContent() + streamResponse.choices.get(0).delta.content);
+            if(!streamResponse.choices.isEmpty()){
+                messageContent.append(streamResponse.choices.get(0).delta.content);
+            }
         }
+        Choice choice = new Choice();
+        Message message = new Message();
+        message.setContent(messageContent.toString());
+        choice.setMessage(message);
+        finalResponse.setChoices(new ArrayList<>());
+        finalResponse.getChoices().add(0, choice);
         String responseText = objectMapper.writeValueAsString(finalResponse);
-        log.trace("# API Response {}: \n{}", connection.getResponseCode(), responseText);
+        log.debug("# API Response {}: \n{}", connection.getResponseCode(), responseText);
         return responseText;
     }
 
     private @NotNull String getStringStandardMode(String jsonRequest, HttpURLConnection connection) throws IOException {
-        log.trace("# API Request [{}] - {}\nBody: {}", connection.getRequestMethod(), connection.getURL(), jsonRequest);
+        log.debug("# API Request [{}] - {}\nBody: {}", connection.getRequestMethod(), connection.getURL(), jsonRequest);
         OutputStream os = connection.getOutputStream();
         byte[] input = jsonRequest.getBytes(StandardCharsets.UTF_8);
         os.write(input, 0, input.length);
@@ -272,7 +275,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             response.append(responseLine.trim());
         }
         String responseText = response.toString().trim();
-        log.trace("# API Response {}: \n{}", connection.getResponseCode(), responseText);
+        log.debug("# API Response {}: \n{}", connection.getResponseCode(), responseText);
         return responseText;
     }
 
@@ -287,7 +290,8 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + "    \"stop\": [\n"
                 + "        \"<|eot_id|>\"\n"
                 + "    ],\n"
-                + (streamMode ? "\"stream_tokens\": true,\n" : "")
+                + (streamMode ? "    \"stream\": true,\n" : "")
+                + (streamMode ? "    \"stream_tokens\": true,\n" : "")
 //                + "    \"stream\": true,\n"
                 + "    \"messages\": {$MESSAGES$}\n"
                 + "}";
