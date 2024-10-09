@@ -73,14 +73,14 @@ public class TestRunRAGPremierLeagueBatch {
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("select m.player_of_the_match from premier_league_2024_2025_match_result m")
+                .querySql("select player_name from premier_league_2024_2025_player_of_the_match potm")
                 .prompt("List the names of the players who were awarded 'Player of the Match' during the 2024-2025 Premier League season")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
         ExpVariant q4 = ExpVariant.builder()
                 .queryNum("Q4")
-                .querySql("select m.player_of_the_match from premier_league_2024_2025_match_result m where m.player_of_the_match_team = 'Manchester United'")
+                .querySql("select player_name, player_team from premier_league_2024_2025_player_of_the_match potm where potm.player_team = 'Manchester United'")
                 .prompt("List the names of the players who were awarded 'Player of the Match' while playing for Manchester United during the 2024-2025 Premier League season")
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -89,20 +89,6 @@ public class TestRunRAGPremierLeagueBatch {
                 .queryNum("Q5")
                 .querySql("select home_team,away_team,home_goals,away_goals from premier_league_2024_2025_match_result")
                 .prompt("Retrieve the match details from the 2024-2025 Premier League season, including the home team, away team, and the number of goals scored by both teams")
-                .optimizers(singleConditionOptimizers)
-                .build();
-
-        ExpVariant q6 = ExpVariant.builder()
-                .queryNum("Q6")
-                .querySql("select count(*) from premier_league_2024_2025_match_result plmr where away_team = 'Liverpool' and away_goals = 3")
-                .prompt("How many Premier League 2024-2025 matches did Liverpool win with 3 goals as the away team?")
-                .optimizers(singleConditionOptimizers)
-                .build();
-
-        ExpVariant q7 = ExpVariant.builder()
-                .queryNum("Q7")
-                .querySql("select home_team, away_team from premier_league_2024_2025_match_result plmr where home_goals = 0 and away_goals = 0")
-                .prompt("List all the teams that played in goalless draws in the Premier League 2024-2025 season")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
@@ -153,7 +139,7 @@ public class TestRunRAGPremierLeagueBatch {
         IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
 //        IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
-        testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdown);
+        testRunner.executeSingle(configPath, type, variant, metrics, results, nullOptimizer);
     }
     
     @Test

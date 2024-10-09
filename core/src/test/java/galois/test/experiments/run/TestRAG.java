@@ -21,7 +21,6 @@ import galois.llm.algebra.LLMScan;
 import galois.llm.database.LLMDB;
 import galois.llm.models.TogetherAIEmbeddingModel;
 import galois.llm.query.IQueryExecutor;
-import galois.llm.query.ollama.llama3.OllamaLlama3NLQueryExecutor;
 import galois.llm.query.togetherai.llama3.TogetheraiLlama3NLQueryExecutor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +38,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static galois.test.utils.TestUtils.toTupleStream;
 
@@ -48,16 +49,18 @@ public class TestRAG {
     private static final String EXP_NAME = "BBC-PremierLeague2024-2025";
     private static final String EXT = ".MD";
 
-//    private static final String NL_PROMPT = "Player of the match";
-//private static final String NL_PROMPT = "List the Player of the Match for each Premier League match in the 2024-25 season";
-//    private static final String SQL = "select * from premier_league_2024_2025_player_of_the_match";
+    private static final String TEXT_TO_CHECK = "Player of the match";
+    private static final String NL_PROMPT = "select player_of_the_match from premier_league_2024_2025_match_result.";
 
+//    private static final String NL_PROMPT = "Given the following query, populate the table with actual values.\n" +
+//            "query: select player_of_the_match from premier_league_2024_2025_match_result.\n" +
+//            "{\"title\":\"premier_league_2024_2025_match_result\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"player_of_the_match\":{\"title\":\"player_of_the_match\",\"type\":\"string\"}}}} ";
 
-//    private static final String NL_PROMPT = "List the date (year, month, day, day of the week) and opponent for each of Arsenal's 2024-25 Premier League season matches";
-//    private static final String SQL = "select * from premier_league_2024_2025_arsenal_matches";
-
-    private static final String TEXT_TO_CHECK = "Match date:";
-    private static final String NL_PROMPT = "Given the following query, populate the table with actual values.\\nquery: select opponent_team and match_date_year and match_date_month and match_date_day from premier_league_2024_2025_arsenal_matches where match_date_month == 8.\\nRespond with JSON only. Don't add any comment.\\nUse the following JSON schema:\\n{\\\"title\\\":\\\"premier_league_2024_2025_arsenal_matches\\\",\\\"type\\\":\\\"array\\\",\\\"items\\\":{\\\"type\\\":\\\"object\\\",\\\"properties\\\":{\\\"opponent_team\\\":{\\\"title\\\":\\\"opponent_team\\\",\\\"type\\\":\\\"string\\\"},\\\"match_date_month\\\":{\\\"title\\\":\\\"match_date_month\\\",\\\"type\\\":\\\"integer\\\"},\\\"match_date_year\\\":{\\\"title\\\":\\\"match_date_year\\\",\\\"type\\\":\\\"integer\\\"},\\\"match_date_day\\\":{\\\"title\\\":\\\"match_date_day\\\",\\\"type\\\":\\\"integer\\\"}}}}\\n\\n";
+//    private static final String NL_PROMPT = "Given the following query, populate the table with actual values.\n" +
+//            "query: select player_of_the_match from premier_league_2024_2025_match_result.\n" +
+//            "Respond with JSON only. Don't add any comment.\n" +
+//            "Use the following JSON schema:\n" +
+//            "{\"title\":\"premier_league_2024_2025_match_result\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"player_of_the_match\":{\"title\":\"player_of_the_match\",\"type\":\"string\"}}}} ";
 
     private IDatabase llmDB;
     private EmbeddingModel embeddingModel;
@@ -86,8 +89,8 @@ public class TestRAG {
         embeddingStoreIngestor = buildEmbeddingStoreIngestor();
         contentRetriever = buildContentRetriver();
         //
-        embeddingStore.removeAll();
-        loadDocuments();
+//        embeddingStore.removeAll();
+//        loadDocuments();
     }
 
     @Test
@@ -101,10 +104,10 @@ public class TestRAG {
         for (int i = 0; i < relevant.size(); i++) {
             EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(i);
             log.info("Result {}:\n\tScore: {}\n\tText: {}", i, embeddingMatch.score(), embeddingMatch.embedded().text());
-            if(embeddingMatch.embedded().text().toUpperCase().contains(NL_PROMPT.toUpperCase())) retrived++;
+            if (embeddingMatch.embedded().text().toUpperCase().contains(NL_PROMPT.toUpperCase())) retrived++;
             documents.add(embeddingMatch.embedded().metadata().getString("file_name"));
         }
-        log.info("Configuration: {}\nDocuments with prompt: {}\nDifferent documents: {}", config,retrived,documents.size());
+        log.info("Configuration: {}\nDocuments with prompt: {}\nDifferent documents: {}", config, retrived, documents.size());
     }
 
     @Test
@@ -119,11 +122,13 @@ public class TestRAG {
         for (int i = 0; i < retrieved.size(); i++) {
             Content content = retrieved.get(i);
             log.info("Result {}:\n\tText: {}", i, content.textSegment().text());
-            if(content.textSegment().text().toUpperCase().contains(TEXT_TO_CHECK.toUpperCase())) retrived++;
+            if (content.textSegment().text().toUpperCase().contains(TEXT_TO_CHECK.toUpperCase())) {
+                retrived++;
 //            if(content.textSegment().text().toUpperCase().contains(NL_PROMPT.toUpperCase())) retrived++;
-            documents.add(content.textSegment().metadata().getString("file_name"));
+                documents.add(content.textSegment().metadata().getString("file_name"));
+            }
         }
-        log.info("Configuration: {}\nDocuments with prompt: {}\nDifferent documents: {}", config,retrived,documents.size());
+        log.info("Configuration: {}\nDocuments with prompt: {}\nDifferent documents: {}", config, retrived, documents.size());
     }
 
     @Test
@@ -184,7 +189,7 @@ public class TestRAG {
         EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore
                 .builder()
                 .baseUrl("http://localhost:8000")
-                .collectionName("rag_premierleague_128_64_m2-bert-80M-8k")
+                .collectionName("rag_premierleague_128_64_UAE-Large")
 //                .collectionName(EXP_NAME + "-" + config.toString().hashCode())
                 .logRequests(true)
                 .logResponses(true)
@@ -213,7 +218,7 @@ public class TestRAG {
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
                 .embeddingModel(embeddingModel)
-                .maxResults(200)
+                .maxResults(100)
 //                .dynamicMaxResults(query -> 3)
                 .minScore(0.75)
 //                .dynamicMinScore(query -> 0.75)

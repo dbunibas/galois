@@ -200,9 +200,10 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         String response = "";
         Chain<String, String> newChain = null;
         try {
-            ChatLanguageModel chatLanguageModel = getChatLanguageModel();
-            response = chatLanguageModel.generate(prompt);
-            //response = getResponse(chain, prompt);
+//            ChatLanguageModel chatLanguageModel = getChatLanguageModel();
+//            response = chatLanguageModel.generate(prompt);
+            newChain = getConversationalChain();
+            response = getResponse(newChain, prompt, false);
             log.debug("Attribute response is: {}", response);
             if (!Mapper.isJSON(response)) {
                 log.debug("Response not in JSON format...execute it again through new chain");

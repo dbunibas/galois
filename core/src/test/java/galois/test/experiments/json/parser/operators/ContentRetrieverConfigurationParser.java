@@ -7,8 +7,10 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.HuggingFaceTokenizer;
 import dev.langchain4j.model.ollama.OllamaEmbeddingModel;
+import dev.langchain4j.rag.content.Content;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
+import dev.langchain4j.rag.query.Query;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
@@ -21,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class ContentRetrieverConfigurationParser {
@@ -100,15 +105,16 @@ public class ContentRetrieverConfigurationParser {
                 .build();
     }
 
-    private EmbeddingStoreContentRetriever buildContentRetriver(ContentRetrieverConfigurationJSON contentRetrieverConf,
-                                                                EmbeddingModel embeddingModel,
-                                                                EmbeddingStore<TextSegment> embeddingStore) {
-        return EmbeddingStoreContentRetriever.builder()
+    private ContentRetriever buildContentRetriver(ContentRetrieverConfigurationJSON contentRetrieverConf,
+                                                  EmbeddingModel embeddingModel,
+                                                  EmbeddingStore<TextSegment> embeddingStore) {
+        EmbeddingStoreContentRetriever baseRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
                 .embeddingModel(embeddingModel)
                 .maxResults(contentRetrieverConf.getMaxResults())
                 .minScore(contentRetrieverConf.getMinScore())
                 .build();
+        return new CustomEmbeddingStoreContentRetriever(baseRetriever);
     }
 
     private void loadDocuments(ContentRetrieverConfigurationJSON contentRetrieverConf, EmbeddingStoreIngestor embeddingStoreIngestor) {
@@ -122,6 +128,37 @@ public class ContentRetrieverConfigurationParser {
             Document document = FileSystemDocumentLoader.loadDocument(file.getPath());
             log.info("Document Metadata {}", document.metadata());
             embeddingStoreIngestor.ingest(document);
+        }
+    }
+
+    @Slf4j
+    static class CustomEmbeddingStoreContentRetriever implements ContentRetriever {
+
+        EmbeddingStoreContentRetriever baseRetriever;
+
+        public CustomEmbeddingStoreContentRetriever(EmbeddingStoreContentRetriever baseRetriever) {
+            this.baseRetriever = baseRetriever;
+        }
+
+        @Override
+        public List<Content> retrieve(Query query) {
+            Query cleanedQuery = cleanQuery(query);
+            List<Content> results = baseRetriever.retrieve(cleanedQuery);
+            log.trace("# Executing retriver: \n Query: {}\n Results: {}", query, results);
+            return results;
+        }
+
+        private Query cleanQuery(Query query) {
+            Pattern pattern = Pattern.compile(".*(select .*)\n", Pattern.CASE_INSENSITIVE);
+            String originalQuery = query.text().replace("\\n", "\n");;
+            Matcher matcher = pattern.matcher(originalQuery);
+            boolean matchFound = matcher.find();
+            if (!matchFound) {
+                return query;
+            }
+            String cleanedQuery = matcher.group(1);
+            log.trace("# Cleaned query {}", cleanedQuery);
+            return Query.from(cleanedQuery, query.metadata());
         }
     }
 
