@@ -15,9 +15,14 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static com.galois.sqlparser.ParseUtils.contextToParseContext;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParseResult> {
+    
+    private boolean changeStringEqualsToLike = false;
+    
     @Override
     public <S> WhereParseResult visit(EqualsTo exp, S context) {
         return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToParseContext(context));
@@ -128,6 +133,7 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
                 expressionToValue(rightExpression)
         );
         String jepExpression = sqlToJEPExpressionString(sqlExpressionWithoutAliases);
+        if (changeStringEqualsToLike) jepExpression = this.convertEqualsToLikeString(jepExpression);
         log.debug("Binary jepExpression {}", jepExpression);
         Expression expression = new Expression(jepExpression);
 
@@ -160,6 +166,19 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
         AttributeRef attributeRef = new AttributeRef(parseContext.getTableAliasFromColumn(column), name);
         speedyExpression.setVariableDescription(name, attributeRef);
         return new VariableDescription(name, attributeRef);
+    }
+    
+    private String convertEqualsToLikeString(String expression) {
+        Pattern pattern = Pattern.compile("(.*) == (\".*\")", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(expression);
+        boolean matchFound = matcher.find();
+        if (!matchFound) {
+            if (log.isDebugEnabled()) log.debug("No Equals found: {}", expression);
+            return expression;
+        }
+        String likeExpression ="contains(" + matcher.group(1) +", " + matcher.group(2) +")";
+        if (log.isDebugEnabled()) log.debug("Like Expression: {}", likeExpression);
+        return likeExpression;
     }
 
     public record WhereParseResult(Expression expression, List<VariableDescription> variableDescriptions) {

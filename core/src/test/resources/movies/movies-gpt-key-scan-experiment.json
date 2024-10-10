@@ -1,5 +1,5 @@
 {
-  "name": "Movies-{{QN}} Experiment-nl",
+  "name": "Movies-{{QN}} Experiment-key-scan",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -11,12 +11,15 @@
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
+  "optimizers": [
+    "AllConditionsPushdownOptimizer",
+    "SingleConditionsOptimizerFactory"
+  ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-nl",
-      "maxIterations": 10,
-      "naturalLanguagePrompt": "{{PROMPT}}"
+      "queryExecutor": "open-ai-key-scan",
+      "maxIterations": 10
     }
   },
   "query": {

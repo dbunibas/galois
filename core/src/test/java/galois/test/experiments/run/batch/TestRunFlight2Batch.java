@@ -34,6 +34,7 @@ public class TestRunFlight2Batch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
+    private String executorModel = "llama3";
 
 
     public TestRunFlight2Batch() {
@@ -69,6 +70,13 @@ public class TestRunFlight2Batch {
                 .optimizers(singleConditionOptimizers)
                 .build();
         
+        ExpVariant q4 = ExpVariant.builder()
+                .queryNum("Q4")
+                .querySql("SELECT f.sourceairport, COUNT(f.flightno) as num_flights FROM target.usa_flights f WHERE f.destairport = 'LAX' GROUP BY f.sourceairport")
+                .prompt("From which airports do flights arrive at LAX?")
+                .optimizers(singleConditionOptimizers)
+                .build();
+        
 //        ExpVariant q7 = ExpVariant.builder()
 //                .queryNum("Q7")
 //                .querySql("SELECT DISTINCT city FROM target.usa_airports WHERE airportname = 'municipal' AND city IS NOT NULL")
@@ -78,7 +86,7 @@ public class TestRunFlight2Batch {
 
         // FIXME: Which Speedy tree can execute this query?
         
-       variants = List.of(q1, q2, q3);
+       variants = List.of(q1, q2, q3, q4);
     }
 
     @Test
@@ -99,11 +107,11 @@ public class TestRunFlight2Batch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/flight_2_data/flight_2-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_2_data/flight_2-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_2_data/flight_2-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/flight_2_data/flight_2-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_2_data/flight_2-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -113,14 +121,15 @@ public class TestRunFlight2Batch {
     public void testPlanSelection() {
         double threshold = 0.9;
         boolean executeAllPlans = true;
+        boolean execute = false;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/flight_2_data/flight_2-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_2_data/flight_2-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            String configPathTable = "/flight_2_data/flight_2-llama3-table-experiment.json";
-            String configPathKey = "/flight_2_data/flight_2-llama3-key-scan-experiment.json";
+            if (execute) testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute) testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String configPathTable = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
+            String configPathKey = "/flight_2_data/flight_2-" + executorModel + "-key-scan-experiment.json";
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
             log.info("Plan Estimated: {}", planEstimation);
             String pushDownStrategy = planEstimation.computePushdown();
@@ -144,18 +153,18 @@ public class TestRunFlight2Batch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
-                testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-                testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
-                testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                    if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                    if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
@@ -168,8 +177,8 @@ public class TestRunFlight2Batch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         IOptimizer optimizer = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-        String configPathTable = "/flight_2_data/flight_2-llama3-table-experiment.json";
-        String configPathKey = "/flight_2_data/flight_2-llama3-key-scan-experiment.json";
+        String configPathTable = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/flight_2_data/flight_2-" + executorModel + "-key-scan-experiment.json";
         for (ExpVariant variant : variants) {
             testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
             testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
@@ -183,7 +192,7 @@ public class TestRunFlight2Batch {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         ExpVariant variant = variants.get(0);
-        String configPath = "/flight_2_data/flight_2-llama3-table-experiment.json";
+        String configPath = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
         String type = "TABLE";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
@@ -198,7 +207,7 @@ public class TestRunFlight2Batch {
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
 //            ExpVariant variant = variants.get(0);
-            String configPath = "/flight_2_data/flight_2-llama3-table-experiment.json";
+            String configPath = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimatorSchema(configPath, variant);
             break;
         }
@@ -209,7 +218,7 @@ public class TestRunFlight2Batch {
         // confidence for every attribute
         for (ExpVariant variant : variants) {
 //            ExpVariant variant = variants.get(0);
-            String configPath = "/flight_2_data/flight_2-llama3-table-experiment.json";
+            String configPath = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimator(configPath, variant);
             break;
         }
@@ -218,7 +227,7 @@ public class TestRunFlight2Batch {
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/flight_2_data/flight_2-llama3-table-experiment.json";
+            String configPath = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
 //            break;
         }
@@ -227,7 +236,7 @@ public class TestRunFlight2Batch {
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/flight_2_data/flight_2-llama3-table-experiment.json";
+            String configPath = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
             testRunner.executeCardinalityEstimatorQuery(configPath, variant);
 //            break;
         }

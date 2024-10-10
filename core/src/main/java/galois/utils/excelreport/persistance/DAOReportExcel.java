@@ -61,7 +61,7 @@ public class DAOReportExcel {
                 results.put(qName, statisticsForQuery);
             }
             List<List<String>> queriesStats = new ArrayList<>();
-            queriesStats.add(List.of("","NL", "SQL", "KEY", "TABLE"));
+            queriesStats.add(List.of("","NL", "SQL", "KEY", "TABLE", "KEY-SCAN-GALOIS", "TABLE-GALOIS", "KEY-SCAN-ALLCONDITION", "TABLE-ALLCONDITION"));
             for (String qName : queriesName) {
                 if (missingQueries.contains(qName)) continue;
                 Map<String, Map<String, Double>> resultsForQuery = results.get(qName);
@@ -71,11 +71,19 @@ public class DAOReportExcel {
                 Map<String, Double> resultsForBestKeyScan = resultsForQuery.get(bestStrategyForKeyScan);
                 String bestStrategyForTable = getBestResultsAveragedFor("TABLE", resultsForQuery, metricsToAverage);
                 Map<String, Double> resultsForBestTable = resultsForQuery.get(bestStrategyForTable);
+                Map<String, Double> galoisKeyScanResults = getGaloisResults("KEY-SCAN-GALOIS", resultsForQuery);
+                Map<String, Double> galoisTableResults = getGaloisResults("TABLE-GALOIS", resultsForQuery);
+                Map<String, Double> allPushdownKeyScanResults = getGaloisResults("KEY-SCAN-ALL-CONDITIONS", resultsForQuery);
+                Map<String, Double> allPushdownTableResults = getGaloisResults("TABLE-ALL-CONDITIONS", resultsForQuery);
                 log.info("QUERY: {}", qName);
                 log.info("NL: {}", SpeedyUtility.printMap(resultsForNL));
                 log.info("SQL: {}", SpeedyUtility.printMap(resultsForSQL));
                 log.info("KEY-SCAN: ({}) {}", bestStrategyForKeyScan, SpeedyUtility.printMap(resultsForBestKeyScan));
                 log.info("TABLE: ({}) {}", bestStrategyForTable, SpeedyUtility.printMap(resultsForBestTable));
+                log.info("KEY-SCAN-GALOIS: {}", SpeedyUtility.printMap(galoisKeyScanResults));
+                log.info("TABLE-GALOIS: {}", SpeedyUtility.printMap(galoisTableResults));
+                log.info("KEY-SCAN-ALL-PUSH: {}", SpeedyUtility.printMap(allPushdownKeyScanResults));
+                log.info("TABLE-ALL-PUSH: {}", SpeedyUtility.printMap(allPushdownTableResults));
                 List<String> query = new ArrayList<>();
                 query.add(qName);
                 for (String statName : statsToExport) {
@@ -84,19 +92,35 @@ public class DAOReportExcel {
                         double avgSQL = computeAverage(resultsForSQL, metricsToAverage);
                         double avgKeyScan = computeAverage(resultsForBestKeyScan, metricsToAverage);
                         double avgTable = computeAverage(resultsForBestTable, metricsToAverage);
+                        double avgKeyScanGalois = computeAverage(galoisKeyScanResults, metricsToAverage);
+                        double avgTableGalois = computeAverage(galoisTableResults, metricsToAverage);
+                        double avgKeyScanAllPush = computeAverage(allPushdownKeyScanResults, metricsToAverage);
+                        double avgTableAllPush = computeAverage(allPushdownTableResults, metricsToAverage);
                         query.add((avgNL + "").replace(".", ","));
                         query.add((avgSQL + "").replace(".", ","));
                         query.add((avgKeyScan + "").replace(".", ","));
                         query.add((avgTable + "").replace(".", ","));
+                        query.add((avgKeyScanGalois + "").replace(".", ","));
+                        query.add((avgTableGalois + "").replace(".", ","));
+                        query.add((avgKeyScanAllPush + "").replace(".", ","));
+                        query.add((avgTableAllPush + "").replace(".", ","));
                     } else {
                         double valNL = resultsForNL.get(statName);
                         double valSQL = resultsForSQL.get(statName);
                         double valKeyScan = resultsForBestKeyScan.get(statName);
                         double valTable = resultsForBestTable.get(statName);
+                        double valKeyScanGalois = galoisKeyScanResults.get(statName);
+                        double valTableGalois = galoisTableResults.get(statName);
+                        double valKeyScanAllCondition = galoisKeyScanResults.get(statName);
+                        double valTableAllCondition = galoisTableResults.get(statName);
                         query.add((valNL + "").replace(".", ","));
                         query.add((valSQL + "").replace(".", ","));
                         query.add((valKeyScan + "").replace(".", ","));
                         query.add((valTable + "").replace(".", ","));
+                        query.add((valKeyScanGalois + "").replace(".", ","));
+                        query.add((valTableGalois + "").replace(".", ","));
+                        query.add((valKeyScanAllCondition + "").replace(".", ","));
+                        query.add((valTableAllCondition + "").replace(".", ","));
                     }
                 }
                 queriesStats.add(query);
@@ -542,7 +566,17 @@ public class DAOReportExcel {
          }
         return bestStrategy;
     }
-
+    
+    private Map<String, Double> getGaloisResults(String strategyName, Map<String, Map<String, Double>> resultsForQuery) {
+        for (String key : resultsForQuery.keySet()) {
+            if (key.startsWith(strategyName)) {
+                Map<String, Double> metrics = resultsForQuery.get(key);
+                return metrics;
+            }
+        }
+        return null;
+    }
+    
     private Double computeAverage(Map<String, Double> metrics, List<String> metricsToAverage) {
         if (metrics == null || metrics.isEmpty()) {
             return -1.0;

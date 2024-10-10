@@ -1,5 +1,5 @@
 {
-  "name": "Movies-{{QN}} Experiment-nl",
+  "name": "Movies-{{QN}} Experiment-sql",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -14,9 +14,8 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-nl",
-      "maxIterations": 10,
-      "naturalLanguagePrompt": "{{PROMPT}}"
+      "queryExecutor": "open-ai-sql",
+      "maxIterations": 10
     }
   },
   "query": {
