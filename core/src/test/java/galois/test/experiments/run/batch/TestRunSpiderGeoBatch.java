@@ -82,8 +82,8 @@ public class TestRunSpiderGeoBatch {
 
         ExpVariant q4 = ExpVariant.builder()
                 .queryNum("Q4")
-                .querySql("SELECT population FROM usa_city WHERE city_name = 'boulder';")
-                .prompt("how many people live in boulder")
+                .querySql("SELECT population FROM usa_city WHERE city_name = 'tempe';")
+                .prompt("how many people live in tempe")
                 .optimizers(singleConditionOptimizers)
                 .build();
 
@@ -128,12 +128,12 @@ public class TestRunSpiderGeoBatch {
                 .optimizers(singleConditionOptimizers)
                 .build();
 
-        ExpVariant q10 = ExpVariant.builder()
-                .queryNum("Q10")
-                .querySql("SELECT DISTINCT usa_state_traversed FROM usa_river;")
-                .prompt("which states have a river")
-                .optimizers(List.of())
-                .build();
+//        ExpVariant q10 = ExpVariant.builder()
+//                .queryNum("Q10")
+//                .querySql("SELECT DISTINCT usa_state_traversed FROM usa_river;")
+//                .prompt("which states have a river")
+//                .optimizers(List.of())
+//                .build();
 
         ExpVariant q11 = ExpVariant.builder()
                 .queryNum("Q11")
@@ -191,12 +191,12 @@ public class TestRunSpiderGeoBatch {
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-        ExpVariant q18 = ExpVariant.builder()
-                .queryNum("Q18")
-                .querySql("SELECT COUNT ( usa_state_traversed ) FROM usa_river WHERE length_in_km > 750;")
-                .prompt("how many states have major rivers")
-                .optimizers(singleConditionOptimizers)
-                .build();
+//        ExpVariant q18 = ExpVariant.builder()
+//                .queryNum("Q18")
+//                .querySql("SELECT COUNT ( usa_state_traversed ) FROM usa_river WHERE length_in_km > 750;")
+//                .prompt("how many states have major rivers")
+//                .optimizers(singleConditionOptimizers)
+//                .build();
 
 //        ExpVariant q19 = ExpVariant.builder()
 //                .queryNum("Q19")
@@ -239,12 +239,12 @@ public class TestRunSpiderGeoBatch {
                 .optimizers(singleConditionOptimizers)
                 .build();
 
-        ExpVariant q25 = ExpVariant.builder()
-                .queryNum("Q25")
-                .querySql("SELECT r.river_name FROM usa_river r WHERE r.length_in_km > 750.0 AND r.usa_state_traversed = 'illinois';")
-                .prompt("name the major rivers in illinois")
-                .optimizers(multipleConditionsOptimizers)
-                .build();
+//        ExpVariant q25 = ExpVariant.builder()
+//                .queryNum("Q25")
+//                .querySql("SELECT r.river_name FROM usa_river r WHERE r.length_in_km > 750.0 AND r.usa_state_traversed = 'illinois';")
+//                .prompt("name the major rivers in illinois")
+//                .optimizers(multipleConditionsOptimizers)
+//                .build();
 
         ExpVariant q26 = ExpVariant.builder()
                 .queryNum("Q26")
@@ -338,7 +338,7 @@ public class TestRunSpiderGeoBatch {
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q20, q21, q22, q23, q24, q25, q26, q29, q30, q31, q32, q33, q34, q35, q36, q37, q38);
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q11, q12, q13, q14, q15, q16, q17, q20, q21, q22, q23, q24, q26, q29, q30, q31, q32, q33, q34, q35, q36, q37, q38);
     }
 
     @Test
@@ -372,7 +372,7 @@ public class TestRunSpiderGeoBatch {
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
-        boolean executeAllPlans = false;
+        boolean executeAllPlans = true;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
@@ -404,17 +404,32 @@ public class TestRunSpiderGeoBatch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
-                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+    }
+    
+    @Test
+    public void testAllConditionPushDown() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IOptimizer optimizer = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        String configPathTable = "/SpiderGeo/geo-llama3-table-experiment.json";
+        String configPathKey = "/SpiderGeo/geo-llama3-key-scan-experiment.json";
+        for (ExpVariant variant : variants) {
+            testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
+            testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }

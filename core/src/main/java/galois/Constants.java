@@ -11,6 +11,7 @@ public class Constants {
 
     public static final String OPEN_AI_API_KEY = "";
     public static final OpenAiChatModelName OPEN_AI_CHAT_MODEL_NAME = OpenAiChatModelName.GPT_4;
+    public static final OpenAiChatModelName OPEN_AI_CHAT_MODEL_NAME = OpenAiChatModelName.GPT_4_O_MINI;
     public static final int WAIT_TIME_MS_TOGETHERAI = 110; // for tier-1 otherwise 1000 for unpaid tier
     public static final String TOGETHERAI_MODEL = TogetherAIConstants.MODEL_LLAMA3_1_8B;
 //    public static final String TOGETHERAI_MODEL = TogetherAIConstants.MODEL_LLAMA3_1_70B;

@@ -155,7 +155,7 @@ public class TestRunMoviesBatch {
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
-        boolean executeAllPlans = false;
+        boolean executeAllPlans = true;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
@@ -187,17 +187,32 @@ public class TestRunMoviesBatch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
-                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+    }
+    
+    @Test
+    public void testAllConditionPushDown() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IOptimizer optimizer = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        String configPathTable = "/movies/movies-llama3-table-experiment.json";
+        String configPathKey = "/movies/movies-llama3-key-scan-experiment.json";
+        for (ExpVariant variant : variants) {
+            testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
+            testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
