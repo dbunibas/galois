@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
-public class TestRunRAGPremierLeagueBatch {
+public class TestRunRAGFortuneBatch {
 
     private static final String EXP_NAME = "RAG-PremierLeague";
     private static final String RESULT_FILE_DIR = "src/test/resources/results/";
@@ -45,7 +45,7 @@ public class TestRunRAGPremierLeagueBatch {
 
     private final List<ExpVariant> variants;
 
-    public TestRunRAGPremierLeagueBatch() {
+    public TestRunRAGFortuneBatch() {
         List<String> singleConditionOptimizers = List.of(
                 "AllConditionsPushdownOptimizer",
                 "AllConditionsPushdownOptimizer-WithFilter"

@@ -68,10 +68,17 @@ public class TestRunFlight2Batch {
                 .prompt("Which airline has call sign 'ual'?")
                 .optimizers(singleConditionOptimizers)
                 .build();
+        
+//        ExpVariant q7 = ExpVariant.builder()
+//                .queryNum("Q7")
+//                .querySql("SELECT DISTINCT city FROM target.usa_airports WHERE airportname = 'municipal' AND city IS NOT NULL")
+//                .prompt("List all distinct cities where airport name is 'municipal'.")
+//                .optimizers(multipleConditionsOptimizers)
+//                .build();
 
         // FIXME: Which Speedy tree can execute this query?
-
-        variants = List.of(q1, q2, q3);
+        
+       variants = List.of(q1, q2, q3);
     }
 
     @Test
@@ -105,7 +112,7 @@ public class TestRunFlight2Batch {
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
-        boolean executeAllPlans = false;
+        boolean executeAllPlans = true;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
@@ -137,17 +144,35 @@ public class TestRunFlight2Batch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
-                testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+                testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
+                testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    testRunner.executeSingle(configPathKey, "KEY-SCAN", variant, metrics, results, optimizer);
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    testRunner.executeSingle(configPathTable, "TABLE", variant, metrics, results, optimizer);
+                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+    }
+    
+    @Test
+    public void testAllConditionPushDown() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IOptimizer optimizer = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        String configPathTable = "/flight_2_data/flight_2-llama3-table-experiment.json";
+        String configPathKey = "/flight_2_data/flight_2-llama3-key-scan-experiment.json";
+        for (ExpVariant variant : variants) {
+            testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
+            testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
