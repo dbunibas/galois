@@ -46,6 +46,7 @@ public class TestRunSpiderGeoBatch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
+    private String executorModel = "llama3";
 
     public TestRunSpiderGeoBatch() {
         List<String> singleConditionOptimizers = List.of(
@@ -359,11 +360,11 @@ public class TestRunSpiderGeoBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/SpiderGeo/geo-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/SpiderGeo/geo-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/SpiderGeo/geo-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/SpiderGeo/geo-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/SpiderGeo/geo-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/SpiderGeo/geo-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/SpiderGeo/geo-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/SpiderGeo/geo-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/SpiderGeo/geo-" + executorModel + "-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/SpiderGeo/geo-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -373,14 +374,15 @@ public class TestRunSpiderGeoBatch {
     public void testPlanSelection() {
         double threshold = 0.9;
         boolean executeAllPlans = true;
+        boolean execute = false;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/SpiderGeo/geo-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/SpiderGeo/geo-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            String configPathTable = "/SpiderGeo/geo-llama3-table-experiment.json";
-            String configPathKey = "/SpiderGeo/geo-llama3-key-scan-experiment.json";
+            if (execute) testRunner.execute("/SpiderGeo/geo-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute) testRunner.execute("/SpiderGeo/geo-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String configPathTable = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
+            String configPathKey = "/SpiderGeo/geo-" + executorModel + "-key-scan-experiment.json";
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
             log.info("Plan Estimated: {}", planEstimation);
             String pushDownStrategy = planEstimation.computePushdown();
@@ -404,15 +406,18 @@ public class TestRunSpiderGeoBatch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
-                testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                IOptimizer allCondition = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allCondition);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allCondition);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                    if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                    if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
@@ -425,8 +430,8 @@ public class TestRunSpiderGeoBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         IOptimizer optimizer = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-        String configPathTable = "/SpiderGeo/geo-llama3-table-experiment.json";
-        String configPathKey = "/SpiderGeo/geo-llama3-key-scan-experiment.json";
+        String configPathTable = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/SpiderGeo/geo-" + executorModel + "-key-scan-experiment.json";
         for (ExpVariant variant : variants) {
             testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
             testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
@@ -440,7 +445,7 @@ public class TestRunSpiderGeoBatch {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         ExpVariant variant = variants.get(1);
-        String configPath = "/SpiderGeo/geo-llama3-key-scan-experiment.json";
+        String configPath = "/SpiderGeo/geo-" + executorModel + "-key-scan-experiment.json";
         String type = "KEY-SCAN";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
@@ -454,7 +459,7 @@ public class TestRunSpiderGeoBatch {
     @Test
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
-            String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+            String configPath = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimatorSchema(configPath, variant);
             break;
         }
@@ -464,7 +469,7 @@ public class TestRunSpiderGeoBatch {
     public void testConfidenceEstimator() {
         // confidence for every attribute
         for (ExpVariant variant : variants) {
-            String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+            String configPath = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimator(configPath, variant);
             break;
         }
@@ -473,7 +478,7 @@ public class TestRunSpiderGeoBatch {
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+            String configPath = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
         }
     }
@@ -481,7 +486,7 @@ public class TestRunSpiderGeoBatch {
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+            String configPath = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
             testRunner.executeCardinalityEstimatorQuery(configPath, variant);
 //            break;
         }
@@ -492,14 +497,14 @@ public class TestRunSpiderGeoBatch {
         double threshold = 0.9;
         boolean removeFromAlgebraTree = true;
         ExpVariant variantForConfidence = variants.get(0); //we need only one
-        String configPath = "/SpiderGeo/geo-llama3-table-experiment.json";
+        String configPath = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
         Map<ITable, Map<Attribute, Double>> dbConfidence = testRunner.executeConfidenceEstimator(configPath, variantForConfidence);
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         IDatabase database = null;
         try {
-            Experiment experiment = ExperimentParser.loadAndParseJSON("/SpiderGeo/geo-llama3-sql-experiment.json");
+            Experiment experiment = ExperimentParser.loadAndParseJSON("/SpiderGeo/geo-" + executorModel + "-sql-experiment.json");
             database = experiment.getQuery().getDatabase();
         } catch (IOException ioe) {
             log.error("Unable to parse JSON to extract Database Object");
@@ -507,19 +512,19 @@ public class TestRunSpiderGeoBatch {
         }
         for (ExpVariant variant : variants) {
             // Baseline Execution
-            testRunner.execute("/SpiderGeo/geo-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/SpiderGeo/geo-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/SpiderGeo/geo-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/SpiderGeo/geo-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             // Galois Execution
             PhysicalPlanSelector physicalPlanSelector = new PhysicalPlanSelector();
             String selectedPlan = physicalPlanSelector.getPlanByKeyStrategy(database, variant.getQuerySql());
             log.info("Query {} selected plan: {}", variant.getQuerySql(), selectedPlan);
             if (selectedPlan.equals(PhysicalPlanSelector.PLAN_TABLE)) {
-                testRunner.executeGalois("/SpiderGeo/geo-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE, dbConfidence, threshold, removeFromAlgebraTree);
+                testRunner.executeGalois("/SpiderGeo/geo-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE, dbConfidence, threshold, removeFromAlgebraTree);
             }
             if (selectedPlan.equals(PhysicalPlanSelector.PLAN_KEY_SCAN)) {
-                testRunner.executeGalois("/SpiderGeo/geo-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE, dbConfidence, threshold, removeFromAlgebraTree);
+                testRunner.executeGalois("/SpiderGeo/geo-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE, dbConfidence, threshold, removeFromAlgebraTree);
             }
-//            testRunner.execute("/SpiderGeo/geo-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/SpiderGeo/geo" + executorModel + "key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));

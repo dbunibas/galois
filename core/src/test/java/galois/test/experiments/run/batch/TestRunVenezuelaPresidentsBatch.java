@@ -45,7 +45,7 @@ public class TestRunVenezuelaPresidentsBatch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
-    private String executorModel = "gpt";
+    private String executorModel = "llama3";
 //    private String executorModel = "" + executorModel + "";
 
     public TestRunVenezuelaPresidentsBatch() {

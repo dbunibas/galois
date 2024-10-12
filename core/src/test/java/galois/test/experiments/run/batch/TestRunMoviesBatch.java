@@ -45,6 +45,7 @@ public class TestRunMoviesBatch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
+    private String executorModel = "llama3";
 
     public TestRunMoviesBatch() {
         List<String> singleConditionOptimizers = List.of(
@@ -142,11 +143,11 @@ public class TestRunMoviesBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/movies/movies-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/movies/movies-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/movies/movies-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/movies/movies-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/movies/movies-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/movies/movies-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/movies/movies-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/movies/movies-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/movies/movies-" + executorModel + "-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/movies/movies-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -156,14 +157,15 @@ public class TestRunMoviesBatch {
     public void testPlanSelection() {
         double threshold = 0.9;
         boolean executeAllPlans = true;
+        boolean execute = false;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/movies/movies-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/movies/movies-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            String configPathTable = "/movies/movies-llama3-table-experiment.json";
-            String configPathKey = "/movies/movies-llama3-key-scan-experiment.json";
+            if (execute) testRunner.execute("/movies/movies-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute) testRunner.execute("/movies/movies-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String configPathTable = "/movies/movies-" + executorModel + "-table-experiment.json";
+            String configPathKey = "/movies/movies-" + executorModel + "-key-scan-experiment.json";
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
             log.info("Plan Estimated: {}", planEstimation);
             String pushDownStrategy = planEstimation.computePushdown();
@@ -187,15 +189,18 @@ public class TestRunMoviesBatch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
-                testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                IOptimizer allCondition = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allCondition);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allCondition);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                    if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                    if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
@@ -208,8 +213,8 @@ public class TestRunMoviesBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         IOptimizer optimizer = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-        String configPathTable = "/movies/movies-llama3-table-experiment.json";
-        String configPathKey = "/movies/movies-llama3-key-scan-experiment.json";
+        String configPathTable = "/movies/movies-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/movies/movies-" + executorModel + "-key-scan-experiment.json";
         for (ExpVariant variant : variants) {
             testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
             testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
@@ -223,7 +228,7 @@ public class TestRunMoviesBatch {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         ExpVariant variant = variants.get(0);
-        String configPath = "/movies/movies-llama3-table-experiment.json";
+        String configPath = "/movies/movies-" + executorModel + "-table-experiment.json";
         String type = "TABLE";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
@@ -237,7 +242,7 @@ public class TestRunMoviesBatch {
     @Test
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
-            String configPath = "/movies/movies-llama3-table-experiment.json";
+            String configPath = "/movies/movies-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimatorSchema(configPath, variant);
             break;
         }
@@ -247,7 +252,7 @@ public class TestRunMoviesBatch {
     public void testConfidenceEstimator() {
         // confidence for every attribute
         for (ExpVariant variant : variants) {
-            String configPath = "/movies/movies-llama3-table-experiment.json";
+            String configPath = "/movies/movies-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimator(configPath, variant);
             break;
         }
@@ -256,7 +261,7 @@ public class TestRunMoviesBatch {
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/movies/movies-llama3-table-experiment.json";
+            String configPath = "/movies/movies-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
 //            break;
         }
@@ -265,7 +270,7 @@ public class TestRunMoviesBatch {
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/movies/movies-llama3-table-experiment.json";
+            String configPath = "/movies/movies-" + executorModel + "-table-experiment.json";
             testRunner.executeCardinalityEstimatorQuery(configPath, variant);
 //            break;
         }
@@ -277,10 +282,10 @@ public class TestRunMoviesBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/movies/movies-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/movies/movies-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            String tableExp = "/movies/movies-llama3-table-experiment.json";
-            String keyExp = "/movies/movies-llama3-key-scan-experiment.json";
+            testRunner.execute("/movies/movies-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/movies/movies-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String tableExp = "/movies/movies-" + executorModel + "-table-experiment.json";
+            String keyExp = "/movies/movies-" + executorModel + "-key-scan-experiment.json";
 //            Double popularity = getPopularity(tableExp, "usa_state", variant);
             Double popularity = testRunner.getPopularity(tableExp, variant);
             if (popularity >= 0.7) {

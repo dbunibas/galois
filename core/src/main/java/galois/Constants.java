@@ -18,4 +18,8 @@ public class Constants {
 
     public static final String OLLAMA_MODEL = "llama3.1:8b";
 //    public static final String OLLAMA_MODEL = "llama3.1:70b";
+    
+    public static final String MODEL_LLAMA3 = "llama3";
+    public static final String MODEL_GPT = "gpt";
+    public static final String LLM_MODEL = Constants.MODEL_LLAMA3;
 }

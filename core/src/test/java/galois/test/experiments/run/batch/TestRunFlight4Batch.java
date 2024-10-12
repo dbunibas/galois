@@ -34,6 +34,7 @@ public class TestRunFlight4Batch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
+    private String executorModel = "llama3";
 
     public TestRunFlight4Batch() {
         List<String> singleConditionOptimizers = List.of(
@@ -67,10 +68,35 @@ public class TestRunFlight4Batch {
                 .prompt("Find the name, city, country, and altitude (or elevation) of the airports in the city of New York.")
                 .optimizers(singleConditionOptimizers)
                 .build();
+        
+        ExpVariant q4 = ExpVariant.builder()
+                .queryNum("Q4")
+                .querySql("SELECT name, city, country FROM target.airports WHERE elevation_in_ft IS NOT NULL AND country = 'Brazil'")
+                .prompt("Find the name, city, and country of airports in Brazil where the elevation is not null.")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+        ExpVariant q5 = ExpVariant.builder()
+                .queryNum("Q5")
+                .querySql("SELECT DISTINCT country FROM target.airports WHERE elevation_in_ft > 1000 AND country IS NOT NULL")
+                .prompt("Find all distinct countries that have airports with an elevation greater than 1000 feet.")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+        ExpVariant q6 = ExpVariant.builder()
+                .queryNum("Q6")
+                .querySql("SELECT name, city, country, y FROM target.airports WHERE y IS NOT NULL ORDER BY y DESC LIMIT 5")
+                .prompt("Find the name, city, country, and longitude of the 5 airports farthest to the east.")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+        ExpVariant q7 = ExpVariant.builder()
+                .queryNum("Q7")
+                .querySql("SELECT name, city, country, elevation_in_ft FROM target.airports WHERE country = 'Canada' ORDER BY elevation_in_ft ASC, name ASC")
+                .prompt("Find the name, city, country, and elevation of airports in Canada, ordered by elevation and name in ascending order.")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
 
         // FIXME: Which Speedy tree can execute this query?
 
-        variants = List.of(q1, q2, q3);
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7);
     }
 
     @Test
@@ -91,11 +117,11 @@ public class TestRunFlight4Batch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/flight_4_data/flight_4-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_4_data/flight_4-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_4_data/flight_4-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/flight_4_data/flight_4-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/flight_4_data/flight_4-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_4_data/flight_4-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_4_data/flight_4-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_4_data/flight_4-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/flight_4_data/flight_4-" + executorModel + "-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/flight_4_data/flight_4-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -105,14 +131,15 @@ public class TestRunFlight4Batch {
     public void testPlanSelection() {
         double threshold = 0.9;
         boolean executeAllPlans = true;
+        boolean execute = false;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-//            testRunner.execute("/flight_4_data/flight_4-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/flight_4_data/flight_4-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            String configPathTable = "/flight_4_data/flight_4-llama3-table-experiment.json";
-            String configPathKey = "/flight_4_data/flight_4-llama3-key-scan-experiment.json";
+            if (execute) testRunner.execute("/flight_4_data/flight_4-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute) testRunner.execute("/flight_4_data/flight_4-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String configPathTable = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
+            String configPathKey = "/flight_4_data/flight_4-" + executorModel + "-key-scan-experiment.json";
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
             log.info("Plan Estimated: {}", planEstimation);
             String pushDownStrategy = planEstimation.computePushdown();
@@ -136,15 +163,18 @@ public class TestRunFlight4Batch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-//                testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
-//                testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                    if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                    if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
@@ -157,8 +187,8 @@ public class TestRunFlight4Batch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         IOptimizer optimizer = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-        String configPathTable = "/flight_4_data/flight_4-llama3-table-experiment.json";
-        String configPathKey = "/flight_4_data/flight_4-llama3-key-scan-experiment.json";
+        String configPathTable = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/flight_4_data/flight_4-" + executorModel + "-key-scan-experiment.json";
         for (ExpVariant variant : variants) {
             testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
             testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
@@ -172,7 +202,7 @@ public class TestRunFlight4Batch {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         ExpVariant variant = variants.get(2);
-        String configPath = "/flight_4_data/flight_4-llama3-sql-experiment.json";
+        String configPath = "/flight_4_data/flight_4-" + executorModel + "-sql-experiment.json";
         String type = "SQL";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
@@ -187,7 +217,7 @@ public class TestRunFlight4Batch {
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
 //            ExpVariant variant = variants.get(0);
-            String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";
+            String configPath = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimatorSchema(configPath, variant);
             break;
         }
@@ -198,7 +228,7 @@ public class TestRunFlight4Batch {
         // confidence for every attribute
         for (ExpVariant variant : variants) {
 //            ExpVariant variant = variants.get(0);
-            String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";
+            String configPath = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimator(configPath, variant);
             break;
         }
@@ -207,7 +237,7 @@ public class TestRunFlight4Batch {
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";
+            String configPath = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
 //            break;
         }
@@ -216,7 +246,7 @@ public class TestRunFlight4Batch {
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/flight_4_data/flight_4-llama3-table-experiment.json";
+            String configPath = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
             testRunner.executeCardinalityEstimatorQuery(configPath, variant);
 //            break;
         }
