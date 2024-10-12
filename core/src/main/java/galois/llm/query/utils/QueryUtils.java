@@ -1,7 +1,6 @@
 package galois.llm.query.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.xwpf.usermodel.ICell;
 import speedy.SpeedyConstants;
 import speedy.exceptions.DAOException;
 import speedy.model.database.*;
@@ -16,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static galois.utils.Mapper.asString;
+import static speedy.persistence.Types.BOOLEAN;
 
 @Slf4j
 public class QueryUtils {
@@ -90,6 +90,11 @@ public class QueryUtils {
         }
 
         Object value = map.get(attribute.getName());
+        if (BOOLEAN.equalsIgnoreCase(attribute.getType())) {
+            if(value.toString().equalsIgnoreCase("YES")) return new ConstantValue(Boolean.TRUE);
+            if(value.toString().equalsIgnoreCase("NO")) return new ConstantValue(Boolean.FALSE);
+            return new ConstantValue(Boolean.parseBoolean(value.toString()));
+        }
         if (!Types.isNumerical(attribute.getType())) {
             return new ConstantValue(value);
         }

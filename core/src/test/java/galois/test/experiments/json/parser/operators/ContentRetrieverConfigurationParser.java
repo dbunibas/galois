@@ -144,16 +144,19 @@ public class ContentRetrieverConfigurationParser {
         public List<Content> retrieve(Query query) {
             Query cleanedQuery = cleanQuery(query);
             List<Content> results = baseRetriever.retrieve(cleanedQuery);
-            log.trace("# Executing retriver: \n Query: {}\n Results: {}", query, results);
             return results;
         }
 
         private Query cleanQuery(Query query) {
-            Pattern pattern = Pattern.compile(".*(select .*)\n", Pattern.CASE_INSENSITIVE);
-            String originalQuery = query.text().replace("\\n", "\n");;
+            Pattern pattern = Pattern.compile(".*(select .*)\\.\n", Pattern.CASE_INSENSITIVE);
+            String originalQuery = query.text().replace("\\n", "\n");
             Matcher matcher = pattern.matcher(originalQuery);
             boolean matchFound = matcher.find();
             if (!matchFound) {
+                if(query.text().contains("Use the following JSON schema")){ //To avoid Input validation error: `inputs` tokens + `max_new_tokens` must be <= 532
+                    String simplifiedQuery = query.text().substring(0,query.text().indexOf("Use the following JSON schema"));
+                    return Query.from(simplifiedQuery, query.metadata());
+                }
                 return query;
             }
             String cleanedQuery = matcher.group(1);

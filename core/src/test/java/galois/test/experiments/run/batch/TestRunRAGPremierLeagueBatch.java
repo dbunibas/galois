@@ -96,19 +96,26 @@ public class TestRunRAGPremierLeagueBatch {
                 .queryNum("Q6")
                 .querySql("select count(*) from premier_league_2024_2025_match_result plmr where away_team = 'Liverpool' and away_goals = 3")
                 .prompt("How many Premier League 2024-2025 matches did Liverpool win with 3 goals as the away team?")
-                .optimizers(singleConditionOptimizers)
+                .optimizers(multipleConditionsOptimizers)
                 .build();
 
         ExpVariant q7 = ExpVariant.builder()
                 .queryNum("Q7")
                 .querySql("select home_team, away_team from premier_league_2024_2025_match_result plmr where home_goals = 0 and away_goals = 0")
                 .prompt("List all the teams that played in goalless draws in the Premier League 2024-2025 season")
-                .optimizers(singleConditionOptimizers)
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q8 = ExpVariant.builder()
+                .queryNum("Q8")
+                .querySql("select player_name, goal_scored from premier_league_2024_2025_key_events where team = 'Manchester City'")
+                .prompt(" ")
+                .optimizers(multipleConditionsOptimizers)
                 .build();
 
 //        variants = List.of(q1, q2, q3, q4, q5);
 //        variants = List.of(q3, q4, q5);
-        variants = List.of(q3);
+        variants = List.of(q8);
     }
 
     @Test

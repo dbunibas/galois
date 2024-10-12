@@ -1,0 +1,13 @@
+**Company Profile: Cognizant Technology Solutions**
+
+According to the latest Fortune 2024 ranking, Cognizant Technology Solutions, a leading player in the Information Technology Services industry, holds the 213th position. As a prominent player in the Technology sector, the company's performance in the previous year reflects a decline in its ranking, dropping by 5.0 positions from its previous standing. Despite this decline, Cognizant Technology Solutions remains a significant force in its industry, boasting a substantial market value of $36,486.8 million as of March 28, 2024.
+
+Headquartered in Teaneck, New Jersey, Cognizant Technology Solutions operates as a public company, with Ravi Kumar S at the helm as Chief Executive Officer. Established by its founders, the company has grown to become a global entity, employing a total of 347,700 employees across the globe. The company's website, accessible at https://www.cognizant.com, offers a comprehensive overview of its services, projects, and company information.
+
+Cognizant Technology Solutions reported revenues of $19,353.0 million in the previous year, reflecting a modest decline of 0.4% in revenue growth. The company's profitability remains intact, with profits totaling $2,126.0 million, albeit experiencing a decline of 7.2% in profit growth. The company's assets stood at $18,483.0 million, indicating a solid financial foundation.
+
+While Cognizant Technology Solutions did not experience growth in jobs, its sheer scale of operations and extensive workforce underscore its position as a major player in the Technology sector. With a long history of establishing itself as a reputable Information Technology Services provider, the company continues to navigate the competitive landscape of the industry.
+
+Notably, Cognizant Technology Solutions has not been recognized as one of the World's Most Admired Companies or among the Best Companies to Work For, nor is it a newcomer to the Fortune 500 list. However, its presence in the Fortune ranking is a testament to its enduring influence in the technology sector. The company's market value, updated to $36,487.0 million as of June 4, 2024, reflects its ongoing relevance in the global business landscape.
+
+In conclusion, Cognizant Technology Solutions, despite experiencing a decline in its ranking, remains a significant player in the Information Technology Services industry, with a substantial market value, extensive workforce, and solid financial foundation. The company's ongoing operations and endeavors will be closely watched as it navigates the competitive landscape of the Technology sector.

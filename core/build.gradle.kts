@@ -29,6 +29,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core:2.17.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.18.0")
 
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.11.0")

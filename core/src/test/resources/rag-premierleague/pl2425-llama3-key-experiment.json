@@ -110,6 +110,27 @@
               "nullable": true
             }
           ]
+        },
+        {
+          "tableName": "premier_league_2024_2025_key_events",
+          "attributes": [
+            {
+              "name": "player_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "goal_scored",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "team",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
         }
       ]
     },

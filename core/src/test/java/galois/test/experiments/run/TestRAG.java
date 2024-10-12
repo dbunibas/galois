@@ -49,8 +49,11 @@ public class TestRAG {
     private static final String EXP_NAME = "BBC-PremierLeague2024-2025";
     private static final String EXT = ".MD";
 
-    private static final String TEXT_TO_CHECK = "Player of the match";
-    private static final String NL_PROMPT = "select player_of_the_match from premier_league_2024_2025_match_result.";
+//    private static final String TEXT_TO_CHECK = "Player of the match";
+//    private static final String NL_PROMPT = "select player_name, goal_scored from premier_league_2024_2025_key_events where team = 'Manchester City'.";
+
+    private static final String TEXT_TO_CHECK = "Oracle";
+    private static final String NL_PROMPT = "select femaleceo and profitable and company and headquartersstate and ceo from fortune_2024 where headquartersstate == \"Texas\"";
 
 //    private static final String NL_PROMPT = "Given the following query, populate the table with actual values.\n" +
 //            "query: select player_of_the_match from premier_league_2024_2025_match_result.\n" +
@@ -144,7 +147,7 @@ public class TestRAG {
 
     private void testExecutor(IQueryExecutor executor) {
 //        TableAlias tableAlias = new TableAlias("premier_league_2024_2025_player_of_the_match", "potm");
-        TableAlias tableAlias = new TableAlias("premier_league_2024_2025_arsenal_matches", "potm");
+        TableAlias tableAlias = new TableAlias("premier_league_2024_2025_key_events", "scorers");
         IAlgebraOperator llmScan = new LLMScan(tableAlias, executor, null);
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
@@ -154,7 +157,7 @@ public class TestRAG {
         AccessConfiguration accessConfiguration = new AccessConfiguration();
         String driver = "org.postgresql.Driver";
         String uri = "jdbc:postgresql:llm_rag_premierleague";
-        String schemaName = "target";
+        String schemaName = "public";
         String username = "pguser";
         String password = "pguser";
         accessConfiguration.setDriver(driver);
@@ -189,7 +192,8 @@ public class TestRAG {
         EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore
                 .builder()
                 .baseUrl("http://localhost:8000")
-                .collectionName("rag_premierleague_128_64_UAE-Large")
+//                .collectionName("rag_premierleague_128_64_UAE-Large")
+                .collectionName("rag_fortune_128_64_UAE-Large")
 //                .collectionName(EXP_NAME + "-" + config.toString().hashCode())
                 .logRequests(true)
                 .logResponses(true)
@@ -218,7 +222,7 @@ public class TestRAG {
         return EmbeddingStoreContentRetriever.builder()
                 .embeddingStore(embeddingStore)
                 .embeddingModel(embeddingModel)
-                .maxResults(100)
+                .maxResults(50)
 //                .dynamicMaxResults(query -> 3)
                 .minScore(0.75)
 //                .dynamicMinScore(query -> 0.75)

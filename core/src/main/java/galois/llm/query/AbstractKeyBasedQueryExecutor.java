@@ -227,7 +227,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
             try {
                 if (newChain == null) {
                     newChain = getConversationalChain();
-                    response = getResponse(newChain, prompt, false);
+//                    response = getResponse(newChain, prompt, false);
                 }
                 response = getResponse(newChain, EPrompts.ERROR_JSON_NUMBER_FORMAT.getTemplate(), false);
                 log.debug("Exception - Attribute response is after appropriate JSON format: {}", response);
