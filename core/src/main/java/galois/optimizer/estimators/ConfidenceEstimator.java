@@ -153,7 +153,7 @@ public class ConfidenceEstimator {
         
 //        String promptJSON = "Return your answer in a single JSON format without any comment using the property \"attribute\" and \"confidence\". For high confidence return \"high\" for low confidence return \"low\".";
         String promptJSON = "Return your answer in a valid JSON format using for each attribute the property \"attribute\" and \"confidence\". Return the result as a JSON list. For confidence use the following values \"high\", \"medium\" or \"low\".";
-        
+        String promptJSONNoCode = "Do not return your answer with any code. " + promptJSON;
         String relationalSchema = "";
         for (String tableName : tableNames) {
             ITable table = database.getTable(tableName);
@@ -197,7 +197,20 @@ public class ConfidenceEstimator {
         String cleanedResponse = Mapper.toCleanJsonList(responseJSON, true);
         if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedResponse);
         Map<String, String> confidencesForAttrsConditions = new HashMap<>();
-        List<Map<String, Object>> confidences = Mapper.fromJsonToListOfMaps(cleanedResponse, true);
+        List<Map<String, Object>> confidences = null;
+        try {
+            confidences = Mapper.fromJsonToListOfMaps(cleanedResponse, false);
+        } catch (Exception e) {
+            log.error("Error in parsing the response for confidence.");
+            responseJSON = model.generate(responseJSON + "\n" +promptJSONNoCode);
+            if (log.isDebugEnabled()) log.debug("Response: \n {}",responseJSON);
+            cleanedResponse = Mapper.toCleanJsonList(responseJSON, true);
+            if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedResponse);
+            try {
+                 confidences = Mapper.fromJsonToListOfMaps(cleanedResponse, false);
+            } catch (Exception internal) {}
+        }
+        if (confidences == null) return confidencesForAttrsConditions;
         for (Map<String, Object> confidence : confidences) {
             String attribute = confidence.get("attribute").toString();
             String confidenceString = confidence.get("confidence").toString();
@@ -263,7 +276,19 @@ public class ConfidenceEstimator {
         if (log.isDebugEnabled()) log.debug("Response JSON:\n {}", response);
         String cleanedJson = Mapper.toCleanJsonObject(response);
         if (log.isDebugEnabled()) log.debug("JSON:\n {}", cleanedJson);
-        Map<String, Object> jsonResponseObj = Mapper.fromJsonToMap(cleanedJson);
+        Map<String, Object> jsonResponseObj = new HashMap<>();
+        try {
+            jsonResponseObj = Mapper.fromJsonToMap(cleanedJson);
+        } catch (Exception e) {
+            log.error("Error in parsing the response for confidence value.");
+            response = model.generate(response + "\n" +promptResult);
+            if (log.isDebugEnabled()) log.debug("Response JSON: \n {}",response);
+            cleanedJson = Mapper.toCleanJsonObject(response);
+            if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedJson);
+            try {
+                 jsonResponseObj = Mapper.fromJsonToMap(cleanedJson);
+            } catch (Exception internal) {}
+        }
         for (String propName : jsonResponseObj.keySet()) {
             if (propName.equalsIgnoreCase("confidence")) {
                 String sConf = jsonResponseObj.get(propName).toString();
