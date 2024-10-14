@@ -15,15 +15,15 @@
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-sql",
-      "maxIterations": 10,
+      "maxIterations": 20,
       "contentRetriever": {
-        "embeddingStoreCollectionName": "rag_fortune_128_64_UAE-Large",
+        "embeddingStoreCollectionName": "rag_fortune_400_50_UAE-Large",
         "embeddingModelEngine": "togetherai",
         "embeddingModel": "WhereIsAI/UAE-Large-V1",
         "maxResults": 50,
         "minScore": 0.75,
-        "maxSegmentSizeInTokens": 128,
-        "maxOverlapSizeInTokens": 64,
+        "maxSegmentSizeInTokens": 400,
+        "maxOverlapSizeInTokens": 50,
         "documentsToLoad": "./src/test/resources/rag-fortune/documents/"
       }
     }
