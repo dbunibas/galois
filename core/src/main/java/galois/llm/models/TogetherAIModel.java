@@ -43,6 +43,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private int maxTokens = 4096; // max returned tokens
     private double temperature = 0.0; // 0.0 deterministic
     private double topP = 0.0; // 0.0 deterministic
+    private boolean useSeed = true; // deterministic
     private List<Message> messages = new ArrayList<>();
     private ObjectMapper objectMapper = Mapper.MAPPER;
     private int inputTokens = 0;
@@ -50,6 +51,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private boolean checkJSON = true;
     private boolean checkJSONResponseContent = false;
     private Map<String, String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
+    private boolean useCache = true;
 
 //    public TogetherAIModel(String toghetherAiAPI, String modelName) {
 //        this(toghetherAiAPI, modelName, false);
@@ -89,7 +91,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         String response = this.inMemoryCache.get(jsonRequest);
         if (response == null && !this.inMemoryCache.containsKey(jsonRequest)) {
             response = this.makeRequest(jsonRequest, authorizationValue);
-            this.inMemoryCache.put(jsonRequest, response);
+            if (useCache) this.inMemoryCache.put(jsonRequest, response);
         }
         if (response == null || response.isEmpty()) {
             log.trace("Return null because response is null or empty: " + response);
@@ -294,6 +296,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + "    ],\n"
                 + (streamMode ? "    \"stream\": true,\n" : "")
                 + (streamMode ? "    \"stream_tokens\": true,\n" : "")
+                + (useSeed ? "    \"seed\": 42,\n" : "")
 //                + "    \"stream\": true,\n"
                 + "    \"messages\": {$MESSAGES$}\n"
                 + "}";

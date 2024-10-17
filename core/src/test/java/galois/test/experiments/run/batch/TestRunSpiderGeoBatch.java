@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -338,8 +339,85 @@ public class TestRunSpiderGeoBatch {
                 .prompt("List the state name, the capital, the popoulation and the area from USA states where the population is 4700000 and the are is 56153")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
+        
+        ///// FOR TESTS
+        ExpVariant q39 = ExpVariant.builder()
+                .queryNum("Q39")
+                .querySql("SELECT mountain_name, mountain_altitude_in_meters FROM usa_mountain WHERE country_name = 'united states' ORDER BY mountain_altitude_in_meters DESC LIMIT 10;")
+                .prompt("What are the top 10 highest mountains in the United States?")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+
+        ExpVariant q40 = ExpVariant.builder()
+                .queryNum("Q40")
+                .querySql("SELECT t1.state_name, COUNT(*) FROM usa_state as t1 JOIN usa_border_info as t2 ON t1.state_name = t2.state_name WHERE t1.area_squared_miles > 50000 AND t1.country_name='united states' GROUP BY t1.state_name;")
+                .prompt("How many neighboring states does each state of united states with an area in squared miles greater than 50,000 have?")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q41 = ExpVariant.builder()
+                .queryNum("Q41")
+                .querySql("SELECT mountain_name FROM usa_mountain WHERE state_name = 'alaska';")
+                .prompt("What are the mountains in Alaska?")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q42 = ExpVariant.builder()
+                .queryNum("Q42")
+                .querySql("SELECT lake_name, area_squared_km, state_name FROM usa_lake WHERE area_squared_km > 750;")
+                .prompt("What are the lakes in the United States with an area greater than 750 squared km?")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q43 = ExpVariant.builder()
+                .queryNum("Q43")
+                .querySql("SELECT COUNT ( river_name ) FROM usa_river WHERE length_in_km > 750 AND usa_state_traversed  = 'ohio';")
+                .prompt("How many rivers in Ohio are longer than 750 km?")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q44 = ExpVariant.builder()
+                .queryNum("Q44")
+                .querySql("SELECT state_name, country_name, mountain_altitude_in_meters FROM usa_mountain WHERE mountain_name = 'whitney';")
+                .prompt("What state is Mount Whitney in?")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q45 = ExpVariant.builder()
+                .queryNum("Q45")
+                .querySql("SELECT COUNT ( city_name ) FROM usa_city WHERE population  >  150000 AND state_name  = 'texas';")
+                .prompt("How many cities in Texas have a population greater than 150,000?")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
+        ExpVariant q46 = ExpVariant.builder()
+                .queryNum("Q46")
+                .querySql("SELECT COUNT ( DISTINCT usa_state_traversed ) FROM usa_river WHERE length_in_km  >  750;")
+                .prompt("How many distinct usa states are traversed by rivers longer than 750 km?")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q47 = ExpVariant.builder()
+                .queryNum("Q47")
+                .querySql("SELECT SUM ( area_squared_miles ) FROM usa_state;")
+                .prompt("What is the total area in squared miles of the United States?")
+                .optimizers(singleConditionOptimizers)
+                .build();
+
+        ExpVariant q48 = ExpVariant.builder()
+                .queryNum("Q48")
+                .querySql("SELECT DISTINCT t1.capital, t1.state_name FROM usa_state AS t1 JOIN usa_city AS t2 ON t1.state_name  =  t2.state_name WHERE t1.area_squared_miles > 50000;")
+                .prompt("What are the capitals of states with an area greater than 50,000 squared miles?")
+                .optimizers(multipleConditionsOptimizers)
+                .build();
+
 
         variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q11, q12, q13, q14, q15, q16, q17, q20, q21, q22, q23, q24, q26, q29, q30, q31, q32, q33, q34, q35, q36, q37, q38);
+//        variants = List.of(q6, q13, q14, q15, q16, q17, q20, q34, q35, q36, q37, q38); // EXP Unoptimized vs AllCondition vs GaloisPushdown
+//        variants = List.of(q39, q40, q41, q42, q43, q44, q45, q46, q47, q48);
+//        variants = List.of(q42);
+
     }
 
     @Test
@@ -374,13 +452,13 @@ public class TestRunSpiderGeoBatch {
     public void testPlanSelection() {
         double threshold = 0.9;
         boolean executeAllPlans = true;
-        boolean execute = false;
+        boolean execute = true;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            if (execute) testRunner.execute("/SpiderGeo/geo-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            if (execute) testRunner.execute("/SpiderGeo/geo-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            if (execute) testRunner.execute("/SpiderGeo/geo-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            if (execute) testRunner.execute("/SpiderGeo/geo-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             String configPathTable = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
             String configPathKey = "/SpiderGeo/geo-" + executorModel + "-key-scan-experiment.json";
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
@@ -408,9 +486,8 @@ public class TestRunSpiderGeoBatch {
             if (executeAllPlans) {
                 if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
-                IOptimizer allCondition = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allCondition);
-                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allCondition);
+                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allConditionPushdownWithFilter);
+                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allConditionPushdownWithFilter);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
@@ -435,6 +512,42 @@ public class TestRunSpiderGeoBatch {
         for (ExpVariant variant : variants) {
             testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
             testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+    }
+    
+    @Test
+    public void testExpOptimization() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IOptimizer nullOptimizer = null;
+        String configPathTable = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
+        for (ExpVariant variant : variants) {
+            QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
+            log.info("Plan Estimated: {}", planEstimation);
+            IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra false
+            IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+            IOptimizer singleConditionPushDownRemoveAlgebraTree = null;
+            IOptimizer singleConditionPushDown = null;
+            String pushDownStrategy = planEstimation.computePushdown();
+            Integer indexPushDown = planEstimation.getIndexPushDown();
+            if (indexPushDown != null) {
+                singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
+                singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexPushDown, false);
+            }
+            IOptimizer optimizer = null;
+            if (pushDownStrategy.equals(QueryPlan.PUSHDOWN_ALL_CONDITION)) {
+//                optimizer = allConditionPushdown;
+                optimizer = allConditionPushdownWithFilter;
+            }
+            if (pushDownStrategy.startsWith(QueryPlan.PUSHDOWN_SINGLE_CONDITION)) {
+//                optimizer = singleConditionPushDown;
+                optimizer = singleConditionPushDownRemoveAlgebraTree;
+            }
+            testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+            testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allConditionPushdownWithFilter);
+            testRunner.executeSingle(configPathTable, "TABLE-UNOPTIMIZED", variant, metrics, results, nullOptimizer);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
@@ -528,5 +641,23 @@ public class TestRunSpiderGeoBatch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
+    }
+    
+    @Test
+    public void testCardinalityRun() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IOptimizer n = null;
+        IOptimizer a = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        List<IOptimizer> optimizers = Arrays.asList(a, n, a, n, n, a, n, n, n, a, n, a, a, a, a, a, a, n, n, n, n, a, n, a, n, n, n, a, a, a, a, a);
+        String configPathTable = "/SpiderGeo/geo-" + executorModel + "-table-experiment.json";
+            String configPathKey = "/SpiderGeo/geo-" + executorModel + "-key-scan-experiment.json";
+        int i = 0;
+        for (ExpVariant variant : variants) {
+           IOptimizer o = optimizers.get(i);
+            testRunner.executeSingle(configPathTable, "TABLE-CARDINALITY", variant, metrics, results, o);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
     }
 }

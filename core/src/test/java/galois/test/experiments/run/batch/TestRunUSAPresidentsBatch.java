@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,7 +186,7 @@ public class TestRunUSAPresidentsBatch {
     public void testPlanSelection() {
         double threshold = 0.9;
         boolean executeAllPlans = true;
-        boolean execute = true;
+        boolean execute = false;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
@@ -356,5 +357,24 @@ public class TestRunUSAPresidentsBatch {
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);
         Double popularity = (Double) parsedResponse.getOrDefault("popularity", -1.0);
         return popularity;
+    }
+    
+    @Test
+    public void testCardinalityRun() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IOptimizer n = null;
+        IOptimizer a = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        List<IOptimizer> optimizers = Arrays.asList(a,a,a,a,a, n, n, n,a, a, a, a, n);
+        String configPathTable = "/presidents/presidents-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/presidents/presidents-" + executorModel + "-key-scan-experiment.json";
+        int i = 0;
+        for (ExpVariant variant : variants) {
+           IOptimizer o = optimizers.get(i);
+            testRunner.executeSingle(configPathTable, "TABLE-CARDINALITY", variant, metrics, results, o);
+//            testRunner.executeSingle(configPathKey, "KEY-SCAN-CARDINALITY", variant, metrics, results, o);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
     }
 }

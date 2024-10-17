@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +97,7 @@ public class TestRunFlight4Batch {
 
         // FIXME: Which Speedy tree can execute this query?
 
-        variants = List.of(q1, q2, q3, q4, q5, q6, q7);
+        variants = List.of(q1, q2, q3);
     }
 
     @Test
@@ -249,6 +250,25 @@ public class TestRunFlight4Batch {
             String configPath = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
             testRunner.executeCardinalityEstimatorQuery(configPath, variant);
 //            break;
+        }
+    }
+    
+    @Test
+    public void testCardinalityRun() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IOptimizer n = null;
+        IOptimizer a = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        List<IOptimizer> optimizers = Arrays.asList(a, n, a);
+        String configPathTable = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/flight_4_data/flight_4-" + executorModel + "-key-scan-experiment.json";
+        int i = 0;
+        for (ExpVariant variant : variants) {
+            IOptimizer o = optimizers.get(i);
+            testRunner.executeSingle(configPathTable, "TABLE-CARDINALITY", variant, metrics, results, o);
+//            testRunner.executeSingle(configPathKey, "KEY-SCAN-CARDINALITY", variant, metrics, results, o);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
 

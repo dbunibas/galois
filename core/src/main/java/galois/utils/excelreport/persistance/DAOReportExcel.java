@@ -43,6 +43,46 @@ public class DAOReportExcel {
 
     public DAOReportExcel() {
     }
+    
+    public void readResultsForDataset2(File filePath, List<String> queriesName, List<String> statsToExport, List<String> strategyNames) {
+            try {
+            Map<String, Map<String, Map<String, Double>>> results = new HashMap<>();
+            Workbook workbook = new XSSFWorkbook(filePath);
+            Set<String> missingQueries = new HashSet<>();
+            for (String qName : queriesName) {
+                Sheet sheet = workbook.getSheet(qName);
+                log.debug("Query: " + qName);
+                if (sheet == null) {
+                    log.error("Missing sheet for query: " + qName);
+                    missingQueries.add(qName);
+                    continue;
+                }
+                Map<String, Map<String, Double>> statisticsForQuery = getStatistics(sheet);
+                results.put(qName, statisticsForQuery);
+            }
+            List<List<String>> queriesStats = new ArrayList<>();
+            List<String> header = new ArrayList<>();
+            header.add("");
+            header.addAll(strategyNames);
+            queriesStats.add(header);
+            for (String qName : queriesName) {
+                if (missingQueries.contains(qName)) continue;
+                Map<String, Map<String, Double>> resultsForQuery = results.get(qName);
+                String key = getKey(resultsForQuery.keySet(), strategyNames);
+                if (key == null) continue;
+                Map<String, Double> resultsForStrategy = resultsForQuery.get(key);
+                List<String> query = new ArrayList<>();
+                query.add(qName);
+                for (String statName : statsToExport) {
+                    query.add((resultsForStrategy.get(statName) + "").replace(".", ","));
+                }
+                queriesStats.add(query);
+            }
+            exportToCSV(queriesStats, filePath);
+        } catch (Exception e) {
+            log.error("Unable to open " + filePath + " * Exception: ", e);
+        }
+    }
 
     public void readResultsForDataset(File filePath, List<String> queriesName, List<String> statsToExport, List<String> metricsToAverage) {
         try {
@@ -610,6 +650,15 @@ public class DAOReportExcel {
                 }
             }
         }
+    }
+
+    private String getKey(Set<String> keySet, List<String> strategyNames) {
+        for (String key : keySet) {
+            for (String strategyName : strategyNames) {
+                if (key.contains(strategyName)) return key;
+            }
+        }
+        return null;
     }
 
 }

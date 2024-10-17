@@ -371,9 +371,11 @@ public class ConfidenceEstimator {
         ParserWhere parserWhere = new ParserWhere();
         parserWhere.parseWhere(querySQL);
         if (parserWhere.getExpressions().isEmpty()) return;
-        String prompt = "Assuming that you have the knowledge of the full table(s) of ${tables} with the following schema: ${relationalSchema}."
+        String prompt = "Assuming that you have the knowledge on the data of the full table(s) of ${tables} with the following schema: ${relationalSchema}."
                 + "\nConsidering the following query: ${sqlQuery}. \n"
-                + "What is your estimation about the cardinality (low, medium, high) of ${conditions}. Answer in json format returning the condition and the cardinality.";
+                + "What is your estimation about the cardinality (low, medium, high) of the following conditions:\n"
+                + "\n${conditions}\n"
+                + "Answer in JSON format returning each condition and the associated cardinality (low, medium, high). Do not report any comments.";
         String relationalSchema = "";
         String tables = "";
         for (String tableName : tableNames) {
@@ -386,16 +388,13 @@ public class ConfidenceEstimator {
         relationalSchema = relationalSchema.trim();
         tables = tables.trim();
         String conditions = "";
-        for(int i = 0; i < parserWhere.getExpressions().size(); i++) {
-            if (i == 0) {
-                conditions += parserWhere.getExpressions().get(i);
-            } else {
-                conditions += " and what is the cardinality of " + parserWhere.getExpressions().get(i);
+        String allConditions = parserWhere.getWhereExpression();
+        if (parserWhere.getExpressions().size() > 1) {
+            for (int i = 0; i < parserWhere.getExpressions().size(); i++) {
+                conditions += parserWhere.getExpressions().get(i) + ";\n";
             }
         }
-        if (parserWhere.getExpressions().size() > 1) {
-            conditions += " and what is the cardinality of all conditions";
-        }
+        conditions += allConditions+";\n";
         String promptTable = prompt.replace("${tables}", tables);
         promptTable = promptTable.replace("${relationalSchema}", relationalSchema);
         promptTable = promptTable.replace("${sqlQuery}", querySQL);
