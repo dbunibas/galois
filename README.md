@@ -1,1 +1,1 @@
-# GALOIS
+# FLOQ
