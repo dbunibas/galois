@@ -11,19 +11,19 @@ In addition, the following tools/subscriptions are needed:
 - **ChromaDB** - optional - Needed only for RAG experiments
 
 ### Datasets
-All datasets are available in the [resources](core%2Fsrc%2Ftest%2Fresources) folder
+All datasets are available in the [resources](core/src/test/resources) folder
 
 ### Experiments
 The project contains several Experiments. For each experiments, queries and prompt are defined in the corresponding test executor classes:
-- [TestRunFlight2Batch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunFlight2Batch.java)
-- [TestRunFlight4Batch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunFlight4Batch.java)
-- [TestRunMoviesBatch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunMoviesBatch.java)
-- [TestRunRAGFortuneBatch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunRAGFortuneBatch.java)
-- [TestRunRAGPremierLeagueBatch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunRAGPremierLeagueBatch.java)
-- [TestRunSpiderGeoBatch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunSpiderGeoBatch.java)
-- [TestRunUSAPresidentsBatch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunUSAPresidentsBatch.java)
-- [TestRunVenezuelaPresidentsBatch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunVenezuelaPresidentsBatch.java)
-- [TestRunWorld1Batch.java](core%2Fsrc%2Ftest%2Fjava%2Ffloq%2Ftest%2Fexperiments%2Frun%2Fbatch%2FTestRunWorld1Batch.java)
+- [TestRunFlight2Batch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunFlight2Batch.java)
+- [TestRunFlight4Batch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunFlight4Batch.java)
+- [TestRunMoviesBatch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunMoviesBatch.java)
+- [TestRunRAGFortuneBatch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunRAGFortuneBatch.java)
+- [TestRunRAGPremierLeagueBatch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunRAGPremierLeagueBatch.java)
+- [TestRunSpiderGeoBatch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunSpiderGeoBatch.java)
+- [TestRunUSAPresidentsBatch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunUSAPresidentsBatch.java)
+- [TestRunVenezuelaPresidentsBatch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunVenezuelaPresidentsBatch.java)
+- [TestRunWorld1Batch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunWorld1Batch.java)
 
 ### How to run an experiment
 `./gradlew -i test --tests floq.test.experiments.run.batch.<EXPERIMENT-TO-EXECUTE>`
