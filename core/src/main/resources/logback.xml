@@ -7,7 +7,7 @@
         </encoder>
     </appender>
     <appender name="EXP-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/Users/Shared/Work/galois/logs/debug-exp-${bySecond}.log</file>
+        <file>/Users/Shared/Work/floq/logs/debug-exp-${bySecond}.log</file>
         <append>true</append>
         <encoder>
             <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
@@ -18,25 +18,11 @@
         <appender-ref ref="stdout"/>
     </root>
 
-    <logger name="galois.llm" level="ERROR"/>
-    <!--<logger name="galois.optimizer" level="DEBUG"/>-->
-    <logger name="galois.parser" level="DEBUG"/>
-    <logger name="galois.optimizer.optimizations" level="DEBUG"/>
-    <!--<logger name="speedy.model.algebra.operators.EvaluateExpression" level="DEBUG"/>-->
-    <!--<logger name="speedy.model.database.operators.mainmemory.ImportCSVFileMainMemory" level="DEBUG"/>-->
-    <!--<logger name="speedy.persistence.DAOMainMemoryDatabase" level="DEBUG"/>-->
-    <!--<logger name="speedy.model.algebra.operators.sql.SQLCreateTable" level="DEBUG"/>-->
-    <logger name="galois.llm.models.TogetherAIModel" level="DEBUG"/>
-    <logger name="galois.llm.query.AbstractKeyBasedQueryExecutor" level="DEBUG"/>
-    <logger name="galois.llm.query.AbstractEntityQueryExecutor" level="DEBUG"/>
-<!--    <logger name="galois.llm.query.togetherai.llama3" level="DEBUG"/>-->
-    <logger name="galois.llm.query.togetherai.llama3.TogetheraiLLama3KeyQueryExecutor" level="DEBUG"/>
-    <logger name="galois.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor" level="DEBUG"/>
-<!--    <logger name="galois.llm.models.TogetherAIEmbeddingModel" level="TRACE"/>-->
-    <logger name="galois.test" level="DEBUG"/>
+    <logger name="floq.llm" level="ERROR"/>
+    <logger name="floq.test" level="INFO"/>
     
-    <logger name="galois.utils.GaloisDebug" level="TRACE" additivity="false">
-        <appender-ref ref="EXP-FILE"/>
-    </logger>
+<!--    <logger name="floq.utils.FLOQDebug" level="TRACE" additivity="false">-->
+<!--        <appender-ref ref="EXP-FILE"/>-->
+<!--    </logger>-->
 
 </configuration>

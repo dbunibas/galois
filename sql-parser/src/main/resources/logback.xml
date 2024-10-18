@@ -11,7 +11,7 @@
         <appender-ref ref="stdout"/>
     </root>
 
-    <logger name="com.galois.sqlparser" level="DEBUG"/>
-    <logger name="com.galois.sqlparser.test" level="DEBUG"/>
+    <logger name="com.floq.sqlparser" level="DEBUG"/>
+    <logger name="com.floq.sqlparser.test" level="DEBUG"/>
 
 </configuration>

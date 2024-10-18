@@ -1,10 +1,10 @@
-rootProject.name = "galois"
+rootProject.name = "floq"
 
-val speedyRoot = settings.extra.properties["speedyRoot"]
+val engine = settings.extra.properties["engineRoot"]
 
-include(":speedy-core", ":jep")
-project(":speedy-core").projectDir = File("${speedyRoot}/core")
-project(":jep").projectDir = File("${speedyRoot}/jep")
+include(":engine-core", ":jep")
+project(":engine-core").projectDir = File("${engine}/core")
+project(":jep").projectDir = File("${engine}/jep")
 
 include(":core")
 include(":sql-parser")
