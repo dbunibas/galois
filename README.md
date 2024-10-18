@@ -26,8 +26,9 @@ The project contains several Experiments. For each experiments, queries and prom
 - [TestRunWorld1Batch.java](core/src/test/java/floq/test/experiments/run/batch/TestRunWorld1Batch.java)
 
 ### How to run an experiment
-`./gradlew -i test --tests floq.test.experiments.run.batch.<EXPERIMENT-TO-EXECUTE>`
+
+`./gradlew -i :core:test --tests "floq.test.experiments.run.batch.<EXPERIMENT-TO-EXECUTE>"`
 
 For example
 
-`./gradlew -i test --tests floq.test.experiments.run.batch.TestRunFlight2Batch`
+`./gradlew -i :core:test --tests "floq.test.experiments.run.batch.TestRunFlight2Batch"`
