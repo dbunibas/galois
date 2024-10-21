@@ -5,7 +5,7 @@
 FLOQ is written in Java, and require a working JDK (>=21).
 
 In addition, the following tools/subscriptions are needed:
-- **PostgreSQL** - required for all projects[gradle.propertiesXX](gradle.propertiesXX)
+- **PostgreSQL** - required for all projects
 - **Ollama** - required to run experiments locally. In order to use Ollama, the `Constants.EXECUTOR` should be set to `OLLAMA_EXECUTOR` (default value). Note that Ollama might have low perfomances on some hosts, and it is suggested only for small models (e.g.: llama3.1:8b).
 - **TogetherAI API Key** - optional - A valid subscription on TogetherAI is needed to run larger models (as `llama3.1:70b`), or to run RAG experiments. In order to use TogetherAI, the `Constants.EXECUTOR` should be set to `TOGETHERAI_EXECUTOR`, and the `TOGETHERAI_API` need to be specified.
 - **ChromaDB** - optional - Needed only for RAG experiments
