@@ -108,47 +108,6 @@ public class TestRunner {
 //            throw new RuntimeException("Cannot run experiment: " + path, ioe);
         }
     }
-        
-    public void executeGalois(
-            String path,
-            String type,
-            ExpVariant variant,
-            List<IMetric> metrics,
-            Map<String, Map<String, ExperimentResults>> results,
-            String resultFileDir,
-            String resultFile,
-            Map<ITable, Map<Attribute, Double>> dbConfidence,
-            double confidenceThreshold,
-            boolean removeFromAlgebraTree
-    ) {
-        try {
-            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
-            Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
-            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
-            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
-            experiment.getQuery().setSql(variant.getQuerySql());
-            log.debug("SQL query is {}", experiment.getQuery().getSql());
-
-            IQueryExecutor queryExecutor = experiment.getOperatorsConfiguration().getScan().getQueryExecutor();
-            if (queryExecutor instanceof INLQueryExectutor nlExecutor) {
-                nlExecutor.setNaturalLanguagePrompt(variant.getPrompt());
-                experiment.setOptimizers(null);
-            } else if (queryExecutor instanceof ISQLExecutor sqlExecutor) {
-                sqlExecutor.setSql(variant.getQuerySql());
-                experiment.setOptimizers(null);
-            }            
-            FLOQDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
-            metrics.clear();
-            metrics.addAll(experiment.getMetrics());
-            var expResults = experiment.executeGalois(dbConfidence, confidenceThreshold, removeFromAlgebraTree);
-            log.info("Results: {}", expResults);
-            for (String expKey : expResults.keySet()) {
-                queryResults.put(type + "-" + expKey, expResults.get(expKey));
-            }
-        } catch (Exception e) {
-            log.error("Unable to execute experiment {}", path, e);
-        }
-    }
 
     public void executeSingle(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, IOptimizer optimizer) {
         try {

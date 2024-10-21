@@ -10,7 +10,6 @@ import floq.llm.query.IQueryExecutor;
 import floq.llm.query.LLMQueryStatManager;
 import floq.optimizer.IOptimizer;
 import floq.optimizer.LogicalPlanOptimizer;
-import floq.parser.ParserWhere;
 import floq.test.utils.TestUtils;
 import floq.utils.FLOQDebug;
 import lombok.AllArgsConstructor;
@@ -100,7 +99,7 @@ public final class Experiment {
     }
     
     @SuppressWarnings("unchecked")
-    public Map<String, ExperimentResults> executeGalois(Map<ITable, Map<Attribute, Double>> dbConfidence, double threshold, boolean removeFromAlgebraTree) {
+    public Map<String, ExperimentResults> executeFloq(Map<ITable, Map<Attribute, Double>> dbConfidence, double threshold, boolean removeFromAlgebraTree) {
         Map<String, ExperimentResults> results = new HashMap<>();
         IAlgebraOperator operator = parse();
         String sqlQuery = query.getSql();
@@ -117,13 +116,13 @@ public final class Experiment {
         List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
         expectedITerator.close();
         log.info("Expected size: " + expectedResults.size());
-        FLOQDebug.log("Galois Execution");
-        var galoisResults = executeUnoptimizedExperiment(operator, expectedResults);
+        FLOQDebug.log("FLOQ Execution");
+        var floqResult = executeUnoptimizedExperiment(operator, expectedResults);
         FLOQDebug.log("Engine Results:");
-        FLOQDebug.log(galoisResults.toDebugString());
-        String name = "Galois";
+        FLOQDebug.log(floqResult.toDebugString());
+        String name = "FLOQ";
         if (!optimizations.isEmpty()) name += " - " + optimizations;
-        results.put(name, galoisResults);
+        results.put(name, floqResult);
         return results;
     }
 
