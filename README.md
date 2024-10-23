@@ -32,3 +32,6 @@ The project contains several Experiments. For each experiments, queries and prom
 For example
 
 `./gradlew -i :core:test --tests "galois.test.experiments.run.batch.TestRunFlight2Batch"`
+
+### Technical Report
+-[V.0](https://github.com/dbunibas/galois/blob/develop/TR.pdf)
