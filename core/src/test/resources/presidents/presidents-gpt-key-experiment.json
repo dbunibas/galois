@@ -1,5 +1,5 @@
 {
-  "name": "Presidents-{{QN}} gpt-key-scan Experiment",
+  "name": "Presidents-{{QN}} gpt-key Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -14,7 +14,7 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "open-ai-key-scan",
+      "queryExecutor": "open-ai-key",
       "maxIterations": 10
     }
   },
