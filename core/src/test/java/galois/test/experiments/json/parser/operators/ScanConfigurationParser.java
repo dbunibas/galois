@@ -6,10 +6,7 @@ import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
 import galois.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
-import galois.llm.query.openai.OpenAIKeyScanQueryExecutor;
-import galois.llm.query.openai.OpenAINLQueryExecutor;
-import galois.llm.query.openai.OpenAISQLQueryExecutor;
-import galois.llm.query.openai.OpenAITableQueryExecutor;
+import galois.llm.query.openai.*;
 import galois.llm.query.togetherai.llama3.*;
 import galois.prompt.EPrompts;
 import galois.test.experiments.Query;
@@ -42,7 +39,8 @@ public class ScanConfigurationParser {
             Map.entry("open-ai-nl", ScanConfigurationParser::generateOpenAINLQueryExecutor),
             Map.entry("open-ai-sql", ScanConfigurationParser::generateOpenAISQLQueryExecutor),
             Map.entry("open-ai-table", ScanConfigurationParser::generateOpenAITableQueryExecutor),
-            Map.entry("open-ai-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor)
+            Map.entry("open-ai-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor),
+            Map.entry("open-ai-key", ScanConfigurationParser::generateOpenAIKeyQueryExecutor)
     );
 
     public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
@@ -147,6 +145,11 @@ public class ScanConfigurationParser {
     private static IQueryExecutor generateOpenAIKeyScanQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAIKeyScanQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+
+    private static IQueryExecutor generateOpenAIKeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new OpenAIKeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
 
     private static IQueryExecutor generateOllamaMistralNLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
