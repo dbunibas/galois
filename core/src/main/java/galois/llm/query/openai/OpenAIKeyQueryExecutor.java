@@ -4,10 +4,7 @@ import dev.langchain4j.chain.Chain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.Constants;
-import galois.llm.query.AbstractKeyBasedQueryExecutor;
-import galois.llm.query.AbstractQueryExecutorBuilder;
-import galois.llm.query.IQueryExecutor;
-import galois.llm.query.IQueryExecutorBuilder;
+import galois.llm.query.*;
 import galois.prompt.EPrompts;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +26,7 @@ import static galois.utils.FunctionalUtils.orElse;
 
 @Slf4j
 @Getter
-public class OpenAIKeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
+public class OpenAIKeyQueryExecutor extends AbstractKeyBasedQueryExecutor implements IGaloisOriginalExecutor {
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
     private final EPrompts attributesPrompt;

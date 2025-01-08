@@ -4,10 +4,7 @@ import dev.langchain4j.chain.Chain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.Constants;
-import galois.llm.query.AbstractKeyBasedQueryExecutor;
-import galois.llm.query.AbstractQueryExecutorBuilder;
-import galois.llm.query.IQueryExecutor;
-import galois.llm.query.IQueryExecutorBuilder;
+import galois.llm.query.*;
 
 import static galois.llm.query.ConversationalChainFactory.*;
 import static galois.llm.query.ConversationalRetrievalChainFactory.buildOllamaLlama3ConversationalRetrivalChain;
@@ -28,7 +25,7 @@ import speedy.model.expressions.Expression;
 
 @Slf4j
 @Getter
-public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
+public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor implements IGaloisOriginalExecutor {
 
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;

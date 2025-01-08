@@ -3,6 +3,7 @@ package galois.test.utils;
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
+import galois.llm.query.IGaloisOriginalExecutor;
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ISQLExecutor;
@@ -72,6 +73,9 @@ public class TestRunner {
                 experiment.setOptimizers(null);
             } else if (queryExecutor instanceof ISQLExecutor sqlExecutor) {
                 sqlExecutor.setSql(variant.getQuerySql());
+                experiment.setOptimizers(null);
+            } else if (queryExecutor instanceof IGaloisOriginalExecutor) {
+                log.debug("Galois original executor, setting optimizers to null!");
                 experiment.setOptimizers(null);
             } else {
                 List<IOptimizer> optimizers = loadOptimizers(variant);
