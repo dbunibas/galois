@@ -1,0 +1,273 @@
+[
+
+ 
+ {
+
+   
+ "
+country
+":
+ "
+V
+enez
+uela
+",
+
+   
+ "
+start
+_year
+":
+ 
+195
+9
+,
+
+   
+ "
+name
+":
+ "
+R
+óm
+ulo
+ Bet
+anc
+ourt
+",
+
+   
+ "
+card
+inal
+_number
+":
+ "
+1
+",
+
+   
+ "
+end
+_year
+":
+ 
+196
+4
+,
+
+   
+ "
+party
+":
+ "
+Democratic
+ Action
+"
+
+ 
+ },
+
+ 
+ {
+
+   
+ "
+country
+":
+ "
+V
+enez
+uela
+",
+
+   
+ "
+start
+_year
+":
+ 
+196
+9
+,
+
+   
+ "
+name
+":
+ "
+R
+af
+ael
+ Calder
+a
+",
+
+   
+ "
+card
+inal
+_number
+":
+ "
+2
+",
+
+   
+ "
+end
+_year
+":
+ 
+197
+4
+,
+
+   
+ "
+party
+":
+ "
+Democratic
+ Action
+"
+
+ 
+ },
+
+ 
+ {
+
+   
+ "
+country
+":
+ "
+V
+enez
+uela
+",
+
+   
+ "
+start
+_year
+":
+ 
+198
+9
+,
+
+   
+ "
+name
+":
+ "
+Carlos
+ Andr
+és
+ Pé
+rez
+",
+
+   
+ "
+card
+inal
+_number
+":
+ "
+3
+",
+
+   
+ "
+end
+_year
+":
+ 
+199
+3
+,
+
+   
+ "
+party
+":
+ "
+Democratic
+ Action
+"
+
+ 
+ },
+
+ 
+ {
+
+   
+ "
+country
+":
+ "
+V
+enez
+uela
+",
+
+   
+ "
+start
+_year
+":
+ 
+199
+9
+,
+
+   
+ "
+name
+":
+ "
+H
+ugo
+ Ch
+á
+vez
+",
+
+   
+ "
+card
+inal
+_number
+":
+ "
+4
+",
+
+   
+ "
+end
+_year
+":
+ 
+200
+0
+,
+
+   
+ "
+party
+":
+ "
+Democratic
+ Action
+"
+
+ 
+ }
+
+]
+<|eot_id|>
