@@ -179,7 +179,7 @@ public final class Experiment {
         return sqlQueryParser.parse(query.getSql(), scanNodeFactory);
     }
 
-    private DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {
+    public DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {
         IDatabase database = query.getDatabase();
         List<String> tableNames = database.getTableNames();
         URL resource = Experiment.class.getResource(query.getResultPath());
@@ -267,7 +267,7 @@ public final class Experiment {
         return toExperimentResults(iterator, expectedResults, optimizer.getName());
     }
 
-    private ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults, String optmizerName) {
+    public ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults, String optmizerName) {
         List<Tuple> results = TestUtils.toTupleList(actual);
         log.info("Results size: " + results.size());
         log.info("Results: " + results);

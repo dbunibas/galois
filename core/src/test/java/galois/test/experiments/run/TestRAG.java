@@ -1,5 +1,6 @@
 package galois.test.experiments.run;
 
+import ai.djl.modality.nlp.embedding.TextEmbedding;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
@@ -12,9 +13,7 @@ import dev.langchain4j.rag.content.Content;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.rag.query.Query;
-import dev.langchain4j.store.embedding.EmbeddingMatch;
-import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
+import dev.langchain4j.store.embedding.*;
 import dev.langchain4j.store.embedding.chroma.ChromaEmbeddingStore;
 import galois.Constants;
 import galois.llm.algebra.LLMScan;
@@ -38,8 +37,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static galois.test.utils.TestUtils.toTupleStream;
 
@@ -49,11 +46,12 @@ public class TestRAG {
     private static final String EXP_NAME = "BBC-PremierLeague2024-2025";
     private static final String EXT = ".MD";
 
-//    private static final String TEXT_TO_CHECK = "Player of the match";
-//    private static final String NL_PROMPT = "select player_name, goal_scored from premier_league_2024_2025_key_events where team = 'Manchester City'.";
+//    private static final String TEXT_TO_CHECK = "Sinisterra";
+//    private static final String NL_PROMPT = "Player of the match of Bournemouth";
 
-    private static final String TEXT_TO_CHECK = "Oracle";
-    private static final String NL_PROMPT = "select femaleceo and profitable and company and headquartersstate and ceo from fortune_2024 where headquartersstate == \"Texas\"";
+    private static final String TEXT_TO_CHECK = "Nvidia";
+//    private static final String NL_PROMPT = "select company, headquartersstate, ticker, ceo, founder_is_ceo, is_femaleceo, number_of_employees from fortune_2024 where headquarterscity = 'Santa Clara' and rank < 70";
+    private static final String NL_PROMPT = "company == \"Nvidia\" ";
 
 //    private static final String NL_PROMPT = "Given the following query, populate the table with actual values.\n" +
 //            "query: select player_of_the_match from premier_league_2024_2025_match_result.\n" +
@@ -100,14 +98,14 @@ public class TestRAG {
     public void testEmbeddingStore() {
         Embedding queryEmbedding = embeddingModel.embed(NL_PROMPT).content();
         log.trace("Embedded query: {}", queryEmbedding);
-        List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 10);
+        List<EmbeddingMatch<TextSegment>> relevant = embeddingStore.findRelevant(queryEmbedding, 200);
         log.info("Relevant documents {}", relevant.size());
         Set<String> documents = new HashSet<>();
         int retrived = 0;
         for (int i = 0; i < relevant.size(); i++) {
             EmbeddingMatch<TextSegment> embeddingMatch = relevant.get(i);
             log.info("Result {}:\n\tScore: {}\n\tText: {}", i, embeddingMatch.score(), embeddingMatch.embedded().text());
-            if (embeddingMatch.embedded().text().toUpperCase().contains(NL_PROMPT.toUpperCase())) retrived++;
+            if (embeddingMatch.embedded().text().toUpperCase().contains(TEXT_TO_CHECK.toUpperCase())) retrived++;
             documents.add(embeddingMatch.embedded().metadata().getString("file_name"));
         }
         log.info("Configuration: {}\nDocuments with prompt: {}\nDifferent documents: {}", config, retrived, documents.size());
@@ -132,6 +130,21 @@ public class TestRAG {
             }
         }
         log.info("Configuration: {}\nDocuments with prompt: {}\nDifferent documents: {}", config, retrived, documents.size());
+    }
+
+    @Test
+    public void exploreDataStore() {
+        Embedding queryEmbedding = embeddingModel.embed("*").content();
+        EmbeddingSearchResult<TextSegment> result = embeddingStore.search(EmbeddingSearchRequest.builder()
+                .queryEmbedding(queryEmbedding)
+                .maxResults(Integer.MAX_VALUE)
+                .minScore(0.0)
+                .build());
+        List<EmbeddingMatch<TextSegment>> documents = result.matches();
+        log.info("Documents: {}", documents.size());
+        for (EmbeddingMatch<TextSegment> document : documents) {
+            log.info("{}",document.embedded());
+        }
     }
 
     @Test
@@ -193,7 +206,9 @@ public class TestRAG {
                 .builder()
                 .baseUrl("http://localhost:8000")
 //                .collectionName("rag_premierleague_128_64_UAE-Large")
-                .collectionName("rag_fortune_128_64_UAE-Large")
+//                .collectionName("rag_premierleague_128_64_UAE-Large-PROCESSED")
+//                .collectionName("rag_fortune_128_64_UAE-Large")
+                .collectionName("rag_fortune_400_50_UAE-Large-PROCESSED")
 //                .collectionName(EXP_NAME + "-" + config.toString().hashCode())
                 .logRequests(true)
                 .logResponses(true)

@@ -1,5 +1,5 @@
 {
-  "name": "RAG-PremierLeague-{{QN}} Experiment-key",
+  "name": "RAG-PremierLeague-{{QN}} Experiment-nl",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -11,28 +11,7 @@
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
-  "optimizers": [
-    "AllConditionsPushdownOptimizer",
-    "SingleConditionsOptimizerFactory"
-  ],
   "dbms": "postgres",
-  "operatorsConfig": {
-    "scan": {
-      "queryExecutor": "togetherai-llama3-key",
-      "maxIterations": 10,
-      "contentRetriever": {
-        "embeddingStoreCollectionName": "rag_premierleague_128_64_UAE-Large-PROCESSED",
-        "embeddingModelEngine": "togetherai",
-        "embeddingModel": "WhereIsAI/UAE-Large-V1",
-        "maxResults": 100,
-        "minScore": 0.75,
-        "maxSegmentSizeInTokens": 128,
-        "maxOverlapSizeInTokens": 64,
-        "processDocuments": true,
-        "documentsToLoad": "./src/test/resources/rag-premierleague/documents/"
-      }
-    }
-  },
   "query": {
     "sql": "{{QUERY-SQL}}",
     "schema": {

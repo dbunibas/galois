@@ -154,7 +154,7 @@ public class TestRunner {
         }
     }
 
-    public void executeSingle(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, IOptimizer optimizer) {
+    public Map<String, ExperimentResults> executeSingle(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, IOptimizer optimizer) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
             Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
@@ -183,9 +183,11 @@ public class TestRunner {
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
             }
+            return expResults;
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);
 //            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+            return null;
         }
     }
     

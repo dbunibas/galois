@@ -1,6 +1,11 @@
 package galois.llm.query;
 
 import dev.langchain4j.chain.Chain;
+import dev.langchain4j.chain.ConversationalChain;
+import dev.langchain4j.chain.ConversationalRetrievalChain;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
+import dev.langchain4j.rag.query.Query;
+import galois.Constants;
 import galois.llm.TokensEstimator;
 import galois.prompt.EPrompts;
 import galois.utils.GaloisDebug;
@@ -10,6 +15,7 @@ import speedy.model.expressions.Expression;
 
 import java.util.*;
 
+import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
 import static galois.llm.query.utils.QueryUtils.*;
 
 @Slf4j
@@ -70,7 +76,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     : generateIterativePrompt(table, attributesExecutionList, jsonSchema);
             log.debug("Iteration {} - Prompt is: {}", i, userMessage);
             try {
-                String response = getResponse(chain, userMessage, false);
+                String response = getResponse(chain, userMessage, i, false);
                 log.debug("Response is: {}", response);
                 if (response == null || response.trim().isBlank()) {
                     log.warn("Error during LLM request.");
@@ -101,7 +107,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             } catch (Exception e) {
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
-                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true);
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), i, true);
                     log.debug("Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);
@@ -121,7 +127,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         return tuples;
     }
 
-    protected String getResponse(Chain<String, String> chain, String userMessage, boolean ignoreTokens) {
+    protected String getResponse(Chain<String, String> chain, String userMessage, int iteration, boolean ignoreTokens) {
         String response = null;
         try {
             TokensEstimator estimator = new TokensEstimator();
@@ -130,6 +136,14 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             double inputTokens = estimator.getTokens(userMessage);
             if (!ignoreTokens) queryStatManager.updateLLMTokensInput(inputTokens);
             long start = System.currentTimeMillis();
+//            log.warn("*** USER MESSAGE: {}", userMessage);
+//            //TODO: Improve retrieval for prompts > 0. IDEA: Inject different values from first prompt
+//            if(iteration > 0 && (chain instanceof CustomConversionalRetrievalChain customConversionalRetrievalChain)){
+//                chain = ConversationalChain.builder().chatLanguageModel(customConversionalRetrievalChain.getChatLanguageModel()).build();
+//                ContentRetriever contentRetriever = customConversionalRetrievalChain.getContentRetriever();
+////                generateFirstPrompt()
+////                contentRetriever.retrieve(Query.from())
+//            }
             response = chain.execute(userMessage);
             if (!ignoreTokens) queryStatManager.updateTimeMs(System.currentTimeMillis() - start);
             double outputTokens = estimator.getTokens(response);

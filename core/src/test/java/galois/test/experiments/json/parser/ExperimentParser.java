@@ -20,6 +20,9 @@ public class ExperimentParser {
     public static Experiment loadAndParseJSON(String fileName) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         URL jsonResource = ExperimentParser.class.getResource(fileName);
+        if(jsonResource == null){
+            throw new IllegalArgumentException("Unable to load file " + fileName);
+        }
         ExperimentJSON experimentJSON = mapper.readValue(jsonResource, ExperimentJSON.class);
         return parseJSON(experimentJSON);
     }

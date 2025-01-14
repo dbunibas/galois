@@ -188,6 +188,16 @@ public class QueryUtils {
         return asString(map);
     }
 
+
+    public static String generateJsonSchemaListDatabase(IDatabase db) {
+        StringBuilder sb = new StringBuilder();
+        for (String tableName : db.getTableNames()) {
+            ITable table = db.getTable(tableName);
+            sb.append(generateJsonSchemaListFromAttributes(table, table.getAttributes())).append("\n");
+        }
+        return sb.toString();
+    }
+
     public static String generateJsonSchemaListFromAttributes(ITable table, List<Attribute> attributes) {
         Map<String, Object> map = new HashMap<>();
         map.put("title", table.getName());

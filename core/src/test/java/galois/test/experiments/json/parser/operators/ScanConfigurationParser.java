@@ -51,7 +51,7 @@ public class ScanConfigurationParser {
             if (base instanceof INLQueryExectutor nlQueryExecutor) {
                 naturalLanguagePrompt = nlQueryExecutor.getNaturalLanguagePrompt();
             }
-            ContentRetriever contentRetriever = contentRetrieverConfigurationParser.loadContentRetriever(json.getContentRetriever());
+            ContentRetriever contentRetriever = contentRetrieverConfigurationParser.loadContentRetriever(json.getContentRetriever(), query);
             return generator.create(
                     json.getFirstPrompt(),
                     json.getIterativePrompt(),

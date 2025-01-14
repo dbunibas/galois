@@ -1,5 +1,7 @@
 package galois.test.experiments.run.batch;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galois.sqlparser.SQLQueryParser;
 import galois.Constants;
 import galois.llm.algebra.LLMScan;
@@ -18,14 +20,25 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
+import galois.test.utils.TestUtils;
 import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
+import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
 import speedy.model.database.Key;
+import speedy.model.database.Tuple;
+import speedy.model.database.dbms.DBMSDB;
+import speedy.model.database.dbms.DBMSTupleIterator;
+import speedy.model.database.mainmemory.MainMemoryDB;
+import speedy.persistence.DAOMainMemoryDatabase;
+import speedy.persistence.relational.QueryManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -96,7 +109,7 @@ public class TestRunRAGFortuneBatch {
 
         ExpVariant q6 = ExpVariant.builder()
                 .queryNum("Q6")
-                .querySql("select ceo from fortune_2024 f where  is_femaleceo = true and f.companytype = 'Private'")
+                .querySql("select ceo from fortune_2024 f where  is_femaleceo = 'Yes' and f.private_or_public = 'Private'")
                 .prompt("List the CEOs from the Fortune 2024 list who are female and lead privately held companies")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
@@ -117,8 +130,8 @@ public class TestRunRAGFortuneBatch {
 
         ExpVariant q9 = ExpVariant.builder()
                 .queryNum("Q9")
-                .querySql("select company, headquartersstate, ticker, ceo, founder_is_ceo, is_femaleceo, number_of_employees from fortune_2024 where company = 'Nvidia'")
-                .prompt("List the company name, headquarters state, stock ticker, CEO, whether the founder is the CEO, whether the CEO is female, and the number of employees for the company named 'Nvidia' from the 'fortune_2024' database.")
+                .querySql("select company, headquartersstate, ticker, ceo, founder_is_ceo, is_femaleceo, number_of_employees from fortune_2024 where company = 'Amazon'")
+                .prompt("List the company name, headquarters state, stock ticker, CEO, whether the founder is the CEO, whether the CEO is female, and the number of employees for the company named 'Amazon' from the 'fortune_2024' database.")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
@@ -129,8 +142,8 @@ public class TestRunRAGFortuneBatch {
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-//        variants = List.of(q2, q3, q4, q5, q6, q7, q8);
-        variants = List.of(q10);
+//        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
+        variants = List.of( q6);
     }
 
     @Test
@@ -145,17 +158,80 @@ public class TestRunRAGFortuneBatch {
         }
     }
 
+
+    @Test
+    public void testComparePalimpzest() throws IOException {
+        String pzResultPath = "/Users/donatello/Projects/research/[Related Tools]/palimpzest/exp-results";
+//        String pzVariant = "Maximum Quality";
+        String pzVariant = "MaxQuality@FixedCost";
+//        String pzVariant = "Minimum Cost";
+        MainMemoryDB pzResults = new DAOMainMemoryDatabase().loadCSVDatabase(pzResultPath + File.separator + pzVariant, ';', null, false, true);
+        StringBuilder resultString = new StringBuilder();
+        for (ExpVariant variant : variants) {
+            String pzVariantResultPath = pzResultPath + File.separator + pzVariant + File.separator + "Galois-Fortune-RAG-" + variant.getQueryNum();
+            log.info("Loading Palimpzest result from path {}", pzVariantResultPath);
+            String pzVariantCSVResultPath = pzVariantResultPath + ".csv";
+            String pzVariantDetailResultPath = pzVariantResultPath + ".json";
+            Map<String, Object> pzVariantDetails = new ObjectMapper().readValue(new File(pzVariantDetailResultPath), new TypeReference<>() {
+            });
+            Number totalUsedTokens = (Number) pzVariantDetails.get("total_used_tokens");
+
+            //QUALITY
+            Experiment experiment = ExperimentParser.loadAndParseJSON("/rag-fortune/fortune2024-llama3-pz-experiment.json"); //Used only for load expected result
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            DBMSDB dbmsDatabase = experiment.createDatabaseForExpected();
+            String queryToExecute = experiment.getQuery().getSql().replace("target.", "public.");
+            log.debug("Query for results:\n{}", queryToExecute);
+            ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
+            ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
+            List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
+            expectedITerator.close();
+            log.info("Expected size: {}", expectedResults.size());
+            ITupleIterator actual = pzResults.getTable("Galois-Fortune-RAG-" + variant.getQueryNum()).getTupleIterator();
+            ExperimentResults experimentResults = experiment.toExperimentResults(actual, expectedResults, "PZ-" + pzVariant);
+            log.warn("{}", experimentResults.getScores());
+            double quality = (
+                    (experimentResults.getScores().get(5) != null ? experimentResults.getScores().get(5)  : 0)  + //CellSimilarityF1Score
+                            (experimentResults.getScores().get(6) != null ? experimentResults.getScores().get(6)  : 0) + //TupleCardinality
+                            (experimentResults.getScores().get(8) != null ? experimentResults.getScores().get(8)  : 0) //TupleSimilarityConstraint
+            ) / 3.0;
+            log.info("\n******** \n* PZ {} - Query {}\n* Total Used Tokens: {}\n* Quality: {}\n********", pzVariant, variant.getQueryNum(), totalUsedTokens, experimentResults.toDebugString());
+            resultString.append((quality + "").replace(".", ",") + "\t" + totalUsedTokens + "\n");
+        }
+        log.info("******** PZ {} ********\n{}", pzVariant, resultString);
+    }
+
+
     @Test
     public void testRunBatch() {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/rag-fortune/fortune2024-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/rag-fortune/fortune2024-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/rag-fortune/fortune2024-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/rag-fortune/fortune2024-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/rag-fortune/fortune2024-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
 //            testRunner.execute("/rag-fortune/fortune2024-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/rag-fortune/fortune2024-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/rag-fortune/fortune2024-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+        log.info("Results\n{}", printMap(results));
+    }
+
+    @Test
+    public void testRunBatch2() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        for (ExpVariant variant : variants) {
+            testRunner.execute("/rag-fortune/fortune2024-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/rag-fortune/fortune2024-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            IOptimizer allCondition = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+            String configPathTable = "/rag-fortune/fortune2024-" + executorModel + "-table-experiment.json";
+            String configPathKey = "/rag-fortune/fortune2024-" + executorModel + "-key-scan-experiment.json";
+            testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allCondition);
+            testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allCondition);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -229,7 +305,14 @@ public class TestRunRAGFortuneBatch {
         IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
 //        IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
-        testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDownRemoveAlgebraTree);
+        Map<String, ExperimentResults> experimentResultsMap = testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdownWithFilter);
+        ExperimentResults experimentResults = experimentResultsMap.values().iterator().next();
+        double quality = (
+                (experimentResults.getScores().get(5) != null ? experimentResults.getScores().get(5)  : 0)  + //CellSimilarityF1Score
+                        (experimentResults.getScores().get(6) != null ? experimentResults.getScores().get(6)  : 0) + //TupleCardinality
+                        (experimentResults.getScores().get(8) != null ? experimentResults.getScores().get(8)  : 0) //TupleSimilarityConstraint
+        ) / 3.0;
+        log.info("{}: {}", experimentResults.getName(), quality);
     }
     
     @Test

@@ -1,5 +1,7 @@
 package galois.test.experiments.run.batch;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galois.sqlparser.SQLQueryParser;
 import galois.Constants;
 import galois.llm.algebra.LLMScan;
@@ -18,14 +20,25 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
+import galois.test.utils.TestUtils;
 import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
+import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
 import speedy.model.database.Key;
+import speedy.model.database.Tuple;
+import speedy.model.database.dbms.DBMSDB;
+import speedy.model.database.dbms.DBMSTupleIterator;
+import speedy.model.database.mainmemory.MainMemoryDB;
+import speedy.persistence.DAOMainMemoryDatabase;
+import speedy.persistence.relational.QueryManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +58,7 @@ public class TestRunRAGPremierLeagueBatch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
-    
+
     private String executorModel = "llama3";
 
     public TestRunRAGPremierLeagueBatch() {
@@ -118,7 +131,7 @@ public class TestRunRAGPremierLeagueBatch {
 
         variants = List.of(q1, q2, q3, q4, q5);
 //        variants = List.of(q3, q4, q5);
-//        variants = List.of(q8);
+//        variants = List.of(q1);
     }
 
     @Test
@@ -131,6 +144,49 @@ public class TestRunRAGPremierLeagueBatch {
                 log.info("Parsed result:\n{}", result);
             });
         }
+    }
+
+    @Test
+    public void testComparePalimpzest() throws IOException {
+        String pzResultPath = "/Users/donatello/Projects/research/[Related Tools]/palimpzest/exp-results/PL/";
+        String pzVariant = "Maximum Quality";
+//        String pzVariant = "MaxQuality@FixedCost";
+//        String pzVariant = "Minimum Cost";
+        MainMemoryDB pzResults = new DAOMainMemoryDatabase().loadCSVDatabase(pzResultPath + File.separator + pzVariant, ';', null, false, true);
+        StringBuilder resultString = new StringBuilder();
+        for (ExpVariant variant : variants) {
+            String pzVariantResultPath = pzResultPath + File.separator + pzVariant + File.separator + "Galois-PL-RAG-" + variant.getQueryNum();
+            log.info("Loading Palimpzest result from path {}", pzVariantResultPath);
+            String pzVariantCSVResultPath = pzVariantResultPath + ".csv";
+            String pzVariantDetailResultPath = pzVariantResultPath + ".json";
+            Map<String, Object> pzVariantDetails = new ObjectMapper().readValue(new File(pzVariantDetailResultPath), new TypeReference<>() {
+            });
+            Number totalUsedTokens = (Number) pzVariantDetails.get("total_used_tokens");
+
+            //QUALITY
+            Experiment experiment = ExperimentParser.loadAndParseJSON("/rag-premierleague/pl2425-llama3-pz-experiment.json"); //Used only for load expected result
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            DBMSDB dbmsDatabase = experiment.createDatabaseForExpected();
+            String queryToExecute = experiment.getQuery().getSql().replace("target.", "public.");
+            log.debug("Query for results:\n{}", queryToExecute);
+            ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
+            ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
+            List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
+            expectedITerator.close();
+            log.info("Expected size: {}", expectedResults.size());
+            ITupleIterator actual = pzResults.getTable("Galois-PL-RAG-" + variant.getQueryNum()).getTupleIterator();
+            ExperimentResults experimentResults = experiment.toExperimentResults(actual, expectedResults, "PZ-" + pzVariant);
+            log.warn("{}", experimentResults.getScores());
+            double quality = (
+                    (experimentResults.getScores().get(5) != null ? experimentResults.getScores().get(5)  : 0)  + //CellSimilarityF1Score
+                            (experimentResults.getScores().get(6) != null ? experimentResults.getScores().get(6)  : 0) + //TupleCardinality
+                            (experimentResults.getScores().get(8) != null ? experimentResults.getScores().get(8)  : 0) //TupleSimilarityConstraint
+                    ) / 3.0;
+            log.info("\n******** \n* PZ {} - Query {}\n* Total Used Tokens: {}\n* Quality: {}\n********", pzVariant, variant.getQueryNum(), totalUsedTokens, experimentResults.toDebugString());
+            resultString.append((quality + "").replace(".", ",") + "\t" + totalUsedTokens + "\n");
+        }
+        log.info("******** PZ {} ********\n{}", pzVariant, resultString);
     }
 
     @Test
@@ -148,7 +204,7 @@ public class TestRunRAGPremierLeagueBatch {
         }
         log.info("Results\n{}", printMap(results));
     }
-    
+
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
@@ -219,7 +275,7 @@ public class TestRunRAGPremierLeagueBatch {
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
         testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdown);
     }
-    
+
     @Test
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
@@ -228,7 +284,7 @@ public class TestRunRAGPremierLeagueBatch {
             break;
         }
     }
-    
+
     @Test
     public void testConfidenceEstimator() {
         // confidence for every attribute
@@ -238,7 +294,7 @@ public class TestRunRAGPremierLeagueBatch {
             break;
         }
     }
-        
+
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
