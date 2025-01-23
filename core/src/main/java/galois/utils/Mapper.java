@@ -107,7 +107,7 @@ public class Mapper {
             for (String key : keys) {
                 substring += '"' + key + '"'+",\n";
             }
-            substring = substring.substring(0, substring.length() - 2);
+            substring = substring.length() >= 3 ? substring.substring(0, substring.length() - 2) : "";
             substring = "[" + substring + "\n";
 //            substring = cleanContent.substring(cleanContent.indexOf("["), cleanContent.lastIndexOf(",") + 1);
         }
