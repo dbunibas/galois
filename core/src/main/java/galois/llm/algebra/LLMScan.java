@@ -329,9 +329,10 @@ public class LLMScan extends Scan {
         }
 
         private void saveTuplesWithProb(List<Tuple> currentResult) {
+            // for exp only
             String dbName = "spider-geo";
             String queryN = "Q1";
-            String fileName = "/Users/enzoveltri/Desktop/galois/exp-logs-llama/" + dbName + "-" + queryN + ".json";
+            String fileName = "TMP-PATH" + dbName + "-" + queryN + ".json";
             List<TupleProb> tuplesProb = new ArrayList<>();
             AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
             for (Tuple tuple : currentResult) {
@@ -382,9 +383,10 @@ public class LLMScan extends Scan {
         }
 
         private List<Tuple> loadStoredTuples() {
+            // for exp only
             String dbName = "spider-geo";
             String queryN = "Q8";
-            String fileName = "/Users/enzoveltri/Desktop/galois/exp-logs-llama/" + dbName + "-" + queryN + ".json";
+            String fileName = "TMP_PATH" + dbName + "-" + queryN + ".json";
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<List<TupleProb>> listTuple = new TypeReference<>() {};
             List<Tuple> tuples = new ArrayList<>();
