@@ -272,4 +272,49 @@ public class TestRunFlight4Batch {
         }
     }
 
+    @Test
+    public void testIterations() {
+        String configPathTable = "/flight_4_data/flight_4-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/flight_4_data/flight_4-" + executorModel + "-key-scan-experiment.json";
+        double threshold = 0.6;
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+
+        List<ExpVariant> iterVariants = List.of(
+                variants.get(2)
+        );
+
+        for (ExpVariant variant: iterVariants) {
+            IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra true
+            QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
+            log.info("Plan Estimated: {}", planEstimation);
+            String pushDownStrategy = planEstimation.computePushdown();
+            Double confidenceKeys = planEstimation.getConfidenceKeys();
+            Integer indexPushDown = planEstimation.getIndexPushDown();
+            IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+            IOptimizer singleConditionPushDownRemoveAlgebraTree = null;
+            if (indexPushDown != null) {
+                singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
+            }
+            IOptimizer optimizer = null;
+            if (pushDownStrategy.equals(QueryPlan.PUSHDOWN_ALL_CONDITION)) {
+                optimizer = allConditionPushdownWithFilter;
+            }
+            if (pushDownStrategy.startsWith(QueryPlan.PUSHDOWN_SINGLE_CONDITION)) {
+                optimizer = singleConditionPushDownRemoveAlgebraTree;
+            }
+            testRunner.executeSingle(configPathTable, "FLOQ-A", variant, metrics, results, optimizerAll);
+            if (confidenceKeys != null && confidenceKeys > threshold) {
+                // Execute KEY-SCAN
+                testRunner.executeSingle(configPathKey, "FLOQ-F", variant, metrics, results, optimizer);
+            } else {
+                // Execute TABLE
+                testRunner.executeSingle(configPathTable, "FLOQ-F", variant, metrics, results, optimizer);
+            }
+        }
+
+        exportExcel.export(fileName, EXP_NAME, metrics, results);
+    }
+
 }

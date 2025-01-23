@@ -66,18 +66,18 @@ public class TestRunFlight2Batch {
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("SELECT a.airline FROM target.usa_airline_companies a WHERE a.call_sign='ual'")
+                .querySql("SELECT a.airline FROM target.usa_airline_companies a WHERE a.call_sign='UAL'")
                 .prompt("Which airline has call sign 'ual'?")
                 .optimizers(singleConditionOptimizers)
                 .build();
-        
+
         ExpVariant q4 = ExpVariant.builder()
                 .queryNum("Q4")
                 .querySql("SELECT f.sourceairport, COUNT(f.flightno) as num_flights FROM target.usa_flights f WHERE f.destairport = 'LAX' GROUP BY f.sourceairport")
                 .prompt("From which airports do flights arrive at LAX?")
                 .optimizers(singleConditionOptimizers)
                 .build();
-        
+
 //        ExpVariant q7 = ExpVariant.builder()
 //                .queryNum("Q7")
 //                .querySql("SELECT DISTINCT city FROM target.usa_airports WHERE airportname = 'municipal' AND city IS NOT NULL")
@@ -86,7 +86,7 @@ public class TestRunFlight2Batch {
 //                .build();
 
         // FIXME: Which Speedy tree can execute this query?
-        
+
        variants = List.of(q1, q2, q3, q4);
     }
 
@@ -117,7 +117,7 @@ public class TestRunFlight2Batch {
         }
         log.info("Results\n{}", printMap(results));
     }
-    
+
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
@@ -171,7 +171,7 @@ public class TestRunFlight2Batch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
-    
+
     @Test
     public void testAllConditionPushDown() {
         List<IMetric> metrics = new ArrayList<>();
@@ -203,7 +203,7 @@ public class TestRunFlight2Batch {
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
         testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
     }
-    
+
     @Test
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
@@ -213,7 +213,7 @@ public class TestRunFlight2Batch {
             break;
         }
     }
-    
+
     @Test
     public void testConfidenceEstimator() {
         // confidence for every attribute
@@ -224,7 +224,7 @@ public class TestRunFlight2Batch {
             break;
         }
     }
-        
+
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
@@ -233,7 +233,7 @@ public class TestRunFlight2Batch {
 //            break;
         }
     }
-    
+
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
@@ -242,7 +242,7 @@ public class TestRunFlight2Batch {
 //            break;
         }
     }
-    
+
     @Test
     public void testCardinalityRun() {
         List<IMetric> metrics = new ArrayList<>();
@@ -260,6 +260,51 @@ public class TestRunFlight2Batch {
 //            testRunner.executeSingle(configPathKey, "KEY-SCAN-CARDINALITY", variant, metrics, results, o);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
+    }
+
+    @Test
+    public void testIterations() {
+        String configPathTable = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/flight_2_data/flight_2-" + executorModel + "-key-scan-experiment.json";
+        double threshold = 0.6;
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+
+        List<ExpVariant> iterVariants = List.of(
+                variants.get(2)
+        );
+
+        for (ExpVariant variant: iterVariants) {
+            IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra true
+            QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
+            log.info("Plan Estimated: {}", planEstimation);
+            String pushDownStrategy = planEstimation.computePushdown();
+            Double confidenceKeys = planEstimation.getConfidenceKeys();
+            Integer indexPushDown = planEstimation.getIndexPushDown();
+            IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+            IOptimizer singleConditionPushDownRemoveAlgebraTree = null;
+            if (indexPushDown != null) {
+                singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexPushDown, true);
+            }
+            IOptimizer optimizer = null;
+            if (pushDownStrategy.equals(QueryPlan.PUSHDOWN_ALL_CONDITION)) {
+                optimizer = allConditionPushdownWithFilter;
+            }
+            if (pushDownStrategy.startsWith(QueryPlan.PUSHDOWN_SINGLE_CONDITION)) {
+                optimizer = singleConditionPushDownRemoveAlgebraTree;
+            }
+            testRunner.executeSingle(configPathTable, "FLOQ-A", variant, metrics, results, optimizerAll);
+            if (confidenceKeys != null && confidenceKeys > threshold) {
+                // Execute KEY-SCAN
+                testRunner.executeSingle(configPathKey, "FLOQ-F", variant, metrics, results, optimizer);
+            } else {
+                // Execute TABLE
+                testRunner.executeSingle(configPathTable, "FLOQ-F", variant, metrics, results, optimizer);
+            }
+        }
+
+        exportExcel.export(fileName, EXP_NAME, metrics, results);
     }
 
 }
