@@ -1,12 +1,9 @@
 package galois.llm.query;
 
 import dev.langchain4j.chain.Chain;
-import dev.langchain4j.chain.ConversationalChain;
-import dev.langchain4j.chain.ConversationalRetrievalChain;
-import dev.langchain4j.rag.content.retriever.ContentRetriever;
-import dev.langchain4j.rag.query.Query;
-import galois.Constants;
 import galois.llm.TokensEstimator;
+import galois.llm.query.utils.cache.CacheEntry;
+import galois.llm.query.utils.cache.LLMCache;
 import galois.prompt.EPrompts;
 import galois.utils.GaloisDebug;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +12,6 @@ import speedy.model.expressions.Expression;
 
 import java.util.*;
 
-import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
 import static galois.llm.query.utils.QueryUtils.*;
 
 @Slf4j
@@ -76,7 +72,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     : generateIterativePrompt(table, attributesExecutionList, jsonSchema);
             log.debug("Iteration {} - Prompt is: {}", i, userMessage);
             try {
-                String response = getResponse(chain, userMessage, i, false);
+                String response = getResponse(chain, userMessage, i, false, generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema));
                 log.debug("Response is: {}", response);
                 if (response == null || response.trim().isBlank()) {
                     log.warn("Error during LLM request.");
@@ -107,7 +103,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             } catch (Exception e) {
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
-                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), i, true);
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), i, true, generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema));
                     log.debug("Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);
@@ -127,14 +123,26 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         return tuples;
     }
 
-    protected String getResponse(Chain<String, String> chain, String userMessage, int iteration, boolean ignoreTokens) {
+    protected String getResponse(Chain<String, String> chain, String userMessage, int iteration, boolean ignoreTokens, String firstPrompt) {
         String response = null;
+        LLMCache llmCache = LLMCache.getInstance();
+
+        if (llmCache.containsQuery(userMessage, iteration, this, firstPrompt)) {
+            log.debug("Cache hit for {} - iteration {}, returning cached value!", userMessage, iteration);
+            CacheEntry entry = llmCache.getResponse(userMessage, iteration, this, firstPrompt);
+            if (!ignoreTokens) {
+                if (entry.baseLLMRequestsIncrement() > 0) {
+                    updateBaseStats(entry.inputTokens(), entry.outputTokens(), entry.timeMillis(), entry.baseLLMRequestsIncrement());
+                } else {
+                    updateStats(entry.inputTokens(), entry.outputTokens(), entry.timeMillis());
+                }
+            }
+            return entry.response();
+        }
+
         try {
             TokensEstimator estimator = new TokensEstimator();
-            // TODO [Stats:] TokenCountEstimator estimator get from model
-            LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
             double inputTokens = estimator.getTokens(userMessage);
-            if (!ignoreTokens) queryStatManager.updateLLMTokensInput(inputTokens);
             long start = System.currentTimeMillis();
 //            log.warn("*** USER MESSAGE: {}", userMessage);
 //            //TODO: Improve retrieval for prompts > 0. IDEA: Inject different values from first prompt
@@ -144,15 +152,46 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
 ////                generateFirstPrompt()
 ////                contentRetriever.retrieve(Query.from())
 //            }
+            double baseInputTokens = LLMQueryStatManager.getInstance().getBaseLLMTokensInput();
+            double baseOutputTokens = LLMQueryStatManager.getInstance().getBaseLLMTokensOutput();
+            long baseTimeMillis = LLMQueryStatManager.getInstance().getBasetimeMs();
+            int baseLLMRequests = LLMQueryStatManager.getInstance().getBaseLLMRequest();
+
             response = chain.execute(userMessage);
-            if (!ignoreTokens) queryStatManager.updateTimeMs(System.currentTimeMillis() - start);
             double outputTokens = estimator.getTokens(response);
-            if (!ignoreTokens) queryStatManager.updateLLMTokensOutput(outputTokens);
-            if (!ignoreTokens) queryStatManager.updateLLMRequest(1);
+            long timeMillis = System.currentTimeMillis() - start;
+            if (!ignoreTokens) updateStats(inputTokens, outputTokens, timeMillis);
+
+            double baseInputTokensIncrement = LLMQueryStatManager.getInstance().getBaseLLMTokensInput() - baseInputTokens;
+            double baseOutputTokensIncrement = LLMQueryStatManager.getInstance().getBaseLLMTokensOutput() - baseOutputTokens;
+            long baseTimeMillisIncrement = LLMQueryStatManager.getInstance().getBasetimeMs() - baseTimeMillis;
+            int baseLLMRequestsIncrement = LLMQueryStatManager.getInstance().getBaseLLMRequest() - baseLLMRequests;
+
+            inputTokens = baseLLMRequestsIncrement > 0 ? baseInputTokensIncrement : inputTokens;
+            outputTokens = baseLLMRequestsIncrement > 0 ? baseOutputTokensIncrement : outputTokens;
+            timeMillis = baseLLMRequestsIncrement > 0 ? baseTimeMillisIncrement : timeMillis;
+            llmCache.updateCache(userMessage, iteration, this, firstPrompt, response, inputTokens, outputTokens, timeMillis, baseLLMRequestsIncrement);
             return response;
         } catch (Exception e) {
             return response;
         }
+    }
+
+    private void updateStats(double inputTokens, double outputTokens, long timeMillis) {
+        // TODO [Stats:] TokenCountEstimator estimator get from model
+        LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
+        queryStatManager.updateLLMTokensInput(inputTokens);
+        queryStatManager.updateLLMTokensOutput(outputTokens);
+        queryStatManager.updateTimeMs(timeMillis);
+        queryStatManager.updateLLMRequest(1);
+    }
+
+    private void updateBaseStats(double inputTokens, double outputTokens, long timeMillis, int baseIncrement) {
+        LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
+        queryStatManager.updateBaseLLMTokensInput(inputTokens);
+        queryStatManager.updateBaseLLMTokensOutput(outputTokens);
+        queryStatManager.updateBaseTimeMs(timeMillis);
+        queryStatManager.updateBaseLLMRequest(1);
     }
 
     protected String generateFirstPrompt(ITable table, List<Attribute> attributes, Expression expression, String jsonSchema) {
