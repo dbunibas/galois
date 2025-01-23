@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.List;
 
 public class TestParseJSONExperiment {
+
     @Test
     public void testParseToExperimentJSON() throws IOException {
         ObjectMapper mapper = new ObjectMapper();

@@ -22,6 +22,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     private List<AttributeRef> attributes = null;
     private boolean skipKeyRequest = false; // for DEBUG put it to true
+    private boolean skipTupleRequest = false; // for DEBUG put it to true
 
     abstract protected Chain<String, String> getConversationalChain();
 
@@ -35,7 +36,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     }
 
     @Override
-    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias, Double llmProbThreshold) {
         Chain<String, String> chain = getConversationalChain();
 
         ITable table = database.getTable(tableAlias.getTableName());
@@ -44,7 +45,8 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         List<Map<String, Object>> keyValues = getKeyValues(table, primaryKey, chain);
         GaloisDebug.log("Parsed keys are:");
         GaloisDebug.log(keyValues);
-
+        if (skipTupleRequest) return new ArrayList<>();
+        
         List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).filter(Objects::nonNull).toList();
         GaloisDebug.log("LLMScan results:");
         GaloisDebug.log(tuples);
@@ -65,6 +67,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 generateJsonSchemaForCompositePrimaryKey(table, primaryKey) :
                 generateJsonSchemaForPrimaryKey(table);
 
+        log.debug("Max Iteration Allowed: {}", getMaxIterations());
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
                     ? getFirstPrompt().generate(table, primaryKey, getExpression(), schema)

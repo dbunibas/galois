@@ -59,12 +59,12 @@ public class ExcelExporter {
         File exportFile = new File(fileName);
         log.info("Writing file {}", exportFile);
         daoReportExcel.saveReport(reportExcel, exportFile);
-        try {
-            Desktop.getDesktop().open(exportFile);
-        } catch (IOException e) {
-        }
+//        try {
+//            Desktop.getDesktop().open(exportFile);
+//        } catch (IOException e) {
+//        }
     }
-
+   
     private void createHeaders(List<String> optmizers, SheetReport dataSheet) {
         ReportRow rowHeader = dataSheet.addRow();
         rowHeader.addCell("");

@@ -21,7 +21,7 @@ public class Choice {
     @JsonProperty("finish_reason")
     private String finishReason;
     @JsonProperty("logprobs")
-    private Object logprobs;
+    private Logprobs logprobs;
     @JsonProperty("index")
     private Integer index;
     @JsonProperty("message")
@@ -40,12 +40,12 @@ public class Choice {
     }
 
     @JsonProperty("logprobs")
-    public Object getLogprobs() {
+    public Logprobs getLogprobs() {
         return logprobs;
     }
 
     @JsonProperty("logprobs")
-    public void setLogprobs(Object logprobs) {
+    public void setLogprobs(Logprobs logprobs) {
         this.logprobs = logprobs;
     }
 

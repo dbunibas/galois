@@ -44,7 +44,7 @@ public class TestLLMAlgebra {
     public void testLLMScan() {
         // Query: SELECT * FROM actor
         TableAlias tableAlias = new TableAlias("actor");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor(), null);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor(), null, null, null);
         ITupleIterator tuples = llmScan.execute(llmDB, null);
         TestUtils.toTupleStream(tuples).map(Tuple::toString).forEach(log::info);
     }
@@ -53,7 +53,7 @@ public class TestLLMAlgebra {
     public void testLLMScanOrderBy() {
         // Query: SELECT a.name FROM actor a WHERE gender = "Female" ORDER BY name
         TableAlias tableAlias = new TableAlias("actor", "a");
-        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor(), null);
+        IAlgebraOperator llmScan = new LLMScan(tableAlias, new OllamaMistralTableQueryExecutor(), null, null, null);
 
         Expression exp = new Expression("gender == \"Female\"");
         exp.setVariableDescription("gender", new AttributeRef(tableAlias, "gender"));

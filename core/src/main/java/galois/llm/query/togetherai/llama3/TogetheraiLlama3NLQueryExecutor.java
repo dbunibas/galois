@@ -63,7 +63,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
     }
 
     @Override
-    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias, Double llmProbThreshold) {
         Chain<String, String> chain = getConversationalChain();
         ITable table = database.getTable(tableAlias.getTableName());
         List<Attribute> attributesExecution = getCleanAttributes(table);

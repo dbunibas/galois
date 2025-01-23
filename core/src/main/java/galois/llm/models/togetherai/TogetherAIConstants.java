@@ -1,7 +1,5 @@
 package galois.llm.models.togetherai;
 
-import org.apache.pdfbox.pdmodel.common.filespecification.PDSimpleFileSpecification;
-
 public class TogetherAIConstants {
     //    public static final String MODEL_LLAMA3_8B = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo";
     public static final String MODEL_LLAMA3_8B = "meta-llama/Llama-3-8b-chat-hf";
@@ -13,7 +11,7 @@ public class TogetherAIConstants {
     public static final String ASSISTANT = "assistant";
     public static final String BASE_ENDPOINT = "https://api.together.xyz/v1/";
 
-    public static final boolean STREAM_MODE = true;
+    public static final boolean STREAM_MODE = true; // Set to false for Probabilities, otherwise se it to true
 
     public static final int CONNECTION_TIMEOUT = 5 * 60 * 1000;
     public static final int MAX_RETRY = 10;

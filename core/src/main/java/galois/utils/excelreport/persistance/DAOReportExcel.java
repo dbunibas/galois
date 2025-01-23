@@ -83,6 +83,10 @@ public class DAOReportExcel {
             log.error("Unable to open " + filePath + " * Exception: ", e);
         }
     }
+    
+    public void printResultsForDataset(File filePath, List<String> queriesName, List<String> statsToExport, String strategy) {
+        
+    }
 
     public void readResultsForDataset(File filePath, List<String> queriesName, List<String> statsToExport, List<String> metricsToAverage) {
         try {

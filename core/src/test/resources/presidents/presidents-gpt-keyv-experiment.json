@@ -1,5 +1,5 @@
 {
-  "name": "Presidents-{{QN}} llama3-key-scan Experiment",
+  "name": "Presidents-{{QN}} gpt-key Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -11,13 +11,11 @@
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
-  "optimizers": [
-  ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-key-scan",
-      "maxIterations": 100
+      "queryExecutor": "open-ai-key",
+      "maxIterations": 10
     }
   },
   "query": {
@@ -29,7 +27,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "world_presidents",
+          "tableName": "venezuela_presidents",
           "attributes": [
             {
               "name": "name",

@@ -21,19 +21,25 @@
     <logger name="galois.llm" level="ERROR"/>
     <!--<logger name="galois.optimizer" level="DEBUG"/>-->
     <logger name="galois.parser" level="DEBUG"/>
+    <logger name="galois.parser.ParserProvenance" level="INFO"/>
+    <logger name="galois.parser.ParserWhere" level="INFO"/>
     <logger name="galois.optimizer.optimizations" level="DEBUG"/>
     <!--<logger name="speedy.model.algebra.operators.EvaluateExpression" level="DEBUG"/>-->
     <!--<logger name="speedy.model.database.operators.mainmemory.ImportCSVFileMainMemory" level="DEBUG"/>-->
     <!--<logger name="speedy.persistence.DAOMainMemoryDatabase" level="DEBUG"/>-->
     <!--<logger name="speedy.model.algebra.operators.sql.SQLCreateTable" level="DEBUG"/>-->
-    <logger name="galois.llm.models.TogetherAIModel" level="DEBUG"/>
-    <logger name="galois.llm.query.AbstractKeyBasedQueryExecutor" level="DEBUG"/>
-    <logger name="galois.llm.query.AbstractEntityQueryExecutor" level="DEBUG"/>
+    <logger name="galois.llm.algebra.LLMScan" level="ERROR"/>
+    <logger name="galois.optimizer.estimators.ConfidenceEstimator" level="INFO"/>
+    <!--<logger name="galois.llm.models.TogetherAIModel" level="TRACE"/>-->
+    <!--<logger name="galois.llm.models.DataProb" level="DEBUG"/>-->
+    <logger name="galois.llm.query.AbstractKeyBasedQueryExecutor" level="TRACE"/>
+    <logger name="galois.llm.query.AbstractEntityQueryExecutor" level="TRACE"/>
 <!--    <logger name="galois.llm.query.togetherai.llama3" level="DEBUG"/>-->
     <logger name="galois.llm.query.togetherai.llama3.TogetheraiLLama3KeyQueryExecutor" level="DEBUG"/>
     <logger name="galois.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor" level="DEBUG"/>
 <!--    <logger name="galois.llm.models.TogetherAIEmbeddingModel" level="TRACE"/>-->
     <logger name="galois.test" level="DEBUG"/>
+    
     
     <logger name="galois.utils.GaloisDebug" level="TRACE" additivity="false">
         <appender-ref ref="EXP-FILE"/>

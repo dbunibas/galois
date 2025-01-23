@@ -35,7 +35,7 @@ public class TestRunWorld1Batch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
-    private String executorModel = "llama3";
+    private String executorModel = "gpt";
 
     public TestRunWorld1Batch() {
         List<String> singleConditionOptimizers = List.of(
@@ -180,11 +180,11 @@ public class TestRunWorld1Batch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/world_1_data/world1-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/world_1_data/world1-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/world_1_data/world1-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/world_1_data/world1-" + executorModel + "-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/world_1_data/world1-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/world_1_data/world1-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/world_1_data/world1-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/world_1_data/world1-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/world_1_data/world1-" + executorModel + "-key-experiment.json", "ORIGINAL-GALOIS", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/world_1_data/world1-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -193,7 +193,7 @@ public class TestRunWorld1Batch {
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
-        boolean executeAllPlans = true;
+        boolean executeAllPlans = false;
         boolean execute = false;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
@@ -258,13 +258,66 @@ public class TestRunWorld1Batch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
+    
+    @Test
+    public void testLLamaLogProbsStaticResults() {
+//        List<IMetric> metrics = new ArrayList<>();
+//        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        String configPath = "/world_1_data/world1-" + executorModel + "-table-experiment.json";
+        String type = "TABLE";
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
+        ExpVariant variant = variants.get(9);
+        Double thresholds[] = {0.5, 0.6, 0.7, 0.8, 0.9, 0.99, 0.995};
+        List<Double> precisions = new ArrayList<>();
+        List<Double> recalls = new ArrayList<>();
+        for (Double threshold : thresholds) {
+            List<IMetric> metrics = new ArrayList<>();
+            Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+            testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdownWithFilter, threshold);
+            for (String queryNumber : results.keySet()) {
+                Map<String, ExperimentResults> resultExp = results.get(queryNumber);
+                for (String executedStrategy : resultExp.keySet()) {
+                    ExperimentResults result = resultExp.get(executedStrategy);
+                    Double precision = result.getMetrics().get("CellSimilarityPrecision");
+                    Double recall = result.getMetrics().get("CellSimilarityRecall");
+                    precisions.add(precision);
+                    recalls.add(recall);
+                }
+            }
+        }
+        for (Double precision : precisions) {
+            System.out.println(precision.toString().replace(".", ","));
+        }
+        System.out.println("");
+        System.out.println("");
+        for (Double recall : recalls) {
+            System.out.println(recall.toString().replace(".", ","));
+        }
+    }
+    
+    @Test
+    public void testIterationsImpact() {
+        String configPathTable = "/world_1_data/world1-" + executorModel + "-table-experiment.json";
+        String configPathKey = "/world_1_data/world1-" + executorModel + "-key-scan-experiment.json";
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        for (ExpVariant variant : variants) {
+            testRunner.executeSingle(configPathTable, "TABLE-Unoptimized", variant, metrics, results, null);
+            testRunner.executeSingle(configPathKey, "KEY-SCAN-Unoptimized", variant, metrics, results, null);
+            testRunner.executeSingle(configPathKey, "KEY-SCAN-All", variant, metrics, results, optimizerAll);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+    }
 
     @Test
     public void testSingle() {
         // TO DEBUG single experiment
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
-        ExpVariant variant = variants.get(0);
+        ExpVariant variant = variants.get(3);
         String configPath = "/world_1_data/world1-" + executorModel + "-table-experiment.json";
         String type = "TABLE";
         int indexSingleCondition = 0;
@@ -273,7 +326,7 @@ public class TestRunWorld1Batch {
         IOptimizer singleConditionPushDownRemoveAlgebraTree = new IndexedConditionPushdownOptimizer(indexSingleCondition, true);
         IOptimizer singleConditionPushDown = new IndexedConditionPushdownOptimizer(indexSingleCondition, false);
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
-        testRunner.executeSingle(configPath, type, variant, metrics, results, singleConditionPushDown);
+        testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdownWithFilter, 0.8);
     }
     
         @Test

@@ -71,13 +71,13 @@ public class ScanParser extends AbstractNodeParser {
                 }
             }
             log.info("Creating LLM Scan with: {}", attributes);
-            root = new LLMScan(tableAlias, configuration.getScan().getQueryExecutor(), attributes, configuration.getScan().getNormalizationStrategy());
+            root = new LLMScan(tableAlias, configuration.getScan().getQueryExecutor(), attributes, configuration.getScan().getNormalizationStrategy(), configuration.getScan().getLlmProbThreshold());
         } else {
             log.info("Creating LLM Scan for the table");
             if (node.getChild(conditionNode, node.getNamespace()) != null) {
                 filter = filterParser.parse(node, database, configuration);
             }
-            root = new LLMScan(tableAlias, configuration.getScan().getQueryExecutor(), configuration.getScan().getNormalizationStrategy());
+            root = new LLMScan(tableAlias, configuration.getScan().getQueryExecutor(), configuration.getScan().getNormalizationStrategy(), configuration.getScan().getLlmProbThreshold());
         }
         if (filter != null && node.getChild(conditionNode, node.getNamespace()) != null) {
             filter.addChild(root);

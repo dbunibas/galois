@@ -4,11 +4,18 @@ import dev.langchain4j.chain.Chain;
 import galois.llm.TokensEstimator;
 import galois.llm.query.utils.cache.CacheEntry;
 import galois.llm.query.utils.cache.LLMCache;
+import galois.llm.models.DataProb;
+import galois.llm.models.togetherai.Logprobs;
+import galois.llm.models.togetherai.StoredProbsSingleton;
+import galois.llm.models.togetherai.CellProb;
 import galois.prompt.EPrompts;
 import galois.utils.GaloisDebug;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 import speedy.model.expressions.Expression;
+import com.google.common.collect.Iterables;
+import galois.llm.database.CellWithProb;
+import galois.llm.query.utils.QueryUtils;
 
 import java.util.*;
 
@@ -16,7 +23,7 @@ import static galois.llm.query.utils.QueryUtils.*;
 
 @Slf4j
 public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
-
+    
     protected List<AttributeRef> attributes = null;
 
     abstract protected Chain<String, String> getConversationalChain();
@@ -27,9 +34,8 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
     }
 
     @Override
-    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias, Double llmProbThreshold) {
         Chain<String, String> chain = getConversationalChain();
-
         ITable table = database.getTable(tableAlias.getTableName());
         log.trace("Table: {}", table);
         log.trace("attributes: {}", attributes);
@@ -65,8 +71,10 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         String jsonSchema = generateJsonSchemaListFromAttributes(table, attributesExecutionList);
         Expression expression = getExpression();
         log.debug("Expression: {}", expression);
+        log.debug("Max Iteration Allowed: {}", getMaxIterations());
         List<Tuple> tuples = new ArrayList<>();
-        for (int i = 0; i < getMaxIterations(); i++) {
+        int i;
+        for (i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
                     ? generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema)
                     : generateIterativePrompt(table, attributesExecutionList, jsonSchema);
@@ -85,10 +93,27 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     GaloisDebug.log(tuples);
                     return tuples;
                 }
+                List<CellProb> cellProbs = null;
+                Iterator<List<CellProb>> iterator = null;
+                if (llmProbThreshold != null) {
+                    Logprobs probs = StoredProbsSingleton.getInstance().getLogprobs(userMessage);
+                    DataProb probsParser = new DataProb();
+                    cellProbs = probsParser.computeProbabilities(probs);
+                    iterator = Iterables.partition(cellProbs, attributesExecution.size()).iterator();
+                }
+                List<CellProb> cellsProbForTuple = null;
                 int initialTuples = tuples.size();
                 for (Map<String, Object> map : parsedResponse) {
                     Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
+                    if (llmProbThreshold != null && iterator.hasNext()) cellsProbForTuple = iterator.next();
                     if (tuple != null && !isAlreadyContained(tuple, tuples)) {
+                        if (llmProbThreshold != null && cellsProbForTuple != null && !cellsProbForTuple.isEmpty()) {
+                            log.debug("Tuple {}", tuple.toStringNoOID());
+                            log.debug("CellProbs: {}", cellsProbForTuple);
+                            tuple = QueryUtils.mapToTupleWithProb(tuple, cellsProbForTuple);
+                            CellWithProb cwp = (CellWithProb)tuple.getCells().getLast();
+                            log.debug("Last cell with prob: {}", cwp.getValueProb());
+                        }
                         tuples.add(tuple);
                         log.trace("Adding new tuple {}", tuple);
                     } else {
@@ -98,6 +123,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 log.info("Tuples after {} iterations: {}", i, tuples.size());
                 if (tuples.size() == initialTuples) {
                     log.info("Iteration {} did not add any new tuples. Avoid proceeding with further iterations", i);
+                    log.info("Return tuples: \n{}", tuples);
                     return tuples;
                 }
             } catch (Exception e) {
@@ -107,9 +133,25 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     log.debug("Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);
+                    List<CellProb> cellProbs = null;
+                    if (llmProbThreshold != null) {
+                        Logprobs probs = StoredProbsSingleton.getInstance().getLogprobs(userMessage);
+                        DataProb probsParser = new DataProb();
+                        cellProbs = probsParser.computeProbabilities(probs);
+                    }
+                    List<CellProb> cellsProbForTuple = null;
+                    Iterator<List<CellProb>> iterator = Iterables.partition(cellProbs, attributesExecution.size()).iterator();
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
+                        if (cellProbs != null && iterator.hasNext()) cellsProbForTuple = iterator.next();
                         if (tuple != null && !isAlreadyContained(tuple, tuples)) {
+                            if (llmProbThreshold != null && cellsProbForTuple != null && !cellsProbForTuple.isEmpty()) {
+                                log.debug("Tuple {}", tuple.toStringNoOID());
+                                log.debug("CellProbs: {}", cellsProbForTuple);
+                                tuple = QueryUtils.mapToTupleWithProb(tuple, cellsProbForTuple);
+                                CellWithProb cwp = (CellWithProb) tuple.getCells().getLast();
+                                log.debug("Last cell with prob: {}", cwp.getValueProb());
+                            }
                             tuples.add(tuple);
                         }
                     }
@@ -120,6 +162,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         }
         GaloisDebug.log("LLMScan results:");
         GaloisDebug.log(tuples);
+        log.info("Return tuples after max iterations: \n{}", tuples);
         return tuples;
     }
 
@@ -173,6 +216,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             llmCache.updateCache(userMessage, iteration, this, firstPrompt, response, inputTokens, outputTokens, timeMillis, baseLLMRequestsIncrement);
             return response;
         } catch (Exception e) {
+            log.error("Exception: {}", e);
             return response;
         }
     }

@@ -68,7 +68,7 @@ public class AggregateConditionsPushdown implements IOptimization {
                 .expression(pushdownExpression)
                 .contentRetriever(executor.getContentRetriever())
                 .build();
-        return new LLMScan(scan.getTableAlias(), optimizedExecutor, scan.getAttributesSelect(), scan.getNormalizationStrategy());
+        return new LLMScan(scan.getTableAlias(), optimizedExecutor, scan.getAttributesSelect(), scan.getNormalizationStrategy(), scan.getLlmProbThreshold());
     }
 
     private IAlgebraOperator aggregate(IAlgebraOperator left, IAlgebraOperator right) {

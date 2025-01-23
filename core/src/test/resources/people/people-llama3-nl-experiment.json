@@ -1,5 +1,5 @@
 {
-  "name": "Presidents-{{QN}} llama3-key-scan Experiment",
+  "name": "People-{{QN}} llama3-nl Experiment",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -16,49 +16,50 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-key-scan",
-      "maxIterations": 100
+      "queryExecutor": "togetherai-llama3-nl",
+      "maxIterations": 1,
+      "naturalLanguagePrompt": "{{PROMPT}}"
     }
   },
-  "query": {
+    "query": {
     "sql": "{{QUERY-SQL}}",
     "schema": {
-      "name": "all_president",
+      "name": "people",
       "schema": "target",
       "username": "pguser",
       "password": "pguser",
       "tables": [
         {
-          "tableName": "world_presidents",
+          "tableName": "peoplebigfivepersonality",
           "attributes": [
             {
-              "name": "name",
-              "type": "STRING",
+              "name": "person_id",
+              "type": "INTEGER",
               "nullable": false,
               "key": true
             },
             {
-              "name": "start_year",
+              "name": "age",
               "type": "INTEGER",
               "nullable": false
             },
             {
-              "name": "end_year",
-              "type": "INTEGER",
-              "nullable": false
-            },
-            {
-              "name": "cardinal_number",
+              "name": "gender",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "party",
+              "name": "race",
               "type": "STRING",
               "nullable": false
             },
             {
-              "name": "country",
+              "name": "country_of_origin",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "openess",
               "type": "STRING",
               "nullable": false
             }
@@ -66,6 +67,6 @@
         }
       ]
     },
-    "results": "/presidents/presidents_data"
+    "results": "/people/people"
   }
 }

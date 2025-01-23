@@ -47,6 +47,8 @@ dependencies {
 
     implementation("org.apache.poi:poi-ooxml:5.2.3")
 
+    implementation("com.google.guava:guava:33.3.1-jre")
+
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }

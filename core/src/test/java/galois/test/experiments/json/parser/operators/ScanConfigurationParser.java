@@ -63,7 +63,7 @@ public class ScanConfigurationParser {
                     contentRetriever
             );
         };
-        return new ScanConfiguration(factory.create(null), factory, json.getNormalizationStrategy());
+        return new ScanConfiguration(factory.create(null), factory, json.getNormalizationStrategy(), json.getLlmProbThreshold());
     }
 
     private static IQueryExecutorGenerator getExecutor(ScanConfigurationJSON json, Query query) {

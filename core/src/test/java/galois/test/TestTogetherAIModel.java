@@ -14,7 +14,7 @@ public class TestTogetherAIModel {
 
     @Test
     public void testRequestText() {
-        TogetherAIModel toghetherAiModel = new TogetherAIModel(this.API_KEI, TogetherAIConstants.MODEL_LLAMA3_8B, true);
+        TogetherAIModel toghetherAiModel = new TogetherAIModel(this.API_KEI, TogetherAIConstants.MODEL_LLAMA3_8B, false);
         String response = toghetherAiModel.generate("Given the following query, populate the table with actual values.\n" +
                 "query: select population and city_name from usa_city where population > 150000.\n" +
                 "Respond with JSON only. Don't add any comment.\n" +

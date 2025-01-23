@@ -12,7 +12,7 @@ import speedy.model.database.AttributeRef;
 // TODO: Delete class (and restore inheriting children)
 public class UnsupportedQueryExecutor implements IQueryExecutor {
     @Override
-    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias, Double llmProbThreshold) {
         throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
 

@@ -113,7 +113,7 @@ public class PostgresXMLParser implements IQueryPlanParser<Document> {
 
         log.debug("Table name {} - Alias {}", relationName, alias);
         TableAlias tableAlias = new TableAlias(relationName, alias);
-        return new LLMScan(tableAlias, configuration.getScan().getQueryExecutor(), configuration.getScan().getNormalizationStrategy());
+        return new LLMScan(tableAlias, configuration.getScan().getQueryExecutor(), configuration.getScan().getNormalizationStrategy(), configuration.getScan().getLlmProbThreshold());
     }
 
     private Element getDescendant(Element element, ElementFilter filter) {

@@ -1,5 +1,7 @@
 package galois.llm.query.utils;
 
+import galois.llm.database.CellWithProb;
+import galois.llm.models.togetherai.CellProb;
 import lombok.extern.slf4j.Slf4j;
 import speedy.SpeedyConstants;
 import speedy.exceptions.DAOException;
@@ -58,7 +60,7 @@ public class QueryUtils {
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
         return mapToTuple(tuple, map, tableAlias, attributes);
     }
-
+    
     public static Tuple mapToTuple(Tuple tuple, Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
         for (Attribute attribute : attributes) {
             /*IValue cellValue = null;
@@ -222,7 +224,15 @@ public class QueryUtils {
 
     public static Tuple normalizeTextValues(Tuple tuple, String normalization) {
         Tuple cloned = tuple.clone();
-        for (Cell cell : cloned.getCells()) {
+        List<Cell> clonedCells = cloned.getCells();
+        for (int i = 0; i < tuple.getCells().size(); i++) {
+            if (tuple.getCells().get(i) instanceof CellWithProb) {
+                Cell tupleCell = tuple.getCells().get(i);
+                CellWithProb tupleCellWithProb = (CellWithProb) tupleCell;
+                CellWithProb cwp = new CellWithProb(tupleCell.getTupleOID(), tupleCell.getAttributeRef(), tupleCell.getValue(), tupleCellWithProb.getCellProb());
+                clonedCells.set(i, cwp);
+            }
+            Cell cell = cloned.getCells().get(i);
             if (cell.getValue() instanceof NullValue) continue;
             if (normalization.equalsIgnoreCase(NORMALIZE_LOWER_CASE)) {
                 IValue normalizedValue = new ConstantValue(cell.getValue().toString().toLowerCase());
@@ -246,5 +256,21 @@ public class QueryUtils {
 
     public static boolean isAlreadyContained(Tuple tuple, List<Tuple> tuples) {
         return tuples.stream().map(Tuple::toStringNoOID).collect(Collectors.toSet()).contains(tuple.toStringNoOID());
+    }
+    
+    public static Tuple mapToTupleWithProb(Tuple originalTuple, List<CellProb> cellProbs) {
+        List<Cell> originalCells = originalTuple.getCells();
+        Tuple newTuple = new Tuple(originalTuple.getOid());
+        Map<String, CellProb> cellProbForAttrName = new HashMap<>();
+        for (CellProb cellProb : cellProbs) {
+            cellProbForAttrName.put(cellProb.getAttributeName(), cellProb);
+        }
+        for (Cell originalCell : originalCells) {
+            String attribute = originalCell.getAttribute();
+            CellProb cellProb = cellProbForAttrName.get(attribute);
+            CellWithProb cellWithProb = new CellWithProb(originalTuple.getOid(), originalCell.getAttributeRef(), originalCell.getValue(), cellProb);
+            newTuple.addCell(cellWithProb);
+        }
+        return newTuple;
     }
 }

@@ -142,8 +142,8 @@ public class TestRunRAGFortuneBatch {
                 .optimizers(multipleConditionsOptimizers)
                 .build();
 
-//        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
-        variants = List.of( q6);
+
+        variants = List.of(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10);
     }
 
     @Test
@@ -236,12 +236,12 @@ public class TestRunRAGFortuneBatch {
         }
         log.info("Results\n{}", printMap(results));
     }
-    
+        
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
         boolean executeAllPlans = true;
-        boolean execute = false;
+        boolean execute = true;
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);

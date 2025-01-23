@@ -11,7 +11,7 @@ import speedy.model.expressions.Expression;
 import java.util.List;
 
 public interface IQueryExecutor {
-    List<Tuple> execute(IDatabase database, TableAlias tableAlias);
+    List<Tuple> execute(IDatabase database, TableAlias tableAlias, Double llmProbThreshold);
 
     void setAttributes(List<AttributeRef> attributes);
 

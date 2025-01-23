@@ -17,7 +17,7 @@ public class OperatorsConfigurationParser {
     }
 
     public static OperatorsConfiguration getDefault() {
-        ScanConfiguration scan = new ScanConfiguration(new OllamaLlama3KeyScanQueryExecutor(), (ignored) -> new OllamaLlama3KeyScanQueryExecutor(), null);
+        ScanConfiguration scan = new ScanConfiguration(new OllamaLlama3KeyScanQueryExecutor(), (ignored) -> new OllamaLlama3KeyScanQueryExecutor(), null, null);
         return new OperatorsConfiguration(scan);
     }
 }
