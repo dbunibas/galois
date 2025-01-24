@@ -15,6 +15,16 @@ import floq.llm.query.openai.OpenAISQLQueryExecutor;
 import floq.llm.query.openai.OpenAITableQueryExecutor;
 import floq.llm.query.togetherai.llama3.*;
 import floq.prompt.EPrompts;
+import floq.llm.algebra.config.ScanConfiguration;
+import floq.llm.query.INLQueryExectutor;
+import floq.llm.query.IQueryExecutor;
+import floq.llm.query.ollama.llama3.*;
+import floq.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
+import floq.llm.query.openai.*;
+import floq.llm.query.togetherai.llama3.*;
+import floq.prompt.EPrompts;
+import floq.test.experiments.Query;
+import floq.test.experiments.json.config.ScanConfigurationJSON;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -27,64 +37,25 @@ public class ScanConfigurationParser {
 
     private static ContentRetrieverConfigurationParser contentRetrieverConfigurationParser = new ContentRetrieverConfigurationParser();
 
-    private static final Map<String, IQueryExecutorGenerator> parserMap;
-
-    static{
-        if(Constants.EXECUTOR.equals("OLLAMA_EXECUTOR")){
-            parserMap  = Map.ofEntries(
-                    Map.entry("ollama-llama3-nl", ScanConfigurationParser::generateOllamaLlama3NLQueryExecutor),
-                    Map.entry("ollama-llama3-sql", ScanConfigurationParser::generateOllamaLlama3SQLQueryExecutor),
-                    Map.entry("ollama-llama3-table", ScanConfigurationParser::generateOllamaLlama3TableQueryExecutor),
-                    Map.entry("ollama-llama3-key", ScanConfigurationParser::generateOllamaLlama3KeyQueryExecutor),
-                    Map.entry("ollama-llama3-key-scan", ScanConfigurationParser::generateOllamaLlama3KeyScanQueryExecutor),
-                    Map.entry("togetherai-llama3-nl", ScanConfigurationParser::generateOllamaLlama3NLQueryExecutor),
-                    Map.entry("togetherai-llama3-sql", ScanConfigurationParser::generateOllamaLlama3SQLQueryExecutor),
-                    Map.entry("togetherai-llama3-table", ScanConfigurationParser::generateOllamaLlama3TableQueryExecutor),
-                    Map.entry("togetherai-llama3-key", ScanConfigurationParser::generateOllamaLlama3KeyQueryExecutor),
-                    Map.entry("togetherai-llama3-key-scan", ScanConfigurationParser::generateOllamaLlama3KeyScanQueryExecutor),
-                    Map.entry("ollama-mistral-nl", ScanConfigurationParser::generateOllamaLlama3NLQueryExecutor),
-                    Map.entry("open-ai-nl", ScanConfigurationParser::generateOpenAINLQueryExecutor),
-                    Map.entry("open-ai-sql", ScanConfigurationParser::generateOllamaLlama3SQLQueryExecutor),
-                    Map.entry("open-ai-table", ScanConfigurationParser::generateOllamaLlama3TableQueryExecutor),
-                    Map.entry("open-ai-key-scan", ScanConfigurationParser::generateOllamaLlama3KeyScanQueryExecutor));
-        } else if(Constants.EXECUTOR.equals("TOGETHERAI_EXECUTOR")){
-            parserMap  = Map.ofEntries(
-                    Map.entry("ollama-llama3-nl", ScanConfigurationParser::generateTogetheraiLlama3NLQueryExecutor),
-                    Map.entry("ollama-llama3-sql", ScanConfigurationParser::generateTogetheraiLlama3SQLQueryExecutor),
-                    Map.entry("ollama-llama3-table", ScanConfigurationParser::generateTogetheraiLlama3TableQueryExecutor),
-                    Map.entry("ollama-llama3-key", ScanConfigurationParser::generateTogetheraiLlama3KeyQueryExecutor),
-                    Map.entry("ollama-llama3-key-scan", ScanConfigurationParser::generateTogetheraiLlama3KeyScanQueryExecutor),
-                    Map.entry("togetherai-llama3-nl", ScanConfigurationParser::generateTogetheraiLlama3NLQueryExecutor),
-                    Map.entry("togetherai-llama3-sql", ScanConfigurationParser::generateTogetheraiLlama3SQLQueryExecutor),
-                    Map.entry("togetherai-llama3-table", ScanConfigurationParser::generateTogetheraiLlama3TableQueryExecutor),
-                    Map.entry("togetherai-llama3-key", ScanConfigurationParser::generateTogetheraiLlama3KeyQueryExecutor),
-                    Map.entry("togetherai-llama3-key-scan", ScanConfigurationParser::generateTogetheraiLlama3KeyScanQueryExecutor),
-                    Map.entry("ollama-mistral-nl", ScanConfigurationParser::generateOllamaMistralNLQueryExecutor),
-                    Map.entry("open-ai-nl", ScanConfigurationParser::generateTogetheraiLlama3NLQueryExecutor),
-                    Map.entry("open-ai-sql", ScanConfigurationParser::generateTogetheraiLlama3SQLQueryExecutor),
-                    Map.entry("open-ai-table", ScanConfigurationParser::generateTogetheraiLlama3TableQueryExecutor),
-                    Map.entry("open-ai-key-scan", ScanConfigurationParser::generateTogetheraiLlama3KeyScanQueryExecutor));
-        } else if(Constants.EXECUTOR.equals("OPENAI_EXECUTOR")){
-            parserMap  = Map.ofEntries(
-                    Map.entry("ollama-llama3-nl", ScanConfigurationParser::generateOpenAINLQueryExecutor),
-                    Map.entry("ollama-llama3-sql", ScanConfigurationParser::generateOpenAISQLQueryExecutor),
-                    Map.entry("ollama-llama3-table", ScanConfigurationParser::generateOpenAITableQueryExecutor),
-                    Map.entry("ollama-llama3-key", ScanConfigurationParser::generateOllamaLlama3KeyQueryExecutor),
-                    Map.entry("ollama-llama3-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor),
-                    Map.entry("togetherai-llama3-nl", ScanConfigurationParser::generateOpenAINLQueryExecutor),
-                    Map.entry("togetherai-llama3-sql", ScanConfigurationParser::generateOpenAISQLQueryExecutor),
-                    Map.entry("togetherai-llama3-table", ScanConfigurationParser::generateOpenAITableQueryExecutor),
-                    Map.entry("togetherai-llama3-key", ScanConfigurationParser::generateTogetheraiLlama3KeyQueryExecutor),
-                    Map.entry("togetherai-llama3-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor),
-                    Map.entry("ollama-mistral-nl", ScanConfigurationParser::generateOllamaMistralNLQueryExecutor),
-                    Map.entry("open-ai-nl", ScanConfigurationParser::generateOpenAINLQueryExecutor),
-                    Map.entry("open-ai-sql", ScanConfigurationParser::generateOpenAISQLQueryExecutor),
-                    Map.entry("open-ai-table", ScanConfigurationParser::generateOpenAITableQueryExecutor),
-                    Map.entry("open-ai-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor));
-        } else {
-            throw new RuntimeException("Unknown executor: " + Constants.EXECUTOR);
-        }
-    }
+    private static final Map<String, IQueryExecutorGenerator> parserMap = Map.ofEntries(
+            // Ollama - Llama3
+            Map.entry("ollama-llama3-nl", ScanConfigurationParser::generateOllamaLlama3NLQueryExecutor),
+            Map.entry("ollama-llama3-sql", ScanConfigurationParser::generateOllamaLlama3SQLQueryExecutor),
+            Map.entry("ollama-llama3-table", ScanConfigurationParser::generateOllamaLlama3TableQueryExecutor),
+            Map.entry("ollama-llama3-key", ScanConfigurationParser::generateOllamaLlama3KeyQueryExecutor),
+            Map.entry("ollama-llama3-key-scan", ScanConfigurationParser::generateOllamaLlama3KeyScanQueryExecutor),
+            Map.entry("togetherai-llama3-nl", ScanConfigurationParser::generateTogetheraiLlama3NLQueryExecutor),
+            Map.entry("togetherai-llama3-sql", ScanConfigurationParser::generateTogetheraiLlama3SQLQueryExecutor),
+            Map.entry("togetherai-llama3-table", ScanConfigurationParser::generateTogetheraiLlama3TableQueryExecutor),
+            Map.entry("togetherai-llama3-key", ScanConfigurationParser::generateTogetheraiLlama3KeyQueryExecutor),
+            Map.entry("togetherai-llama3-key-scan", ScanConfigurationParser::generateTogetheraiLlama3KeyScanQueryExecutor),
+            Map.entry("ollama-mistral-nl", ScanConfigurationParser::generateOllamaMistralNLQueryExecutor),
+            Map.entry("open-ai-nl", ScanConfigurationParser::generateOpenAINLQueryExecutor),
+            Map.entry("open-ai-sql", ScanConfigurationParser::generateOpenAISQLQueryExecutor),
+            Map.entry("open-ai-table", ScanConfigurationParser::generateOpenAITableQueryExecutor),
+            Map.entry("open-ai-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor),
+            Map.entry("open-ai-key", ScanConfigurationParser::generateOpenAIKeyQueryExecutor)
+    );
 
     public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
         IQueryExecutorGenerator generator = getExecutor(json, query);
@@ -94,7 +65,7 @@ public class ScanConfigurationParser {
             if (base instanceof INLQueryExectutor nlQueryExecutor) {
                 naturalLanguagePrompt = nlQueryExecutor.getNaturalLanguagePrompt();
             }
-            ContentRetriever contentRetriever = contentRetrieverConfigurationParser.loadContentRetriever(json.getContentRetriever());
+            ContentRetriever contentRetriever = contentRetrieverConfigurationParser.loadContentRetriever(json.getContentRetriever(), query);
             return generator.create(
                     json.getFirstPrompt(),
                     json.getIterativePrompt(),
@@ -106,7 +77,7 @@ public class ScanConfigurationParser {
                     contentRetriever
             );
         };
-        return new ScanConfiguration(factory.create(null), factory, json.getNormalizationStrategy());
+        return new ScanConfiguration(factory.create(null), factory, json.getNormalizationStrategy(), json.getLlmProbThreshold());
     }
 
     private static IQueryExecutorGenerator getExecutor(ScanConfigurationJSON json, Query query) {
@@ -188,6 +159,11 @@ public class ScanConfigurationParser {
     private static IQueryExecutor generateOpenAIKeyScanQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAIKeyScanQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+
+    private static IQueryExecutor generateOpenAIKeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new OpenAIKeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
 
     private static IQueryExecutor generateOllamaMistralNLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {

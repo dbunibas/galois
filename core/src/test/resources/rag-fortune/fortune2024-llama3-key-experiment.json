@@ -21,13 +21,14 @@
       "queryExecutor": "togetherai-llama3-key",
       "maxIterations": 20,
       "contentRetriever": {
-        "embeddingStoreCollectionName": "rag_fortune_400_50_UAE-Large",
+        "embeddingStoreCollectionName": "rag_fortune_400_50_UAE-Large-PROCESSED",
         "embeddingModelEngine": "togetherai",
         "embeddingModel": "WhereIsAI/UAE-Large-V1",
-        "maxResults": 50,
+        "maxResults": 100,
         "minScore": 0.75,
         "maxSegmentSizeInTokens": 400,
         "maxOverlapSizeInTokens": 50,
+        "processDocuments": true,
         "documentsToLoad": "./src/test/resources/rag-fortune/documents/"
       }
     }
@@ -180,7 +181,7 @@
         "nullable": true
     },
     {
-        "name": "CompanyType",
+        "name": "private_or_public",
         "type": "STRING",
         "nullable": true
     },

@@ -3,31 +3,30 @@ package floq.llm.query.togetherai.llama3;
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
-import floq.Constants;
-import floq.llm.query.AbstractKeyBasedQueryExecutor;
-import floq.llm.query.AbstractQueryExecutorBuilder;
-import floq.llm.query.IQueryExecutor;
-import floq.llm.query.IQueryExecutorBuilder;
-
-import static floq.llm.query.ConversationalChainFactory.*;
-import static floq.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
-import static floq.llm.query.utils.QueryUtils.mapToTuple;
-import floq.prompt.EPrompts;
-import static floq.utils.FunctionalUtils.orElse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import engine.model.database.Attribute;
 import engine.model.database.ITable;
 import engine.model.database.TableAlias;
 import engine.model.database.Tuple;
 import engine.model.expressions.Expression;
+import floq.Constants;
+import floq.llm.query.*;
+import floq.prompt.EPrompts;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static floq.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
+import static floq.llm.query.ConversationalChainFactory.buildTogetherAiChatLanguageModel;
+import static floq.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
+import static floq.llm.query.utils.QueryUtils.mapToTuple;
+import static floq.utils.FunctionalUtils.orElse;
 
 @Slf4j
 @Getter
-public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor {
+public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecutor implements IGaloisOriginalExecutor {
 
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;

@@ -11,5 +11,6 @@ public class ContentRetrieverConfigurationJSON {
     private double minScore;
     private int maxSegmentSizeInTokens;
     private int maxOverlapSizeInTokens;
+    private boolean processDocuments;
     private String documentsToLoad;
 }

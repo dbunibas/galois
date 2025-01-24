@@ -64,7 +64,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
     }
 
     @Override
-    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias, Double llmProbThreshold) {
         Chain<String, String> chain = getConversationalChain();
         ITable table = database.getTable(tableAlias.getTableName());
         List<Attribute> attributesExecution = getCleanAttributes(table);
@@ -78,11 +78,11 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
         List<Tuple> tuples = new ArrayList<>();
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
-                    ? generateFirstPrompt(table, attributesExecution,null, jsonSchema)
+                    ? generateFirstPrompt(table, attributesExecution, null, jsonSchema)
                     : generateIterativePrompt(table, attributesExecution, jsonSchema);
             log.debug("Prompt is: {}", userMessage);
             try {
-                String response = super.getResponse(chain, userMessage, false);
+                String response = super.getResponse(chain, userMessage, i, false, generateFirstPrompt(table, attributesExecution, null, jsonSchema));
                 log.debug("First Response is: {}", response);
                 if (response == null || response.trim().isBlank()) {
                     log.warn("Error during LLM request.");
@@ -97,25 +97,25 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
                 for (Map<String, Object> map : parsedResponse) {
                     log.debug("Try to parse: " + EngineUtility.printMapCompact(map));
                     Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
-                    if(!isAlreadyContained(tuple, tuples)){
+                    if (!isAlreadyContained(tuple, tuples)) {
                         tuples.add(tuple);
                     }
                 }
-                if(tuples.size() == initialTuples){
+                if (tuples.size() == initialTuples) {
                     log.info("Iteration {} did not add any new tuples. Avoid proceeding with further iterations", i);
                     return tuples;
                 }
             } catch (Exception e) {
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
-                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true);
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), i, true, generateFirstPrompt(table, attributesExecution, null, jsonSchema));
                     log.debug("Second Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Second Parsed response is: {}", parsedResponse);
                     for (Map<String, Object> map : parsedResponse) {
                         log.debug("Second Try to parse: " + EngineUtility.printMapCompact(map));
                         Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
-                        if(!isAlreadyContained(tuple, tuples)){
+                        if (!isAlreadyContained(tuple, tuples)) {
                             tuples.add(tuple);
                         }
                     }
@@ -131,9 +131,9 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
 
     @Override
     protected Chain<String, String> getConversationalChain() {
-        if(contentRetriever == null) {
+        if (contentRetriever == null) {
             return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
-        }else {
+        } else {
             return buildTogetherAIConversationalRetrivalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, contentRetriever);
         }
     }

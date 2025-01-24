@@ -28,4 +28,7 @@ public class Constants {
     public static final String LLM_MODEL = Constants.MODEL_LLAMA3;
 
     public static final String EXPORT_EXCEL_PATH = "~/floq/test-results/";
+
+    public static final boolean CACHE_ENABLED = false;
+    public static final String CACHE_DIR = "";
 }

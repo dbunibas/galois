@@ -166,7 +166,8 @@ public final class Experiment {
         log.info("Parsing the query using SQLQueryParser - {}", sqlQueryParser.getClass());
         IQueryExecutor scanQueryExecutor = operatorsConfiguration.getScan().getQueryExecutor();
         String normalizationStrategy = operatorsConfiguration.getScan().getNormalizationStrategy();
-        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, operatorsConfiguration.getScan().createQueryExecutor(scanQueryExecutor), attributes, normalizationStrategy);
+        Double llmProbThreshold = operatorsConfiguration.getScan().getLlmProbThreshold();
+        ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, operatorsConfiguration.getScan().createQueryExecutor(scanQueryExecutor), attributes, normalizationStrategy, llmProbThreshold);
 
         // If ignoreTree() returns true, only execute the LLMScan operation
         if (scanQueryExecutor.ignoreTree()) {
@@ -177,7 +178,7 @@ public final class Experiment {
         return sqlQueryParser.parse(query.getSql(), scanNodeFactory);
     }
 
-    private DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {
+    public DBMSDB createDatabaseForExpected() throws IllegalStateException, DAOException {
         IDatabase database = query.getDatabase();
         List<String> tableNames = database.getTableNames();
         URL resource = Experiment.class.getResource(query.getResultPath());
@@ -265,7 +266,7 @@ public final class Experiment {
         return toExperimentResults(iterator, expectedResults, optimizer.getName());
     }
 
-    private ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults, String optmizerName) {
+    public ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults, String optmizerName) {
         List<Tuple> results = TestUtils.toTupleList(actual);
         log.info("Results size: " + results.size());
         log.info("Results: " + results);

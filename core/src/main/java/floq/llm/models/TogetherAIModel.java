@@ -8,6 +8,7 @@ import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ChatMessageType;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.output.FinishReason;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.model.output.TokenUsage;
 import floq.Constants;
@@ -36,6 +37,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Data
 public class TogetherAIModel implements IModel, ChatLanguageModel {
+    
+    public static final String LOG_PROBS = "logprobs";
 
     private String toghetherAiAPI;
     private String modelName;
@@ -44,6 +47,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private double temperature = 0.0; // 0.0 deterministic
     private double topP = 0.0; // 0.0 deterministic
     private boolean useSeed = true; // deterministic
+    private boolean useLogProbs = false;
     private List<Message> messages = new ArrayList<>();
     private ObjectMapper objectMapper = Mapper.MAPPER;
     private int inputTokens = 0;
@@ -51,8 +55,8 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private boolean checkJSON = true;
     private boolean checkJSONResponseContent = false;
     private Map<String, String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
-    private boolean useCache = true;
-
+    private boolean useCache = false;
+    
 //    public TogetherAIModel(String toghetherAiAPI, String modelName) {
 //        this(toghetherAiAPI, modelName, false);
 //    }
@@ -97,6 +101,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             log.trace("Return null because response is null or empty: " + response);
             return null;
         }
+        log.trace("Response: {}", response);
         try {
             ResponseTogetherAI responseAPI = objectMapper.readValue(response, ResponseTogetherAI.class);
             Choice choice = responseAPI.getChoices().get(0);
@@ -122,7 +127,12 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 log.trace("Add Assistant Message in getResponse: {}", newMessage);
                 this.messages.add(newMessage);
                 this.messages.add(message);
+                if (useLogProbs) {
+                    StoredProbsSingleton singleton = StoredProbsSingleton.getInstance();
+                    singleton.putProbs(prompt, choice.getLogprobs());
+                }
             }
+            log.trace("Return ResponseAPI: {}", responseAPI);
             return responseAPI;
         } catch (Exception e) {
             log.error("Exception with parsing response: " + response, e);
@@ -169,8 +179,14 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             if (responseAPI != null) {
                 Choice choice = responseAPI.getChoices().get(0);
                 Message message = choice.getMessage();
+                Map<String,Object> otherInfo = new HashMap<>();
+                if (choice.getLogprobs() != null) {
+                    Logprobs logprobs = choice.getLogprobs();
+                    otherInfo.put(LOG_PROBS, logprobs);
+                }
                 if (message != null) {
-                    return Response.from(AiMessage.from(message.getContent()), new TokenUsage(responseAPI.getUsage().getPromptTokens(), responseAPI.getUsage().getCompletionTokens()));
+//                    return Response.from(AiMessage.from(message.getContent()), new TokenUsage(responseAPI.getUsage().getPromptTokens(), responseAPI.getUsage().getCompletionTokens()));
+                    return Response.from(AiMessage.from(message.getContent()), new TokenUsage(responseAPI.getUsage().getPromptTokens(), responseAPI.getUsage().getCompletionTokens()),FinishReason.OTHER, otherInfo);
                 }
             }
             log.trace("Return null because responseAPI is null");
@@ -205,6 +221,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                     numRetry++;
                     continue;
                 }
+                log.trace("ResponseText: {}", responseText);
                 return responseText;
             } catch (Exception e) {
                 if (e instanceof IOException) {
@@ -297,6 +314,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + (streamMode ? "    \"stream\": true,\n" : "")
                 + (streamMode ? "    \"stream_tokens\": true,\n" : "")
                 + (useSeed ? "    \"seed\": 42,\n" : "")
+                + (useLogProbs ? "    \"logprobs\": 1,\n" : "")
 //                + "    \"stream\": true,\n"
                 + "    \"messages\": {$MESSAGES$}\n"
                 + "}";

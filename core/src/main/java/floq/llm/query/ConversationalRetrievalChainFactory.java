@@ -2,9 +2,13 @@ package floq.llm.query;
 
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalRetrievalChain;
+import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModelName;
+import dev.langchain4j.rag.DefaultRetrievalAugmentor;
+import dev.langchain4j.rag.content.injector.DefaultContentInjector;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import floq.llm.models.TogetherAIModel;
 import floq.llm.models.togetherai.TogetherAIConstants;
@@ -46,6 +50,16 @@ public class ConversationalRetrievalChainFactory {
                 .chatLanguageModel(model)
                 .contentRetriever(contentRetriever)
                 .build();
+        //TODO: Improve retrieval for prompts > 0. IDEA: Inject different values from first prompt
+//        DefaultRetrievalAugmentor defaultRetrievalAugmentor = DefaultRetrievalAugmentor.builder().contentRetriever(contentRetriever)
+//                .contentInjector(DefaultContentInjector.builder()
+//                        .promptTemplate(toPromptTemplateWithNewVariableNames(null))
+//                        .build()).build();
+//        return new CustomConversionalRetrievalChain(model, contentRetriever, defaultRetrievalAugmentor);
+    }
+
+    private static PromptTemplate toPromptTemplateWithNewVariableNames(PromptTemplate oldPromptTemplate) {
+        return oldPromptTemplate != null ? PromptTemplate.from(oldPromptTemplate.template().replaceAll("\\{\\{question}}", "{{userMessage}}").replaceAll("\\{\\{information}}", "{{contents}}")) : PromptTemplate.from("Answer the following question to the best of your ability: {{userMessage}}\n\nBase your answer on the following information:\n{{contents}}");
     }
 
     public static Chain<String, String> buildOpenAIConversationalRetrievalChain(String apiKey, OpenAiChatModelName modelName, ContentRetriever contentRetriever) {

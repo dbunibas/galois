@@ -1,0 +1,6 @@
+person_id,age,gender,race,country_of_origin,openess
+001,29,male,asian,China,high
+002,35,male,asian,India,low
+003,42,male,asian,Japan,medium
+004,27,male,asian,South Korea,high
+005,31,male,asian,Philippines,low

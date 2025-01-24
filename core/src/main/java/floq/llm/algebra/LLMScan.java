@@ -1,33 +1,37 @@
 package floq.llm.algebra;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import engine.model.algebra.Scan;
+import engine.model.algebra.operators.IAlgebraTreeVisitor;
+import engine.model.algebra.operators.ITupleIterator;
+import engine.model.database.*;
+import engine.persistence.Types;
+import engine.utility.AlgebraUtility;
+import floq.llm.database.CellWithProb;
 import floq.llm.database.LLMDB;
 import floq.llm.database.LLMTable;
+import floq.llm.models.togetherai.CellProb;
+import floq.llm.models.togetherai.TupleProb;
 import floq.llm.query.IQueryExecutor;
 import floq.llm.query.ISQLExecutor;
 import floq.llm.query.utils.QueryUtils;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import engine.model.algebra.Scan;
-import engine.model.algebra.operators.IAlgebraTreeVisitor;
-import engine.model.algebra.operators.ITupleIterator;
-import engine.model.database.AttributeRef;
-import engine.model.database.IDatabase;
-import engine.model.database.TableAlias;
-import engine.model.database.Tuple;
 
+import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import engine.model.database.Attribute;
-import engine.model.database.Cell;
-import engine.model.database.ITable;
-import engine.model.database.NullValue;
-import engine.persistence.Types;
-import engine.utility.AlgebraUtility;
 
 @Getter
+@Slf4j
 public class LLMScan extends Scan {
 
     private static final Logger logger = LoggerFactory.getLogger(LLMScan.class);
@@ -36,6 +40,7 @@ public class LLMScan extends Scan {
     private final IQueryExecutor queryExecutor;
     private List<AttributeRef> attributesSelect = null;
     private final String normalizationStrategy;
+    private Double llmProbThreshold = null;
     private final boolean checkTypes = true;
     private final boolean removeDuplicates = true;
 
@@ -52,6 +57,23 @@ public class LLMScan extends Scan {
         this.queryExecutor = queryExecutor;
         this.attributesSelect = attributesSelect;
         this.normalizationStrategy = normalizationStrategy;
+    }
+
+    public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect, String normalizationStrategy, Double llmProbThreshold) {
+        super(tableAlias);
+        this.tableAlias = tableAlias;
+        this.queryExecutor = queryExecutor;
+        this.attributesSelect = attributesSelect;
+        this.normalizationStrategy = normalizationStrategy;
+        this.llmProbThreshold = llmProbThreshold;
+    }
+
+    public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, String normalizationStrategy, Double llmProbThreshold) {
+        super(tableAlias);
+        this.tableAlias = tableAlias;
+        this.queryExecutor = queryExecutor;
+        this.normalizationStrategy = normalizationStrategy;
+        this.llmProbThreshold = llmProbThreshold;
     }
 
     @Override
@@ -161,8 +183,12 @@ public class LLMScan extends Scan {
                 }
                 return result;
             }
-            currentResult = new ArrayList<>(queryExecutor.execute(database, tableAlias));
+            currentResult = new ArrayList<>(queryExecutor.execute(database, tableAlias, llmProbThreshold));
+//            currentResult = loadStoredTuples();
+//            saveTuplesWithProb(currentResult);
+            if (llmProbThreshold != null && !(queryExecutor instanceof ISQLExecutor)) filterTuplesWithProb();
             if (removeDuplicates && !(queryExecutor instanceof ISQLExecutor)) AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
+
             currentTry++;
 
             if (!currentResult.isEmpty()) {
@@ -207,6 +233,166 @@ public class LLMScan extends Scan {
                 }
             }
             return true;
+        }
+
+        private void filterTuplesWithProb() {
+            List<Tuple> tuples = currentResult;
+            List<Tuple> filtered = new ArrayList<>();
+            for (Tuple tuple : tuples) {
+                if (canAddWithProb(tuple, "mean", true)) filtered.add(tuple);
+            }
+            currentResult = filtered;
+        }
+
+        private boolean canAddWithProb(Tuple tuple, String strategy, boolean normalize) {
+            List<CellWithProb> cellsWithProb = new ArrayList<>();
+            for (Cell cell : tuple.getCells()) {
+                CellWithProb cellWithProb = (CellWithProb) cell;
+                if (cellWithProb.getCellProb() == null) continue;
+                cellsWithProb.add(cellWithProb);
+//                log.info("Cell with Prob: {}", cellWithProb.toShortString());
+            }
+            if (normalize) {
+                Double maxProb = findMax(cellsWithProb);
+                normalize(cellsWithProb, maxProb);
+            }
+            if (log.isInfoEnabled()) {
+                log.info(printTupleWithProb(tuple));
+            }
+            if (strategy.equalsIgnoreCase("min")) {
+                // strategy all cell at least with the same prob
+                for (CellWithProb cellWithProb : cellsWithProb) {
+                    if (cellWithProb.getValueProb() < llmProbThreshold) {
+                        log.info("Discarded");
+                        return false;
+                    }
+                }
+                log.info("Accepted");
+                return true;
+            }
+            if (strategy.equalsIgnoreCase("mean")) {
+                // strategy mean
+                double mean = 0.0;
+                for (CellWithProb cellWithProb : cellsWithProb) {
+                    mean += cellWithProb.getValueProb();
+                }
+                mean = mean / cellsWithProb.size();
+                log.info("Accepted mean? {}", mean >= llmProbThreshold);
+                return mean >= llmProbThreshold;
+            }
+            if (strategy.equals("msp")) {
+                double sumLogProb = 0.0;
+                for (CellWithProb cellWithProb : cellsWithProb) {
+                    sumLogProb += Math.log(cellWithProb.getValueProb());
+                }
+                double msp = Math.exp(sumLogProb);
+                log.info("Accepted MSP? {}", msp >= llmProbThreshold);
+                return msp >= llmProbThreshold;
+            }
+            // default add all
+            return true;
+        }
+
+        private String printTupleWithProb(Tuple tuple) {
+            String toPrint = "";
+            for (Cell cell : tuple.getCells()) {
+                toPrint += cell.toShortString() + " | ";
+            }
+            return toPrint;
+        }
+
+        private Double findMax(List<CellWithProb> cellsWithProb) {
+            Double max = cellsWithProb.getFirst().getValueProb();
+            for (CellWithProb cellWithProb : cellsWithProb) {
+                if (cellWithProb.getValueProb() > max) {
+                    max = cellWithProb.getValueProb();
+                }
+            }
+            return max;
+        }
+
+        private void normalize(List<CellWithProb> cellsWithProb, Double maxProb) {
+            for (CellWithProb cellWithProb : cellsWithProb) {
+                Double newValue = cellWithProb.getValueProb() / maxProb;
+                cellWithProb.getCellProb().setValueProb(newValue);
+            }
+        }
+
+        private void saveTuplesWithProb(List<Tuple> currentResult) {
+            // for exp only
+            String dbName = "spider-geo";
+            String queryN = "Q1";
+            String fileName = "TMP-PATH" + dbName + "-" + queryN + ".json";
+            List<TupleProb> tuplesProb = new ArrayList<>();
+            AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
+            for (Tuple tuple : currentResult) {
+                TupleProb tp = toTupleProb(tuple);
+                tuplesProb.add(tp);
+            }
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            try {
+                String json = ow.writeValueAsString(tuplesProb);
+                FileUtils.writeStringToFile(new File(fileName), json, Charset.forName("UTF-8"));
+            } catch (Exception e) {
+                log.error("Unable to save file: {}", fileName);
+                log.error("Exception in saving the JSON: {}", e);
+            }
+        }
+
+        private TupleProb toTupleProb(Tuple tuple) {
+            TupleProb tp = new TupleProb();
+            for (Cell cell : tuple.getCells()) {
+                if (cell instanceof CellWithProb) {
+                    CellWithProb cp = (CellWithProb) cell;
+                    if (cp.getCellProb() != null) tp.addCell(cp.getCellProb());
+                }
+            }
+            return tp;
+        }
+
+        private Tuple toTuple(TupleProb tp, long oidValue) {
+            String tableName = tableAlias.getTableName();
+//            ITable table = database.getTable(tableName);
+            TupleOID oid = new TupleOID(oidValue);
+            Tuple t = new Tuple(oid);
+            for (CellProb cell : tp.getCells()) {
+                String attributeName = cell.getAttributeName();
+                Object value = cell.getValue();
+//                Attribute attribute = table.getAttribute(attributeName);
+//                Cell speedyCell = new Cell(oid, new AttributeRef(tableName, attributeName), new ConstantValue(value));
+                IValue ivalue;
+                if (value == null){
+                    ivalue = new NullValue("null");
+                } else {
+                    ivalue = new ConstantValue(value);
+                }
+                CellWithProb cwp = new CellWithProb(oid, new AttributeRef(tableAlias, attributeName), ivalue, cell);
+                t.addCell(cwp);
+            }
+            return t;
+        }
+
+        private List<Tuple> loadStoredTuples() {
+            // for exp only
+            String dbName = "spider-geo";
+            String queryN = "Q8";
+            String fileName = "TMP_PATH" + dbName + "-" + queryN + ".json";
+            ObjectMapper mapper = new ObjectMapper();
+            TypeReference<List<TupleProb>> listTuple = new TypeReference<>() {};
+            List<Tuple> tuples = new ArrayList<>();
+            try {
+                List<TupleProb> tuplesProb = mapper.readValue(new File(fileName), listTuple);
+                long oid = 1;
+                for (TupleProb tupleProb : tuplesProb) {
+                    Tuple t = toTuple(tupleProb, oid);
+                    oid++;
+                    tuples.add(t);
+                }
+            } catch (Exception e) {
+                log.error("Unable to open file: {}", fileName);
+                log.error("Exception in reading obj from JSON: {}", e);
+            }
+            return tuples;
         }
     }
 }

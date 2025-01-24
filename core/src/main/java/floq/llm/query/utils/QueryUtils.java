@@ -1,12 +1,14 @@
 package floq.llm.query.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import engine.EngineConstants;
 import engine.exceptions.DAOException;
 import engine.model.database.*;
 import engine.model.database.mainmemory.datasource.IntegerOIDGenerator;
 import engine.model.expressions.Expression;
 import engine.persistence.Types;
+import floq.llm.database.CellWithProb;
+import floq.llm.models.togetherai.CellProb;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static floq.utils.Mapper.asString;
 import static engine.persistence.Types.BOOLEAN;
+import static floq.utils.Mapper.asString;
 
 @Slf4j
 public class QueryUtils {
@@ -58,7 +60,7 @@ public class QueryUtils {
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
         return mapToTuple(tuple, map, tableAlias, attributes);
     }
-
+    
     public static Tuple mapToTuple(Tuple tuple, Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
         for (Attribute attribute : attributes) {
             IValue cellValue = safelyParseCellValue(map, attribute);
@@ -177,6 +179,16 @@ public class QueryUtils {
         return asString(map);
     }
 
+
+    public static String generateJsonSchemaListDatabase(IDatabase db) {
+        StringBuilder sb = new StringBuilder();
+        for (String tableName : db.getTableNames()) {
+            ITable table = db.getTable(tableName);
+            sb.append(generateJsonSchemaListFromAttributes(table, table.getAttributes())).append("\n");
+        }
+        return sb.toString();
+    }
+
     public static String generateJsonSchemaListFromAttributes(ITable table, List<Attribute> attributes) {
         Map<String, Object> map = new HashMap<>();
         map.put("title", table.getName());
@@ -201,7 +213,15 @@ public class QueryUtils {
 
     public static Tuple normalizeTextValues(Tuple tuple, String normalization) {
         Tuple cloned = tuple.clone();
-        for (Cell cell : cloned.getCells()) {
+        List<Cell> clonedCells = cloned.getCells();
+        for (int i = 0; i < tuple.getCells().size(); i++) {
+            if (tuple.getCells().get(i) instanceof CellWithProb) {
+                Cell tupleCell = tuple.getCells().get(i);
+                CellWithProb tupleCellWithProb = (CellWithProb) tupleCell;
+                CellWithProb cwp = new CellWithProb(tupleCell.getTupleOID(), tupleCell.getAttributeRef(), tupleCell.getValue(), tupleCellWithProb.getCellProb());
+                clonedCells.set(i, cwp);
+            }
+            Cell cell = cloned.getCells().get(i);
             if (cell.getValue() instanceof NullValue) continue;
             if (normalization.equalsIgnoreCase(NORMALIZE_LOWER_CASE)) {
                 IValue normalizedValue = new ConstantValue(cell.getValue().toString().toLowerCase());
@@ -225,5 +245,21 @@ public class QueryUtils {
 
     public static boolean isAlreadyContained(Tuple tuple, List<Tuple> tuples) {
         return tuples.stream().map(Tuple::toStringNoOID).collect(Collectors.toSet()).contains(tuple.toStringNoOID());
+    }
+    
+    public static Tuple mapToTupleWithProb(Tuple originalTuple, List<CellProb> cellProbs) {
+        List<Cell> originalCells = originalTuple.getCells();
+        Tuple newTuple = new Tuple(originalTuple.getOid());
+        Map<String, CellProb> cellProbForAttrName = new HashMap<>();
+        for (CellProb cellProb : cellProbs) {
+            cellProbForAttrName.put(cellProb.getAttributeName(), cellProb);
+        }
+        for (Cell originalCell : originalCells) {
+            String attribute = originalCell.getAttribute();
+            CellProb cellProb = cellProbForAttrName.get(attribute);
+            CellWithProb cellWithProb = new CellWithProb(originalTuple.getOid(), originalCell.getAttributeRef(), originalCell.getValue(), cellProb);
+            newTuple.addCell(cellWithProb);
+        }
+        return newTuple;
     }
 }

@@ -15,6 +15,7 @@ public class TupleConstraint implements  IMetric{
 
     @Override
     public Double getScore(IDatabase database, List<Tuple> expected, List<Tuple> result) {
+        try {
 
         if(expected.isEmpty() && result.isEmpty()) {
             return 1.0;
@@ -74,5 +75,9 @@ public class TupleConstraint implements  IMetric{
 
         //return the sum of true values over cardinality over the length of cardinality
         return cardinality.stream().mapToDouble( value -> value ? 1 : 0).sum() / (double) cardinality.size();
+        } catch (Exception e) {
+            return -1.0;
+        }
     }
+    
 }

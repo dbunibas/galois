@@ -2,12 +2,14 @@ package floq.llm.query;
 
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import engine.model.database.*;
 import floq.llm.TokensEstimator;
+import floq.llm.query.utils.cache.CacheEntry;
+import floq.llm.query.utils.cache.LLMCache;
 import floq.prompt.EPrompts;
 import floq.utils.FLOQDebug;
 import floq.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
-import engine.model.database.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     private List<AttributeRef> attributes = null;
     private boolean skipKeyRequest = false; // for DEBUG put it to true
+    private boolean skipTupleRequest = false; // for DEBUG put it to true
 
     abstract protected Chain<String, String> getConversationalChain();
 
@@ -33,7 +36,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     }
 
     @Override
-    public List<Tuple> execute(IDatabase database, TableAlias tableAlias) {
+    public List<Tuple> execute(IDatabase database, TableAlias tableAlias, Double llmProbThreshold) {
         Chain<String, String> chain = getConversationalChain();
 
         ITable table = database.getTable(tableAlias.getTableName());
@@ -42,6 +45,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         List<Map<String, Object>> keyValues = getKeyValues(table, primaryKey, chain);
         FLOQDebug.log("Parsed keys are:");
         FLOQDebug.log(keyValues);
+        if (skipTupleRequest) return new ArrayList<>();
 
         List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).filter(Objects::nonNull).toList();
         FLOQDebug.log("LLMScan results:");
@@ -63,6 +67,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 generateJsonSchemaForCompositePrimaryKey(table, primaryKey) :
                 generateJsonSchemaForPrimaryKey(table);
 
+        log.debug("Max Iteration Allowed: {}", getMaxIterations());
         for (int i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
                     ? getFirstPrompt().generate(table, primaryKey, getExpression(), schema)
@@ -73,7 +78,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
             try {
                 log.trace("Asking for response...");
                 callGetResponse = false;
-                response = getResponse(chain, userMessage, false);
+                response = getResponse(chain, userMessage, false, i, getFirstPrompt().generate(table, primaryKey, getExpression(), schema));
                 callGetResponse = true;
                 log.debug("Response is: {}", response);
                 if (response == null || response.trim().isBlank()) return new ArrayList<>(keys); // avoid other requests
@@ -203,15 +208,15 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 //            ChatLanguageModel chatLanguageModel = getChatLanguageModel();
 //            response = chatLanguageModel.generate(prompt);
             newChain = getConversationalChain();
-            response = getResponse(newChain, prompt, false);
+            response = getResponse(newChain, prompt, false, 0, "Basic chain");
             log.debug("Attribute response is: {}", response);
             if (!Mapper.isJSON(response)) {
                 log.debug("Response not in JSON format...execute it again through new chain");
                 newChain = getConversationalChain();
-                response = getResponse(newChain, prompt, false);
+                response = getResponse(newChain, prompt, false, 0, "New chain");
                 log.debug("Attribute response is: {}", response);
                 if (!Mapper.isJSON(response)) {
-                    response = getResponse(newChain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true);
+                    response = getResponse(newChain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), true, 0, prompt);
                     log.debug("Attribute response is after appropriate JSON format: {}", response);
                     return getAttributesPrompt().getAttributesParser().parse(response, attributesPrompt);
                 } else {
@@ -229,7 +234,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                     newChain = getConversationalChain();
 //                    response = getResponse(newChain, prompt, false);
                 }
-                response = getResponse(newChain, EPrompts.ERROR_JSON_NUMBER_FORMAT.getTemplate(), false);
+                response = getResponse(newChain, EPrompts.ERROR_JSON_NUMBER_FORMAT.getTemplate(), false, 0, prompt);
                 log.debug("Exception - Attribute response is after appropriate JSON format: {}", response);
                 return getAttributesPrompt().getAttributesParser().parse(response, attributesPrompt);
             } catch (Exception internal) {
@@ -238,23 +243,68 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         }
     }
 
-    private String getResponse(Chain<String, String> chain, String userMessage, boolean ignoreTokens) {
+    private String getResponse(Chain<String, String> chain, String userMessage, boolean ignoreTokens, int iteration, String firstPrompt) {
         String response = null;
+        LLMCache llmCache = LLMCache.getInstance();
+
+        if (llmCache.containsQuery(userMessage, iteration, this, firstPrompt)) {
+            log.debug("Cache hit for {} - iteration {}, returning cached value!", userMessage, iteration);
+            CacheEntry entry = llmCache.getResponse(userMessage, iteration, this, firstPrompt);
+            if (!ignoreTokens) {
+                if (entry.baseLLMRequestsIncrement() > 0) {
+                    updateBaseStats(entry.inputTokens(), entry.outputTokens(), entry.timeMillis(), entry.baseLLMRequestsIncrement());
+                } else {
+                    updateStats(entry.inputTokens(), entry.outputTokens(), entry.timeMillis());
+                }
+            }
+            return entry.response();
+        }
+
         try {
             TokensEstimator estimator = new TokensEstimator();
-            // TODO [Stats:] TokenCountEstimator estimator get from model
-            LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
             double inputTokens = estimator.getTokens(userMessage);
-            if (!ignoreTokens) queryStatManager.updateLLMTokensInput(inputTokens);
             long start = System.currentTimeMillis();
+
+            double baseInputTokens = LLMQueryStatManager.getInstance().getBaseLLMTokensInput();
+            double baseOutputTokens = LLMQueryStatManager.getInstance().getBaseLLMTokensOutput();
+            long baseTimeMillis = LLMQueryStatManager.getInstance().getBasetimeMs();
+            int baseLLMRequests = LLMQueryStatManager.getInstance().getBaseLLMRequest();
+
             response = chain.execute(userMessage);
-            if (!ignoreTokens) queryStatManager.updateTimeMs(System.currentTimeMillis() - start);
             double outputTokens = estimator.getTokens(response);
-            if (!ignoreTokens) queryStatManager.updateLLMTokensOutput(outputTokens);
-            if (!ignoreTokens) queryStatManager.updateLLMRequest(1);
+            long timeMillis = System.currentTimeMillis() - start;
+            if (!ignoreTokens) updateStats(inputTokens, outputTokens, timeMillis);
+
+            double baseInputTokensIncrement = LLMQueryStatManager.getInstance().getBaseLLMTokensInput() - baseInputTokens;
+            double baseOutputTokensIncrement = LLMQueryStatManager.getInstance().getBaseLLMTokensOutput() - baseOutputTokens;
+            long baseTimeMillisIncrement = LLMQueryStatManager.getInstance().getBasetimeMs() - baseTimeMillis;
+            int baseLLMRequestsIncrement = LLMQueryStatManager.getInstance().getBaseLLMRequest() - baseLLMRequests;
+
+            inputTokens = baseLLMRequestsIncrement > 0 ? baseInputTokensIncrement : inputTokens;
+            outputTokens = baseLLMRequestsIncrement > 0 ? baseOutputTokensIncrement : outputTokens;
+            timeMillis = baseLLMRequestsIncrement > 0 ? baseTimeMillisIncrement : timeMillis;
+            llmCache.updateCache(userMessage, iteration, this, firstPrompt, response, inputTokens, outputTokens, timeMillis, baseLLMRequestsIncrement);
+
             return response;
         } catch (Exception e) {
             return response;
         }
+    }
+
+    private void updateStats(double inputTokens, double outputTokens, long timeMillis) {
+        // TODO [Stats:] TokenCountEstimator estimator get from model
+        LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
+        queryStatManager.updateLLMTokensInput(inputTokens);
+        queryStatManager.updateLLMTokensOutput(outputTokens);
+        queryStatManager.updateTimeMs(timeMillis);
+        queryStatManager.updateLLMRequest(1);
+    }
+
+    private void updateBaseStats(double inputTokens, double outputTokens, long timeMillis, int baseIncrement) {
+        LLMQueryStatManager queryStatManager = LLMQueryStatManager.getInstance();
+        queryStatManager.updateBaseLLMTokensInput(inputTokens);
+        queryStatManager.updateBaseLLMTokensOutput(outputTokens);
+        queryStatManager.updateBaseTimeMs(timeMillis);
+        queryStatManager.updateBaseLLMRequest(1);
     }
 }

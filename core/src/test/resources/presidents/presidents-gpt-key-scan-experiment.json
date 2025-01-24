@@ -11,8 +11,6 @@
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
-  "optimizers": [
-  ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {

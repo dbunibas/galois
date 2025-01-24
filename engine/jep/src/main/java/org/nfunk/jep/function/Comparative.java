@@ -170,6 +170,7 @@ public class Comparative extends PostfixMathCommand {
         try{
             String stringValue = v.toString();
             if(stringValue.equalsIgnoreCase("true")) return 1;
+            if(stringValue.equalsIgnoreCase("yes")) return 1;
             if(stringValue.equalsIgnoreCase("false")) return 0;
             return Double.parseDouble(stringValue);
         }catch(Exception e){
