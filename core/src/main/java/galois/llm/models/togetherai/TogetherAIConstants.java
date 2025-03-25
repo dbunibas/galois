@@ -6,6 +6,7 @@ public class TogetherAIConstants {
     public static final String MODEL_LLAMA3_70B = "meta-llama/Llama-3-70b-chat-hf";
     public static final String MODEL_LLAMA3_1_8B = "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo";
     public static final String MODEL_LLAMA3_1_70B = "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo";
+    public static final String MODEL_LLAMA3_3_70B = "meta-llama/Llama-3.3-70B-Instruct-Turbo";
 
     public static final String USER = "user";
     public static final String ASSISTANT = "assistant";

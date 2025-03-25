@@ -1,0 +1,55 @@
+{
+  "name": "academic-{{QN}} llama3-nl Experiment",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-nl",
+      "maxIterations": 10,
+      "naturalLanguagePrompt": "{{PROMPT}}"
+    }
+  },
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "academic_journal",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "academic_journal",
+          "attributes": [
+            {
+              "name": "homepage",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "jid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }    
+      ]
+    },
+    "results": "/llm-bench/spider1/academic"
+  }
+}

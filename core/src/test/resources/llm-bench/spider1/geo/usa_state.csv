@@ -1,0 +1,52 @@
+state_name,population,area_squared_miles,country_name,capital,density
+alabama,3894000,51700.0,united states,montgomery,75.3191489361702
+alaska,401800,591000.0,united states,juneau,0.679864636209814
+arizona,2718000,114000.0,united states,phoenix,23.8421052631579
+arkansas,2286000,53200.0,united states,little rock,42.9699248120301
+california,23670000,158000.0,united states,sacramento,149.810126582278
+colorado,2889000,104000.0,united states,denver,27.7788461538462
+connecticut,3107000,5020.0,united states,hartford,618.924302788845
+delaware,594000,2044.0,united states,dover,290.606653620352
+district of columbia,638000,1100.0,united states,washington,580.0
+florida,9746000,68664.0,united states,tallahassee,141.937550972853
+georgia,5463000,58900.0,united states,atlanta,92.7504244482173
+hawaii,964000,6471.0,united states,honolulu,148.972338123938
+idaho,944000,83000.0,united states,boise,11.3734939759036
+illinois,11400000,56300.0,united states,springfield,202.486678507993
+indiana,5490000,36200.0,united states,indianapolis,151.657458563536
+iowa,2913000,56300.0,united states,des moines,51.740674955595
+kansas,2364000,82300.0,united states,topeka,28.7241798298906
+kentucky,2364000,82300.0,united states,frankfort,28.7241798298906
+louisiana,4206000,47700.0,united states,baton rouge,88.1761006289308
+maine,1125000,33265.0,united states,augusta,33.8193296257327
+maryland,4217000,10460.0,united states,annapolis,403.154875717017
+massachusetts,5737000,8284.0,united states,boston,692.539835828102
+michigan,9262000,58500.0,united states,lansing,158.324786324786
+minnesota,4076000,84400.0,united states,st. paul,48.2938388625592
+mississippi,2520000,47700.0,united states,jackson,52.8301886792453
+missouri,4916000,69700.0,united states,jefferson city,70.5308464849354
+montana,786700,147000.0,united states,helena,5.35170068027211
+nebraska,1569000,77300.0,united states,lincoln,20.2975420439845
+nevada,800500,110500.0,united states,carson city,7.24434389140271
+new hampshire,920600,9279.0,united states,concord,99.2132772928117
+new jersey,7365000,7787.0,united states,trenton,945.807114421472
+new mexico,1303000,121600.0,united states,santa fe,10.7154605263158
+new york,17558000,49100.0,united states,albany,357.596741344195
+north carolina,5882000,52670.0,united states,raleigh,111.676476172394
+north dakota,652700,70700.0,united states,bismarck,9.23196605374823
+ohio,10800000,41300.0,united states,columbus,261.501210653753
+oklahoma,3025000,69950.0,united states,oklahoma city,43.2451751250893
+oregon,2633000,97073.0,united states,salem,27.1239170521154
+pennsylvania,11863000,45308.0,united states,harrisburg,261.830140372561
+rhode island,947200,1212.0,united states,providence,781.518151815182
+south carolina,3121800,31113.0,united states,columbia,100.337479510173
+south dakota,690767,77116.0,united states,pierre,8.95750557601535
+tennessee,4591000,42140.0,united states,nashville,108.946369245373
+texas,14229000,266807.0,united states,austin,53.3306847271623
+utah,1461000,84900.0,united states,salt lake city,17.208480565371
+vermont,511500,9614.0,united states,montpelier,53.2036613272311
+virginia,5346800,40760.0,united states,richmond,131.177625122669
+washington,4113200,68139.0,united states,olympia,60.3648424543947
+west virginia,1950000,24200.0,united states,charleston,80.5785123966942
+wisconsin,5893000,56153.0,united states,madison,104.94541699
+wyoming,469557,97809.0,united states,cheyenne,4.80075453179155

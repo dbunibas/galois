@@ -1,0 +1,387 @@
+city_name,population,country_name,state_name
+birmingham,284413,united states,alabama
+mobile,200452,united states,alabama
+montgomery,177857,united states,alabama
+huntsville,142513,united states,alabama
+tuscaloosa,75143,united states,alabama
+anchorage,174431,united states,alaska
+phoenix,789704,united states,arizona
+tucson,330537,united states,arizona
+mesa,152453,united states,arizona
+tempe,185950,united states,arizona
+glendale,96988,united states,arizona
+scottsdale,88622,united states,arizona
+little rock,158915,united states,arkansas
+fort smith,71384,united states,arkansas
+north little rock,64388,united states,arkansas
+los angeles,2966850,united states,california
+san diego,875538,united states,california
+san francisco,678974,united states,california
+san jose,629442,united states,california
+long beach,361334,united states,california
+oakland,339337,united states,california
+sacramento,275741,united states,california
+anaheim,219311,united states,california
+fresno,218202,united states,california
+santa ana,203713,united states,california
+riverside,170876,united states,california
+huntington beach,170505,united states,california
+stockton,149779,united states,california
+glendale,139060,united states,california
+fremont,131945,united states,california
+torrance,131497,united states,california
+garden grove,123351,united states,california
+san bernardino,118794,united states,california
+pasadena,118072,united states,california
+east los angeles,110017,united states,california
+oxnard,108195,united states,california
+modesto,106963,united states,california
+sunnyvale,106618,united states,california
+bakersfield,105611,united states,california
+concord,103763,united states,california
+berkeley,103328,united states,california
+fullerton,102246,united states,california
+inglewood,94162,united states,california
+hayward,93585,united states,california
+pomona,92742,united states,california
+orange,91450,united states,california
+ontario,88820,united states,california
+santa monica,88314,united states,california
+santa clara,87700,united states,california
+citrus heights,85911,united states,california
+norwalk,84901,united states,california
+burbank,84625,united states,california
+chula vista,83927,united states,california
+santa rosa,83205,united states,california
+downey,82602,united states,california
+costa mesa,82291,united states,california
+compton,81230,united states,california
+carson,81221,united states,california
+salinas,80479,united states,california
+west covina,80292,united states,california
+vallejo,80188,united states,california
+el monte,79494,united states,california
+daly city,78519,united states,california
+thounited statesnd oaks,77797,united states,california
+san mateo,77640,united states,california
+simi valley,77500,united states,california
+oceanside,76698,united states,california
+richmond,74676,united states,california
+lakewood,74654,united states,california
+santa barbara,74542,united states,california
+el cajon,73892,united states,california
+ventura,73774,united states,california
+westminster,71133,united states,california
+whittier,68558,united states,california
+south gate,66784,united states,california
+alhambra,64767,united states,california
+buena park,64165,united states,california
+san leandro,63952,united states,california
+alameda,63852,united states,california
+newport beach,63475,united states,california
+escondido,62480,united states,california
+irvine,62134,united states,california
+mountain view,58655,united states,california
+fairfield,58099,united states,california
+redondo beach,57102,united states,california
+scotts valley,6037,united states,california
+denver,492365,united states,colorado
+colorado springs,215150,united states,colorado
+aurora,158588,united states,colorado
+lakewood,113808,united states,colorado
+pueblo,101686,united states,colorado
+arvada,84576,united states,colorado
+boulder,105485,united states,colorado
+fort collins,64632,united states,colorado
+bridgeport,142546,united states,connecticut
+hartford,136392,united states,connecticut
+new haven,126089,united states,connecticut
+waterbury,103266,united states,connecticut
+stamford,102466,united states,connecticut
+norwalk,77767,united states,connecticut
+new britain,73840,united states,connecticut
+west hartford,61301,united states,connecticut
+danbury,60470,united states,connecticut
+greenwich,59578,united states,connecticut
+bristol,57370,united states,connecticut
+meriden,57118,united states,connecticut
+wilmington,70195,united states,delaware
+washington,638333,united states,district of columbia
+jacksonville,540920,united states,florida
+miami,346865,united states,florida
+tampa,271523,united states,florida
+st. petersburg,238647,united states,florida
+fort lauderdale,153256,united states,florida
+orlando,128394,united states,florida
+hollywood,117188,united states,florida
+miami beach,96298,united states,florida
+clearwater,85450,united states,florida
+tallahassee,81548,united states,florida
+gainesville,81371,united states,florida
+kendall,73758,united states,florida
+west palm beach,62530,united states,florida
+largo,58977,united states,florida
+pensacola,57619,united states,florida
+atlanta,425022,united states,georgia
+columbus,169441,united states,georgia
+savannah,141654,united states,georgia
+macon,116860,united states,georgia
+albany,74425,united states,georgia
+honolulu,762874,united states,hawaii
+ewa,190037,united states,hawaii
+koolaupoko,109373,united states,hawaii
+boise,102249,united states,idaho
+chicago,3005172,united states,illinois
+rockford,139712,united states,illinois
+peoria,124160,united states,illinois
+springfield,100054,united states,illinois
+decatur,93939,united states,illinois
+aurora,81293,united states,illinois
+joliet,77956,united states,illinois
+evanston,73706,united states,illinois
+waukegan,67653,united states,illinois
+arlington heights,66116,united states,illinois
+elgin,63668,united states,illinois
+cicero,61232,united states,illinois
+oak lawn,60590,united states,illinois
+skokie,60278,united states,illinois
+champaign,58267,united states,illinois
+indianapolis,700807,united states,indiana
+fort wayne,172196,united states,indiana
+gary,151968,united states,indiana
+evansville,130496,united states,indiana
+south bend,109727,united states,indiana
+hammond,93714,united states,indiana
+muncie,77216,united states,indiana
+anderson,64695,united states,indiana
+terre haute,61125,united states,indiana
+des moines,191003,united states,iowa
+cedar rapids,110243,united states,iowa
+davenport,103254,united states,iowa
+sioux city,82003,united states,iowa
+waterloo,75985,united states,iowa
+dubuque,62321,united states,iowa
+wichita,279212,united states,kansas
+kansas city,161148,united states,kansas
+topeka,118690,united states,kansas
+overland park,81784,united states,kansas
+louisville,298451,united states,kentucky
+lexington,204165,united states,kentucky
+new orleans,557515,united states,louisiana
+baton rouge,219419,united states,louisiana
+shreveport,205820,united states,louisiana
+metairie,164160,united states,louisiana
+lafayette,80584,united states,louisiana
+lake charles,75051,united states,louisiana
+kenner,66382,united states,louisiana
+monroe,57597,united states,louisiana
+portland,61572,united states,maine
+baltimore,786775,united states,maryland
+silver spring,72893,united states,maryland
+dundalk,71293,united states,maryland
+bethesda,63022,united states,maryland
+boston,562994,united states,massachusetts
+worcester,161799,united states,massachusetts
+springfield,152319,united states,massachusetts
+new bedford,98478,united states,massachusetts
+cambridge,95322,united states,massachusetts
+brockton,95172,united states,massachusetts
+fall river,92574,united states,massachusetts
+lowell,92418,united states,massachusetts
+quincy,84743,united states,massachusetts
+newton,83622,united states,massachusetts
+lynn,78471,united states,massachusetts
+somerville,77372,united states,massachusetts
+framingham,65113,united states,massachusetts
+lawrence,63175,united states,massachusetts
+waltham,58200,united states,massachusetts
+medford,58076,united states,massachusetts
+detroit,1203339,united states,michigan
+grand rapids,181843,united states,michigan
+warren,161134,united states,michigan
+flint,159611,united states,michigan
+lansing,130414,united states,michigan
+sterling heights,108999,united states,michigan
+ann arbor,107969,united states,michigan
+livonia,104814,united states,michigan
+dearborn,90660,united states,michigan
+westland,84603,united states,michigan
+kalamazoo,79722,united states,michigan
+taylor,77568,united states,michigan
+saginaw,77508,united states,michigan
+pontiac,76715,united states,michigan
+st. clair shores,76210,united states,michigan
+southfield,75568,united states,michigan
+clinton,72400,united states,michigan
+royal oak,70893,united states,michigan
+dearborn heights,67706,united states,michigan
+troy,67102,united states,michigan
+waterford,64250,united states,michigan
+wyoming,59616,united states,michigan
+redford,58441,united states,michigan
+farmington hills,58056,united states,michigan
+minneapolis,370951,united states,minnesota
+st. paul,270230,united states,minnesota
+duluth,92811,united states,minnesota
+bloomington,81831,united states,minnesota
+rochester,57906,united states,minnesota
+jackson,202895,united states,mississippi
+st. louis,453085,united states,missouri
+kansas city,448159,united states,missouri
+springfield,133116,united states,missouri
+independence,111797,united states,missouri
+st. joseph,76691,united states,missouri
+columbia,62061,united states,missouri
+billings,66842,united states,montana
+great falls,56725,united states,montana
+omaha,314255,united states,nebraska
+lincoln,171932,united states,nebraska
+las vegas,164674,united states,nevada
+reno,100756,united states,nevada
+manchester,90936,united states,new hampshire
+nashua,67865,united states,new hampshire
+newark,329248,united states,new jersey
+jersey city,223532,united states,new jersey
+paterson,137970,united states,new jersey
+elizabeth,106201,united states,new jersey
+trenton,92124,united states,new jersey
+woodbridge,90074,united states,new jersey
+camden,84910,united states,new jersey
+east orange,77878,united states,new jersey
+clifton,74388,united states,new jersey
+edison,70193,united states,new jersey
+cherry hill,68785,united states,new jersey
+bayonne,65047,united states,new jersey
+middletown,61615,united states,new jersey
+irvington,61493,united states,new jersey
+albuquerque,331767,united states,new mexico
+new york,7071639,united states,new york
+buffalo,357870,united states,new york
+rochester,241741,united states,new york
+yonkers,195351,united states,new york
+syracuse,170105,united states,new york
+albany,101727,united states,new york
+cheektowaga,92145,united states,new york
+utica,75632,united states,new york
+niagara falls,71384,united states,new york
+new rochelle,70794,united states,new york
+schenectady,67972,united states,new york
+mount vernon,66713,united states,new york
+irondequoit,57648,united states,new york
+levittown,57045,united states,new york
+charlotte,314447,united states,north carolina
+greensboro,155642,united states,north carolina
+raleigh,149771,united states,north carolina
+winston-salem,131885,united states,north carolina
+durham,100538,united states,north carolina
+high point,64107,united states,north carolina
+fayetteville,59507,united states,north carolina
+fargo,61308,united states,north dakota
+cleveland,573822,united states,ohio
+columbus,564871,united states,ohio
+cincinnati,385457,united states,ohio
+toledo,354635,united states,ohio
+akron,237177,united states,ohio
+dayton,203371,united states,ohio
+youngstown,115436,united states,ohio
+canton,93077,united states,ohio
+parma,92548,united states,ohio
+lorain,75416,united states,ohio
+springfield,72563,united states,ohio
+hamilton,63189,united states,ohio
+lakewood,61963,united states,ohio
+kettering,61186,united states,ohio
+euclid,59999,united states,ohio
+elyria,57504,united states,ohio
+oklahoma city,403213,united states,oklahoma
+tulsa,360919,united states,oklahoma
+lawton,80054,united states,oklahoma
+norman,68020,united states,oklahoma
+portland,366383,united states,oregon
+eugene,105664,united states,oregon
+salem,89233,united states,oregon
+philadelphia,1688210,united states,pennsylvania
+pittsburgh,423938,united states,pennsylvania
+erie,119123,united states,pennsylvania
+allentown,103758,united states,pennsylvania
+scranton,88117,united states,pennsylvania
+upper darby,84054,united states,pennsylvania
+reading,78686,united states,pennsylvania
+bethlehem,70419,united states,pennsylvania
+lower merion,59651,united states,pennsylvania
+abingdon,59084,united states,pennsylvania
+bristol township,58733,united states,pennsylvania
+penn hills,57632,united states,pennsylvania
+altoona,57078,united states,pennsylvania
+providence,156804,united states,rhode island
+warwick,87123,united states,rhode island
+cranston,71992,united states,rhode island
+pawtucket,71204,united states,rhode island
+columbia,101229,united states,south carolina
+charleston,69855,united states,south carolina
+north charleston,62504,united states,south carolina
+greenville,58242,united states,south carolina
+sioux falls,81343,united states,south dakota
+memphis,646356,united states,tennessee
+nashville,455651,united states,tennessee
+knoxville,175030,united states,tennessee
+chattanooga,169728,united states,tennessee
+houston,1595138,united states,texas
+dallas,904078,united states,texas
+san antonio,785880,united states,texas
+el paso,425259,united states,texas
+fort worth,385164,united states,texas
+austin,345496,united states,texas
+corpus christi,231999,united states,texas
+lubbock,173979,united states,texas
+arlington,160123,united states,texas
+amarillo,149230,united states,texas
+garland,138857,united states,texas
+beaumont,118102,united states,texas
+pasadena,112560,united states,texas
+irving,109943,united states,texas
+waco,101261,united states,texas
+abilene,98315,united states,texas
+wichita falls,94201,united states,texas
+laredo,91449,united states,texas
+odessa,90027,united states,texas
+brownsville,84997,united states,texas
+san angelo,73240,united states,texas
+richardson,72496,united states,texas
+plano,72331,united states,texas
+grand prairie,71462,united states,texas
+midland,70525,united states,texas
+tyler,70508,united states,texas
+mesquite,67053,united states,texas
+mcallen,67042,united states,texas
+longview,62762,united states,texas
+port arthur,61195,united states,texas
+salt lake city,163034,united states,utah
+provo,74111,united states,utah
+west valley,72299,united states,utah
+ogden,64407,united states,utah
+norfolk,266979,united states,virginia
+virginia beach,262199,united states,virginia
+richmond,219214,united states,virginia
+arlington,152599,united states,virginia
+newport news,144903,united states,virginia
+hampton,122617,united states,virginia
+chesapeake,114226,united states,virginia
+portsmouth,104577,united states,virginia
+alexandria,103217,united states,virginia
+roanoke,100427,united states,virginia
+lynchburg,66743,united states,virginia
+seattle,749256,united states,washington
+spokane,171300,united states,washington
+tacoma,158501,united states,washington
+bellevue,73903,united states,washington
+charleston,63968,united states,west virginia
+huntington,63684,united states,west virginia
+milwaukee,636212,united states,wisconsin
+madison,170616,united states,wisconsin
+green bay,87899,united states,wisconsin
+racine,85725,united states,wisconsin
+kenosha,77685,united states,wisconsin
+west allis,63982,united states,wisconsin
+appleton,58913,united states,wisconsin
+casper,51016,united states,wyoming

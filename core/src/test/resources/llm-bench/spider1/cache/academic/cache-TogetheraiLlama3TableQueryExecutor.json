@@ -1,0 +1,51 @@
+{
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select homepage and name and jid from academic_journal.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"academic_journal\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"jid\":{\"title\":\"jid\",\"type\":\"integer\"},\"name\":{\"title\":\"name\",\"type\":\"string\"},\"homepage\":{\"title\":\"homepage\",\"type\":\"string\"}}}}" : {
+    "response" : "[\n  {\n    \"jid\": 1,\n    \"name\": \"Journal of Computer Science\",\n    \"homepage\": \"https://www.jocsc.com\"\n  },\n  {\n    \"jid\": 2,\n    \"name\": \"Journal of Mathematics\",\n    \"homepage\": \"https://www.jomath.com\"\n  },\n  {\n    \"jid\": 3,\n    \"name\": \"Journal of Engineering\",\n    \"homepage\": \"https://www.joeng.com\"\n  },\n  {\n    \"jid\": 4,\n    \"name\": \"Journal of Physics\",\n    \"homepage\": \"https://www.jophys.com\"\n  },\n  {\n    \"jid\": 5,\n    \"name\": \"Journal of Biology\",\n    \"homepage\": \"https://www.jobiol.com\"\n  }\n]",
+    "inputTokens" : 126.0,
+    "outputTokens" : 168.0,
+    "timeMillis" : 1644,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select homepage and name and jid from academic_journal.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"academic_journal\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"jid\":{\"title\":\"jid\",\"type\":\"integer\"},\"name\":{\"title\":\"name\",\"type\":\"string\"},\"homepage\":{\"title\":\"homepage\",\"type\":\"string\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"jid\":6,\"name\":\"Journal of Chemistry\",\"homepage\":\"https://www.jochem.com\"},{\"jid\":7,\"name\":\"Journal of Economics\",\"homepage\":\"https://www.joecon.com\"},{\"jid\":8,\"name\":\"Journal of Psychology\",\"homepage\":\"https://www.jopsy.com\"},{\"jid\":9,\"name\":\"Journal of Environmental Science\",\"homepage\":\"https://www.joes.com\"},{\"jid\":10,\"name\":\"Journal of Medicine\",\"homepage\":\"https://www.jomed.com\"}]",
+    "inputTokens" : 258.0,
+    "outputTokens" : 103.0,
+    "timeMillis" : 1016,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select homepage and name and jid from academic_journal.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"academic_journal\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"jid\":{\"title\":\"jid\",\"type\":\"integer\"},\"name\":{\"title\":\"name\",\"type\":\"string\"},\"homepage\":{\"title\":\"homepage\",\"type\":\"string\"}}}}-iter:2-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[]",
+    "inputTokens" : 388.0,
+    "outputTokens" : 2.0,
+    "timeMillis" : 983,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select homepage and name and jid from academic_journal where name == \"PVLDB\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"academic_journal\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"jid\":{\"title\":\"jid\",\"type\":\"integer\"},\"name\":{\"title\":\"name\",\"type\":\"string\"},\"homepage\":{\"title\":\"homepage\",\"type\":\"string\"}}}}" : {
+    "response" : "[\n  {\n    \"jid\": 1,\n    \"name\": \"PVLDB\",\n    \"homepage\": \"https://pvldb.org/\"\n  }\n]",
+    "inputTokens" : 133.0,
+    "outputTokens" : 34.0,
+    "timeMillis" : 1211,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select homepage and name and jid from academic_journal where name == \"PVLDB\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"academic_journal\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"jid\":{\"title\":\"jid\",\"type\":\"integer\"},\"name\":{\"title\":\"name\",\"type\":\"string\"},\"homepage\":{\"title\":\"homepage\",\"type\":\"string\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"jid\":1,\"name\":\"PVLDB\",\"homepage\":\"https://pvldb.org/\"},{\"jid\":2,\"name\":\"PVLDB\",\"homepage\":\"https://www.vldb.org/pvldb/\"},{\"jid\":3,\"name\":\"PVLDB\",\"homepage\":\"https://dl.acm.org/pub/journal/pvldb\"}]",
+    "inputTokens" : 184.0,
+    "outputTokens" : 71.0,
+    "timeMillis" : 1371,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select homepage and name and jid from academic_journal where name == \"PVLDB\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"academic_journal\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"jid\":{\"title\":\"jid\",\"type\":\"integer\"},\"name\":{\"title\":\"name\",\"type\":\"string\"},\"homepage\":{\"title\":\"homepage\",\"type\":\"string\"}}}}-iter:2-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"jid\":1,\"name\":\"PVLDB\",\"homepage\":\"https://pvldb.org/\"},{\"jid\":2,\"name\":\"PVLDB\",\"homepage\":\"https://www.vldb.org/pvldb/\"},{\"jid\":3,\"name\":\"PVLDB\",\"homepage\":\"https://dl.acm.org/pub/journal/pvldb\"},{\"jid\":4,\"name\":\"PVLDB\",\"homepage\":\"http://www.vldb.org/pvldb/issues.html\"}]",
+    "inputTokens" : 283.0,
+    "outputTokens" : 95.0,
+    "timeMillis" : 2483,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select homepage and name and jid from academic_journal where name == \"PVLDB\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"academic_journal\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"jid\":{\"title\":\"jid\",\"type\":\"integer\"},\"name\":{\"title\":\"name\",\"type\":\"string\"},\"homepage\":{\"title\":\"homepage\",\"type\":\"string\"}}}}-iter:3-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[]",
+    "inputTokens" : 406.0,
+    "outputTokens" : 2.0,
+    "timeMillis" : 1748,
+    "baseLLMRequestsIncrement" : 1
+  }
+}

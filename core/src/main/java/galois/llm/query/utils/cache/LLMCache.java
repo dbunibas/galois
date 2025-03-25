@@ -2,8 +2,7 @@ package galois.llm.query.utils.cache;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.langchain4j.chain.Chain;
-import dev.langchain4j.chain.ConversationalChain;
+import galois.Constants;
 import galois.llm.query.IQueryExecutor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +30,10 @@ public class LLMCache {
 
     private LLMCache() {
     }
+    
+    public String getFileName(IQueryExecutor queryExecutor) {
+         return String.format("%s/cache-%s-%s.json", CACHE_DIR, queryExecutor.getClass().getSimpleName(), Constants.LLM_MODEL);
+    }
 
     public boolean containsQuery(String prompt, int iteration, IQueryExecutor queryExecutor, String firstPrompt) {
         if (!CACHE_ENABLED)
@@ -51,9 +54,7 @@ public class LLMCache {
     }
 
     public void updateCache(String prompt, int iteration, IQueryExecutor queryExecutor, String firstPrompt, String response, double inputTokens, double outputTokens, long timeMillis, int baseLLMRequestsIncrement) {
-        if (!CACHE_ENABLED)
-            throw new UnsupportedOperationException("Cannot use cache when it is disabled!");
-
+        if (!CACHE_ENABLED) return;
         Map<String, CacheEntry> cache = loadCache(queryExecutor);
         String key = getKey(prompt, iteration, firstPrompt);
         cache.put(key, new CacheEntry(response, inputTokens, outputTokens, timeMillis, baseLLMRequestsIncrement));
@@ -62,12 +63,8 @@ public class LLMCache {
     }
 
     private Map<String, CacheEntry> loadCache(IQueryExecutor queryExecutor) {
-        // FIXME: queryExecutor.getClass().getSimpleName() lacks references to the model used (ex. 8b, 70b, ...)
-        String fileName = String.format("%s/cache-%s.json", CACHE_DIR, queryExecutor.getClass().getSimpleName());
-
-        if (cache != null && fileName.equals(cacheName))
-            return cache;
-
+        String fileName = getFileName(queryExecutor);
+        if (cache != null && fileName.equals(cacheName)) return cache;
         File file = new File(fileName);
         if (!file.exists())
             return new HashMap<>();
@@ -89,10 +86,8 @@ public class LLMCache {
 
     private void writeCache(Map<String, CacheEntry> cache, IQueryExecutor queryExecutor) {
         String executorName = queryExecutor.getClass().getSimpleName();
-
-        String fileName = String.format("%s/cache-%s.json", CACHE_DIR, executorName);
+        String fileName = getFileName(queryExecutor);
         File file = new File(fileName);
-
         String updatedFileName = String.format("%s/cache-%s-updated.json", CACHE_DIR, executorName);
         File updatedFile = new File(updatedFileName);
 
@@ -107,9 +102,7 @@ public class LLMCache {
                 throw new CacheException("Cannot update cache!");
             }
         } catch (IOException e) {
-            if (updatedFile.exists())
-                updatedFile.delete();
-
+            if (updatedFile.exists()) updatedFile.delete();
             throw new CacheException("Cannot save cache!", e);
         }
     }
