@@ -1,6 +1,8 @@
 package galois.test.experiments.run.batch;
 
+import galois.optimizer.IOptimizer;
 import galois.test.experiments.ExperimentResults;
+import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
@@ -56,19 +58,17 @@ public class TestBenchLLMSpider1 {
 
     @Test
     public void testRunBatch() {
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (String dbID : variants.keySet()) {
             System.out.println("DB:" + dbID);
-            if (!dbID.equals("academic")) {
-                continue;
-            }
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-                testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+                testRunner.executeSingle("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-table-experiment.json","TABLE", variant, metrics, results,allConditionPushdownWithFilter);
                 exportExcel.export(fileName, EXP_NAME, metrics, results);
             }
         }

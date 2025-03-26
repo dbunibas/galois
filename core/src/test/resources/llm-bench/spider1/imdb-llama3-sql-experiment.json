@@ -1,15 +1,15 @@
 {
   "name": "imdb-{{QN}} llama3-sql Experiment",
   "metrics": [
-    "CellPrecision",
-    "CellSimilarityPrecision",
-    "CellRecall",
-    "CellSimilarityRecall",
-    "CellF1Score",
-    "CellSimilarityF1Score",
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
     "TupleCardinality",
-    "TupleConstraint",
-    "TupleSimilarityConstraint"
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes"
   ],
   "dbms": "postgres",
   "operatorsConfig": {

@@ -1,15 +1,15 @@
 {
   "name": "movie_1-{{QN}} llama3-table Experiment",
   "metrics": [
-    "CellPrecision",
-    "CellSimilarityPrecision",
-    "CellRecall",
-    "CellSimilarityRecall",
-    "CellF1Score",
-    "CellSimilarityF1Score",
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
     "TupleCardinality",
-    "TupleConstraint",
-    "TupleSimilarityConstraint"
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
@@ -27,7 +27,7 @@
       "password": "pguser",
       "tables": [
         {
-          "tableName": "Movie",
+          "tableName": "movie",
           "attributes": [
             {
               "name": "mID",
@@ -53,7 +53,7 @@
           ]
         },
         {
-          "tableName": "Rating",
+          "tableName": "rating",
           "attributes": [
             {
               "name": "rID",
@@ -79,7 +79,7 @@
           ]
         },
         {
-          "tableName": "Reviewer",
+          "tableName": "reviewer",
           "attributes": [
             {
               "name": "rID",

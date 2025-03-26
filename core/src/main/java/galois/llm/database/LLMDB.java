@@ -12,6 +12,7 @@ public class LLMDB extends DBMSDB {
 
     @Override
     public ITable getTable(String name) {
+        if (name.contains("\"")) name = name.replace("\"", "");
         super.getTable(name);
         return new LLMTable(name, getAccessConfiguration());
     }
