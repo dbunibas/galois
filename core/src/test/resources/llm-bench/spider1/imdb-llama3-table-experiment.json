@@ -1,0 +1,286 @@
+{
+  "name": "imdb-{{QN}} llama3-table Experiment",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-table",
+      "maxIterations": 10
+    }
+  },
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "imdb",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "actor",
+          "attributes": [
+            {
+              "name": "aid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "gender",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "nationality",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_city",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_year",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "cast",
+          "attributes": [
+            {
+              "name": "id",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "msid",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "aid",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "role",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "directed_by",
+          "attributes": [
+            {
+              "name": "aid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "msid",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "did",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "director",
+          "attributes": [
+            {
+              "name": "did",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "gender",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "nationality",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_city",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_year",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "movie",
+          "attributes": [
+            {
+              "name": "mid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "title",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "release_year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "title_aka",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "budget",
+              "type": "REAL",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "tv_series",
+          "attributes": [
+            {
+              "name": "sid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "title",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "release_year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "num_of_seasons",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "num_of_episodes",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "title_aka",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "budget",
+              "type": "REAL",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "writer",
+          "attributes": [
+            {
+              "name": "wid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "gender",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "nationality",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "num_of_episodes",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "birth_city",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_year",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "written_by",
+          "attributes": [
+            {
+              "name": "id",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "msid",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "wid",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        }    
+      ]
+    },
+    "results": "/llm-bench/spider1/imdb"
+  }
+}

@@ -59,7 +59,7 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
 
     @Override
     public boolean ignoreTree() {
-        return false;
+        return true;
     }
 
     @Override

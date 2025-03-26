@@ -9,9 +9,7 @@ import galois.utils.excelreport.SheetReport;
 import galois.utils.excelreport.persistance.DAOReportExcel;
 import lombok.extern.slf4j.Slf4j;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -22,7 +20,7 @@ public class ExcelExporter {
 
     public String getFileName(String expName) {
         String pathExport = Constants.EXPORT_EXCEL_PATH;
-        String fileName = pathExport + expName + "-" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + ".xlsx";
+        String fileName = pathExport + expName + "-" + Constants.LLM_MODEL + "-" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + ".xlsx";
         return fileName;
     }
 

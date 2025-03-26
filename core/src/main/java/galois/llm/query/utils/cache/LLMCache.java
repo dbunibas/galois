@@ -32,7 +32,7 @@ public class LLMCache {
     }
     
     public String getFileName(IQueryExecutor queryExecutor) {
-         return String.format("%s/cache-%s-%s.json", CACHE_DIR, queryExecutor.getClass().getSimpleName(), Constants.LLM_MODEL);
+        return String.format("%s/cache-%s-%s.json", CACHE_DIR, queryExecutor.getClass().getSimpleName(), Constants.LLM_MODEL);
     }
 
     public boolean containsQuery(String prompt, int iteration, IQueryExecutor queryExecutor, String firstPrompt) {
