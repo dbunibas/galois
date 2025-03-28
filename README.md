@@ -1,12 +1,16 @@
 # Galois
 
+# News
+- 2025-03 Research paper [Logical and Physical Optimizations for SQL Query Execution
+over Large Language Models](https://github.com/dbunibas/galois/blob/develop/Galois_SIGMOD25_CR.pdf) Accepted to SIGMOD 2025 
+
 
 ### Requirements
 Galois is written in Java, and require a working JDK (>=21).
 
 In addition, the following tools/subscriptions are needed:
 - **PostgreSQL** - required for all projects
-- **Ollama** - required to run experiments locally. In order to use Ollama. Note that Ollama might have low perfomances on some hosts, and it is suggested only for small models (e.g.: llama3.1:8b).
+- **Ollama** - required to run experiments locally. In order to use Ollama. Note that Ollama might have low performance on some hosts, and it is suggested only for small models (e.g.: llama3.1:8b).
 - **TogetherAI API Key** - optional - A valid subscription on TogetherAI is needed to run larger models (as `llama3.1:70b`), or to run RAG experiments. In order to use TogetherAI, the `TOGETHERAI_API` need to be specified.
 - **ChromaDB** - optional - Needed only for RAG experiments
 
@@ -14,7 +18,7 @@ In addition, the following tools/subscriptions are needed:
 All datasets are available in the [resources](core/src/test/resources) folder
 
 ### Experiments
-The project contains several Experiments. For each experiments, queries and prompt are defined in the corresponding test executor classes:
+The project contains several Experiments. For each experiment, queries and prompts are defined in the corresponding test executor classes:
 - [TestRunFlight2Batch](core/src/test/java/galois/test/experiments/run/batch/TestRunFlight2Batch.java)
 - [TestRunFlight4Batch](core/src/test/java/galois/test/experiments/run/batch/TestRunFlight4Batch.java)
 - [TestRunMoviesBatch](core/src/test/java/galois/test/experiments/run/batch/TestRunMoviesBatch.java)
@@ -32,6 +36,3 @@ The project contains several Experiments. For each experiments, queries and prom
 For example
 
 `./gradlew -i :core:test --tests "galois.test.experiments.run.batch.TestRunFlight2Batch"`
-
-### Technical Report
--[V.0](https://github.com/dbunibas/galois/blob/develop/TR.pdf)
