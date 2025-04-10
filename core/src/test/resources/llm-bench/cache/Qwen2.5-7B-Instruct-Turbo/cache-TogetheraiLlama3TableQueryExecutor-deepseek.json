@@ -1,0 +1,226 @@
+{
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select chronname and unitid and state from institution_details where chronname == \"Mercer University\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"institution_details\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"chronname\":{\"title\":\"chronname\",\"type\":\"string\"},\"unitid\":{\"title\":\"unitid\",\"type\":\"integer\"},\"state\":{\"title\":\"state\",\"type\":\"string\"}}}}" : {
+    "response" : "{\"title\":\"institution_details\",\"type\":\"array\",\"items\":[{\"chronname\":\"Mercer University\",\"unitid\":12345,\"state\":\"GA\"}]}",
+    "inputTokens" : 133.0,
+    "outputTokens" : 34.0,
+    "timeMillis" : 589,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select chronname and unitid and state from institution_details where chronname == \"Mercer University\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"institution_details\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"chronname\":{\"title\":\"chronname\",\"type\":\"string\"},\"unitid\":{\"title\":\"unitid\",\"type\":\"integer\"},\"state\":{\"title\":\"state\",\"type\":\"string\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"chronname\":\"Mercer University\",\"unitid\":12345,\"state\":\"GA\"}]",
+    "inputTokens" : 185.0,
+    "outputTokens" : 24.0,
+    "timeMillis" : 739,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select chronname and city and unitid from institution_details where chronname == \"Rensselaer Polytechnic Institute\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"institution_details\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"chronname\":{\"title\":\"chronname\",\"type\":\"string\"},\"city\":{\"title\":\"city\",\"type\":\"string\"},\"unitid\":{\"title\":\"unitid\",\"type\":\"integer\"}}}}" : {
+    "response" : "{\"title\":\"institution_details\",\"type\":\"array\",\"items\":[{\"chronname\":\"Rensselaer Polytechnic Institute\",\"city\":\"Troy\",\"unitid\":12345}]}",
+    "inputTokens" : 139.0,
+    "outputTokens" : 41.0,
+    "timeMillis" : 628,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select chronname and city and unitid from institution_details where chronname == \"Rensselaer Polytechnic Institute\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"institution_details\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"chronname\":{\"title\":\"chronname\",\"type\":\"string\"},\"city\":{\"title\":\"city\",\"type\":\"string\"},\"unitid\":{\"title\":\"unitid\",\"type\":\"integer\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"chronname\":\"Rensselaer Polytechnic Institute\",\"city\":\"Troy\",\"unitid\":12345}]",
+    "inputTokens" : 197.0,
+    "outputTokens" : 30.0,
+    "timeMillis" : 532,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select name and abbreviation from state where name == \"Virginia\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"state\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"name\",\"type\":\"string\"},\"abbreviation\":{\"title\":\"abbreviation\",\"type\":\"string\"}}}}" : {
+    "response" : "{\"items\":[{\"name\":\"Virginia\",\"abbreviation\":\"VA\"}]}",
+    "inputTokens" : 110.0,
+    "outputTokens" : 13.0,
+    "timeMillis" : 478,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select name and abbreviation from state where name == \"Virginia\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"state\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"name\",\"type\":\"string\"},\"abbreviation\":{\"title\":\"abbreviation\",\"type\":\"string\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"name\":\"Virginia\",\"abbreviation\":\"VA\"}]",
+    "inputTokens" : 150.0,
+    "outputTokens" : 12.0,
+    "timeMillis" : 439,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select zip_code and county and state from country.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"country\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"county\":{\"title\":\"county\",\"type\":\"string\"},\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}" : {
+    "response" : "{\"items\":[{\"county\":\"New York County\",\"state\":\"New York\",\"zip_code\":10001},{\"county\":\"Los Angeles County\",\"state\":\"California\",\"zip_code\":90001}]}",
+    "inputTokens" : 120.0,
+    "outputTokens" : 44.0,
+    "timeMillis" : 863,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select zip_code and county and state from country.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"country\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"county\":{\"title\":\"county\",\"type\":\"string\"},\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"county\":\"Bronx County\",\"state\":\"New York\",\"zip_code\":10451},{\"county\":\"Queens County\",\"state\":\"New York\",\"zip_code\":11355},{\"county\":\"Xiao Hanyu District\",\"state\":\"Beijing\",\"zip_code\":100015}]",
+    "inputTokens" : 190.0,
+    "outputTokens" : 67.0,
+    "timeMillis" : 707,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select zip_code and county and state from country.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"country\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"county\":{\"title\":\"county\",\"type\":\"string\"},\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:2-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[]",
+    "inputTokens" : 285.0,
+    "outputTokens" : 2.0,
+    "timeMillis" : 547,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select house and cognress_rep_id from congress where House == \"House of Repsentatives\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"congress\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"cognress_rep_id\":{\"title\":\"cognress_rep_id\",\"type\":\"string\"},\"house\":{\"title\":\"house\",\"type\":\"string\"}}}}" : {
+    "response" : "{\"items\":[{\"cognress_rep_id\":\"R000599\",\"house\":\"House of Representatives\"}]}",
+    "inputTokens" : 126.0,
+    "outputTokens" : 25.0,
+    "timeMillis" : 535,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select house and cognress_rep_id from congress where House == \"House of Repsentatives\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"congress\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"cognress_rep_id\":{\"title\":\"cognress_rep_id\",\"type\":\"string\"},\"house\":{\"title\":\"house\",\"type\":\"string\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"cognress_rep_id\":\"R000599\",\"house\":\"House of Representatives\"}]",
+    "inputTokens" : 178.0,
+    "outputTokens" : 24.0,
+    "timeMillis" : 493,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select district and zip_code from zip_congress.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_congress\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"district\":{\"title\":\"district\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}" : {
+    "response" : "{\"items\":[{\"district\":\"1\",\"zip_code\":10001},{\"district\":\"2\",\"zip_code\":10002},{\"district\":\"3\",\"zip_code\":10003}]}`jsonschema`",
+    "inputTokens" : 112.0,
+    "outputTokens" : 47.0,
+    "timeMillis" : 603,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select district and zip_code from zip_congress.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_congress\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"district\":{\"title\":\"district\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"district\":\"4\",\"zip_code\":10004},{\"district\":\"5\",\"zip_code\":10005},{\"district\":\"6\",\"zip_code\":10006}]",
+    "inputTokens" : 182.0,
+    "outputTokens" : 42.0,
+    "timeMillis" : 655,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select district and zip_code from zip_congress.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_congress\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"district\":{\"title\":\"district\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:2-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"district\":\"7\",\"zip_code\":10007},{\"district\":\"8\",\"zip_code\":10008},{\"district\":\"9\",\"zip_code\":10009}]",
+    "inputTokens" : 252.0,
+    "outputTokens" : 42.0,
+    "timeMillis" : 640,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select district and zip_code from zip_congress.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_congress\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"district\":{\"title\":\"district\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:3-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[]",
+    "inputTokens" : 322.0,
+    "outputTokens" : 2.0,
+    "timeMillis" : 468,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select name and abbreviation from state where (county == \"NEW CASTLE\" && name == \"Delaware\").\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"state\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"name\",\"type\":\"string\"},\"abbreviation\":{\"title\":\"abbreviation\",\"type\":\"string\"}}}}" : {
+    "response" : "{\"items\":[{\"name\":\"Delaware\",\"abbreviation\":\"DE\"}]}",
+    "inputTokens" : 120.0,
+    "outputTokens" : 14.0,
+    "timeMillis" : 459,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select name and abbreviation from state where (county == \"NEW CASTLE\" && name == \"Delaware\").\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"state\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"name\":{\"title\":\"name\",\"type\":\"string\"},\"abbreviation\":{\"title\":\"abbreviation\",\"type\":\"string\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[]",
+    "inputTokens" : 161.0,
+    "outputTokens" : 2.0,
+    "timeMillis" : 424,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select zip_code and county from country where county == \"ARECIBO\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"country\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"county\":{\"title\":\"county\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}" : {
+    "response" : "{\"title\":\"country\",\"type\":\"array\",\"items\":[{\"county\":\"ARECIBO\",\"zip_code\":0},{\"county\":\"ARECIBO\",\"zip_code\":0}][]}",
+    "inputTokens" : 116.0,
+    "outputTokens" : 37.0,
+    "timeMillis" : 677,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select zip_code and county from country where county == \"ARECIBO\".\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"country\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"county\":{\"title\":\"county\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"county\":\"ARECIBO\",\"zip_code\":0}]",
+    "inputTokens" : 159.0,
+    "outputTokens" : 15.0,
+    "timeMillis" : 509,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select population_2020 and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"population_2020\":{\"title\":\"population_2020\",\"type\":\"integer\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}" : {
+    "response" : "{\"items\":[{\"population_2020\":58000,\"zip_code\":90210},{\"population_2020\":32000,\"zip_code\":90211},{\"population_2020\":45000,\"zip_code\":90212}]}`jsonschema`",
+    "inputTokens" : 125.0,
+    "outputTokens" : 74.0,
+    "timeMillis" : 1007,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select population_2020 and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"population_2020\":{\"title\":\"population_2020\",\"type\":\"integer\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"population_2020\":60000,\"zip_code\":90213},{\"population_2020\":38000,\"zip_code\":90214},{\"population_2020\":49000,\"zip_code\":90215}]",
+    "inputTokens" : 222.0,
+    "outputTokens" : 69.0,
+    "timeMillis" : 743,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select population_2020 and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"population_2020\":{\"title\":\"population_2020\",\"type\":\"integer\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:2-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[]",
+    "inputTokens" : 319.0,
+    "outputTokens" : 2.0,
+    "timeMillis" : 385,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select zip_code and area_code from area_code where area_code == 787.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"area_code\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"area_code\":{\"title\":\"area_code\",\"type\":\"integer\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}" : {
+    "response" : "{\"items\":[{\"area_code\":787,\"zip_code\":78733},{\"area_code\":787,\"zip_code\":78741},{\"area_code\":787,\"zip_code\":78750}]}",
+    "inputTokens" : 121.0,
+    "outputTokens" : 53.0,
+    "timeMillis" : 649,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select zip_code and area_code from area_code where area_code == 787.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"area_code\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"area_code\":{\"title\":\"area_code\",\"type\":\"integer\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"area_code\":787,\"zip_code\":78733},{\"area_code\":787,\"zip_code\":78741},{\"area_code\":787,\"zip_code\":78750}]",
+    "inputTokens" : 200.0,
+    "outputTokens" : 51.0,
+    "timeMillis" : 697,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select state and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}" : {
+    "response" : "{\"items\":[{\"state\":\"CA\",\"zip_code\":90210},{\"state\":\"NY\",\"zip_code\":10001},{\"state\":\"TX\",\"zip_code\":75201}][]}",
+    "inputTokens" : 110.0,
+    "outputTokens" : 44.0,
+    "timeMillis" : 561,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select state and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"state\":\"FL\",\"zip_code\":33130},{\"state\":\"IL\",\"zip_code\":60611},{\"state\":\"NC\",\"zip_code\":27513}]",
+    "inputTokens" : 180.0,
+    "outputTokens" : 42.0,
+    "timeMillis" : 1056,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select state and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:2-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"state\":\"PA\",\"zip_code\":19103},{\"state\":\"OH\",\"zip_code\":43215},{\"state\":\"VA\",\"zip_code\":23223}]",
+    "inputTokens" : 250.0,
+    "outputTokens" : 42.0,
+    "timeMillis" : 653,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select state and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:3-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"state\":\"WA\",\"zip_code\":98101},{\"state\":\"MD\",\"zip_code\":21201},{\"state\":\"GA\",\"zip_code\":30301}]",
+    "inputTokens" : 320.0,
+    "outputTokens" : 42.0,
+    "timeMillis" : 559,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select state and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:4-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"state\":\"MI\",\"zip_code\":48201},{\"state\":\"TN\",\"zip_code\":37215},{\"state\":\"AZ\",\"zip_code\":85001}]",
+    "inputTokens" : 390.0,
+    "outputTokens" : 42.0,
+    "timeMillis" : 774,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select state and zip_code from zip_data.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"zip_data\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"state\":{\"title\":\"state\",\"type\":\"string\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:5-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[]",
+    "inputTokens" : 374.0,
+    "outputTokens" : 2.0,
+    "timeMillis" : 458,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "iter:0-Given the following query, populate the table with actual values.\nquery: select zip_code and area_code from area_code where (city == \"Bishopville\" && state == \"SC\").\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"area_code\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"area_code\":{\"title\":\"area_code\",\"type\":\"integer\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}" : {
+    "response" : "{\"items\":[{\"area_code\":803,\"zip_code\":29010}]}",
+    "inputTokens" : 127.0,
+    "outputTokens" : 21.0,
+    "timeMillis" : 716,
+    "baseLLMRequestsIncrement" : 1
+  },
+  "fp:Given the following query, populate the table with actual values.\nquery: select zip_code and area_code from area_code where (city == \"Bishopville\" && state == \"SC\").\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n{\"title\":\"area_code\",\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"area_code\":{\"title\":\"area_code\",\"type\":\"integer\"},\"zip_code\":{\"title\":\"zip_code\",\"type\":\"integer\"}}}}-iter:1-List more values if there are more, otherwise return an empty JSON. Respond with JSON only." : {
+    "response" : "[{\"area_code\":803,\"zip_code\":29010}]",
+    "inputTokens" : 174.0,
+    "outputTokens" : 19.0,
+    "timeMillis" : 585,
+    "baseLLMRequestsIncrement" : 1
+  }
+}

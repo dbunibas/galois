@@ -1,0 +1,184 @@
+{
+    "name": "movie-{{QN}} llama3-sql Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes"
+    ],
+
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-sql",
+            "maxIterations": 10
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "movie",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "characters",
+                    "attributes": [
+                        {
+                            "name": "movieid",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "actorid",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "character_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "creditorder",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "pay",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "screentime",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "actor",
+                    "attributes": [
+                        {
+                            "name": "actorid",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "date_of_birth",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "birth_city",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "birth_country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "height_in_inches",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "biography",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gender",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "ethnicity",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "networth",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movie",
+                    "attributes": [
+                        {
+                            "name": "movieid",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "title",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "mpaa_rating",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "budget",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gross",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "release_date",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "genre",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "runtime",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "rating",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "rating_count",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "summary",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/movie"
+    }
+}

@@ -1,0 +1,466 @@
+"CBSA","CBSA_name","CBSA_type"
+10300,"Adrian, MI",Micro
+10380,"Aguadilla-Isabela, PR",Metro
+10420,"Akron, OH",Metro
+10500,"Albany, GA",Metro
+10580,"Albany-Schenectady-Troy, NY",Metro
+10620,"Albemarle, NC",Micro
+10700,"Albertville, AL",Micro
+10760,"Alexander City, AL",Micro
+10900,"Allentown-Bethlehem-Easton, PA-NJ",Metro
+10940,"Alma, MI",Micro
+10980,"Alpena, MI",Micro
+11020,"Altoona, PA",Metro
+11140,"Americus, GA",Micro
+11220,"Amsterdam, NY",Micro
+11260,"Anchorage, AK",Metro
+11420,"Angola, IN",Micro
+11460,"Ann Arbor, MI",Metro
+11500,"Anniston-Oxford, AL",Metro
+11580,"Arcadia, FL",Micro
+11640,"Arecibo, PR",Metro
+11700,"Asheville, NC",Metro
+11740,"Ashland, OH",Micro
+11780,"Ashtabula, OH",Micro
+11900,"Athens, OH",Micro
+11940,"Athens, TN",Micro
+12020,"Athens-Clarke County, GA",Metro
+12060,"Atlanta-Sandy Springs-Alpharetta, GA",Metro
+12100,"Atlantic City-Hammonton, NJ",Metro
+12120,"Atmore, AL",Micro
+12140,"Auburn, IN",Micro
+12180,"Auburn, NY",Micro
+12220,"Auburn-Opelika, AL",Metro
+12260,"Augusta-Richmond County, GA-SC",Metro
+12300,"Augusta-Waterville, ME",Micro
+12460,"Bainbridge, GA",Micro
+12580,"Baltimore-Columbia-Towson, MD",Metro
+12620,"Bangor, ME",Metro
+12680,"Bardstown, KY",Micro
+12700,"Barnstable Town, MA",Metro
+12740,"Barre, VT",Micro
+12860,"Batavia, NY",Micro
+12980,"Battle Creek, MI",Metro
+13020,"Bay City, MI",Metro
+13220,"Beckley, WV",Metro
+13260,"Bedford, IN",Micro
+13340,"Bellefontaine, OH",Micro
+13500,"Bennettsville, SC",Micro
+13540,"Bennington, VT",Micro
+13620,"Berlin, NH",Micro
+13660,"Big Rapids, MI",Micro
+13720,"Big Stone Gap, VA",Micro
+13780,"Binghamton, NY",Metro
+13820,"Birmingham-Hoover, AL",Metro
+13980,"Blacksburg-Christiansburg, VA",Metro
+14020,"Bloomington, IN",Metro
+14100,"Bloomsburg-Berwick, PA",Metro
+14140,"Bluefield, WV-VA",Micro
+14380,"Boone, NC",Micro
+14460,"Boston-Cambridge-Newton, MA-NH",Metro
+14540,"Bowling Green, KY",Metro
+14620,"Bradford, PA",Micro
+14820,"Brevard, NC",Micro
+14860,"Bridgeport-Stamford-Norwalk, CT",Metro
+15020,"Brookhaven, MS",Micro
+15140,"Brownsville, TN",Micro
+15260,"Brunswick, GA",Metro
+15340,"Bucyrus-Galion, OH",Micro
+15380,"Buffalo-Cheektowaga, NY",Metro
+15500,"Burlington, NC",Metro
+15540,"Burlington-South Burlington, VT",Metro
+15620,"Cadillac, MI",Micro
+15660,"Calhoun, GA",Micro
+15680,"California-Lexington Park, MD",Metro
+15700,"Cambridge, MD",Micro
+15740,"Cambridge, OH",Micro
+15820,"Campbellsville, KY",Micro
+15940,"Canton-Massillon, OH",Metro
+15980,"Cape Coral-Fort Myers, FL",Metro
+16340,"Cedartown, GA",Micro
+16380,"Celina, OH",Micro
+16420,"Central City, KY",Micro
+16540,"Chambersburg-Waynesboro, PA",Metro
+16620,"Charleston, WV",Metro
+16700,"Charleston-North Charleston, SC",Metro
+16740,"Charlotte-Concord-Gastonia, NC-SC",Metro
+16820,"Charlottesville, VA",Metro
+16860,"Chattanooga, TN-GA",Metro
+16980,"Chicago-Naperville-Elgin, IL-IN-WI",Metro
+17060,"Chillicothe, OH",Micro
+17140,"Cincinnati, OH-KY-IN",Metro
+17220,"Clarksburg, WV",Micro
+17260,"Clarksdale, MS",Micro
+17300,"Clarksville, TN-KY",Metro
+17380,"Cleveland, MS",Micro
+17420,"Cleveland, TN",Metro
+17460,"Cleveland-Elyria, OH",Metro
+17500,"Clewiston, FL",Micro
+17620,"Coamo, PR",Micro
+17640,"Coco, PR",Micro
+17740,"Coldwater, MI",Micro
+17900,"Columbia, SC",Metro
+17980,"Columbus, GA-AL",Metro
+18020,"Columbus, IN",Metro
+18060,"Columbus, MS",Micro
+18140,"Columbus, OH",Metro
+18180,"Concord, NH",Micro
+18220,"Connersville, IN",Micro
+18260,"Cookeville, TN",Micro
+18380,"Cordele, GA",Micro
+18420,"Corinth, MS",Micro
+18460,"Cornelia, GA",Micro
+18500,"Corning, NY",Micro
+18660,"Cortland, NY",Micro
+18740,"Coshocton, OH",Micro
+18820,"Crawfordsville, IN",Micro
+18880,"Crestview-Fort Walton Beach-Destin, FL",Metro
+18900,"Crossville, TN",Micro
+18980,"Cullman, AL",Micro
+19000,"Cullowhee, NC",Micro
+19060,"Cumberland, MD-WV",Metro
+19140,"Dalton, GA",Metro
+19220,"Danville, KY",Micro
+19260,"Danville, VA",Micro
+19300,"Daphne-Fairhope-Foley, AL",Metro
+19420,"Dayton, TN",Micro
+19430,"Dayton-Kettering, OH",Metro
+19460,"Decatur, AL",Metro
+19540,"Decatur, IN",Micro
+19580,"Defiance, OH",Micro
+19660,"Deltona-Daytona Beach-Ormond Beach, FL",Metro
+19820,"Detroit-Warren-Dearborn, MI",Metro
+20020,"Dothan, AL",Metro
+20060,"Douglas, GA",Micro
+20100,"Dover, DE",Metro
+20140,"Dublin, GA",Micro
+20180,"DuBois, PA",Micro
+20500,"Durham-Chapel Hill, NC",Metro
+20540,"Dyersburg, TN",Micro
+20660,"Easton, MD",Micro
+20700,"East Stroudsburg, PA",Metro
+21020,"Elizabeth City, NC",Micro
+21060,"Elizabethtown-Fort Knox, KY",Metro
+21140,"Elkhart-Goshen, IN",Metro
+21180,"Elkins, WV",Micro
+21300,"Elmira, NY",Metro
+21460,"Enterprise, AL",Micro
+21500,"Erie, PA",Metro
+21540,"Escanaba, MI",Micro
+21640,"Eufaula, AL-GA",Micro
+21780,"Evansville, IN-KY",Metro
+21900,"Fairmont, WV",Micro
+22180,"Fayetteville, NC",Metro
+22300,"Findlay, OH",Micro
+22340,"Fitzgerald, GA",Micro
+22420,"Flint, MI",Metro
+22500,"Florence, SC",Metro
+22520,"Florence-Muscle Shoals, AL",Metro
+22580,"Forest City, NC",Micro
+22840,"Fort Payne, AL",Micro
+23060,"Fort Wayne, IN",Metro
+23140,"Frankfort, IN",Micro
+23180,"Frankfort, KY",Micro
+23380,"Fremont, OH",Micro
+23460,"Gadsden, AL",Metro
+23500,"Gaffney, SC",Micro
+23540,"Gainesville, FL",Metro
+23580,"Gainesville, GA",Metro
+23860,"Georgetown, SC",Micro
+23900,"Gettysburg, PA",Metro
+23980,"Glasgow, KY",Micro
+24020,"Glens Falls, NY",Metro
+24100,"Gloversville, NY",Micro
+24140,"Goldsboro, NC",Metro
+24340,"Grand Rapids-Kentwood, MI",Metro
+24620,"Greeneville, TN",Micro
+24660,"Greensboro-High Point, NC",Metro
+24700,"Greensburg, IN",Micro
+24740,"Greenville, MS",Micro
+24780,"Greenville, NC",Metro
+24820,"Greenville, OH",Micro
+24860,"Greenville-Anderson, SC",Metro
+24900,"Greenwood, MS",Micro
+24940,"Greenwood, SC",Micro
+24980,"Grenada, MS",Micro
+25020,"Guayama, PR",Metro
+25060,"Gulfport-Biloxi, MS",Metro
+25180,"Hagerstown-Martinsburg, MD-WV",Metro
+25420,"Harrisburg-Carlisle, PA",Metro
+25500,"Harrisonburg, VA",Metro
+25540,"Hartford-East Hartford-Middletown, CT",Metro
+25620,"Hattiesburg, MS",Metro
+25780,"Henderson, NC",Micro
+25860,"Hickory-Lenoir-Morganton, NC",Metro
+25880,"Hillsdale, MI",Micro
+25940,"Hilton Head Island-Bluffton, SC",Metro
+25980,"Hinesville, GA",Metro
+26090,"Holland, MI",Micro
+26140,"Homosassa Springs, FL",Metro
+26340,"Houghton, MI",Micro
+26460,"Hudson, NY",Micro
+26500,"Huntingdon, PA",Micro
+26540,"Huntington, IN",Micro
+26580,"Huntington-Ashland, WV-KY-OH",Metro
+26620,"Huntsville, AL",Metro
+26860,"Indiana, PA",Micro
+26900,"Indianapolis-Carmel-Anderson, IN",Metro
+26940,"Indianola, MS",Micro
+27020,"Iron Mountain, MI-WI",Micro
+27060,"Ithaca, NY",Metro
+27100,"Jackson, MI",Metro
+27140,"Jackson, MS",Metro
+27160,"Jackson, OH",Micro
+27180,"Jackson, TN",Metro
+27260,"Jacksonville, FL",Metro
+27340,"Jacksonville, NC",Metro
+27460,"Jamestown-Dunkirk-Fredonia, NY",Micro
+27530,"Jasper, AL",Micro
+27540,"Jasper, IN",Micro
+27580,"Jayuya, PR",Micro
+27600,"Jefferson, GA",Micro
+27700,"Jesup, GA",Micro
+27740,"Johnson City, TN",Metro
+27780,"Johnstown, PA",Metro
+28020,"Kalamazoo-Portage, MI",Metro
+28300,"Keene, NH",Micro
+28340,"Kendallville, IN",Micro
+28580,"Key West, FL",Micro
+28620,"Kill Devil Hills, NC",Micro
+28700,"Kingsport-Bristol, TN-VA",Metro
+28740,"Kingston, NY",Metro
+28820,"Kinston, NC",Micro
+28940,"Knoxville, TN",Metro
+29020,"Kokomo, IN",Metro
+29060,"Laconia, NH",Micro
+29200,"Lafayette-West Lafayette, IN",Metro
+29300,"LaGrange, GA-AL",Micro
+29380,"Lake City, FL",Micro
+29460,"Lakeland-Winter Haven, FL",Metro
+29540,"Lancaster, PA",Metro
+29620,"Lansing-East Lansing, MI",Metro
+29860,"Laurel, MS",Micro
+29900,"Laurinburg, NC",Micro
+29980,"Lawrenceburg, TN",Micro
+30100,"Lebanon, NH-VT",Micro
+30140,"Lebanon, PA",Metro
+30260,"Lewisburg, PA",Micro
+30280,"Lewisburg, TN",Micro
+30340,"Lewiston-Auburn, ME",Metro
+30380,"Lewistown, PA",Micro
+30460,"Lexington-Fayette, KY",Metro
+30620,"Lima, OH",Metro
+30820,"Lock Haven, PA",Micro
+30900,"Logansport, IN",Micro
+30940,"London, KY",Micro
+31140,"Louisville/Jefferson County, KY-IN",Metro
+31220,"Ludington, MI",Micro
+31300,"Lumberton, NC",Micro
+31340,"Lynchburg, VA",Metro
+31420,"Macon-Bibb County, GA",Metro
+31500,"Madison, IN",Micro
+31580,"Madisonville, KY",Micro
+31660,"Malone, NY",Micro
+31700,"Manchester-Nashua, NH",Metro
+31900,"Mansfield, OH",Metro
+31930,"Marietta, OH",Micro
+31940,"Marinette, WI-MI",Micro
+31980,"Marion, IN",Micro
+32000,"Marion, NC",Micro
+32020,"Marion, OH",Micro
+32100,"Marquette, MI",Micro
+32280,"Martin, TN",Micro
+32300,"Martinsville, VA",Micro
+32420,"Mayaguez, PR",Metro
+32460,"Mayfield, KY",Micro
+32500,"Maysville, KY",Micro
+32620,"McComb, MS",Micro
+32660,"McMinnville, TN",Micro
+32740,"Meadville, PA",Micro
+32820,"Memphis, TN-MS-AR",Metro
+32940,"Meridian, MS",Micro
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL",Metro
+33140,"Michigan City-La Porte, IN",Metro
+33180,"Middlesborough, KY",Micro
+33220,"Midland, MI",Metro
+33300,"Milledgeville, GA",Micro
+33660,"Mobile, AL",Metro
+33780,"Monroe, MI",Metro
+33860,"Montgomery, AL",Metro
+33980,"Morehead City, NC",Micro
+34060,"Morgantown, WV",Metro
+34100,"Morristown, TN",Metro
+34220,"Moultrie, GA",Micro
+34340,"Mount Airy, NC",Micro
+34350,"Mount Gay-Shamrock, WV",Micro
+34380,"Mount Pleasant, MI",Micro
+34460,"Mount Sterling, KY",Micro
+34540,"Mount Vernon, OH",Micro
+34620,"Muncie, IN",Metro
+34660,"Murray, KY",Micro
+34740,"Muskegon, MI",Metro
+34820,"Myrtle Beach-Conway-North Myrtle Beach, SC-NC",Metro
+34940,"Naples-Marco Island, FL",Metro
+34980,"Nashville-Davidson--Murfreesboro--Franklin, TN",Metro
+35020,"Natchez, MS-LA",Micro
+35100,"New Bern, NC",Metro
+35140,"Newberry, SC",Micro
+35220,"New Castle, IN",Micro
+35260,"New Castle, PA",Micro
+35300,"New Haven-Milford, CT",Metro
+35420,"New Philadelphia-Dover, OH",Micro
+35460,"Newport, TN",Micro
+35620,"New York-Newark-Jersey City, NY-NJ-PA",Metro
+35660,"Niles, MI",Metro
+35840,"North Port-Sarasota-Bradenton, FL",Metro
+35860,"North Vernon, IN",Micro
+35900,"North Wilkesboro, NC",Micro
+35940,"Norwalk, OH",Micro
+35980,"Norwich-New London, CT",Metro
+36100,"Ocala, FL",Metro
+36140,"Ocean City, NJ",Metro
+36300,"Ogdensburg-Massena, NY",Micro
+36340,"Oil City, PA",Micro
+36380,"Okeechobee, FL",Micro
+36460,"Olean, NY",Micro
+36580,"Oneonta, NY",Micro
+36700,"Orangeburg, SC",Micro
+36740,"Orlando-Kissimmee-Sanford, FL",Metro
+36980,"Owensboro, KY",Metro
+37060,"Oxford, MS",Micro
+37120,"Ozark, AL",Micro
+37140,"Paducah, KY-IL",Micro
+37260,"Palatka, FL",Micro
+37340,"Palm Bay-Melbourne-Titusville, FL",Metro
+37460,"Panama City, FL",Metro
+37540,"Paris, TN",Micro
+37620,"Parkersburg-Vienna, WV",Metro
+37860,"Pensacola-Ferry Pass-Brent, FL",Metro
+37940,"Peru, IN",Micro
+37980,"Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",Metro
+38100,"Picayune, MS",Micro
+38240,"Pinehurst-Southern Pines, NC",Micro
+38300,"Pittsburgh, PA",Metro
+38340,"Pittsfield, MA",Metro
+38460,"Plattsburgh, NY",Micro
+38500,"Plymouth, IN",Micro
+38580,"Point Pleasant, WV-OH",Micro
+38660,"Ponce, PR",Metro
+38860,"Portland-South Portland, ME",Metro
+38940,"Port St. Lucie, FL",Metro
+39020,"Portsmouth, OH",Micro
+39060,"Pottsville, PA",Micro
+39100,"Poughkeepsie-Newburgh-Middletown, NY",Metro
+39300,"Providence-Warwick, RI-MA",Metro
+39460,"Punta Gorda, FL",Metro
+39580,"Raleigh-Cary, NC",Metro
+39740,"Reading, PA",Metro
+39980,"Richmond, IN",Micro
+40060,"Richmond, VA",Metro
+40080,"Richmond-Berea, KY",Micro
+40220,"Roanoke, VA",Metro
+40260,"Roanoke Rapids, NC",Micro
+40380,"Rochester, NY",Metro
+40460,"Rockingham, NC",Micro
+40580,"Rocky Mount, NC",Metro
+40660,"Rome, GA",Metro
+40860,"Rutland, VT",Micro
+40980,"Saginaw, MI",Metro
+41220,"St. Marys, GA",Micro
+41260,"St. Marys, PA",Micro
+41400,"Salem, OH",Micro
+41540,"Salisbury, MD-DE",Metro
+41780,"Sandusky, OH",Micro
+41820,"Sanford, NC",Micro
+41900,"San German, PR",Metro
+41980,"San Juan-Bayamon-Caguas, PR",Metro
+42180,"Santa Isabel, PR",Micro
+42300,"Sault Ste. Marie, MI",Micro
+42340,"Savannah, GA",Metro
+42380,"Sayre, PA",Micro
+42460,"Scottsboro, AL",Micro
+42500,"Scottsburg, IN",Micro
+42540,"Scranton--Wilkes-Barre, PA",Metro
+42680,"Sebastian-Vero Beach, FL",Metro
+42700,"Sebring-Avon Park, FL",Metro
+42780,"Selinsgrove, PA",Micro
+42820,"Selma, AL",Micro
+42860,"Seneca, SC",Micro
+42900,"Seneca Falls, NY",Micro
+42940,"Sevierville, TN",Micro
+42980,"Seymour, IN",Micro
+43140,"Shelby, NC",Micro
+43180,"Shelbyville, TN",Micro
+43380,"Sidney, OH",Micro
+43700,"Somerset, KY",Micro
+43740,"Somerset, PA",Micro
+43780,"South Bend-Mishawaka, IN-MI",Metro
+43900,"Spartanburg, SC",Metro
+44140,"Springfield, MA",Metro
+44220,"Springfield, OH",Metro
+44260,"Starkville, MS",Micro
+44300,"State College, PA",Metro
+44340,"Statesboro, GA",Micro
+44420,"Staunton, VA",Metro
+44780,"Sturgis, MI",Micro
+44900,"Summerville, GA",Micro
+44940,"Sumter, SC",Metro
+44980,"Sunbury, PA",Micro
+45060,"Syracuse, NY",Metro
+45180,"Talladega-Sylacauga, AL",Micro
+45220,"Tallahassee, FL",Metro
+45300,"Tampa-St. Petersburg-Clearwater, FL",Metro
+45460,"Terre Haute, IN",Metro
+45540,"The Villages, FL",Metro
+45580,"Thomaston, GA",Micro
+45620,"Thomasville, GA",Micro
+45660,"Tiffin, OH",Micro
+45700,"Tifton, GA",Micro
+45740,"Toccoa, GA",Micro
+45780,"Toledo, OH",Metro
+45860,"Torrington, CT",Micro
+45900,"Traverse City, MI",Micro
+45940,"Trenton-Princeton, NJ",Metro
+45980,"Troy, AL",Micro
+46100,"Tullahoma-Manchester, TN",Micro
+46180,"Tupelo, MS",Micro
+46220,"Tuscaloosa, AL",Metro
+46420,"Union, SC",Micro
+46460,"Union City, TN",Micro
+46500,"Urbana, OH",Micro
+46540,"Utica-Rome, NY",Metro
+46660,"Valdosta, GA",Metro
+46780,"Van Wert, OH",Micro
+46980,"Vicksburg, MS",Micro
+47080,"Vidalia, GA",Micro
+47180,"Vincennes, IN",Micro
+47220,"Vineland-Bridgeton, NJ",Metro
+47240,"Vineyard Haven, MA",Micro
+47260,"Virginia Beach-Norfolk-Newport News, VA-NC",Metro
+47340,"Wabash, IN",Micro
+47540,"Wapakoneta, OH",Micro
+47580,"Warner Robins, GA",Metro
+47620,"Warren, PA",Micro
+47700,"Warsaw, IN",Micro
+47780,"Washington, IN",Micro
+47820,"Washington, NC",Micro
+47900,"Washington-Arlington-Alexandria, DC-VA-MD-WV",Metro
+47920,"Washington Court House, OH",Micro
+48060,"Watertown-Fort Drum, NY",Metro
+48100,"Wauchula, FL",Micro
+48180,"Waycross, GA",Micro
+48260,"Weirton-Steubenville, WV-OH",Metro
+48500,"West Point, MS",Micro
+48540,"Wheeling, WV-OH",Metro
+48700,"Williamsport, PA",Metro
+48900,"Wilmington, NC",Metro
+48940,"Wilmington, OH",Micro
+48980,"Wilson, NC",Micro
+49020,"Winchester, VA-WV",Metro
+49180,"Winston-Salem, NC",Metro
+49300,"Wooster, OH",Micro
+49340,"Worcester, MA-CT",Metro
+49500,"Yauco, PR",Metro
+49620,"York-Hanover, PA",Metro
+49660,"Youngstown-Warren-Boardman, OH-PA",Metro
+49780,"Zanesville, OH",Micro

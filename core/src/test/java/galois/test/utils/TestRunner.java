@@ -43,6 +43,7 @@ import speedy.model.database.AttributeRef;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
 import speedy.model.database.Key;
+import speedy.model.database.Tuple;
 import speedy.utility.SpeedyUtility;
 
 @Slf4j
@@ -110,6 +111,21 @@ public class TestRunner {
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);
 //            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+        }
+    }
+    
+    public List<Tuple> computeExpected(String path, ExpVariant variant) {
+        try{
+//            Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            List<Tuple> expected = experiment.computeExpected();
+            log.info("{} \t {}", variant.getQueryNum(), expected.size());
+            return expected;
+        } catch (IOException ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+            return null;
         }
     }
         

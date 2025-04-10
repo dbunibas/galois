@@ -40,7 +40,7 @@ public class TupleSimilarityConstraint implements IMetric {
             //remove from expectedCells the i-th element greater than number of attributes
             expectedCells = expectedCells.stream().map(list -> list.subList(0, numberOfAttributes)).toList();
         }*/
-            List<Tuple> resultSorted = result.stream()
+            List<Tuple> resultSorted = result.stream().filter(tuple -> tuple != null).filter(tuple -> tuple.getCells().size() > 1)
                     .sorted(Comparator.comparing(tuple -> tuple.getCells().get(1).getValue().toString()))
                     .toList();
 

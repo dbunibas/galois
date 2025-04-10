@@ -186,7 +186,7 @@ public class LLMScan extends Scan {
                 }
                 if (checkTypes) {
                     boolean check = checkTupleTypes(result, database);
-                    if (!check)  {
+                    if (!check && hasNext())  {
                         logger.warn("Ignoring tuple because has different types: " + result);
                         return next();
                     }
@@ -209,7 +209,7 @@ public class LLMScan extends Scan {
                 }
                 if (checkTypes) {
                     boolean check = checkTupleTypes(result, database);
-                    if (!check)  {
+                    if (!check && hasNext())  {
                         logger.warn("Ignoring tuple because has different types: " + result);
                         return next();
                     }

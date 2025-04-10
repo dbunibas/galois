@@ -1,0 +1,483 @@
+{
+    "name": "address-{{QN}} llama3-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-table",
+            "maxIterations": 10
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "address",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "area_code",
+                    "attributes": [
+                        {
+                            "name": "zip_code",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "area_code",
+                            "type": "INTEGER",
+                            "key": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "country",
+                    "attributes": [
+                        {
+                            "name": "zip_code",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "county",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "state",
+                    "attributes": [
+                        {
+                            "name": "abbreviation",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "cbsa",
+                    "attributes": [
+                        {
+                            "name": "CBSA",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "CBSA_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "CBSA_type",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "alias",
+                    "attributes": [
+                        {
+                            "name": "zip_code",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "alias",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "congress",
+                    "attributes": [
+                        {
+                            "name": "cognress_rep_id",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "first_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "last_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "CID",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "party",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "abbreviation",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "House",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "District",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "land_area",
+                            "type": "REAL",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "avoid",
+                    "attributes": [
+                        {
+                            "name": "zip_code",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "bad_alias",
+                            "type": "STRING",
+                            "key": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "zip_data",
+                    "attributes": [
+                        {
+                            "name": "zip_code",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "multi_county",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "type",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "organization",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "time_zone",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "daylight_savings",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "latitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "longitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "elevation",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state_fips",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "county_fips",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "region",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "division",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population_2020",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population_2010",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "households",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "avg_house_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "avg_income_per_household",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "persons_per_household",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "white_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "black_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "hispanic_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "asian_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "american_indian_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "hawaiian_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "other_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "male_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "female_population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "median_age",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "male_median_age",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "female_median_age",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "residential_mailboxes",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "business_mailboxes",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "total_delivery_receptacles",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "businesses",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "_1st_quarter_payroll",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "annual_payroll",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "employees",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "water_area",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "land_area",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "single_family_delivery_units",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "multi_family_delivery_units",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "total_beneficiaries",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "retired_workers",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "disabled_workers",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "parents_and_widowed",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "spouses",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "children",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "over_65",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "monthly_benefits_all",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "monthly_benefits_retired_workers",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "monthly_benefits_widowed",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "CBSA",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "zip_congress",
+                    "attributes": [
+                        {
+                            "name": "zip_code",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "district",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/address"
+    }
+}

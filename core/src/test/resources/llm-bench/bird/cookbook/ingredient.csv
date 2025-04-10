@@ -1,0 +1,3347 @@
+"ingredient_id","category","name","plural"
+1,dairy,"1% lowfat cottage cheese",
+6,dairy,"1% lowfat milk",
+10,Mexican products,"10-inch flour tortilla",s
+11,cereals,"100% bran cereal",
+12,dairy,"2% lowfat milk",
+13,breads,"3-inch round pita bread",s
+14,breads,"4-inch diameter rye roll",s
+15,Mexican products,"6-inch corn tortilla",s
+16,Mexican products,"6-inch flour tortilla",s
+17,breads,"6-inch pita bread",s
+18,fresh vegetables,"7-inch long zucchini",s
+19,miscellaneous,"8 to 10-inch skewer",s
+20,vinegars,aceto balsamico vinegar,
+22,fresh vegetables,acorn squash,
+24,baking products,active dry yeast,
+25,dried beans,adzuki beans,
+26,fresh seafood,ahi,
+27,fresh vegetables,"alfalfa, radish or clover sprouts",
+28,fresh vegetables,alfalfa sprouts,
+30,baking products,all-purpose flour,
+31,baking products,all-ready pie crust,s
+32,spices and seasonings,allspice,
+33,spices and seasonings,allspice berry,#NAME?
+34,spices and seasonings,almond extract,
+35,nuts and seeds,almonds,
+37,grains,amaranth,
+38,alcoholic beverages,amaretto,
+39,cheese,American cheese,
+42,fresh vegetables,Anaheim chili pepper,s
+44,fresh vegetables,ancho chili pepper,s
+45,canned fish,anchovy,#NAME?
+46,canned fish,anchovy fillets,
+47,condiments/sauces,anchovy paste,
+48,baked goods,angel food cake,s
+49,pasta/noodles,angel hair pasta,
+50,spices and seasonings,anise,
+51,spices and seasonings,anise extract,
+52,spices and seasonings,anise seeds,
+53,spices and seasonings,aniseed,
+54,fresh fruit,anjou pear,s
+56,jams and jellies,apple butter,
+57,fruit juices,apple cider,
+59,vinegars,apple cider vinegar,
+60,frozen fruit,apple juice,
+61,frozen fruit,frozen apple juice concentrate,
+66,fresh fruit,Apple rings,
+68,alcoholic beverages,applejack,
+69,canned/bottled fruit,applesauce,
+70,fresh fruit,apricot,s
+71,alcoholic beverages,apricot brandy,
+74,canned/bottled fruit,apricots in light syrup,
+75,canned/bottled fruit,apricot halves in syrup,
+76,canned/bottled fruit,apricot halves packed in juice,
+77,jams and jellies,apricot jam,
+78,fruit juices,apricot nectar,
+79,jams and jellies,apricot preserves,
+81,canned/bottled vegetables,arbole pepper,s
+83,baking products,Argo or Kingsford's cornstarch,
+84,fresh vegetables,Armenian cucumber,s
+85,baking products,arrowroot,
+86,baking products,arrowroot powder,
+87,fresh vegetables,artichoke,s
+88,canned/bottled vegetables,artichoke bottom,s
+89,canned/bottled vegetables,artichoke hearts,
+91,canned/bottled vegetables,artichoke hearts in brine,
+92,fresh vegetables,arugula,
+93,cheese,asiago,
+94,fresh vegetables,Asian eggplant,s
+95,Oriental products,Asian fish sauce,
+96,fresh fruit,Asian pear,s
+97,frozen vegetables,asparagus,
+98,fresh vegetables,asparagus tips,
+99,fresh vegetables,Assorted Fresh Vegetables,
+100,fresh fruit,assorted sliced fruit,
+101,fresh seafood,Atlantic pollock,
+102,fresh vegetables,avocado,s
+103,fresh vegetables,baby carrot,s
+104,canned/bottled vegetables,canned baby corn,
+105,fresh vegetables,baby leek,s
+106,frozen vegetables,baby lima beans,
+107,fresh seafood,baby snapper,
+110,frozen vegetables,frozen baby carrots,
+111,fresh vegetables,baby zucchini,s
+112,deli meats,bacon,
+113,condiments/sauces,bacon bits,
+114,deli meats,bacon slice,s
+117,frozen vegetables,frozen mixed vegetables,
+118,breads,bagel,s
+119,fresh vegetables,bagged Frieda's Shallots,
+120,breads,baguette,s
+121,canned beans,baked beans,
+122,meat/poultry,baked ham,
+124,fresh vegetables,baking potato,es
+125,baking products,baking powder,
+126,baking products,baking soda,
+127,vinegars,balsamic vinegar,
+128,canned/bottled vegetables,bamboo shoots,
+129,miscellaneous,bamboo skewer,s
+130,fresh fruit,banana,s
+131,dried fruit,banana chips,
+134,condiments/sauces,barbecue sauce,
+135,grains,barley,
+136,sweeteners,barley malt syrup,
+137,fresh fruit,fresh bartlett pear,s
+138,fresh fruit,Bartlett pear halves,
+141,soups,basic vegetable stock,
+142,spices and seasonings,dried basil,
+147,fresh seafood,bass,
+148,fresh seafood,"bay, calico or sea scallops",
+149,spices and seasonings,bay leaf,#NAME?
+150,fresh seafood,bay scallops,
+151,miscellaneous,bay scallop shell,s
+152,fresh seafood,bay shrimp,
+154,vegetarian products,bean cooking liquid,
+155,vegetarian products,bean curd,
+156,fresh vegetables,bean sprouts,
+157,Oriental noodles,bean threads,
+158,dried beans,beans,
+160,meat/poultry,beef,
+161,meat/poultry,beef back ribs,
+162,meat/poultry,beef bottom round,
+165,meat/poultry,beef brisket,
+166,soups,beef broth,
+168,meat/poultry,beef chuck,
+171,meat/poultry,beef chunks,
+172,meat/poultry,Beef Eye Round Roast,
+173,soups,beef flavored bouillon,
+174,deli meats,beef frankfurter,s
+175,meat/poultry,Beef Ground Round,
+176,meat/poultry,beef heart,s
+177,meat/poultry,beef kidney,s
+178,meat/poultry,beef liver,s
+180,meat/poultry,beef round tip steak,s
+181,meat/poultry,Beef Rump Roast,
+182,deli meats,beef sausage,s
+185,meat/poultry,beef steak,s
+186,soups,beef stock,
+187,meat/poultry,Beef Tenderloin,
+189,meat/poultry,beef tip roast,s
+190,meat/poultry,beef top loin,s
+192,meat/poultry,beef top round steak,
+196,alcoholic beverages,beer,
+198,deli meats,beer sausage,s
+199,fresh vegetables,beet,s
+200,fresh vegetables,beet greens,
+201,fresh vegetables,Belgian endive leaves,
+202,fresh vegetables,Belgian endive,
+203,fresh vegetables,green bell pepper,s
+204,fresh vegetables,bermuda onion,s
+205,fresh fruit,berry,#NAME?
+207,fresh vegetables,bibb lettuce,
+208,fresh fruit,bing cherry,#NAME?
+209,baked goods,biscuit,s
+210,baking products,bittersweet chocolate,
+211,canned beans,black beans,
+212,breads,black bread,
+213,hot beverages,black coffee,
+214,dried fruit,black currants,
+215,dried beans,black eye peas,
+216,dried vegetables,black fungi,
+217,canned/bottled vegetables,black mushroom,s
+218,condiments/sauces,whole black olive,s
+219,spices and seasonings,black pepper,
+220,spices and seasonings,black peppercorns,
+221,dried vegetables,black soy beans,
+222,dried beans,black turtle bean,
+223,dried beans,black-eyed beans,
+224,fresh vegetables,black-eyed peas,
+225,frozen vegetables,frozen black-eyed peas,
+227,fresh fruit,blackberry,#NAME?
+228,jams and jellies,blackberry preserves,
+230,sweeteners,blackstrap molasses,
+233,fresh fruit,blood orange,s
+235,deli meats,blood sausage,s
+236,cheese,blue cheese,
+237,salad dressings,blue cheese salad dressing,
+238,fresh vegetables,blue corn,
+239,fresh seafood,blue crabmeat,
+240,fresh vegetables,blue potato,es
+241,fresh fruit,blueberry,#NAME?
+242,jams and jellies,blueberry preserves,
+243,fresh seafood,bluefish,
+244,meat/poultry,boar,
+245,fresh vegetables,boiled carrots,
+246,fresh seafood,boiled/steamed shrimp,
+247,fresh vegetables,boiling onion,s
+248,fresh vegetables,boiling potato,es
+249,beverages,boiling water,
+251,fresh vegetables,bok choy,
+253,fresh vegetables,bok choy leaves and stems,
+254,dried vegetables,boletus mushroom,s
+255,deli meats,bologna,
+257,meat/poultry,boneless American lamb shoulder,s
+258,meat/poultry,boneless beef bottom round,
+259,meat/poultry,boneless beef brisket,s
+261,meat/poultry,boneless beef round,
+262,meat/poultry,boneless beef sirloin,
+264,meat/poultry,beef top round,
+265,meat/poultry,boneless chicken,
+266,meat/poultry,boneless chicken breast,s
+267,meat/poultry,boneless fresh American leg of lamb,s
+268,meat/poultry,boneless ham,
+269,meat/poultry,boneless lamb,
+271,meat/poultry,boneless lamb stew meat,
+272,meat/poultry,boneless lean pork,
+273,meat/poultry,boneless leg of lamb,
+274,meat/poultry,boneless pork,
+275,meat/poultry,boneless pork butt,
+276,meat/poultry,boneless pork loin roast,s
+277,meat/poultry,boneless pork shoulder,
+279,meat/poultry,boneless pork tenderloin,
+281,meat/poultry,boneless round steak,
+282,meat/poultry,skinless boneless chicken breast,s
+283,meat/poultry,skinless boneless chicken breast halves,
+285,meat/poultry,skinless boneless turkey roast,s
+287,meat/poultry,boneless smoked ham,
+288,meat/poultry,boneless top round steak or flank steak,s
+289,meat/poultry,whole boneless turkey,
+290,meat/poultry,boneless turkey breast,s
+292,dairy,Borden Buttermilk,
+294,fresh fruit,bosc pear,s
+295,fresh vegetables,Boston lettuce,s
+296,fresh vegetables,Boston lettuce leaves,
+297,condiments/sauces,bottled chili sauce,
+298,canned/bottled juice,bottled clam juice,
+299,condiments/sauces,bottled hot pepper sauce,
+301,canned/bottled juice,bottled lemon juice,
+302,miscellaneous,bottled liquid pectin,
+304,condiments/sauces,bottled microwave browning sauce,
+305,salad dressings,bottled no-fat creamy salad dressing,
+307,salad dressings,bottled red wine vinegar dressing,
+308,Mexican products,bottled salsa,
+309,condiments/sauces,bottled seafood sauce,
+310,tomato products,bottled spaghetti sauce,
+311,soups,bouillon cube,s
+312,soups,boullion,
+313,alcoholic beverages,bourbon whiskey,
+314,pasta/noodles,bowtie or farfalle pasta,
+315,frozen meat/poultry/seafood,frozen rabbit,s
+316,baking products,powdered sugar,
+317,pasta/noodles,dry cheese tortellini,
+318,frozen fruit,boysenberries,
+319,jams and jellies,boysenberry preserves,
+320,meat/poultry,brain,
+321,grains,braised bulgur,
+322,cereals,bran,
+323,cereals,bran flakes cereal,
+324,alcoholic beverages,brandy,
+326,breads,bread,
+327,bread products,bread crumbs,
+329,baking products,bread flour,
+330,bread products,bread stuffing crumbs,
+332,breads,hard breadstick,s
+333,breads,soft breadstick,s
+334,miscellaneous,brewer's yeast,
+335,cheese,brick cheese,
+336,cheese,Brie cheese,
+337,fresh vegetables,broccoli,
+338,fresh vegetables,broccoli flowerettes,
+343,meat/poultry,broiler-fryer chicken,s
+345,soups,broth,
+346,soups,broth or low-sodium bouillon,
+347,grains,brown rice,
+348,baking products,brown rice flour,
+349,sweeteners,brown rice syrup,
+351,baking products,brown sugar,
+353,fresh vegetables,Brussels sprouts,
+354,grains,buckwheat,
+355,baking products,barley flour,
+356,fresh vegetables,fennel bulb,s
+357,grains,bulgur wheat,
+358,grains,bulgur or cracked wheat,
+360,breads,bun,s
+361,Oriental vegetables,burdock root,
+362,breads,hamburger bun,s
+363,dairy,butter,
+364,canned/bottled vegetables,butter bean,s
+366,spices and seasonings,Butter Buds Mix,
+367,spices and seasonings,Butter Buds Sprinkles,
+368,fresh seafood,butter fish,
+369,spices and seasonings,butter flavoring,
+370,spices and seasonings,butter flavoring granules,
+371,fresh vegetables,butter lettuce,
+373,dairy,butter margarine blend spread,
+374,dairy,butter or margarine,
+377,oils and fats,butter-flavored nonstick cooking spray,
+378,fresh vegetables,buttercup squash,
+380,meat/poultry,butterflied lamb leg,
+381,pasta/noodles,butterfly or bow-tie pasta,
+386,dairy,buttermilk,
+387,baking products,buttermilk baking mix,
+388,fresh vegetables,butternut squash,
+389,fresh vegetables,button mushrooms,
+390,fresh vegetables,cabbage,
+391,alcoholic beverages,Cabernet Sauvignon wine,
+392,canned/bottled vegetables,"cactus, tender",s
+394,baking products,cake flour,
+395,meat/poultry,calf sweetbreads,
+396,fresh vegetables,California artichoke,s
+397,fresh vegetables,California avocado,s
+398,fresh fruit,California bartlett pear,s
+399,dried fruit,California date,s
+401,canned/bottled fruit,California fruit cocktail,
+402,fresh fruit,California grapes,
+403,fresh fruit,California nectarine,s
+404,fresh fruit,California peach,es
+406,fresh fruit,fresh California plum,s
+407,condiments/sauces,ripe olives,
+408,fresh fruit,California seedless grapes,
+410,alcoholic beverages,Calvados,
+411,cheese,camembert,
+412,canned/bottled vegetables,canned bamboo shoots,
+413,Mexican products,canned green chiles,
+414,deli meats,Canadian bacon,
+415,cheese,Canadian cheddar cheese,
+416,Oriental products,candied ginger,
+417,sweeteners,cane syrup,
+418,canned/bottled fruit,canned apricots,
+420,canned/bottled vegetables,canned artichoke hearts,
+421,canned/bottled vegetables,canned artichoke hearts packed in water,
+422,canned beans,canned baked beans,
+423,canned beans,canned baked beans w/ franks,
+424,canned beans,canned baked beans w/ pork,
+426,canned/bottled fruit,canned Bartlett pear halves,
+427,soups,canned beef broth,
+428,canned beans,canned black beans,
+431,canned/bottled vegetables,canned black-eyed peas,
+432,canned fish,canned blue crab,
+433,canned beans,canned butter beans,
+434,canned/bottled fruit,canned California cling peach slices,
+436,canned beans,canned cannellini beans,
+437,canned/bottled fruit,canned cherries,
+438,canned/bottled fruit,canned cherry filling and topping,
+439,canned/bottled vegetables,canned chickpeas,
+442,canned fish,canned chopped clams,
+443,canned/bottled vegetables,canned chopped hot peppers,
+446,soups,canned condensed beef broth,
+448,canned/bottled vegetables,canned corn,
+449,canned/bottled vegetables,canned corn w red and green pepper,
+450,canned beans,canned cranberry beans,
+451,soups,canned cream of celery soup,
+452,canned/bottled vegetables,canned cream-style corn,
+454,canned/bottled fruit,canned Dole Crushed Pineapple,
+455,canned/bottled fruit,canned Dole Pineapple Chunks,
+456,canned/bottled fruit,canned Dole Pineapple Slices,
+457,canned/bottled fruit,canned Dole Pineapple Tidbits,
+461,Mexican products,canned enchilada sauce,
+463,canned/bottled fruit,canned fig in light syrup,
+466,canned/bottled fruit,canned fruit packed in juice,
+467,canned beans,canned garbanzo beans,
+469,Oriental products,canned ginkgo nuts,
+470,canned beans,canned Great Northern beans,
+475,canned/bottled vegetables,canned hot peppers,
+480,Mexican products,canned jalapeno peppers,
+481,canned beans,canned kidney beans,
+482,canned/bottled vegetables,canned low sodium beets,
+483,soups,canned low sodium chicken broth,
+484,canned/bottled vegetables,canned low sodium peas,
+485,tomato sauces,"canned tomato sauce, low sodium",
+487,canned/bottled fruit,canned mandarin oranges,
+489,canned/bottled fruit,canned mixed fruit,
+490,tomato products,"canned tomatoes, no-salt-added",
+491,canned/bottled vegetables,canned onions,
+492,Mexican products,picante sauce,
+493,canned/bottled juice,vegetable juice,
+494,canned/bottled fruit,pitted cherries,
+495,canned/bottled juice,canned orange juice,
+496,canned/bottled fruit,canned peaches in syrup,
+497,canned/bottled fruit,canned peaches in water,
+498,canned/bottled fruit,canned peaches with own juice,
+499,canned/bottled fruit,canned pears,
+500,canned/bottled vegetables,canned peas,
+501,canned/bottled vegetables,canned peas and onions,
+503,condiments/sauces,canned pimientos,
+504,canned/bottled fruit,canned pineapple,
+505,canned/bottled fruit,canned pineapple chunks,
+506,canned/bottled fruit,canned pineapple chunks in juice,
+508,canned beans,canned pink beans,
+509,canned beans,canned pinto beans,
+512,canned/bottled fruit,canned plums,
+513,canned/bottled fruit,canned prickly pear,
+514,canned/bottled vegetables,canned pumpkin,
+515,canned/bottled vegetables,canned pumpkin-pie mix,
+516,soups,canned reduced sodium beef broth,
+517,canned fish,canned salmon,
+518,canned beans,canned small white beans,
+519,canned fish,canned solid white tuna in water,
+520,canned/bottled vegetables,canned solid-pack pumpkin,
+521,tomato products,"canned stewed tomatoes, low salt",
+523,canned/bottled vegetables,canned sweet potatoes,
+524,canned/bottled vegetables,canned sweet potatoes in syrup,
+525,canned dairy,sweetened condensed milk,
+526,tomato products,tomato paste,
+527,tomato sauces,canned tomato sauce,
+528,tomato products,canned tomatoes,
+529,tomato products,canned tomatoes and green chilies,
+531,canned fish,canned tuna in oil,
+536,canned/bottled vegetables,canned vacuum packed corn,
+537,canned/bottled vegetables,canned water chestnuts,
+540,canned beans,canned white beans,
+541,canned meat,canned white chicken,
+542,canned beans,canned white kidney beans,
+544,canned/bottled fruit,canned whole berry cranberry sauce,
+546,canned/bottled fruit,canned whole apricots,
+548,canned/bottled vegetables,canned yams,
+550,oils and fats,canola oil,
+554,condiments/sauces,capers,
+556,meat/poultry,capon,s
+557,candy,caramel candy,#NAME?
+558,spices and seasonings,caraway,
+559,spices and seasonings,caraway seeds,
+560,spices and seasonings,cardamom,
+562,fresh vegetables,cardoon,
+565,fresh seafood,carp,
+568,dairy,Land O'Lakes light sour cream,
+569,fresh fruit,casaba melon,s
+570,nuts and seeds,cashews,
+571,alcoholic beverages,cassis liqueur,
+572,sweeteners,castor sugar,
+574,fresh seafood,catfish fillet,s
+575,condiments/sauces,catsup,
+577,fresh vegetables,cauliflower,
+578,fresh vegetables,cauliflower florets,
+579,spices and seasonings,cayenne,
+580,spices and seasonings,cayenne pepper,
+583,spices and seasonings,cayenne powder,
+584,fresh vegetables,celeriac,
+585,fresh vegetables,celery,
+586,fresh vegetables,celery leaf,#NAME?
+589,fresh vegetables,celery root,s
+590,spices and seasonings,celery seed,s
+591,fresh vegetables,celery stalk,s
+592,fresh vegetables,celery with leaves,
+593,fresh vegetables,cepe or boletus mushrooms,
+594,Oriental vegetables,cha gwa,
+595,alcoholic beverages,Champagne,
+597,dried vegetables,chanterelle mushroom,s
+599,fresh vegetables,chard,
+600,alcoholic beverages,chardonnay wine,
+601,meat/poultry,Chateaubriand,
+602,fresh vegetables,chayote,s
+603,cheese,cheddar cheese,
+604,cheese,cheese,
+605,snack foods,cheese flavored tortilla chips,
+606,pasta/noodles,cheese-filled tortellini,s
+607,fresh fruit,cherimoya,s
+608,fresh fruit,cherry,#NAME?
+610,canned/bottled fruit,cherry filling,
+611,gelatin,cherry gelatin,
+612,fruit juices,cherry juice,
+614,canned/bottled fruit,cherry pie filling,
+616,jams and jellies,cherry preserves,
+617,fresh vegetables,cherry tomatoes,
+618,fresh seafood,cherrystone clam,s
+619,fresh herbs,chervil,
+620,cheese,Cheshire cheese,
+621,nuts and seeds,chestnuts,
+622,sweeteners,chestnut honey,
+623,meat/poultry,chevon/goat,
+624,cheese,chevre,
+626,dried beans,chickpeas,
+627,meat/poultry,whole chicken,s
+628,meat/poultry,chicken bones,
+629,soups,chicken bouillon,
+630,soups,chicken bouillon cube,s
+632,meat/poultry,chicken breast,s
+633,meat/poultry,chicken breast half,#NAME?
+638,soups,chicken broth,
+644,oils and fats,chicken fat,
+645,meat/poultry,chicken feet,
+647,deli meats,chicken frankfurter,s
+648,meat/poultry,chicken giblet,s
+649,soups,chicken gumbo soup,
+650,meat/poultry,chicken leg,
+651,meat/poultry,chicken liver,s
+657,meat/poultry,chicken parts - necks and wings,
+658,meat/poultry,chicken sausage,s
+660,soups,chicken stock,
+664,meat/poultry,chicken tenderloin,s
+665,meat/poultry,chicken thigh,s
+667,meat/poultry,chicken wing,s
+671,fresh vegetables,chicory,
+672,canned/bottled vegetables,chile chipotle adobados,
+673,condiments/sauces,chile paste,
+674,fresh vegetables,chiles serranos,
+675,canned beans,chili beans,
+676,fresh vegetables,chili pepper,s
+677,spices and seasonings,chili pepper flakes,
+678,spices and seasonings,chili powder,
+679,condiments/sauces,chili sauce,
+680,spices and seasonings,chili seasoning mix,
+681,fresh vegetables,Chinese bitter melon,s
+682,Oriental products,Chinese black vinegar,
+683,fresh vegetables,Chinese broccoli,
+684,Oriental vegetables,Chinese cabbage,
+685,Oriental vegetables,Chinese cabbage leaf,#NAME?
+690,Oriental products,Chinese chili paste,
+691,Oriental products,Chinese five-spice,
+692,spices and seasonings,Chinese five-spice powder,
+694,oils and fats,Chinese hot oil,
+695,Oriental products,Chinese mushroom,s
+696,Oriental products,Chinese mustard,
+698,fresh herbs,Chinese parsley,
+699,fresh fruit,Chinese pear,s
+700,alcoholic beverages,Chinese rice wine,
+701,spices and seasonings,Chinese star anise,
+702,fresh vegetables,chipotle chile,s
+703,Mexican products,chipotle or jalapeno chiles,
+704,spices and seasonings,chives,
+705,baking products,chocolate,
+706,candy,chocolate candy,#NAME?
+707,baking products,chocolate chip,s
+708,cookies/crackers,chocolate cookies,
+709,baking products,chocolate crumb crust,s
+710,dessert sauces,chocolate fudge syrup,
+711,candy,chocolate leaves,#NAME?
+712,dessert sauces,chocolate sauce,
+713,beverages,chocolate shake,s
+714,cookies/crackers,chocolate wafer cookies,
+715,Mexican products,chopped green chilies,
+718,fresh herbs,fresh parsley,
+719,condiments/sauces,chopped pimientos,
+720,nuts and seeds,chopped walnuts,
+721,deli meats,chorizo,
+722,deli meats,chorizo or hot Italian sausage,
+723,Oriental products,chrysanthemum,s
+724,meat/poultry,chuck roast,
+725,fresh seafood,chunk-style surimi seafood,
+726,nuts and seeds,chunky no salt peanut butter,
+727,Mexican products,chunky salsa,
+728,nuts and seeds,chunky salted peanut butter,
+729,condiments/sauces,chutney,
+732,vinegars,cider vinegar,
+733,fresh herbs,cilantro,
+735,fresh herbs,cilantro leaves,
+736,fresh herbs,fresh cilantro,
+737,fresh herbs,cilantro sprigs,
+738,spices and seasonings,cinnamon,
+740,cereals,cinnamon granola,
+741,spices and seasonings,cinnamon or nutmeg,
+742,candy,cinnamon red hots,
+743,spices and seasonings,cinnamon stick,s
+745,spices and seasonings,cinnamon sugar,
+747,fresh fruit,citrus fruit,s
+748,fruit juices,citrus juice,
+749,fresh seafood,clam,s
+750,canned/bottled juice,clam broth,
+751,canned/bottled juice,clam juice,
+752,alcoholic beverages,claret wine,
+753,sweeteners,clear honey,
+755,canned/bottled fruit,cling peach halves in juice,
+756,canned/bottled fruit,cling peach halves in syrup,
+757,canned/bottled fruit,cling peaches,
+758,spices and seasonings,cloves,
+759,sweeteners,clover honey,
+760,meat/poultry,club or minute steak,s
+761,beverages,club soda,
+762,grains,coarse corn grits,
+763,condiments/sauces,coarse Dijon-style mustard,
+764,spices and seasonings,coarse salt,
+765,condiments/sauces,coarse-grained mustard,
+766,spices and seasonings,coarsely ground black pepper,
+768,baking products,cocoa,
+769,baking products,unsweetened cocoa,
+770,fresh fruit,coconut,s
+771,Oriental products,coconut cream,
+772,baking products,coconut flakes,
+773,Oriental products,coconut milk,
+774,oils and fats,coconut oil,
+775,spices and seasonings,coconut extract,
+776,fresh seafood,cod,
+777,fresh seafood,cod fillet,s
+778,hot beverages,coffee,
+779,alcoholic beverages,cognac,
+780,cheese,colby,
+781,dairy,skim milk,
+782,beverages,cold water,
+783,fresh vegetables,collard,s
+784,fresh vegetables,collard greens,
+785,dried beans,colored bean,
+786,fresh fruit,comice pear,s
+787,fresh vegetables,commercial mushroom,s
+788,fresh fruit,concord grapes,
+789,soups,condensed chicken broth,
+790,soups,cond. reduced-sodium tomato soup,
+791,baking products,confectioners chocolate,
+792,baking products,confectioners' sugar,
+795,dried beans,cooked adzuki beans,
+797,fresh seafood,cooked bay shrimp,
+799,dried beans,cooked black eye peas,
+800,dried beans,cooked black turtle beans,
+802,grains,cooked brown rice,
+803,dried beans,cooked chickpeas,
+804,meat/poultry,cooked chicken,
+805,meat/poultry,cooked chicken breast,
+808,Oriental products,cooked Chinese noodles,
+809,grains,cooked couscous,
+810,dried beans,cooked cranberry beans,
+811,fresh seafood,cooked crawfish tails,
+813,pasta/noodles,cooked egg noodle,s
+815,pasta/noodles,cooked fettuccine or linguine,
+816,fresh seafood,cooked fish,
+817,pasta/noodles,cooked fresh spinach pasta,
+818,dried beans,cooked garbanzo beans,
+819,dried beans,cooked Great Northern beans,
+820,Oriental noodles,cooked Japanese soba noodles,
+821,dried beans,cooked kidney beans,
+823,dried beans,cooked lentils,
+824,pasta/noodles,cooked linguine,
+825,grains,cooked long grain and wild rice,
+827,fresh seafood,cooked medium shrimp,
+828,pasta/noodles,cooked mostaccioli,
+829,pasta/noodles,cooked Mueller's macaroni,
+830,pasta/noodles,cooked Mueller's ridged elbow macaroni,
+831,pasta/noodles,cooked Mueller's ridged mostaccioli,
+832,pasta/noodles,cooked noodles,
+835,dried beans,garbanzo beans,
+837,dried beans,pinto beans,
+840,fresh seafood,shrimp,
+841,grains,cooked rice,
+844,fresh seafood,cooked shrimp,
+847,pasta/noodles,cooked small macaroni,
+848,dried beans,cooked small white beans,
+849,dried beans,cooked soybeans,
+850,pasta/noodles,cooked spaghetti,
+851,meat/poultry,cooked turkey,
+852,meat/poultry,cooked turkey breast,
+857,grains,cooked wild rice,
+858,baking products,cookie crumbs,
+861,oils and fats,cooking oil,
+862,alcoholic beverages,cooking wine,
+863,deli meats,coppa salami,
+864,spices and seasonings,coriander,
+865,fresh herbs,coriander leaves,
+866,fresh herbs,coriander root,
+867,spices and seasonings,coriander seeds,
+868,fresh vegetables,corn,
+869,baking products,corn bran,
+870,snack foods,corn chips,
+871,fresh vegetables,fresh corn ear,s
+872,cereals,corn flake crumbs,
+873,cereals,corn flakes,
+874,grains,corn grits,
+875,fresh vegetables,corn husk,s
+876,frozen vegetables,corn kernels,
+877,grains,corn meal,
+878,oils and fats,corn oil,
+879,fresh vegetables,corn on the cob,
+882,sweeteners,corn syrup,
+884,canned meat,corned beef,
+885,pickled fruit/vegetables,cornichon pickles,
+886,frozen meat/poultry/seafood,Rock Cornish game hen,s
+889,baking products,cornstarch,
+892,dairy,cottage cheese,
+893,deli meats,cotto salami,
+894,breads,country bread,
+895,fresh vegetables,Country Fresh mushroom,s
+896,condiments/sauces,country-style Dijon mustard,
+897,meat/poultry,country-style pork spareribs,
+898,grains,couscous,
+900,fresh seafood,crab,
+901,fresh fruit,crab apple,s
+902,fresh seafood,crab meat,
+903,fresh seafood,crab surimi seafood chunks,
+905,spices and seasonings,cracked black pepper,
+906,grains,cracked bulgur wheat,
+909,spices and seasonings,cracked peppercorns,
+910,grains,cracked wheat,
+911,grains,cracker meal,
+912,fresh fruit,cranberry,#NAME?
+913,dried beans,cranberry beans,
+914,fruit juices,"cranberry juice, unsweetened",
+915,canned/bottled juice,cranberry juice cocktail,
+916,canned/bottled fruit,cranberry sauce,
+917,fresh fruit,crane melon,s
+918,fresh seafood,crawfish tails,
+920,dairy,cream,
+921,dairy,cream cheese,
+923,cereals,cream of rice,
+924,baking products,cream of tartar,
+925,cereals,cream of wheat,
+927,alcoholic beverages,cream sherry,
+932,dairy,creme fraiche,
+933,fresh fruit,crenshaw melon,s
+935,fresh vegetables,crimini mushroom,s
+936,cereals,crisp rice cereal,
+938,fresh vegetables,crookneck squash,
+940,bread products,croutons,
+941,fresh herbs,crumbled rosemary,
+942,cereals,crunchy nugget-type cereal,
+943,nuts and seeds,crunchy peanut butter,
+944,spices and seasonings,crushed coriander seeds,
+947,spices and seasonings,crushed oregano leaves,
+949,canned/bottled fruit,canned crushed pineapple in juice,
+954,spices and seasonings,crushed red hot pepper,
+955,spices and seasonings,crushed red pepper flakes,
+956,spices and seasonings,crushed red pepper,
+958,spices and seasonings,crushed red pepper pods,
+963,breads,crusty bread,
+964,breads,crusty roll,s
+965,spices and seasonings,crystallized ginger,
+966,meat/poultry,cube steak,s
+967,fresh vegetables,cucumber,s
+968,spices and seasonings,cumin,
+971,spices and seasonings,cumin powder,
+972,spices and seasonings,cumin seeds,
+973,meat/poultry,cured ham,
+974,fresh vegetables,curly lettuce leaves,
+975,fresh fruit,currants,
+976,jams and jellies,currant jelly,
+979,spices and seasonings,curry,
+980,spices and seasonings,curry powder,
+984,condiments/sauces,curry sauce,
+985,fresh vegetables,cut asparagus tips,
+987,fresh vegetables,daikon,s
+989,Oriental vegetables,daikon radish,es
+991,fresh vegetables,dandelion greens,
+992,Oriental products,dark barley miso,
+993,breads,dark bread,s
+994,baking products,dark brown sugar,
+995,sweeteners,dark corn syrup,
+996,sweeteners,dark molasses,
+997,dried fruit,dark raisins,
+998,alcoholic beverages,dark rum,
+999,oils and fats,dark sesame oil,
+1000,Oriental products,dark soy sauce,
+1001,canned/bottled fruit,dark sweet cherries in heavy syrup,
+1002,canned/bottled fruit,dark sweet cherries,
+1004,fresh fruit,dates,
+1005,sweeteners,date sugar,
+1007,miscellaneous,debittered brewer's yeast,
+1009,soups,defatted chicken stock,
+1010,baking products,defatted soybean flour,
+1011,dried fruit,dehydrated cranberries,
+1012,dried vegetables,dehydrated mashed potato flakes,
+1013,spices and seasonings,dehydrated onion flakes,
+1014,soups,dehydrated onion soup mix,
+1016,deli meats,deli beef,
+1017,deli,deli coleslaw,
+1018,fresh vegetables,delicata squash,
+1019,dairy,dessert topping,
+1020,fresh vegetables,diced chili peppers,
+1021,Mexican products,canned diced mild green chiles,
+1022,dairy,diet margarine,
+1023,dairy,reduced calorie margarine,
+1024,condiments/sauces,diet tartar sauce,
+1025,condiments/sauces,Dijon mustard,
+1029,spices and seasonings,dill,
+1030,spices and seasonings,dill seeds,
+1031,fresh herbs,dill sprigs,
+1032,spices and seasonings,dill weed,
+1034,vinegars,distilled vinegar,
+1037,fresh seafood,dragon prawn,s
+1038,canned/bottled fruit,drained pitted tart cherries,
+1040,Oriental products,dried agar,
+1041,dried fruit,dried apples,
+1042,dried fruit,dried apricots,
+1043,dried fruit,dried apricot halves,
+1049,dried vegetables,dried black mushroom,s
+1050,dried vegetables,dried celery,
+1051,dried vegetables,dried cepes or dried mushrooms,
+1052,dried fruit,dried cherries,
+1053,dried vegetables,dried chili pepper,s
+1054,dried vegetables,dried Chinese mushroom,s
+1055,spices and seasonings,dried chives,
+1056,spices and seasonings,dried cilantro,
+1058,pasta/noodles,corkscrew pasta,
+1061,spices and seasonings,dried dill weed,
+1062,pasta/noodles,fettuccine,
+1063,dried fruit,dried figs,
+1064,nuts and seeds,dried filberts,
+1065,Oriental products,dried frozen tofu,
+1066,dried fruit,dried fruit,
+1069,Oriental products,dried ginkgo nuts,
+1070,dried beans,Great Northern beans,
+1071,bread products,dried herb seasoned stuffing cubes,
+1072,spices and seasonings,dried herbs de Provence,
+1073,spices and seasonings,dried Italian herbs,
+1074,spices and seasonings,dried Italian seasoning,
+1076,dried fruit,dried kiwi,
+1077,dried fruit,dried large apricots,
+1080,dried fruit,dried mangoes,
+1081,spices and seasonings,marjoram,
+1082,spices and seasonings,dried mint,
+1083,dried vegetables,dried mushrooms,
+1085,spices and seasonings,dried onion flakes,
+1086,spices and seasonings,oregano,
+1087,spices and seasonings,dried oregano,
+1088,spices and seasonings,parsley,
+1089,dried fruit,dried peaches,
+1090,dried fruit,dried pear halves,
+1091,dried fruit,dried pears,
+1094,spices and seasonings,dried pimiento,
+1096,spices and seasonings,dried red chili pepper,
+1097,spices and seasonings,dried red hot pepper,s
+1098,spices and seasonings,dried rosemary,
+1099,spices and seasonings,dried sage,
+1101,spices and seasonings,dried savory,
+1102,dried seafood,dried shrimp,
+1103,dried seafood,dried shrimp powder,
+1105,spices and seasonings,dried tangerine peel,
+1106,spices and seasonings,dried tarragon,
+1108,spices and seasonings,dried thyme,
+1110,dried vegetables,dried tomato halves,
+1114,dried vegetables,dried wild mushrooms,
+1117,baking products,dry biscuit mix,
+1120,dried beans,dried blackeyes,
+1122,bread products,dry bread crumbs,
+1123,grains,dry bulgur,
+1124,grains,dry bulgur wheat,
+1125,cheese,dry cheese,
+1127,dairy,dry curd cottage cheese,
+1128,alcoholic beverages,dry dessert wine,
+1129,bread products,fine dry bread crumbs,
+1130,hot beverages,dry instant espresso,
+1131,cheese,dry jack,
+1132,dried beans,dried lentils,
+1133,pasta/noodles,dry linguine or spaghetti,
+1135,condiments/sauces,dry mustard,
+1137,powdered dairy,regular nonfat dry milk,
+1138,cereals,dry oat bran high-fiber hot cereal,
+1139,salad dressings,dry ranch dressing mix,
+1141,alcoholic beverages,dry red wine,
+1142,nuts and seeds,dry roasted almonds,
+1143,nuts and seeds,dry roasted peanuts,
+1144,nuts and seeds,dry roasted salted peanuts,
+1145,dried beans,dry roasted soybeans,
+1146,deli meats,dry salami,
+1147,alcoholic beverages,dry sherry,
+1151,spices and seasonings,dry taco seasoning mix,
+1153,alcoholic beverages,dry vermouth,
+1155,alcoholic beverages,dry white wine,
+1159,powdered dairy,whole powdered milk,
+1162,meat/poultry,duck,
+1163,eggs,duck egg,s
+1164,meat/poultry,duckling,s
+1165,deli meats,dutch loaf,
+1166,hot beverages,Earl Grey Tea,
+1168,cheese,edam,
+1169,fresh vegetables,edible flower,s
+1170,fresh seafood,eel,s
+1171,eggs,egg,s
+1172,breads,egg bread,
+1173,pasta/noodles,egg noodles,
+1176,pasta/noodles,egg or spinach noodles,
+1177,pasta/noodles,egg pastina,
+1178,dairy,liquid egg substitute,
+1180,eggs,egg white,s
+1181,eggs,egg yolk,s
+1182,fresh vegetables,eggplant,s
+1183,pasta/noodles,elbow macaroni,
+1184,fresh vegetables,elephant garlic,
+1185,fresh fruit,emperor grape,s
+1187,fresh vegetables,endive,s
+1188,fresh vegetables,English cucumber,s
+1189,breads,English muffin,s
+1190,fresh vegetables,enoki mushroom,s
+1191,pasta/noodles,enriched pasta,
+1192,condiments/sauces,envelope enchilada sauce mix,
+1193,gelatin,envelope Knox Unflavored Gelatine,
+1194,soups,envelope onion soup mix,
+1196,fresh vegetables,escarole,
+1197,hot beverages,espresso beans,
+1198,canned dairy,evaporated lowfat milk,
+1199,canned dairy,evaporated milk,
+1200,canned dairy,evaporated skim milk,
+1201,meat/poultry,extra lean ground beef,
+1202,deli meats,extra lean ham,
+1203,deli meats,extra lean smoked ham slice,s
+1204,dairy,extra light corn oil spread,
+1205,oils and fats,extra light olive oil,
+1206,spices and seasonings,extra spicy herb and spice seasoning,
+1207,oils and fats,extra virgin olive oil,
+1210,condiments/sauces,fajita sauce,
+1213,cheese,farmer cheese,
+1214,baking products,quick-rise active dry yeast,
+1215,soups,fat-free chicken broth,
+1218,canned/bottled vegetables,fava beans,
+1219,fresh vegetables,fennel,
+1221,fresh vegetables,fennel leaves,
+1222,spices and seasonings,fennel seeds,
+1223,spices and seasonings,fenugreek,
+1224,condiments/sauces,fermented black beans,
+1225,cheese,feta cheese,
+1227,pasta/noodles,fettucine,
+1228,pasta/noodles,fettuccine nida,
+1233,meat/poultry,filet mignon,s
+1234,fresh seafood,tuna fillet,
+1235,frozen baking products,filo,
+1237,spices and seasonings,fines herbes,
+1238,bread products,fine soft bread crumbs,
+1239,spices and seasonings,finely ground black pepper,
+1241,fresh vegetables,fingerling potato,es
+1242,fresh seafood,firm fish fillet,s
+1243,fresh fruit,firm ripe banana,s
+1244,vegetarian products,firm tofu,
+1245,fresh seafood,firm white fish,
+1246,fresh seafood,firm white fish fillet,s
+1247,dairy,yogurt,
+1248,fresh fruit,firm-ripe Anjou pear,s
+1249,baking products,firmly packed brown sugar,
+1251,fresh seafood,fish,
+1252,fresh seafood,fish fillet,s
+1255,condiments/sauces,fish sauce,
+1257,spices and seasonings,five-spice powder,
+1258,baking products,flaked coconut,
+1259,meat/poultry,flank steak,s
+1260,canned fish,flat anchovy fillets,
+1261,fresh herbs,flat-leaf parsley,
+1262,dairy,flavored yogurt,
+1265,fresh seafood,flounder fillet,s
+1267,baking products,flour,
+1270,cheese,Fontina cheese,
+1272,miscellaneous,food color,
+1273,dried vegetables,freeze dried leek,s
+1274,spices and seasonings,freeze dried parsley,
+1275,dried vegetables,freeze dried shallot,s
+1276,breads,French bread,
+1277,breads,French bread slice,s
+1278,salad dressings,French salad dressing,
+1281,breads,French roll,s
+1283,frozen vegetables,French style green beans,
+1284,frozen desserts,French vanilla ice cream,
+1285,fresh vegetables,fresh Anaheim chile,s
+1286,fresh fruit,fresh apricot,s
+1287,fresh vegetables,fresh artichoke hearts,
+1288,fresh vegetables,fresh asparagus,
+1289,fresh vegetables,fresh asparagus spears,
+1292,fresh herbs,fresh basil,
+1293,fresh herbs,fresh basil leaf,#NAME?
+1294,fresh herbs,fresh basil sprigs,
+1295,fresh vegetables,fresh bean sprouts,
+1296,fresh fruit,fresh berries,
+1297,fresh fruit,fresh blackberry,#NAME?
+1298,fresh fruit,fresh blueberry,#NAME?
+1299,bread products,fresh bread crumbs,
+1300,fresh vegetables,fresh broccoli,
+1302,fresh vegetables,fresh button mushrooms,
+1303,fresh fruit,fresh California Bartlett pear,s
+1305,fresh fruit,fresh California peach,es
+1308,fresh fruit,fresh cherry,#NAME?
+1309,fresh herbs,fresh chervil,
+1310,Oriental noodles,fresh Chinese noodles,
+1311,fresh vegetables,fresh Chinese pea pods,
+1312,fresh herbs,fresh chives,
+1316,fresh herbs,fresh coriander,
+1317,fresh herbs,fresh coriander sprigs,
+1319,fresh vegetables,fresh corn husk,s
+1320,fresh vegetables,fresh corn kernels,
+1322,fresh fruit,fresh cranberry,#NAME?
+1323,fresh herbs,fresh dill weed,
+1326,fresh vegetables,fresh edible flowers,
+1327,fresh vegetables,fresh fennel,
+1328,fresh vegetables,fresh field corn kernels,
+1331,fresh fruit,fresh fruit,s
+1333,fresh vegetables,fresh garlic clove,s
+1334,fresh herbs,fresh ginger root,
+1337,fresh fruit,fresh grapefruit,s
+1339,spices and seasonings,fresh ground black pepper,
+1342,fresh herbs,fresh herbs,
+1343,fresh vegetables,fresh Idaho potato,es
+1344,fresh vegetables,fresh jalapeno pepper,s
+1345,fresh vegetables,fresh or canned jalapeno peppers,
+1347,fresh vegetables,fresh kale,
+1349,fresh fruit,fresh lemon,s
+1350,fresh fruit/vegetable juices,fresh lemon juice,
+1351,fresh fruit,fresh lemon peel,s
+1352,fresh fruit/vegetable juices,fresh lime juice,
+1354,fresh herbs,fresh marjoram,
+1356,fresh herbs,fresh mint,
+1357,fresh herbs,fresh mint leaves,
+1358,fresh herbs,fresh mint sprigs,
+1359,cheese,mozzarella cheese,
+1360,fresh vegetables,fresh mushroom,s
+1363,fresh fruit,fresh Northwest sweet cherries,
+1364,fresh vegetables,fresh okra,
+1366,fresh vegetables,jalapeno pepper,s
+1367,fresh vegetables,mushroom,s
+1369,fresh vegetables,fresh or defrosted frozen corn kernels,
+1373,fresh fruit,fresh or frozen blueberries,
+1375,fresh seafood,fresh or frozen catfish fillet,s
+1376,fresh fruit,fresh or frozen cranberries,
+1377,fresh vegetables,fresh or frozen green beans,
+1379,fresh seafood,fresh or frozen fish fillet,s
+1382,fresh vegetables,fresh or frozen kale,
+1383,fresh vegetables,fresh or frozen okra,
+1384,fresh vegetables,fresh peas,
+1385,fresh vegetables,fresh or frozen snow peas,
+1386,fresh seafood,fresh or frozen sole fillet,s
+1387,fresh seafood,fresh or frozen squid,
+1388,fresh fruit,fresh or frozen unsweetened raspberries,
+1389,fresh vegetables,fresh or frozen whole corn,
+1391,Mexican products,fresh or thawed frozen corn tortilla,s
+1393,fresh fruit/vegetable juices,fresh orange juice,
+1396,fresh herbs,fresh oregano,
+1402,fresh fruit,fresh peach,es
+1404,fresh fruit,fresh pear,s
+1410,fresh fruit,fresh plum,s
+1412,meat/poultry,fresh pork sausage,
+1413,fresh vegetables,fresh pumpkin,s
+1414,fresh fruit,fresh raspberry,#NAME?
+1415,fresh fruit,fresh ripe California Bartlett pear,s
+1416,fresh fruit,ripe California nectarine,s
+1417,fresh fruit,fresh ripe California peach,es
+1420,fresh herbs,fresh rosemary,
+1422,fresh herbs,fresh sage,
+1423,fresh herbs,fresh sage leaves,
+1424,fresh seafood,fresh salmon,
+1425,Mexican products,fresh salsa,
+1426,fresh fruit,fresh seedless green grapes,
+1427,fresh seafood,fresh side of salmon with skin,
+1432,meat/poultry,skinless boneless turkey,
+1434,fresh vegetables,snow peas,
+1435,fresh vegetables,fresh spinach,
+1436,fresh vegetables,fresh spinach leaves,
+1437,pasta/noodles,"fresh spinach pasta, raw",
+1438,meat/poultry,skinless chicken breast halves,
+1439,fresh fruit,fresh squeezed lime juice,
+1440,fresh fruit,fresh strawberry,#NAME?
+1442,fresh vegetables,fresh sweet peas,
+1443,fresh herbs,fresh tarragon,
+1445,fresh herbs,fresh thyme,
+1446,fresh herbs,fresh thyme leaves,
+1448,fresh seafood,fresh tuna,
+1449,fresh fruit,fresh USA pear,s
+1450,fresh vegetables,fresh vegetable sticks,
+1451,fresh vegetables,fresh vine leaves or packed in brine,
+1452,bread products,fresh whole wheat bread crumbs,
+1455,spices and seasonings,freshly grated nutmeg,
+1457,cheese,freshly grated parmesan cheese,
+1460,spices and seasonings,freshly ground white pepper,
+1461,grains,freshly popped popcorn,
+1463,fresh herbs,Frieda's chopped fresh basil,
+1464,fresh herbs,Frieda's chopped fresh dill,
+1465,fresh herbs,Frieda's chopped Fresh Sage,
+1466,fresh herbs,Frieda's chopped Fresh Thyme,
+1467,dried vegetables,Frieda's Dried Habanero Chile,
+1468,dried vegetables,dried tomatoes,
+1469,fresh vegetables,Frieda's Elephant Garlic,
+1470,spices and seasonings,Frieda's Fresh chopped cilantro,
+1471,fresh herbs,Frieda's Fresh Mint sprigs,
+1472,fresh vegetables,Frieda's Jicama,
+1473,fresh vegetables,Frieda's Limestone Lettuce,
+1474,fresh vegetables,Frieda's Spaghetti Squash,
+1475,Oriental products,Frieda's Won Ton Wrappers,
+1476,fresh vegetables,Frieda's Yellow Finnish potato,es
+1477,meat/poultry,frog leg,s
+1478,dairy,fromage blanc,
+1481,frozen vegetables,frozen artichoke hearts,
+1482,frozen vegetables,frozen asparagus spears,
+1484,frozen baking products,frozen bread dough,
+1485,frozen vegetables,frozen broccoli,
+1486,frozen vegetables,frozen broccoli spears,
+1487,frozen vegetables,frozen cauliflower,
+1488,frozen vegetables,frozen chopped broccoli,
+1490,frozen vegetables,frozen chopped spinach,
+1491,frozen meat/poultry/seafood,frozen cod fillet,s
+1492,frozen vegetables,frozen corn,
+1493,frozen vegetables,frozen corn on the cob,
+1494,Mexican products,frozen corn tortilla,s
+1495,frozen fruit,frozen cranberry juice,
+1496,frozen vegetables,frozen creamed spinach,
+1497,frozen vegetables,frozen green beans,
+1498,frozen desserts,frozen dessert topping,
+1500,frozen vegetables,frozen edible pod peas,
+1501,frozen dairy,frozen egg substitute,
+1502,frozen baking products,frozen enriched roll dough,
+1503,frozen meat/poultry/seafood,frozen fish fillet,s
+1504,frozen meat/poultry/seafood,frozen flounder fillet,s
+1505,frozen vegetables,frozen French style green beans,
+1507,frozen vegetables,frozen green peas,
+1508,frozen meat/poultry/seafood,frozen halibut steak,s
+1509,frozen vegetables,frozen Japanese vegetables,
+1510,frozen vegetables,frozen kale,
+1511,frozen vegetables,frozen kernel corn,
+1512,frozen fruit,frozen lemonade concentrate,
+1513,frozen desserts,frozen light dessert topping,
+1514,frozen fruit,frozen mixed citrus juice concentrate,
+1517,frozen vegetables,frozen okra,
+1518,frozen vegetables,frozen or fresh corn kernels,
+1519,frozen vegetables,frozen or fresh peas,
+1520,frozen fruit,frozen orange juice concentrate,
+1522,frozen vegetables,frozen pea pods,
+1523,frozen vegetables,frozen pearl onions,
+1524,frozen vegetables,frozen peas,
+1525,frozen vegetables,frozen petite peas,
+1526,frozen baking products,frozen pizza dough,
+1527,frozen vegetables,frozen potato skins,
+1528,frozen baking products,frozen puff pastry,
+1529,frozen fruit,frozen raspberries,
+1530,frozen fruit,frozen raspberries in light syrup,
+1531,frozen fruit,frozen raspberries in syrup,
+1532,frozen vegetables,frozen shredded hash brown potatoes,
+1534,frozen vegetables,frozen spinach,
+1535,frozen fruit,frozen strawberries,
+1536,frozen fruit,frozen strawberries in sugar,
+1538,frozen vegetables,frozen sugar snap peas or snow pea pods,
+1539,frozen vegetables,frozen summer squash,
+1540,frozen vegetables,frozen tiny peas,
+1541,frozen meat/poultry/seafood,frozen tiny shrimp,
+1542,frozen fruit,frozen unconcentrated lemon juice,
+1543,frozen baking products,frozen unenriched roll dough,
+1544,frozen fruit,frozen unsweetened mixed fruit,
+1545,frozen fruit,frozen unsweetened strawberries,
+1546,frozen desserts,frozen vanilla yogurt,
+1547,frozen vegetables,frozen vegetables,
+1548,frozen vegetables,frozen white corn kernels,
+1549,frozen vegetables,frozen whole kernel corn,
+1550,frozen vegetables,frozen winter squash,
+1551,frozen vegetables,frozen yellow corn,
+1552,frozen desserts,frozen yogurt,
+1553,sweeteners,fructose,
+1554,fresh fruit,fruit,s
+1555,jams and jellies,fruit jelly,
+1559,vinegars,fruit vinegar,
+1560,oils and fats,fruity olive oil,
+1561,alcoholic beverages,fruity red wine,
+1562,alcoholic beverages,fruity zinfandel,
+1564,fresh fruit,fuiorelli pear,s
+1566,pasta/noodles,fusilli,
+1567,pasta/noodles,fusilli or penne,
+1568,condiments/sauces,Gaeta olive,s
+1569,condiments/sauces,Gaeta or Kalamata olive,s
+1572,fresh vegetables,garden cress,
+1573,fresh vegetables,garlic clove,s
+1574,fresh herbs,garlic chive,s
+1576,fresh vegetables,large garlic clove,s
+1577,spices and seasonings,garlic powder,
+1578,spices and seasonings,garlic powder with parsley,
+1579,spices and seasonings,garlic salt,
+1585,gelatin,gelatin,
+1586,deli meats,Genoa salami,s
+1587,condiments/sauces,German mustard,
+1589,oils and fats,ghee,
+1590,pasta/noodles,large pasta shells,
+1591,meat/poultry,giblets,
+1592,alcoholic beverages,gin,
+1593,spices and seasonings,ginger,
+1594,beverages,ginger ale,
+1598,grains,glutinous rice,
+1599,cheese,goat cheese,
+1600,fresh vegetables,gold bell pepper,s
+1601,frozen fruit,gold raspberries,
+1602,canned/bottled fruit,gold raspberry preserves,
+1603,fresh fruit,golden delicious apple,s
+1604,dried fruit,golden raisins,
+1605,fresh vegetables,golden zucchini,s
+1606,meat/poultry,goose,
+1607,oils and fats,goose fat,
+1608,canned meat,goose liver,s
+1609,fresh fruit,gooseberry,#NAME?
+1610,cheese,gorgonzola,
+1611,cheese,gouda,
+1612,cookies/crackers,graham crackers,
+1613,cookies/crackers,graham cracker crumbs,
+1615,alcoholic beverages,Grand Marnier,
+1616,fresh fruit,Granny Smith apple,s
+1618,cereals,granola,
+1619,baking products,granulated sugar,
+1621,fresh fruit,grapes,
+1622,frozen juices/drinks,grape juice,
+1623,cereals,Grape Nuts cereal,
+1625,fresh fruit,grapefruit,
+1626,frozen fruit,grapefruit juice,
+1627,fresh fruit,grapefruit section,s
+1635,spices and seasonings,Greek oregano,
+1636,frozen vegetables,green beans,
+1638,fresh vegetables,green cabbage,
+1639,spices and seasonings,green cardamom pod,s
+1640,fresh vegetables,green chili,
+1642,fresh vegetables,green chili pepper,s
+1643,baking products,green food color,
+1644,fresh fruit,green grapes,
+1645,fresh vegetables,green leaf lettuce,
+1646,dried beans,green lentils,
+1647,condiments/sauces,green olive,s
+1648,fresh vegetables,green onion,s
+1649,fresh vegetables,green onion fans,
+1650,fresh vegetables,green onions including tops,
+1651,fresh vegetables,green onion tops,
+1657,fresh vegetables,green or red bell pepper,s
+1659,fresh vegetables,green or yellow bell pepper,s
+1661,fresh fruit,green papaya,s
+1662,fresh vegetables,green pea,s
+1664,fresh vegetables,green Serrano chile,s
+1665,fresh vegetables,green squash,
+1666,Mexican products,green taco sauce or Tomatillo Salsa,
+1668,fresh vegetables,greens,
+1669,sweeteners,grenadine syrup,
+1670,cereals,grits,
+1671,spices and seasonings,ground allspice,
+1672,spices and seasonings,ground almonds,
+1673,spices and seasonings,ground basil,
+1676,meat/poultry,ground Beef Top Round,
+1679,spices and seasonings,ground cardamom,
+1680,spices and seasonings,ground cayenne pepper,
+1682,meat/poultry,ground chuck,
+1683,meat/poultry,ground chuck burger,
+1684,spices and seasonings,ground cinnamon,
+1685,spices and seasonings,ground cloves,
+1686,spices and seasonings,ground coriander,
+1687,spices and seasonings,ground coriander seed,
+1688,spices and seasonings,ground cumin,
+1690,spices and seasonings,ground ginger,
+1692,meat/poultry,ground lamb,
+1693,meat/poultry,ground lean American lamb,
+1694,spices and seasonings,mace,
+1695,spices and seasonings,ground marjoram,
+1696,spices and seasonings,nutmeg,
+1697,spices and seasonings,nutmeg or allspice,
+1700,spices and seasonings,ground pepper,
+1701,meat/poultry,ground pork,
+1704,meat/poultry,ground round burger,
+1705,spices and seasonings,ground sage,
+1706,meat/poultry,ground sirloin burger,
+1707,spices and seasonings,ground thyme,
+1708,meat/poultry,ground turkey,
+1710,spices and seasonings,ground turmeric,
+1711,meat/poultry,ground veal,
+1713,spices and seasonings,ground white or red pepper,
+1714,spices and seasonings,ground white pepper,
+1715,cheese,Gruyere cheese,
+1716,Mexican products,guacamole,
+1718,fresh fruit,guava,s
+1719,fruit juices,guava juice,
+1720,jams and jellies,guava paste,
+1721,meat/poultry,guinea,s
+1722,spices and seasonings,gumbo seasoning,
+1724,fresh seafood,haddock,
+1725,fresh seafood,haddock fillet,s
+1727,dairy,half and half,
+1729,fresh seafood,halibut,
+1730,fresh seafood,halibut fillet,s
+1731,fresh seafood,halibut or other white fish steaks,
+1732,fresh seafood,halibut steak,s
+1733,fresh seafood,halibut steaks or fillets,
+1734,meat/poultry,ham,
+1735,meat/poultry,ham bone,s
+1736,meat/poultry,ham hock,s
+1738,frozen meat/poultry/seafood,frozen hamburger,s
+1739,eggs,hard cooked egg,s
+1740,eggs,hard boiled egg,s
+1741,cheese,hard Parmesan cheese,
+1742,breads,hard roll,s
+1744,cheese,havarti,
+1745,nuts and seeds,hazelnuts,
+1746,spices and seasonings,hazelnut extract,
+1748,deli,head cheese,
+1749,fresh vegetables,head lettuce,
+1751,frozen dairy,Healthy Choice Cholesterol Free Egg Prod,
+1752,canned/bottled vegetables,hearts of palm,
+1753,dairy,heavy cream,
+1755,dairy,heavy or whipping cream,
+1757,fresh vegetables,hedgehog mushroom,s
+1758,salad dressings,Hellmann's Light mayonnaise dressing,
+1759,salad dressings,Hellmann's or Best Foods lt mayonnaise,
+1760,salad dressings,Hellmann's or Best Foods mayonnaise,
+1762,fresh herbs,herb leaves,
+1763,spices and seasonings,herb pepper seasoning,
+1764,spices and seasonings,herb seasoning,
+1765,spices and seasonings,herbal salt substitute,
+1766,canned fish,herring,
+1767,baking products,HERSHEY'S Cocoa,
+1769,dairy,high polyunsaturated fat margarine,
+1770,dairy,high polyunsaturated margarine,
+1771,oils and fats,high polyunsaturated oil,
+1772,Oriental products,hoisin sauce,
+1777,tomato sauces,homestyle spaghetti sauce,
+1778,canned/bottled vegetables,hominy,
+1779,cereals,hominy grits,
+1780,sweeteners,honey,
+1781,meat/poultry,honey baked ham,s
+1782,condiments/sauces,honey mustard,
+1784,breads,honey wheat bread,
+1786,fresh fruit,honeydew melon,s
+1788,fresh herbs,horseradish,
+1789,condiments/sauces,horseradish sauce,
+1790,Oriental products,hot chili oil,
+1791,Oriental products,hot chili paste,
+1792,fresh vegetables,hot chili pepper,s
+1793,spices and seasonings,hot chili powder,
+1794,condiments/sauces,hot mango chutney,
+1795,fresh vegetables,hot pepper,s
+1796,spices and seasonings,hot pepper flakes,
+1797,oils and fats,hot pepper oil,
+1798,condiments/sauces,hot pepper sauce,
+1801,Oriental products,hot sesame oil,
+1802,deli meats,hot smoked sausage link,s
+1803,beverages,hot water,
+1804,deli meats,hotdog,s
+1806,beverages,ice,
+1807,frozen desserts,chocolate ice cream,
+1808,frozen desserts,vanilla ice cream,
+1809,frozen desserts,rich vanilla ice cream,
+1810,beverages,ice cubes,
+1811,frozen desserts,ice milk,
+1812,beverages,ice water,
+1813,fresh vegetables,iceberg lettuce,
+1814,fresh vegetables,Idaho potato,es
+1815,fresh seafood,imitation crab,
+1816,dairy,imitation ice cream,
+1817,dairy,imitation sour cream,
+1818,fresh seafood,imitation surimi shrimp,
+1819,oils and fats,imported walnut oil,
+1820,candy,imported white chocolate,
+1822,baking products,individual graham cracker tart shells,
+1824,spices and seasonings,instant chicken broth and seasoning,
+1825,hot beverages,instant coffee,
+1826,cereals,instant cream of wheat,
+1827,spices and seasonings,instant dried onion,
+1828,hot beverages,instant coffee powder,
+1830,hot beverages,instant espresso powder,
+1831,spices and seasonings,instant minced onion,
+1833,powdered dairy,instant nonfat dry milk,
+1835,grains,instant polenta,
+1838,frozen vegetables,Italian beans,
+1839,breads,Italian bread,
+1840,bread products,Italian bread crumbs,
+1841,bread products,Italian bread cubes,
+1842,tomato products,Italian cooking sauce,
+1843,salad dressings,Italian dressing without oil,
+1844,fresh vegetables,Italian eggplant,s
+1845,fresh herbs,Italian flat-leaf parsley,
+1846,spices and seasonings,Italian herbs,
+1847,spices and seasonings,Italian herb seasoning,
+1848,dried vegetables,Italian mushroom,s
+1849,condiments/sauces,Italian olive,s
+1853,fresh vegetables,Italian pepper,s
+1854,canned/bottled vegetables,Italian peppers or pepperoccinis,
+1856,alcoholic beverages,Italian red wine,
+1858,salad dressings,Italian salad dressing,
+1859,deli meats,Italian sausage meat,
+1860,spices and seasonings,Italian seasoning,
+1862,tomato sauces,Italian tomato sauce,
+1864,canned fish,tuna packed in olive oil,
+1865,cheese,jack cheese,
+1866,fresh vegetables,jalapeno,s
+1867,fresh vegetables,jalapeno chile,s
+1868,fresh vegetables,jalapeno chili pepper,s
+1869,jams and jellies,jalapeno jelly,
+1871,cheese,Jalepeno pepper Monterey Jack cheese,
+1872,Oriental noodles,Japanese buckwheat noodles,
+1873,fresh vegetables,Japanese eggplant,s
+1875,fresh vegetables,Japanese vegetable,s
+1877,cheese,Jarlsberg cheese,
+1878,tomato products,"jarred CLASSICO Pasta Sauce, any flavor",
+1879,condiments/sauces,jarred pimientos,
+1880,jams and jellies,red pepper jelly,
+1881,spices and seasonings,jarred TABASCO 7 Spice Chili Recipe,
+1882,canned/bottled fruit,jellied cranberry sauce,
+1883,gelatin,jello,
+1884,fresh vegetables,jerusalem artichoke,s
+1885,fresh vegetables,jicama,
+1889,condiments/sauces,jumbo olive,s
+1890,fresh seafood,jumbo shrimp,
+1891,fresh vegetables,kabocha squash,
+1892,condiments/sauces,Kalamata olive,s
+1894,sweeteners,Karo dark corn syrup,
+1895,sweeteners,Karo light corn syrup,
+1896,sweeteners,Karo light or dark corn syrup,
+1899,cereals,Kellogg's 40+ Bran Flakes cereal,
+1900,cereals,Kellogg's All-Bran cereal,
+1902,canned/bottled vegetables,kernel corn,
+1903,condiments/sauces,ketchup,
+1904,dried beans,kidney beans,
+1906,deli meats,kielbasa,
+1907,Oriental products,kim chee,
+1908,fresh seafood,kipper fillet,s
+1909,alcoholic beverages,kirsch,
+1911,fresh fruit,kiwi fruit,s
+1913,gelatin,Knox Unflavored Gelatine,
+1915,fresh vegetables,kohlrabi,
+1916,spices and seasonings,kosher salt,
+1917,Oriental vegetables,kue tao,
+1918,fresh fruit,kumquat,s
+1920,baked goods,ladyfingers,
+1921,meat/poultry,lamb,
+1922,meat/poultry,lamb chop,s
+1923,meat/poultry,lamb cutlet,s
+1924,meat/poultry,lamb kebab,s
+1925,meat/poultry,lamb roast,s
+1926,meat/poultry,lamb sausage,s
+1927,meat/poultry,lamb shank,s
+1928,meat/poultry,lamb shoulder,
+1930,oils and fats,lard,
+1932,fresh vegetables,large baking potato,es
+1933,fresh fruit,large Bartlett pear,s
+1934,fresh vegetables,large green bell pepper,s
+1935,canned/bottled fruit,canned pineapple slices,
+1936,fresh vegetables,large carrot,s
+1937,fresh vegetables,large celery stalk,s
+1938,fresh seafood,large clams,
+1940,Mexican products,large corn tortilla,s
+1941,eggs,large egg,s
+1942,eggs,large egg white,s
+1943,eggs,large egg yolk,s
+1944,fresh fruit,large peach,es
+1945,fresh fruit,pineapple,
+1954,fresh vegetables,large Idaho potato,es
+1955,fresh vegetables,large jalapeno pepper,
+1956,fresh fruit,large lemon,s
+1957,fresh vegetables,large lettuce leaves,
+1959,frozen vegetables,lima beans,
+1960,meat/poultry,meaty ham hocks,
+1961,fresh vegetables,large mushroom,s
+1962,condiments/sauces,large olive,s
+1963,fresh vegetables,large onion,s
+1964,fresh fruit,large orange,s
+1966,fresh fruit,large pear,s
+1967,fresh vegetables,large potato,es
+1969,fresh vegetables,large red bell pepper,s
+1971,fresh vegetables,large red onion,s
+1972,fresh vegetables,large red or green pepper,s
+1974,fresh fruit,large ripe banana,s
+1977,fresh seafood,large shrimp,
+1978,fresh vegetables,large sweet potato,es
+1981,fresh vegetables,large yellow hot pepper,s
+1982,fresh vegetables,large yellow onion,s
+1983,fresh vegetables,large zucchini,s
+1984,pasta/noodles,lasagne noodles,
+1985,pasta/noodles,lasagne,
+1987,condiments/sauces,Lea & Perrins Worcestershire sauce,
+1988,fresh vegetables,leaf amaranth,
+1989,fresh vegetables,leaf lettuce,
+1992,meat/poultry,lean boned beef chuck roast,
+1993,meat/poultry,lean boneless lamb shoulder,s
+1995,deli meats,lean cooked ham,
+1996,meat/poultry,lean American lamb,
+1997,meat/poultry,lean American lamb leg steaks,
+1998,meat/poultry,lean ground beef,
+2000,meat/poultry,lean ground pork,
+2001,meat/poultry,lean ground round,
+2003,meat/poultry,lean hamburger,s
+2004,meat/poultry,lean lamb loin,s
+2005,meat/poultry,lean pork,
+2007,deli meats,lean sausage meat,
+2008,fresh vegetables,leek,s
+2009,fresh vegetables,"leek, white part only",
+2012,meat/poultry,leg of American lamb,
+2013,meat/poultry,leg of lamb,
+2014,fresh fruit,lemon,s
+2016,fresh vegetables,lemon cucumber,s
+2019,fruit juices,lemon juice,
+2020,dairy,lowfat lemon yogurt,
+2021,fruit juices,lemon or lime juice,
+2026,spices and seasonings,lemon pepper,
+2027,fresh fruit,lemon rind,
+2029,fresh fruit,lemon wedge,s
+2030,fresh fruit,lemon wheel,s
+2031,fresh fruit,lemon zest,
+2034,frozen juices/drinks,lemonade,
+2035,frozen juices/drinks,lemonade concentrate,
+2037,dried beans,lentils,
+2038,fresh vegetables,lettuce,
+2042,breads,levain bread,
+2043,baking products,light brown sugar,
+2046,sweeteners,light corn syrup,
+2047,dairy,light cream,
+2048,dairy,light cream cheese,
+2049,frozen desserts,light dessert topping,
+2051,sweeteners,light honey,
+2052,dairy,"light margarine, stick form",
+2053,salad dressings,light mayonnaise,
+2054,cheese,light Monterey jack,
+2055,dairy,light Neufchatel cheese,
+2056,oils and fats,light olive oil,
+2057,dried beans,light red kidney beans,
+2058,salad dressings,low calorie mayonnaise,
+2059,oils and fats,light salad oil,
+2060,spices and seasonings,light salt,
+2061,oils and fats,light sesame oil,
+2062,dairy,light sour cream,
+2063,Oriental products,light soy sauce,
+2064,canned fish,light tuna in oil,
+2065,canned fish,light tuna in water,
+2066,cheese,light velveeta cheese,
+2069,fresh fruit,lime,s
+2070,gelatin,lime gelatin,
+2071,fruit juices,lime juice,
+2072,fruit juices,lime or lemon juice,
+2073,fresh fruit,lime peel,
+2074,fresh fruit,lime rind,
+2075,fresh fruit,lime slice,s
+2077,frozen juices/drinks,limeade concentrate,
+2078,pasta/noodles,linguine,
+2081,hot beverages,Lipton Cinnamon Apple Herbal Tea Bags,
+2082,hot beverages,Lipton Flo-Thru Tea Bags,
+2083,hot beverages,Lipton Special Blend Honey Lemon Tea Bag,
+2086,condiments/sauces,liquid hot pepper sauce,
+2087,spices and seasonings,liquid woodsmoke flavoring,
+2088,Oriental products,litchis,
+2089,salad dressings,lite salad dressing,
+2090,cheese,lite cheese,
+2091,salad dressings,lite Italian salad dressing,
+2092,cheese,lowfat ricotta cheese,
+2094,salad dressings,lite vinaigrette dressing,
+2095,meat/poultry,liver,
+2096,deli meats,liverwurst,
+2098,breads,loaf French bread,
+2099,fresh seafood,lobster,s
+2100,frozen fruit,loganberries,
+2101,jams and jellies,loganberry preserves,
+2102,fresh vegetables,long beans,
+2104,fresh vegetables,long European seedless cucumber,s
+2105,fresh vegetables,long French radish,es
+2106,grains,long grain rice,
+2108,grains,long grain wild rice,
+2110,fresh seafood,long thin fish fillet,s
+2111,pasta/noodles,long thin spaghetti,
+2114,Oriental products,longan,s
+2115,fresh fruit,loquat,s
+2117,Oriental vegetables,lotus root,
+2118,condiments/sauces,Louisiana-style hot sauce,
+2120,dairy,low calorie cream cheese,
+2121,salad dressings,low calorie Italian salad dressing,
+2124,soups,low sodium beef broth,
+2125,soups,low sodium chicken bouillon,
+2127,soups,low-fat reduced sodium chicken broth,
+2128,condiments/sauces,low sodium chili sauce,
+2129,Oriental products,low sodium soy sauce,
+2130,salad dressings,lowfat mayonnaise,
+2134,dairy,lowfat buttermilk,
+2135,cheese,lowfat cheddar cheese,
+2137,dairy,lowfat coffee yogurt,
+2139,dairy,lowfat creamed cottage cheese,
+2140,cheese,lowfat low sodium swiss cheese,
+2141,dairy,lowfat margarine,
+2144,cheese,lowfat sharp cheddar cheese,
+2145,dairy,lowfat Swiss cheese,
+2147,soups,low-sodium beef bouillon powder,
+2152,canned/bottled juice,low-sodium tomato juice,
+2153,canned/bottled juice,low-sodium vegetable juice,
+2154,hot beverages,lowcal cocoa mix with aspartame,
+2155,fruit juices,lowcal cranberry juice cocktail,
+2156,salad dressings,lowcal French dressing,
+2157,salad dressings,lowcal French salad dressing,
+2158,salad dressings,lowcal Italian salad dressing,
+2162,breads,lowcal raisin bread,
+2163,breads,lowcal raisin bread slice,s
+2164,salad dressings,lowcal salad dressing,
+2166,meat/poultry,"lower salt, 95% fat free, boneless ham",
+2171,dairy,lowfat banana yogurt,
+2178,powdered dairy,instant lowfat dry milk,
+2180,dairy,lowfat flavored yogurt,
+2181,frozen desserts,lowfat ice cream,
+2187,cheese,lowfat mozzarella cheese,
+2189,dairy,lowfat yogurt,
+2190,powdered dairy,lowfat powdered milk,
+2191,salad dressings,lowfat salad dressing,
+2192,dairy,lowfat sour cream,
+2194,dairy,lowfat vanilla yogurt,
+2195,dairy,lowfat whipped cream or nonfat yogurt,
+2196,dairy,plain lowfat yogurt,
+2197,canned fish,lump crabmeat,
+2198,Oriental products,lychee,s
+2200,nuts and seeds,macadamia nuts,
+2201,pasta/noodles,macaroni,
+2203,sweeteners,MACDONALD'S PURE MAPLE SYRUP,
+2204,spices and seasonings,ground mace,
+2205,spices and seasonings,mace or allspice,
+2207,fresh seafood,mackerel,
+2208,alcoholic beverages,Madeira,
+2209,fresh seafood,mahi mahi,
+2211,canned/bottled fruit,mandarin orange sections,
+2212,fresh fruit,mango,es
+2213,condiments/sauces,mango chutney,
+2214,fruit juices,mango juice,
+2217,spices and seasonings,maple flavoring,
+2218,sweeteners,maple sugar,
+2219,sweeteners,maple syrup,
+2220,dairy,margarine,
+2222,dairy,margarine or butter,
+2224,dairy,margarine or vegetable oil,
+2225,spices and seasonings,marigold,
+2227,tomato sauces,marinara sauce,
+2229,canned/bottled vegetables,marinated artichoke bottoms or hearts,
+2230,canned/bottled vegetables,marinated artichoke hearts,
+2233,meat/poultry,marrow bones,
+2234,alcoholic beverages,marsala,
+2235,candy,marshmallows,
+2236,Mexican products,masa corn flour,
+2237,Mexican products,masa harina,
+2238,cheese,mascarpone cheese,
+2240,fresh vegetables,mashed potato,es
+2241,fresh fruit,ripe banana,s
+2242,pasta/noodles,mastacciolo,
+2243,fresh vegetables,matusutake mushroom,s
+2244,Kosher products,matzoh meal,
+2245,fresh vegetables,Maui onion,s
+2246,salad dressings,mayonnaise,
+2247,salad dressings,low-cal mayonnaise-type salad dressing,
+2248,oils and fats,Mazola corn oil,
+2249,dairy,Mazola margarine,
+2250,oils and fats,Mazola No Stick cooking spray,
+2251,oils and fats,Mazola No Stick corn oil cooking spray,
+2252,tomato sauces,meatless spaghetti sauce,
+2253,fresh fruit,apple,s
+2259,fresh fruit,cantaloupe,s
+2260,fresh vegetables,carrot,s
+2270,fresh vegetables,garlic,
+2277,fresh vegetables,red cabbage,
+2279,fresh fruit,kiwi,s
+2281,fresh fruit,navel orange,s
+2282,fresh vegetables,onion,s
+2283,fresh fruit,orange,s
+2284,fresh fruit,pear,s
+2286,fresh vegetables,potato,es
+2287,fresh vegetables,red bell pepper,s
+2288,fresh vegetables,red onion,s
+2289,fresh vegetables,red or green bell pepper,s
+2292,pasta/noodles,rigatoni,
+2293,fresh vegetables,scallion,s
+2294,fresh seafood,sea scallops,
+2295,pasta/noodles,shell macaroni,
+2298,fresh vegetables,sweet potato,es
+2299,fresh vegetables,sweet red pepper,s
+2302,fresh vegetables,white onion,s
+2303,miscellaneous,white sauce,
+2304,fresh vegetables,yellow onion,s
+2305,fresh vegetables,yellow squash,
+2306,fresh vegetables,zucchini,
+2310,fresh seafood,medium-size shrimp,
+2312,alcoholic beverages,medium-sweet sherry,
+2313,fresh fruit,melon,s
+2314,miscellaneous,metal skewer,s
+2316,fresh fruit,Meyer lemon,s
+2317,cheese,mild cheddar cheese,
+2319,fresh vegetables,mild green chiles,
+2320,sweeteners,mild honey,
+2322,cheese,mild white cheese,
+2323,vinegars,white wine vinegar,
+2324,sweeteners,mild-flavored honey,
+2327,dairy,milk,
+2328,candy,milk chocolate,
+2331,grains,millet,
+2334,candy,mini marshmallows,
+2335,cereals,mini shredded wheat cereal,
+2336,breads,mini whole wheat pita bread,s
+2337,candy,miniature semisweet chocolate chips,
+2338,spices and seasonings,mint,
+2341,salad dressings,Miracle Whip Lite,
+2342,dried fruit,mixed dried fruit,
+2345,fresh fruit,mixed fruit,
+2346,fresh vegetables,mixed greens,
+2347,fresh herbs,mixed herbs,
+2348,fresh vegetables,mixed lettuce or mesclun mix,
+2349,spices and seasonings,mixed pickling spices,
+2350,fresh vegetables,mixed salad greens,
+2351,fresh vegetables,mixed soft salad greens,
+2352,canned/bottled vegetables,mixed vegetables,
+2353,dried beans,mixed white and colored beans,
+2355,sweeteners,molasses,
+2358,cheese,Monterey Jack cheese,
+2360,dried vegetables,morel mushroom,s
+2361,fresh vegetables,morels,
+2362,deli meats,mortadella,
+2363,pasta/noodles,mostaccioli,
+2366,pasta/noodles,Mueller's medium egg noodles,
+2367,pasta/noodles,Mueller's noodle style pasta,
+2368,pasta/noodles,Mueller's rigatoni,
+2369,pasta/noodles,Mueller's twist macaroni,
+2370,cheese,muenster cheese,
+2373,dried beans,mung beans,
+2374,fresh vegetables,mung bean sprouts,
+2375,fresh fruit,muscat grape,s
+2377,dried fruit,muscat raisins,
+2379,fresh vegetables,mushroom cap,s
+2380,fresh vegetables,mushroom stems and pieces,
+2381,fresh seafood,mussel,s
+2382,fresh seafood,mussels in shells,
+2384,condiments/sauces,mustard,
+2385,fresh vegetables,mustard green,s
+2386,spices and seasonings,mustard seed,s
+2391,fresh vegetables,nappa cabbage,
+2393,nuts and seeds,natural almonds,
+2394,nuts and seeds,natural California pistachios,
+2395,cereals,natural high-fiber cereal shreds,
+2397,dried beans,navy beans,
+2398,dried fruit,nectarine,s
+2400,dairy,Neufchatel cheese,
+2401,fresh vegetables,New Mexican green chile,s
+2402,fresh vegetables,new potatoes,
+2403,cheese,New York cheddar cheese,
+2404,fresh fruit,New Zealand kiwi fruit,s
+2405,dairy,no-salt-added cottage cheese,
+2406,canned beans,canned no salt kidney beans,
+2407,salad dressings,no salt diet Italian salad dressing,
+2408,spices and seasonings,no-salt seasoning mix,
+2409,tomato products,unsalted tomato paste,
+2410,dairy,nonfat yogurt,
+2412,dairy,nonfat buttermilk,
+2415,dairy,nonfat ice cream,
+2416,salad dressings,nonfat mayonnaise dressing,
+2417,dairy,nonfat milk,
+2419,dairy,nonfat sour cream,
+2421,oils and fats,nonstick cooking spray,
+2422,oils and fats,nonstick vegetable spray,
+2423,pasta/noodles,noodles,
+2424,Oriental products,nori sheets,
+2426,nuts and seeds,nuts,
+2427,breads,nut bread,
+2428,spices and seasonings,ground nutmeg,
+2431,cereals,oats,
+2432,cereals,oatmeal,
+2433,fresh seafood,ocean perch,
+2434,fresh seafood,octopus,
+2435,oils and fats,oil,
+2436,salad dressings,oil-free Italian salad dressing,
+2438,cereals,old-fashioned oatmeal,
+2439,condiments/sauces,olive,s
+2440,condiments/sauces,olive juice,
+2441,deli meats,olive loaf,
+2442,oils and fats,olive oil,
+2446,spices and seasonings,onion flakes,
+2447,spices and seasonings,onion granules or powder,
+2449,spices and seasonings,onion powder,
+2450,spices and seasonings,onion salt,
+2453,gelatin,orange gelatin,
+2454,frozen fruit,orange juice,
+2455,frozen fruit,orange juice concentrate,
+2456,alcoholic beverages,orange liqueur,
+2457,jams and jellies,orange marmalade,
+2459,fresh fruit,orange peel,
+2460,fresh fruit,orange rind,
+2462,fresh fruit,orange zest,
+2463,alcoholic beverages,orange-flavored liqueur,
+2464,beverages,orange-flavored sparkling mineral water,
+2467,pasta/noodles,orecchiette,
+2471,spices and seasonings,oregano or marjoram,
+2472,nuts and seeds,Oregon hazelnuts,
+2473,Oriental vegetables,Oriental cucumber,s
+2474,Oriental products,Oriental Five Spice Powder,
+2475,oils and fats,Oriental hot chili sesame oil,
+2477,Oriental products,Oriental sesame oil,
+2478,pasta/noodles,orzo,
+2481,meat/poultry,oxtail,s
+2482,fresh seafood,oyster,s
+2483,Oriental products,oyster mushroom,s
+2484,Oriental products,oyster sauce,
+2485,fresh seafood,oysters with liquid,
+2486,fresh seafood,Pacific snapper,
+2491,gelatin,package fruit flavored gelatin,
+2494,bread products,packaged bread crumbs,
+2495,baking products,packaged cornbread mix,
+2496,pasta/noodles,CREAMETTE lasagna noodles,
+2497,pasta/noodles,fresh cheese-filled tortellini,
+2498,dried beans,Frieda's Black Beans,
+2500,frozen vegetables,frozen snow peas,
+2501,frozen vegetables,Italian-style frozen vegetables,
+2502,gelatin,packaged lemon flavored gelatin,
+2507,sweeteners,Sweet'N Low granulated sugar substitute,
+2509,sweeteners,Equal Sweetener,
+2510,oils and fats,palm oil,
+2511,vinegars,palm vinegar,
+2513,deli meats,pancetta,
+2514,dried fruit,dried papaya,s
+2515,fresh fruit,papaya,s
+2516,fruit juices,papaya juice,
+2518,spices and seasonings,paprika,
+2519,spices and seasonings,paprika pepper,
+2520,baking products,parchment paper,
+2521,miscellaneous,Parchment paper or foil,
+2522,deli meats,Parma ham,
+2523,cheese,Parmesan cheese,
+2526,cheese,Parmigiano-Reggiano cheese,
+2527,spices and seasonings,dried parsley,
+2528,spices and seasonings,parsley flakes,
+2533,pasta/noodles,"parsley pasta, any kind",
+2534,fresh vegetables,parsnip,s
+2537,cheese,part skim mozzarella cheese,
+2538,cheese,part skim string cheese,
+2539,fresh fruit,passion fruit,s
+2540,fruit juices,passion fruit juice,
+2541,pasta/noodles,pasta,
+2542,pasta/noodles,pasta shells,
+2543,deli meats,pastrami,
+2546,baking products,pastry flour,
+2548,fresh vegetables,pattypan squash,
+2549,fresh vegetables,peas,
+2550,fresh vegetables,pea pods,
+2552,fresh fruit,peach,es
+2555,jams and jellies,peach preserves,
+2558,canned/bottled fruit,peaches in juice,
+2559,nuts and seeds,peanuts,
+2560,nuts and seeds,peanut butter,
+2562,oils and fats,peanut oil,
+2568,condiments/sauces,peanut sauce,
+2571,fruit juices,pear juice,
+2572,grains,pearl barley,
+2573,fresh vegetables,pearl onions,
+2574,fresh vegetables,Pearl Onions by Frieda,
+2577,nuts and seeds,pecans,
+2578,nuts and seeds,pecan halves,
+2579,nuts and seeds,pecans or walnuts,
+2580,nuts and seeds,pecan pieces,
+2582,cheese,pecorino cheese,
+2583,miscellaneous,powdered fruit pectin,
+2584,miscellaneous,sweetened pectin,
+2588,pasta/noodles,penne,
+2590,pasta/noodles,penne or ziti,
+2591,spices and seasonings,pepper,
+2593,spices and seasonings,peppercorns,
+2594,deli meats,pepperoni,
+2595,fresh seafood,perch,
+2596,fresh seafood,perch fillet,s
+2597,deli meats,Perdue fresh hot Italian turkey sausage,
+2599,alcoholic beverages,Pernod,
+2600,fresh fruit,persian melon,s
+2601,dried fruit,dried persimmon,s
+2602,fresh fruit,persimmon,s
+2603,condiments/sauces,pesto,
+2604,fresh vegetables,petite pea,
+2605,meat/poultry,pheasant,s
+2606,frozen baking products,phyllo dough,
+2607,frozen baking products,phyllo dough sheets,
+2610,condiments/sauces,dill pickle,
+2611,condiments/sauces,sour pickle relish,
+2612,condiments/sauces,sweet pickle relish,
+2613,condiments/sauces,sour pickle,
+2614,condiments/sauces,sweet pickle,
+2615,Oriental products,pickled ginger,
+2616,canned fish,pickled herring,
+2617,pickled fruit/vegetables,pickled jalapeno,s
+2618,pickled fruit/vegetables,pickled jalapeno juice,
+2619,pickled fruit/vegetables,pickled jalapeno peppers,
+2620,pickled fruit/vegetables,pickled mangoes,
+2621,pickled fruit/vegetables,pickled shallots,
+2622,pickled fruit/vegetables,pickled sugar cane,
+2623,pickled fruit/vegetables,pickled sweet red peppers,
+2624,fresh vegetables,pickling cucumber,s
+2625,spices and seasonings,pickling spice,
+2626,baking products,pie crust,s
+2627,baking products,pie crust mix,
+2628,baking products,pie shell,s
+2629,canned meat,pigs feet,
+2630,condiments/sauces,pimientos,
+2632,condiments/sauces,pimiento strips,
+2633,condiments/sauces,pimiento-stuffed green olives,
+2634,nuts and seeds,pine nuts,
+2636,nuts and seeds,pine nuts or slivered almonds,
+2637,nuts and seeds,pine nuts or walnuts,
+2638,dried fruit,dried pineapple,s
+2642,fruit juices,pineapple juice,
+2643,canned/bottled fruit,canned pineapple rings,
+2645,canned/bottled fruit,canned pineapple tidbits in juice,
+2646,dried beans,pink beans,
+2647,dried beans,cooked pink beans,
+2648,fresh fruit,pink grapefruit,s
+2649,fruit juices,pink grapefruit juice,
+2650,nuts and seeds,pinons,
+2651,dried beans,pinquito beans,
+2653,nuts and seeds,pistachio nuts,
+2654,spices and seasonings,pistachio flavoring,
+2655,breads,pita bread,s
+2658,condiments/sauces,pitted black olive,s
+2660,dried fruit,pitted prune,s
+2664,bread products,"12-inch pizza crust",s
+2665,bread products,pizza dough,
+2666,tomato products,pizza sauce,
+2667,grains,"Lipton Noodles and Sauce,Chicken Fl.",
+2668,grains,"Lipton Rice and Sauce, Chicken Fl.",
+2669,bread products,plain croutons,
+2673,bread products,plain or Italian bread crumbs,
+2675,fresh fruit,plantain,s
+2676,fresh fruit,plum,s
+2677,alcoholic beverages,plum brandy,
+2678,jams and jellies,plum jelly,
+2679,fruit juices,plum juice,
+2680,condiments/sauces,plum sauce,
+2682,fresh vegetables,plum tomato,es
+2683,alcoholic beverages,plum wine,
+2684,eggs,poached egg,s
+2685,grains,polenta,
+2686,deli meats,Polish sausage,s
+2687,dairy,polyunsaturated margarine,
+2688,oils and fats,polyunsaturated oil,
+2689,fresh fruit,pomegranate,s
+2690,spices and seasonings,poppy seeds,
+2691,salad dressings,poppyseed dressing,
+2692,dried vegetables,porcini mushroom,s
+2693,meat/poultry,pork,
+2694,canned beans,pork and beans in tomato sauce,
+2695,deli meats,pork bologna,
+2696,deli meats,pork braunschweiger,
+2697,meat/poultry,pork butt,s
+2699,meat/poultry,pork chop,s
+2700,meat/poultry,pork country style ribs,
+2701,meat/poultry,pork cutlet,s
+2702,meat/poultry,pork loin chop,s
+2703,meat/poultry,pork rib,s
+2704,meat/poultry,pork roast,s
+2705,deli meats,pork sausage,s
+2706,meat/poultry,pork shoulder,
+2708,meat/poultry,pork sirloin,
+2709,meat/poultry,pork sparerib,s
+2710,meat/poultry,pork tenderloin,
+2712,alcoholic beverages,port,
+2713,cheese,Port du Salut cheese,
+2714,meat/poultry,porterhouse steak,s
+2715,hot beverages,Postum,
+2718,snack foods,potato chips,
+2719,frozen vegetables,potato skin,s
+2720,baking products,potato starch,
+2721,miscellaneous,pouch liquid pectin,
+2722,spices and seasonings,poultry seasoning,
+2723,powdered dairy,powdered cultured buttermilk,
+2724,baking products,powdered egg substitute,
+2726,spices and seasonings,powdered mustard,
+2727,spices and seasonings,powdered nutmeg,
+2728,spices and seasonings,powdered saffron,
+2730,fresh seafood,prawn,s
+2732,deli,prepared deli coleslaw,
+2734,canned/bottled vegetables,prepared grape leaves,
+2735,condiments/sauces,prepared horseradish,
+2738,condiments/sauces,prepared mustard,
+2740,Mexican products,prepared taco shell,s
+2741,Oriental products,preserved ginger,
+2742,Oriental products,preserved stem ginger in syrup,
+2743,fresh seafood,prime cut cod fillet,s
+2744,meat/poultry,prime rib roast,s
+2745,cheese,processed Swiss cheese,
+2746,deli meats,prosciutto,
+2747,cheese,provolone cheese,
+2749,dried fruit,prune,s
+2750,fruit juices,prune juice,
+2751,gelatin,pudding mix,
+2753,frozen baking products,puff pastry,s
+2754,frozen baking products,puff pastry shell,s
+2756,breads,pumpernickel bread,
+2759,fresh vegetables,pumpkin or winter squash,
+2760,spices and seasonings,pumpkin pie spice,
+2761,canned/bottled vegetables,pumpkin puree,
+2762,nuts and seeds,pumpkin seeds,
+2763,fresh vegetables,pumpkin squash,
+2765,oils and fats,Puritan Oil,
+2766,fresh vegetables,purple onion,s
+2767,fresh vegetables,purple pepper,s
+2768,fresh fruit,purple plum,s
+2769,meat/poultry,quail,
+2770,eggs,quail egg,s
+2771,cheese,queso fresco,
+2775,cereals,quick cooking rolled oats,
+2776,cereals,quick cooking tapioca,
+2778,grains,quick-cooking couscous,
+2780,fresh fruit,quince,s
+2781,grains,quinoa,
+2782,meat/poultry,rabbit,
+2783,meat/poultry,rack of lamb,
+2784,cheese,raclette,
+2785,fresh vegetables,radicchio,
+2786,fresh vegetables,radish,es
+2787,fresh vegetables,radish sprout,s
+2788,dried fruit,raisins,
+2789,breads,raisin bread,
+2791,cheese,Romano cheese,
+2793,salad dressings,ranch dressing mix,
+2794,deli meats,roast beef,
+2796,fresh fruit,raspberry,#NAME?
+2797,fruit juices,raspberry juice,
+2798,alcoholic beverages,raspberry liqueur,
+2799,jams and jellies,raspberry preserves,
+2802,vinegars,raspberry vinegar,
+2804,Oriental products,raw dulse,
+2805,fresh seafood,raw Eastern oyster,s
+2807,fresh seafood,raw flatfish,
+2808,Oriental products,raw ginkgo nuts,
+2809,fresh vegetables,green tomato,es
+2810,Oriental products,raw kelp,
+2813,cereals,oat bran,
+2814,fresh seafood,raw Pacific oyster,s
+2815,fresh seafood,raw Pacific rockfish,
+2816,dried beans,raw pigeon pea,
+2817,fresh seafood,raw pink salmon,
+2819,deli meats,pork breakfast strip,s
+2820,meat/poultry,pork liver,s
+2822,fresh seafood,raw sablefish,
+2823,fresh seafood,raw seatrout,
+2824,nuts and seeds,raw Spanish peanuts,
+2825,dried beans,split peas,
+2827,nuts and seeds,raw Virginia peanuts,
+2829,fresh seafood,raw walleye pike,
+2831,fresh seafood,raw whitefish,
+2834,fresh seafood,raw yellowtail,
+2836,fresh vegetables,ready-to-use garlic,
+2838,fruit juices,ReaLemon lemon juice from concentrate,
+2839,fresh vegetables,red or yellow bell pepper,s
+2841,dried beans,red beans,
+2843,alcoholic beverages,red Burgundy,
+2845,fresh fruit,red California seedless grape,s
+2846,fresh vegetables,red chard,
+2847,spices and seasonings,red chile powder,
+2848,fresh vegetables,red chili,s
+2849,dried fruit,red currants,
+2850,jams and jellies,red currant jelly,
+2852,fresh fruit,red flame grapes,
+2853,fresh fruit,red grapes,
+2854,spices and seasonings,red hot pepper,
+2855,spices and seasonings,red hot pepper flakes,
+2856,canned beans,red kidney beans,
+2858,fresh vegetables,red leaf lettuce,s
+2859,fresh vegetables,red mustard,
+2862,fresh vegetables,red or green chili,s
+2866,fresh vegetables,red or yellow onion,s
+2871,fresh fruit,red plum,s
+2872,fresh vegetables,red potato,es
+2873,fresh fruit,red raspberry,#NAME?
+2874,jams and jellies,red raspberry preserves,
+2875,fresh fruit,red seedless grapes,
+2876,fresh vegetables,red Serrano chili,s
+2877,fresh seafood,red snapper,
+2878,fresh seafood,red snapper fillet,s
+2879,fresh vegetables,red sweet pepper,s
+2880,alcoholic beverages,red wine,
+2881,vinegars,red wine vinegar,
+2884,dairy,reduced calorie sour cream,
+2888,dairy,reduced calorie creamed cheese spread,
+2890,cheese,reduced-fat Monterey jack cheese,
+2891,dairy,reduced fat sour cream,
+2892,cheese,reduced-fat Swiss cheese slices,
+2894,Mexican products,refried beans,
+2897,frozen vegetables,rhubarb,
+2898,meat/poultry,rib,s
+2899,meat/poultry,rib eye/rib steak,s
+2900,meat/poultry,rib roast,s
+2901,fresh fruit,ribier grapes,
+2902,grains,rice,
+2903,cereals,rice bran,
+2904,baking products,rice flour,
+2907,Oriental noodles,rice sheet,s
+2908,Oriental noodles,rice stick,s
+2910,vinegars,rice vinegar,
+2913,alcoholic beverages,rice wine,
+2915,cheese,ricotta cheese,
+2917,cheese,skim ricotta cheese,
+2919,pasta/noodles,rigatini abissina,
+2924,fresh fruit,ripe cantaloupe,s
+2926,fresh fruit,ripe mango,es
+2928,condiments/sauces,sliced pitted black olive,
+2929,fresh fruit,ripe peach,es
+2930,fresh fruit,ripe pear,s
+2931,fresh fruit,ripe strawberry,#NAME?
+2932,cookies/crackers,Ritz crackers,
+2933,nuts and seeds,roasted almonds,
+2934,fresh vegetables,roasted chestnuts,
+2935,nuts and seeds,roasted peanuts,
+2936,canned/bottled vegetables,roasted red peppers,
+2937,nuts and seeds,roasted salted Spanish peanuts,
+2938,nuts and seeds,roasted salted Virginia peanuts,
+2939,dried beans,roasted soybean,
+2942,meat/poultry,roasted turkey breast,s
+2945,fresh vegetables,rocambole garlic,
+2947,spices and seasonings,rock or table salt,
+2948,cereals,rolled oats,
+2951,fresh vegetables,romaine lettuce,
+2953,fresh vegetables,Romaine lettuce leaves,
+2954,fresh vegetables,Roman beans,
+2959,cheese,Roquefort cheese,
+2960,alcoholic beverages,rose wine,
+2961,spices and seasonings,rosemary,
+2964,fresh herbs,rosemary sprig,s
+2965,pasta/noodles,rotini,
+2967,fresh vegetables,round red radish,es
+2968,meat/poultry,round steak,s
+2973,fresh fruit,ruby red grapefruit,s
+2974,fruit juices,ruby red grapefruit juice,
+2975,fresh fruit,Ruby-Sweet grapefruit,s
+2976,alcoholic beverages,rum,
+2978,spices and seasonings,rum extract,
+2979,meat/poultry,rump steak,s
+2981,fresh vegetables,russet potato,es
+2982,fresh vegetables,rutabaga,s
+2984,grains,rye,
+2985,breads,rye bread,
+2986,bread products,rye bread crumbs,
+2987,baking products,rye flour,
+2989,breads,rye roll,s
+2990,meat/poultry,saddle or venison roast,
+2991,oils and fats,safflower oil,
+2994,spices and seasonings,saffron,
+2995,spices and seasonings,saffron or turmeric,
+2997,spices and seasonings,saffron threads,
+2999,spices and seasonings,sage,
+3000,spices and seasonings,sage leaf,#NAME?
+3001,salad dressings,salad dressing,
+3002,fresh vegetables,salad greens,
+3003,fresh herbs,salad herbs,
+3004,pasta/noodles,salad macaroni,
+3005,oils and fats,salad oil,
+3008,deli meats,salami,
+3009,fresh seafood,salmon,
+3010,fresh seafood,salmon bones,
+3011,fresh seafood,salmon fillet,s
+3012,fresh seafood,salmon or steelhead,
+3013,fresh seafood,salmon or tuna,
+3014,fresh seafood,salmon steak,s
+3015,Mexican products,salsa,
+3020,fresh vegetables,salsify,
+3021,spices and seasonings,salt,
+3022,spices and seasonings,salt and pepper,
+3023,spices and seasonings,salt or herbal salt substitute,
+3024,meat/poultry,salt pork,
+3025,bread products,salt-free seasoned bread crumbs,
+3026,canned fish,salted anchovies,
+3027,nuts and seeds,salted cashews,
+3028,nuts and seeds,salted peanuts,
+3029,cookies/crackers,saltine crackers,
+3030,fresh seafood,sand dab,
+3033,canned fish,sardine,s
+3034,fresh fruit,satsuma mandarin orange,s
+3035,canned/bottled vegetables,sauerkraut,
+3036,frozen meat/poultry/seafood,sausage,s
+3037,alcoholic beverages,Sauvignon Blanc wine,
+3039,fresh herbs,savory,
+3041,spices and seasonings,savory leaves,
+3042,fresh vegetables,Savoy cabbage,
+3044,fresh vegetables,scallion top,s
+3045,fresh vegetables,scallions including tops,
+3047,fresh seafood,scallops,
+3048,fresh seafood,scrod,
+3049,fresh seafood,sea bass,
+3050,fresh seafood,sea bass steak,s
+3051,fresh seafood,sea or bay scallops,
+3052,spices and seasonings,sea salt,
+3055,condiments/sauces,seafood cocktail sauce,
+3058,bread products,seasoned bread crumbs,
+3059,bread products,seasoned croutons,
+3060,bread products,seasoned dry bread crumbs,
+3061,spices and seasonings,seasoned pepper,
+3062,vinegars,seasoned rice vinegar,
+3063,spices and seasonings,seasoned salt,
+3064,fresh fruit,seckel pear,s
+3066,fresh fruit,seedless grapes,
+3067,fresh fruit,seedless green grapes,
+3068,dried fruit,seedless raisins,
+3070,jams and jellies,seedless red raspberry jam,
+3071,fresh fruit,seedless white grapes,
+3072,fresh fruit,seedless red grapes,
+3073,beverages,seltzer,
+3074,baking products,semisweet chocolate,
+3075,candy,semisweet HERSHEY'S MINI CHIPS,
+3077,baking products,semisweet chocolate bits,
+3078,baking products,semisweet chocolate chips,
+3079,baking products,semisweet or bittersweet chocolate,
+3080,grains,semolina,
+3081,baking products,semolina flour,
+3082,fresh vegetables,serrano chile,s
+3083,fresh vegetables,serrano or jalapeno chiles,
+3084,fresh vegetables,serrano pepper,s
+3085,Oriental noodles,sesame noodles,
+3086,Oriental products,sesame oil,
+3088,Oriental products,sesame paste,
+3089,Oriental products,sesame paste or peanut butter,
+3090,spices and seasonings,sesame seeds,
+3091,vinegars,sesame vinegar,
+3092,fresh seafood,shad,
+3093,fresh vegetables,shallot,s
+3095,fresh seafood,shark,
+3096,fresh seafood,shark steak,s
+3097,cheese,sharp reduced fat Cheddar cheese,
+3098,cheese,sharp cheddar cheese,
+3099,frozen baking products,sheet frozen puff pastry,
+3100,frozen baking products,sheets commercial frozen phyllo pastry,
+3101,frozen baking products,sheets frozen filo dough,
+3103,fresh vegetables,shelled fresh or frozen peas,
+3105,fresh seafood,shellfish,
+3106,fresh vegetables,shelling pea,s
+3107,alcoholic beverages,sherry,
+3110,vinegars,sherry vinegar,
+3112,alcoholic beverages,sherry wine,
+3115,dried vegetables,shiitake mushroom,s
+3116,grains,short grain rice,
+3117,meat/poultry,short rib,s
+3118,oils and fats,shortening,
+3119,baking products,shredded coconut,
+3120,frozen meat/poultry/seafood,frozen shrimp,s
+3122,Oriental products,shrimp paste or Kapee,
+3123,condiments/sauces,shrimp sauce,
+3124,condiments/sauces,Sicilian or Spanish olive,s
+3125,fresh seafood,side of salmon,
+3127,meat/poultry,sirloin tip steak,s
+3128,miscellaneous,skewer,s
+3131,cheese,skim milk mozzarella,
+3142,meat/poultry,skinless boneless chicken breast tenders,
+3147,meat/poultry,skinless turkey breast,
+3148,meat/poultry,skinless chicken breasts,
+3149,meat/poultry,skinless chicken thighs,
+3150,fresh seafood,skinless fish fillet,s
+3153,meat/poultry,skinned chicken,
+3156,nuts and seeds,Skippy peanut butter,
+3157,deli meats,sliced extra lean ham,
+3158,fresh fruit,sliced fruit,
+3159,canned/bottled fruit,canned sliced peaches in juice,
+3161,fresh vegetables,slicing cucumber,s
+3162,nuts and seeds,slivered almonds,
+3164,spices and seasonings,small bay leaf,#NAME?
+3165,fresh vegetables,small bok choy,
+3166,fresh vegetables,small carrot,s
+3167,fresh seafood,small clams,
+3168,fresh vegetables,small cucumber,s
+3171,fresh vegetables,small eggplant,s
+3172,pasta/noodles,small elbow macaroni,
+3173,fresh vegetables,small fresh chili peppers,
+3174,fresh vegetables,small fresh jalapeno pepper,s
+3175,fresh vegetables,small fresh mushroom,s
+3176,fresh herbs,small fresh sage leaves,
+3177,fresh vegetables,small garlic clove,s
+3180,fresh vegetables,small green bell pepper,s
+3183,fresh vegetables,small head cabbage,
+3184,Oriental vegetables,small head Chinese cabbage,
+3185,fresh vegetables,small head escarole,
+3186,fresh vegetables,small head roasted garlic,
+3188,fresh vegetables,small leek,s
+3189,fresh fruit,small lemons or limes,
+3190,pasta/noodles,small macaroni,
+3191,fresh fruit,small mango,es
+3192,fresh seafood,small mussels,
+3193,fresh vegetables,small new potato,es
+3194,fresh vegetables,small new red potatoes,
+3195,fresh vegetables,small onion,s
+3196,gelatin,sugar free instant vanilla pudding,
+3197,salad dressings,Good Seasons salad dressing,
+3198,pasta/noodles,small pasta shells,
+3199,pasta/noodles,small pasta such as stars,
+3200,canned/bottled vegetables,small pickled jalapeno peppers,
+3201,pasta/noodles,small ravioli,
+3203,dried beans,small red beans,
+3204,fresh vegetables,small red bell pepper,s
+3205,fresh vegetables,small red onion,s
+3206,fresh vegetables,small red pepper,s
+3207,fresh vegetables,small red potato,es
+3208,fresh fruit,small ripe apricots,
+3209,condiments/sauces,small ripe pitted olives,
+3210,pasta/noodles,small seashell macaroni,
+3212,fresh vegetables,small sweet onion,s
+3213,fresh vegetables,small sweet potato,es
+3216,fresh vegetables,small white boiling onions,
+3217,fresh vegetables,small yellow bell pepper,s
+3218,fresh vegetables,small yellow onion,s
+3219,fresh vegetables,small yellow squash,
+3220,fresh vegetables,small zucchini,s
+3221,fresh vegetables,small zucchini or yellow squash,
+3222,fresh seafood,smoked chinook salmon,
+3223,meat/poultry,smoked chipped cured beef,
+3224,canned fish,smoked clam,s
+3225,meat/poultry,smoked ham,
+3226,meat/poultry,smoked ham hock,
+3227,cheese,smoked mozzarella cheese,
+3229,canned fish,smoked mussel,s
+3231,meat/poultry,smoked or roast chicken,
+3232,canned fish,smoked oyster,s
+3233,meat/poultry,smoked pork loin,
+3234,fresh seafood,smoked sablefish,
+3235,fresh seafood,smoked salmon,
+3236,deli meats,smoked slab bacon,
+3237,fresh seafood,smoked sturgeon,
+3238,deli meats,smoked turkey,
+3239,deli meats,smoked turkey breast,
+3240,deli meats,smoked turkey sausage,s
+3241,fresh seafood,smoked whitefish,
+3242,nuts and seeds,smooth no salt peanut butter,
+3243,nuts and seeds,smooth or chunky peanut butter,
+3244,nuts and seeds,smooth salted peanut butter,
+3245,canned meat,snail,s
+3246,fresh seafood,snapper,
+3248,Oriental noodles,soba,
+3249,beverages,soda,
+3250,cookies/crackers,soda crackers,
+3251,bread products,soft bread crumbs,
+3252,breads,soft bun,s
+3254,dried fruit,soft moist dried prunes,
+3255,fresh seafood,soft shell crab,
+3256,frozen desserts,vanilla ice milk,
+3257,bread products,soft whole wheat bread crumbs,
+3258,fresh seafood,sole,
+3259,fresh seafood,sole fillet,s
+3261,alcoholic beverages,Sonoma County chardonnay wine,
+3262,dried vegetables,dried tomato bits,
+3266,grains,sorghum,
+3267,sweeteners,sorghum syrup,
+3271,dairy,sour cream,
+3276,breads,sourdough bread slice,s
+3277,breads,sourdough french bread,
+3279,dried beans,soy beans,
+3280,baking products,soy bean flour,
+3281,dairy,soy margarine,
+3282,beverages,soy milk,
+3283,Oriental products,soy sauce,
+3286,oils and fats,soybean oil,
+3287,pasta/noodles,spaghetti,
+3288,canned/bottled vegetables,spaghetti sauce,
+3289,canned/bottled vegetables,spaghetti sauce with mushrooms,
+3290,fresh vegetables,spaghetti squash,
+3291,fresh vegetables,Spanish onion,s
+3293,meat/poultry,sparerib,s
+3294,condiments/sauces,spicy brown mustard,
+3295,condiments/sauces,spicy chutney,
+3298,canned/bottled vegetables,spinach,
+3299,fresh vegetables,spinach bunch,es
+3300,pasta/noodles,spinach fettuccine,
+3301,fresh vegetables,spinach leaves,
+3303,pasta/noodles,spinach or whole wheat pasta,
+3304,pasta/noodles,spiral pasta,
+3305,Oriental products,spirulina,
+3306,fresh vegetables,sprouts,
+3307,fresh vegetables,sprouted soybean,s
+3308,meat/poultry,squab,
+3309,frozen vegetables,squash,
+3310,frozen meat/poultry/seafood,squid,
+3311,spices and seasonings,star anise,
+3312,fresh fruit,star fruit,s
+3313,condiments/sauces,steak sauce,
+3315,meat/poultry,stew meat,
+3316,tomato products,canned stewed tomatoes,
+3317,cheese,Stilton cheese,
+3319,cereals,stone-ground yellow corn meal,
+3320,canned/bottled vegetables,straw mushrooms,
+3322,fresh fruit,strawberry,#NAME?
+3323,alcoholic beverages,strawberry or raspberry liqueur,
+3324,jams and jellies,strawberry preserves,
+3325,beverages,strawberry shake,s
+3326,frozen vegetables,string beans,
+3327,meat/poultry,strip or shell steak,s
+3329,hot beverages,strong coffee,
+3331,bread products,stuffing cube,s
+3332,fresh seafood,sturgeon,
+3334,baking products,sugar,
+3335,baking products,sugar or honey,
+3336,fresh vegetables,sugar snap pea,s
+3337,fresh vegetables,Sugar Snap Peas by Frieda,
+3338,sweeteners,sugar substitute,
+3339,spices and seasonings,summer savory,
+3340,fresh vegetables,summer squash,
+3341,tomato products,sun-dried tomatoes,
+3342,imported products,sun-dried tomato halves in oil,
+3343,imported products,sun-dried tomato paste,
+3344,fresh vegetables,sunburst squash,
+3346,nuts and seeds,sunflower seeds,
+3347,fresh vegetables,sunflower sprouts,
+3348,condiments/sauces,super colossal olive,s
+3349,baking products,superfine sugar,
+3351,fresh seafood,Surimi seafood,
+3352,fresh seafood,surimi seafood chunks or flake style,
+3353,condiments/sauces,"sweet and sour sauce, bottled",
+3355,fresh herbs,sweet basil,
+3356,deli meats,sweet breakfast sausage,s
+3357,dairy,sweet butter,
+3358,fresh fruit,sweet red cherries,
+3361,alcoholic beverages,sweet dessert wine,
+3362,breads,sweet French bread,
+3363,pickled fruit/vegetables,sweet gherkins,
+3364,fresh vegetables,sweet green pepper,s
+3365,deli meats,sweet Italian sausage,
+3366,fresh vegetables,sweet onion,s
+3367,spices and seasonings,sweet paprika,
+3368,vinegars,sweet pickle vinegar,
+3369,fresh fruit,sweet plum,s
+3372,canned/bottled vegetables,sweet potatoes in syrup,
+3373,fresh vegetables,sweet red or green bell pepper,s
+3374,fresh vegetables,sweet red onion,s
+3378,fresh vegetables,sweet yellow pepper,s
+3379,meat/poultry,sweetbreads,
+3381,hot beverages,sweetened hot chocolate powder,
+3382,sweeteners,sweetener,
+3383,fresh vegetables,Swiss chard,
+3384,cheese,Swiss cheese,
+3388,fresh seafood,swordfish or other firm white fish,
+3389,fresh seafood,swordfish steaks,
+3390,Oriental products,Szechuan pepper oil,
+3391,meat/poultry,T-bone steak,s
+3392,condiments/sauces,tabasco sauce,
+3393,condiments/sauces,Tabasco pepper sauce,
+3397,Mexican products,taco sauce,
+3399,spices and seasonings,taco seasoning mix,
+3400,Mexican products,taco shell,s
+3401,nuts and seeds,sesame tahini,
+3402,condiments/sauces,tamari,
+3404,condiments/sauces,tamari soy sauce,
+3406,fresh fruit,tamarind,s
+3407,fruit juices,tamarind juice,
+3408,condiments/sauces,tandoori paste,
+3409,Oriental products,tang chi or preserved radish,
+3410,fresh fruit,tangelo,s
+3411,fresh fruit,tangerine,s
+3412,spices and seasonings,tangerine peel,
+3413,baking products,tapioca,
+3415,spices and seasonings,tarragon,
+3416,spices and seasonings,tarragon leaf,#NAME?
+3418,fresh fruit,tart red cherries,
+3424,baking products,tart shell,
+3425,condiments/sauces,tartar sauce,
+3428,spices and seasonings,tellicherry black pepper,
+3429,vegetarian products,tempeh,
+3430,Oriental products,tempura sauce,
+3431,meat/poultry,tenderloin or fillet steak,s
+3432,beverages,tepid water,
+3433,alcoholic beverages,tequila,
+3436,Oriental products,teriyaki sauce,
+3437,fresh fruit,Texas blueberries,
+3438,fresh fruit,Texas orange,s
+3440,fresh vegetables,Thai eggplant,s
+3441,Oriental products,Thai fish sauce,
+3442,fresh vegetables,Thai pepper,s
+3445,deli meats,thick bacon,
+3449,fresh vegetables,thin asparagus,
+3451,fresh fruit,lemon slice,s
+3453,pasta/noodles,thin or medium egg noodles,
+3458,fresh fruit,Thompson seedless grape,s
+3459,salad dressings,thousand island salad dressing,
+3460,spices and seasonings,thyme,
+3461,spices and seasonings,thyme leaves,
+3462,alcoholic beverages,Tia Maria,
+3463,fresh seafood,tilapia fillet,s
+3464,cheese,tilsit cheese,
+3466,fresh vegetables,tiny red potatoes,
+3467,canned fish,tiny shrimp,
+3468,meat/poultry,tip of the round,
+3469,nuts and seeds,toasted almonds,
+3470,nuts and seeds,toasted nuts,
+3472,nuts and seeds,toasted peanuts,
+3473,Oriental products,toasted sesame oil,
+3474,nuts and seeds,toasted sesame seeds,
+3475,nuts and seeds,toasted slivered almonds,
+3476,cereals,toasted wheat germ,
+3477,vegetarian products,tofu,
+3478,vegetarian products,tofu or bean curd,
+3479,fresh vegetables,tomatillo,s
+3480,fresh vegetables,tomato,es
+3484,canned/bottled juice,tomato juice,
+3486,tomato products,tomato puree,
+3487,pasta/noodles,tomato rosette macaroni,
+3488,Mexican products,tomato salsa,
+3490,tomato sauces,"canned tomato sauce, no salt added",
+3492,soups,tomato soup,
+3493,condiments/sauces,tomato tapenade,
+3497,tomato products,canned tomatoes in puree,
+3500,meat/poultry,beef tongue,
+3501,meat/poultry,top round,
+3502,meat/poultry,top round steak,s
+3503,meat/poultry,top sirloin steak,s
+3505,pasta/noodles,tortellini,
+3507,snack foods,tortilla chips,
+3510,meat/poultry,tripe,
+3511,alcoholic beverages,Triple Sec liqueur,
+3514,grains,triticale,
+3515,baking products,triticale flour,
+3516,fresh seafood,trout,
+3517,fresh seafood,trout fillet,s
+3518,imported products,truffle,s
+3519,pasta/noodles,tubetti,
+3520,spices and seasonings,turmeric,
+3523,fresh seafood,tuna steak,s
+3524,fresh seafood,turbot,
+3525,meat/poultry,turkey,
+3526,deli meats,turkey bacon,
+3528,meat/poultry,turkey breast cutlet,s
+3529,meat/poultry,turkey breast steak,
+3531,soups,turkey broth,
+3533,meat/poultry,turkey cutlet,s
+3534,meat/poultry,turkey drumstick,s
+3535,deli meats,turkey frankfurter,s
+3536,meat/poultry,turkey giblet,s
+3538,deli meats,turkey ham,
+3544,deli meats,turkey pastrami,
+3546,meat/poultry,turkey roast,s
+3547,deli meats,turkey salami,
+3549,deli meats,turkey sausage,s
+3550,meat/poultry,turkey tenderloin,s
+3551,meat/poultry,turkey thigh,s
+3553,meat/poultry,turkey wing,s
+3555,fresh vegetables,turnip,s
+3558,baking products,unbleached flour,
+3565,pasta/noodles,rotini macaroni,
+3567,gelatin,unflavored gelatin,
+3570,dairy,unsalted butter,
+3571,canned fish,unsalted light tuna in oil,
+3572,canned fish,unsalted light tuna in water,
+3573,nuts and seeds,unsalted peanuts,
+3575,canned fish,unsalted white tuna in oil,
+3576,canned fish,unsalted white tuna in water,
+3577,bread products,unseasoned dry bread crumbs,
+3578,sweeteners,unsulphured molasses,
+3579,fruit juices,unsweetened apple juice,
+3582,canned/bottled fruit,unsweetened applesauce,
+3583,frozen fruit,unsweetened blueberries,
+3584,baking products,unsweetened chocolate,
+3586,baking products,unsweetened cocoa powder,
+3587,baking products,unsweetened coconut flake,s
+3588,fruit juices,unsweetened orange juice,
+3589,fruit juices,unsweetened pineapple juice,
+3590,canned/bottled vegetables,unsweetened pumpkin filling,
+3591,frozen fruit,unsweetened strawberries,
+3592,dairy,usli ghee,
+3593,canned/bottled juice,V-8 juice,
+3594,fresh fruit,valencia orange,s
+3595,spices and seasonings,vanilla,
+3596,spices and seasonings,vanilla bean,s
+3598,spices and seasonings,vanilla extract,
+3601,frozen desserts,vanilla nonfat frozen yogurt,
+3602,beverages,vanilla shake,s
+3603,baking products,vanilla sugar,
+3604,cookies/crackers,vanilla wafer cookies,
+3606,dairy,vanilla yogurt,
+3607,meat/poultry,veal,
+3608,meat/poultry,veal breast,s
+3609,meat/poultry,veal cutlet,s
+3610,meat/poultry,veal sausage,s
+3611,meat/poultry,veal steak,s
+3612,fresh vegetables,vegetables,
+3613,soups,Vegetable Broth,
+3614,oils and fats,vegetable cooking spray,
+3618,oils and fats,vegetable oil,
+3619,oils and fats,vegetable oil spray,
+3622,oils and fats,vegetable shortening,
+3625,meat/poultry,venison,
+3626,meat/poultry,venison cutlet,s
+3627,meat/poultry,venison steak,s
+3628,pasta/noodles,vermicelli,
+3631,fresh vegetables,vidalia onion,s
+3632,canned meat,Vienna sausage,s
+3634,fresh vegetables,vine leaf,#NAME?
+3636,vinegars,vinegar,
+3637,oils and fats,virgin olive oil,
+3639,alcoholic beverages,vodka,
+3640,nuts and seeds,walnuts,
+3641,nuts and seeds,walnut halves,
+3643,oils and fats,walnut oil,
+3646,nuts and seeds,walnut pieces,
+3647,nuts and seeds,walnuts or pecans,
+3648,beverages,warm water,
+3649,beverages,water,
+3650,canned/bottled vegetables,water chestnuts,
+3655,fresh vegetables,watercress,
+3657,fresh fruit,watermelon,
+3658,canned/bottled vegetables,wax beans,
+3659,grains,Wehani rice,
+3660,fresh vegetables,Western eggplant,s
+3661,meat/poultry,Westphalian ham,
+3662,grains,wheat,
+3663,grains,wheat berries,
+3664,cereals,wheat bran,
+3665,cereals,wheat germ,
+3669,dairy,whipped cream,
+3670,baking products,powdered dessert topping,
+3672,dairy,whipping cream,
+3673,canned/bottled vegetables,white beans,
+3674,fresh vegetables,white boiling onion,s
+3675,breads,white bread,
+3676,bread products,white bread crumbs,s
+3677,cheese,white cheddar cheese,
+3678,fresh vegetables,white corn,
+3679,grains,white corn meal,
+3681,fresh seafood,white fish,
+3682,fresh seafood,white fish fillet,s
+3684,fruit juices,white grape juice,
+3685,fresh fruit,white grapefruit,s
+3686,frozen fruit,white grapefruit juice,
+3687,fresh herbs,white horseradish,
+3689,Oriental products,white miso,
+3690,fresh vegetables,white mushroom,s
+3692,spices and seasonings,white or black pepper,
+3693,fresh seafood,white or light fish,
+3694,spices and seasonings,white or red pepper,
+3696,canned/bottled vegetables,white pearl onions,
+3697,spices and seasonings,white pepper,
+3698,fresh vegetables,white potato,es
+3701,dried beans,small white beans,
+3702,baking products,white sugar,
+3703,vinegars,white vinegar,
+3704,alcoholic beverages,white wine,
+3709,spices and seasonings,whole allspice,
+3710,spices and seasonings,whole bay leaf,#NAME?
+3711,spices and seasonings,whole black peppercorns,
+3714,fresh vegetables,whole butterhead lettuce,
+3722,spices and seasonings,whole cloves,
+3723,canned/bottled vegetables,whole corn kernels,
+3724,dried fruit,whole date,s
+3725,fresh herbs,whole dillweed,
+3726,eggs,whole egg,s
+3727,frozen vegetables,whole frozen corn,
+3729,dairy,whole goat milk,
+3730,breads,whole grain bread,
+3731,condiments/sauces,whole grain mustard,
+3734,fresh vegetables,whole kernel corn,
+3735,canned/bottled vegetables,whole kernel corn with liquid,
+3737,fresh vegetables,whole large leek,s
+3740,fresh vegetables,whole mushroom,s
+3741,spices and seasonings,whole mustard seed,s
+3746,fresh vegetables,whole potato,es
+3749,nuts and seeds,whole roasted sesame seeds,
+3751,fresh vegetables,whole snow pea pods,
+3752,spices and seasonings,whole star anise,
+3753,fresh vegetables,whole tomatillo,s
+3757,breads,whole wheat bread,
+3758,breads,whole wheat bun,s
+3759,baking products,whole wheat flour,
+3761,breads,whole wheat pita bread,s
+3762,pasta/noodles,whole wheat spaghetti,
+3763,Mexican products,whole wheat tortilla,s
+3764,grains,whole-grain barley,
+3765,grains,whole-ground yellow corn meal,
+3769,baking products,whole wheat pastry flour,
+3770,pasta/noodles,wholewheat lasagne,
+3771,grains,wild rice,
+3772,vinegars,wine vinegar,
+3773,Oriental vegetables,winter melon,
+3774,spices and seasonings,winter savory,
+3775,fresh vegetables,winter squash,
+3776,fresh vegetables,Winter Squash by Frieda,
+3777,salad dressings,Wish-Bone Healthy Sensation! French Dres,
+3778,salad dressings,Wish-Bone Healthy Sensation! Honey Dijon,
+3779,salad dressings,Wish-Bone Healthy Sensation! Thousand Is,
+3780,salad dressings,Wish-Bone Healthy Sensation! Chunky Blue,
+3782,salad dressings,Wish-Bone Italian Dressing,
+3783,Oriental products,won ton,
+3784,Oriental products,wonton wrapper,s
+3785,spices and seasonings,woodsmoke flavoring,
+3787,condiments/sauces,Worcestershire sauce,
+3789,fresh seafood,wreckfish fillet,s
+3790,soups,Wyler's Chicken-Flavor Instant Bouillon,
+3791,canned/bottled vegetables,yam,s
+3792,baking products,yeast,
+3794,canned/bottled vegetables,yellow beans,
+3795,fresh vegetables,yellow bell pepper,s
+3797,canned/bottled vegetables,yellow corn,
+3798,baking products,yellow corn flour,
+3799,grains,yellow corn meal,
+3803,fresh vegetables,yellow hot pepper,s
+3807,fresh fruit,yellow peach,es
+3810,fresh vegetables,yellow tomato,es
+3811,fresh vegetables,yellow wax bean,s
+3812,fresh vegetables,yellowflesh potato,es
+3813,dairy,plain yogurt,
+3815,fresh vegetables,yucca root,s
+3816,fresh fruit,zest of 1 lemon,
+3817,fresh fruit,zest of 1/2 lemon,
+3820,alcoholic beverages,Zinfandel wine,
+3822,pasta/noodles,ziti macaroni,
+3827,fresh vegetables,zucchini squash,
+3829,cereals,All-Bran,
+3835,nuts and seeds,blanched slivered almonds,
+3837,fruit juices,bottled lime juice,
+3842,soups,chicken noodle soup mix,
+3843,oils and fats,chili oil,
+3845,baking products,cornbread mix,
+3846,alcoholic beverages,creme de casis,
+3848,dried fruit,dried currants,
+3851,frozen fruit,frozen unsweetened blueberries,
+3852,gelatin,fruit flavored gelatin,
+3854,fresh vegetables,green onion bunch,es
+3855,spices and seasonings,green onion flakes,
+3856,meat/poultry,lean boneless beef,
+3857,gelatin,lemon flavored gelatin,
+3860,cheese,lowfat low sodium mozarella cheese,
+3861,tomato products,low sodium spaghetti sauce,
+3863,bread products,mini lahvosh rounds,
+3865,soups,onion soup mix,
+3866,Oriental noodles,Oriental noodles,
+3870,jams and jellies,reduced sugar grape jelly,
+3871,baking products,refrigerated buttermilk biscuit,s
+3872,fresh vegetables,small whole potatoes,
+3876,deli meats,turkey kielbasa sausage,
+3878,dairy,unsalted margarine,
+3879,frozen fruit,unsweetened frozen raspberries,
+3881,grains,wild and long grain rice,
+3882,Oriental noodles,Chinese or Japanese soba noodles,
+3883,bread products,bread cubes,
+3884,breads,bread slice,s
+3885,spices and seasonings,dried herbs,
+3887,fresh seafood,firm fish steak,s
+3888,miscellaneous,foil or baking parchment,
+3889,fresh seafood,fresh fish steaks or fillets,
+3892,spices and seasonings,freeze dried green peppercorns,
+3893,nuts and seeds,horse chestnuts,
+3894,meat/poultry,lean sirloin,
+3895,miscellaneous,liquid,
+3896,alcoholic beverages,"low alcohol wine, 9% or less",
+3901,Oriental noodles,"Oriental noodles, beef flavor",
+3902,cheese,part skim jack cheese,
+3903,cheese,part skim feta cheese,
+3904,imported products,assorted caviar,
+3905,canned/bottled fruit,candied cherries,
+3906,canned/bottled fruit,candied citrus peel,
+3907,canned/bottled fruit,candied orange rind,
+3908,imported products,canned black truffles,
+3911,Oriental products,cloud ears,
+3912,fresh seafood,fish bones,
+3914,fresh seafood,fish heads and carcasses,
+3916,fresh vegetables,fresh chiles,
+3917,canned/bottled fruit,glace cherries,
+3922,cookies/crackers,oyster crackers,
+3923,pickled fruit/vegetables,pickled daikon,
+3924,jams and jellies,plum jam,
+3925,imported products,rose water,
+3927,imported products,soft almond paste,
+3930,imported products,white truffle,
+3931,alcoholic beverages,light beer,s
+3932,alcoholic beverages,bloody mary,
+3933,alcoholic beverages,daiquiri,
+3934,alcoholic beverages,gin and tonic,
+3935,alcoholic beverages,manhattan,
+3936,alcoholic beverages,pina colada,
+3937,alcoholic beverages,screwdriver,
+3938,alcoholic beverages,tequila sunrise,
+3939,alcoholic beverages,tom collins,
+3940,alcoholic beverages,whiskey sour mix,
+3941,alcoholic beverages,creme de menthe,
+3942,alcoholic beverages,"80 proof alcohol",
+3943,alcoholic beverages,dark beer,
+3944,alcoholic beverages,Frangelico liqueur,
+3945,alcoholic beverages,orange-peel liqueur,
+3947,alcoholic beverages,riesling or dry white wine,
+3949,alcoholic beverages,sweet muscat blanc,
+3953,baking products,firmly packed light brown sugar,
+3955,beverages,malted milk,
+3956,beverages,chocolate milk,
+3957,beverages,"2% lowfat chocolate milk",
+3958,beverages,"1% lowfat chocolate milk",
+3959,beverages,thick chocolate shake,s
+3960,beverages,thick vanilla shake,s
+3961,beverages,cream soda,
+3962,beverages,grape soda,
+3963,beverages,lemon-lime soda,
+3964,beverages,orange soda,
+3965,beverages,tonic water,
+3966,beverages,root beer,
+3967,beverages,decaffenated coffee,
+3968,beverages,cola,
+3969,beverages,diet cola,
+3970,bread products,fine white bread crumbs,
+3971,breads,baguette slices,
+3972,breads,buttered toast strips,
+3973,candy,white chocolate,
+3974,canned meat,canned chicken spread,
+3975,canned meat,canned chopped ham,
+3976,canned meat,ham salad spread,
+3977,canned/bottled fruit,canned gooseberries with juice,
+3979,canned/bottled vegetables,canned tomatillos,
+3981,cereals,Alpha-Bits cereal,
+3982,cereals,Apple Jacks cereal,
+3983,cereals,Bran Chex cereal,
+3984,cereals,Cap'n Crunch cereal,
+3985,cereals,Cheerios cereal,
+3986,cereals,Cocoa Krispies cereal,
+3987,cereals,Cookie Crisp cereal,
+3988,cereals,Corn Chex cereal,
+3989,cereals,Cracklin' Bran cereal,
+3990,cereals,Crispy Wheats and Raisins cereal,
+3991,cereals,Froot Loops cereal,
+3992,cereals,Frosted Mini Wheats cereal,
+3994,cereals,Fruity Pebbles cereal,
+3995,cereals,Golden Grahams cereal,
+3996,cereals,Honey Nut Cheerios cereal,
+3997,cereals,honeycomb cereal,
+3998,cereals,Kix cereal,
+3999,cereals,Life cereal,
+4000,cereals,Lucky Charms cereal,
+4001,cereals,Nature Valley Granola cereal,
+4002,cereals,Product 19 cereal,
+4003,cereals,Kellogg's Raisin Bran cereal,
+4004,cereals,Rice Chex cereal,
+4005,cereals,Rice Krispies cereal,
+4006,cereals,Special K cereal,
+4007,cereals,Sugar Corn Pops cereal,
+4008,cereals,Sugar Frosted Flakes cereal,
+4009,cereals,Sugar Smacks cereal,
+4010,cereals,Total cereal,
+4011,cereals,Trix cereal,
+4012,cereals,Wheat Chex cereal,
+4013,cereals,Wheaties cereal,
+4014,cereals,cooked Maypo,
+4015,cereals,cooked Ralston cereal,
+4016,cereals,cooked Roman Meal,
+4017,cereals,cooked Wheatena,
+4018,cereals,Shredded Wheat cereal,
+4019,cheese,caraway cheese,
+4020,cheese,cottage cheese with fruit,
+4021,cheese,limburger cheese,
+4022,cheese,goat cheese log,
+4023,condiments/sauces,Greek olives,
+4024,condiments/sauces,black nicoise olives,
+4025,condiments/sauces,black olive pieces,
+4026,condiments/sauces,black sesame seeds,
+4027,condiments/sauces,creole mustard,
+4028,cookies/crackers,amaretti cookies,
+4029,dairy,whipped butter,
+4030,dairy,eggnog,
+4031,deli meats,bockwurst,
+4032,deli meats,turkey bologna,
+4033,deli meats,bratwurst,
+4034,deli meats,Italian sausage,
+4036,dried vegetables,dried ancho chiles,
+4039,dried vegetables,dried red chiles,
+4040,dried beans,green split peas,
+4041,dried fruit,white raisins,
+4042,fresh fruit,elderberries,
+4043,fresh fruit,jackfruit,
+4044,fresh fruit,jujube,
+4045,fresh fruit,bitter oranges,
+4047,fresh fruit,prickly pear,
+4048,fresh fruit,seedless orange,s
+4049,fresh fruit,small blue prune plums,
+4051,fresh seafood,atlantic pollock fillet,
+4052,fresh seafood,pompano fillet,
+4053,fresh seafood,roe,
+4054,fresh seafood,orange roughy,
+4055,fresh seafood,sablefish fillet,
+4056,fresh seafood,king crab leg,
+4057,fresh seafood,live maine lobster,s
+4058,fresh seafood,lobster meat,
+4060,frozen dairy,orange sherbet,
+4061,frozen desserts,coffee ice cream,
+4062,fresh fruit/vegetable juices,fresh pomegranate juice,
+4063,meat/poultry,duck leg,s
+4064,meat/poultry,boneless lean pork cutlet,
+4066,meat/poultry,club steak,s
+4067,deli meats,cotechino sausage,
+4068,meat/poultry,lamb or calf brains,
+4069,meat/poultry,leg of veal,
+4070,deli meats,mild Italian pork sausage,
+4072,meat/poultry,pork loin,
+4073,meat/poultry,pork loin roast with bone,
+4074,meat/poultry,skirt steak,
+4075,meat/poultry,smoked pork chops,
+4077,meat/poultry,veal shank,
+4078,nuts and seeds,beechnuts,
+4079,nuts and seeds,Brazil nuts,
+4080,nuts and seeds,butternuts,
+4081,nuts and seeds,black walnuts,
+4082,oils and fats,rendered bacon fat,
+4083,Oriental products,black soy sauce,
+4084,Oriental products,sushi rice,
+4085,pasta/noodles,fresh herb pasta,
+4086,salad dressings,russian salad dressing,
+4087,salad dressings,lowcal russian salad dressing,
+4088,salad dressings,thousand island dressing,
+4089,salad dressings,soybean mayonnaise,
+4090,soups,cond. cream of asparagus soup,
+4091,soups,cond. black bean soup,
+4092,soups,cond. bean and bacon soup,
+4093,soups,cond. beef noodle soup,
+4094,soups,cond. cheese soup,
+4095,soups,cond. chunky chicken soup,
+4096,soups,cond. cream of chicken soup,
+4097,soups,cond. chicken gumbo soup,
+4098,soups,cond. chicken noodle soup,
+4099,soups,cond. chicken rice soup,
+4100,soups,cond. chicken vegetable soup,
+4101,soups,cond. Manhattan clam chowder,
+4102,soups,cond. New England clam chowder,
+4103,soups,gazpacho soup,
+4104,soups,lentil ham soup,
+4105,soups,cond. minestrone soup,
+4106,soups,cond. mushroom barley soup,
+4107,soups,cond. cream of mushroom soup,
+4108,soups,cond. onion soup,
+4109,soups,cond. cream of onion soup,
+4110,soups,cond. oyster stew,
+4111,soups,cond. green pea soup,
+4112,soups,split pea and ham soup,
+4113,soups,cond. cream of potato soup,
+4114,soups,cond. tomato rice soup,
+4115,soups,cond. turkey noodle soup,
+4116,soups,chunky vegetable soup,
+4117,soups,cond. vegetable beef soup,
+4118,soups,chicken mushroom soup,
+4119,soups,tomato bisque soup,
+4120,soups,Brown Veal Stock,
+4122,soups,clarified chicken stock,
+4123,spices and seasonings,dried chervil,
+4126,spices and seasonings,white peppercorns,
+4127,spices and seasonings,dried summer savory,
+4128,spices and seasonings,green peppercorn,
+4129,sweeteners,light molasses,
+4130,fresh vegetables,baby artichokes,
+4131,fresh vegetables,beets with greens attached,
+4132,vegetarian products,firm Chinese-style tofu,
+4133,vinegars,black vinegar,
+4134,prepared foods,fried egg,s
+4135,prepared foods,cheese danish,
+4136,prepared foods,cinnamon danish,
+4137,prepared foods,scrambled egg,
+4138,prepared foods,pancakes w/butter and syrup,
+4139,prepared foods,hash brown potatoes,
+4140,prepared foods,hot fudge sundae,s
+4141,prepared foods,"fried chicken, dark meat",
+4142,prepared foods,"fried chicken, light meat",
+4143,prepared foods,fried breaded fish fillet,
+4144,prepared foods,cheese pizza slice,s
+4145,prepared foods,pepperoni pizza slice,s
+4146,prepared foods,salad with chicken,
+4147,prepared foods,chef salad,
+4148,prepared foods,fried breaded shrimp,
+4149,prepared foods,cheese and bean burrito,s
+4150,prepared foods,beef burrito,s
+4151,prepared foods,cheese enchilada,s
+4152,prepared foods,taco,s
+4153,prepared foods,taco salad,s
+4154,prepared foods,cheeseburger,s
+4155,prepared foods,chicken fillet sandwich,
+4156,prepared foods,fish sandwich w/tartar sauce,
+4157,prepared foods,hamburger,s
+4158,prepared foods,ham and cheese sandwich,es
+4159,prepared foods,chili dog,s
+4160,prepared foods,corn dog,s
+4161,prepared foods,roast beef sandwich,es
+4162,prepared foods,cold cut submarine,s
+4163,prepared foods,fried onion rings,
+4164,prepared foods,potato salad,
+4165,sauces and gravies,dehydrated white sauce,
+4166,sauces and gravies,canned au jus gravy,
+4167,sauces and gravies,canned beef gravy,
+4168,sauces and gravies,canned chicken gravy,
+4169,sauces and gravies,canned mushroom gravy,
+4170,sauces and gravies,canned turkey gravy,
+4171,sauces and gravies,bearnaise sauce,
+4172,sauces and gravies,hollandaisse sauce,
+4178,sauces and gravies,hot pan juices,
+4182,fresh vegetables,fresh garlic bulb,s
+4183,meat/poultry,knucklebone,s
+4184,meat/poultry,meaty bone,s
+4187,pasta/noodles,manicotti,
+4188,frozen baking products,pizza crust,
+4189,meat/poultry,ground chicken,
+4190,bread products,whole wheat bread crumbs,
+4191,salad dressings,Wish-Bone Lite Italian Dressing,
+4192,cereals,bran cereal shreds,
+4193,cereals,fiber cereal,
+4194,breads,cinnamon raisin bread,
+4195,frozen dairy,Egg Beaters 99% Real Egg Product,
+4196,sweeteners,maple flavored syrup,
+4197,oils and fats,Fleischmann's margarine,
+4198,cereals,NABISCO 100% Bran Cereal,
+4199,breads,low-sodium white bread,
+4201,pasta/noodles,spinach linguine,
+4202,meat/poultry,veal shoulder,
+4203,meat/poultry,veal loin chops,
+4204,meat/poultry,veal rib chop,
+4205,meat/poultry,veal for stew,
+4206,meat/poultry,veal riblets,
+4207,meat/poultry,boneless veal breast,
+4208,meat/poultry,veal round steak,
+4210,fresh fruit/vegetable juices,Florida Tangerine Juice,
+4211,fresh fruit,grated tangerine peel,
+4213,dried fruit,pitted dates,
+4215,canned/bottled juice,carrot juice,
+4216,spices and seasonings,celery salt,
+4217,fresh fruit,large cantaloupe,
+4219,soups,low sodium chicken stock,
+4220,cheese,Wisconsin Jalapeno Jack Cheese,
+4221,frozen vegetables,"corn, broccoli and red peppers",
+4222,cheese,Wisconsin Colby Cheese,
+4223,cheese,lowfat Wisconsin Muenster Cheese,
+4224,salad dressings,no fat Italian salad dressing,
+4225,salad dressings,no fat Thousand Island dressing,
+4226,canned/bottled vegetables,sliced water chestnuts,
+4228,meat/poultry,lean ground lamb,
+4229,dried beans,cooked pinto beans,
+4230,canned beans,spicy red chili beans,
+4231,beverages,cafe mocha powder,
+4232,canned/bottled fruit,canned grapefruit slices,
+4233,canned/bottled vegetables,canned spinach,
+4234,canned/bottled vegetables,canned carrots,
+4235,canned/bottled vegetables,canned asparagus,
+4236,canned/bottled vegetables,canned beets,
+4237,canned/bottled fruit,canned blackberries,
+4238,canned/bottled fruit,canned blueberries,
+4239,canned/bottled fruit,canned cranberry sauce,
+4240,beverages,cappuccino,
+4241,cookies/crackers,cheese cracker,s
+4242,cookies/crackers,butter cracker,s
+4243,beverages,diet soda,
+4244,nuts and seeds,dry roasted unsalted pecan halves,
+4245,nuts and seeds,roasted mixed nuts,
+4246,nuts and seeds,dry roasted sunflower seeds,
+4247,frozen vegetables,frozen lima beans,
+4248,beverages,herb tea,
+4249,jams and jellies,jam,
+4250,dairy,lowfat fruit yogurt,
+4251,cereals,malt-o-meal,
+4252,snack foods,pretzels,
+4253,cereals,raisin bran,
+4254,deli meats,beef lunchmeat,
+4255,beverages,tea,
+4256,fresh vegetables,turnip greens,
+4257,cookies/crackers,wheat thins crackers,
+4258,nuts and seeds,dry roasted cashews,
+4259,salad dressings,low-cal thousand island dressing,
+4260,salad dressings,low-cal blue cheese dressing,
+4261,salad dressings,low-cal ranch style dressing,
+4263,canned/bottled juice,no-salt-added vegetable juice cocktail,
+4266,canned/bottled vegetables,canned green beans,
+4267,canned/bottled vegetables,canned wax beans,
+4268,canned beans,canned lima beans,
+4269,deli meats,canned ham,
+4270,canned/bottled fruit,chunky fruit cocktail,
+4271,sauces and gravies,brown gravy mix,
+4272,meat/poultry,boneless veal leg rump roast,
+4273,meat/poultry,lamb shoulder chop,
+4274,salad dressings,ranch style salad dressing,
+4276,pasta/noodles,cooked spinach linguine,
+4277,meat/poultry,veal shoulder arm steak,
+4278,deli,tortellini deli salad,
+4285,fresh vegetables,lettuce leaves,
+4286,meat/poultry,skinned turkey thighs,
+4287,spices and seasonings,ground red pepper,
+4288,dried beans,cooked beans,
+4289,dairy,plain nonfat yogurt,
+4290,meat/poultry,beef sirloin steak,
+4291,canned/bottled vegetables,canned sliced water chestnuts,
+4295,spices and seasonings,basil,
+4298,meat/poultry,"cooked broiler-fryer, boned, skinned",
+4299,pasta/noodles,cooked pasta,
+4300,grains,cooked barley,
+4301,meat/poultry,cooked lean American lamb,
+4302,dried beans,cooked lima beans,
+4303,fresh fruit,red delicious apple,
+4304,fresh fruit,rome apple,
+4305,fresh vegetables,large tomato,es
+4306,fresh vegetables,small tomato,
+4307,fresh fruit,large apple,s
+4308,meat/poultry,loin of boar,
+4309,cookies/crackers,macaroon crumbs,
+4310,candy,marshmallow cream,
+4311,meat/poultry,meaty chicken pieces,
+4312,cheese,mild cheese,
+4313,spices and seasonings,Hungarian paprika,
+4314,fresh vegetables,mild red onion,s
+4315,deli meats,mild sausage link,s
+4316,alcoholic beverages,Mirin,
+4317,Oriental products,miso,
+4318,canned/bottled fruit,mixed candied fruits,
+4319,powdered dairy,non-instant nonfat dry milk,
+4320,condiments/sauces,oil-cured black olives,
+4321,fresh herbs,parsley sprig,s
+4322,alcoholic beverages,pear liqueur,
+4323,baking products,pearl tapioca,
+4324,cheese,Pecorino Romano cheese,
+4325,fresh fruit,pippin apple,s
+4327,fresh fruit,pomegranate seeds,
+4328,meat/poultry,pork fat,
+4329,cheese,pot cheese,
+4330,Oriental products,potsticker skins,
+4331,meat/poultry,poussin,s
+4332,meat/poultry,beef prime rib,
+4333,cereals,quick-cooking hominy grits,
+4334,nuts and seeds,raw peanuts,
+4335,baking products,raw sugar,
+4336,Oriental products,red miso,
+4337,Oriental noodles,rice vermicelli,
+4338,fresh fruit,fresh fig,s
+4339,meat/poultry,roasting chicken,
+4340,fresh vegetables,Roma tomato,es
+4341,alcoholic beverages,Shaoxing wine,
+4342,fresh seafood,smelt,
+4343,meat/poultry,Smithfield ham,
+4344,baking products,sourdough starter,
+4345,deli meats,spicy sausage link,s
+4346,fresh vegetables,squash blossoms,
+4347,fresh seafood,sturgeon steak,s
+4348,meat/poultry,suet,
+4349,fresh herbs,tarragon sprig,s
+4350,vinegars,tarragon vinegar,
+4351,vinegars,tarragon wine vinegar,
+4352,fresh fruit,tart apple,s
+4353,meat/poultry,tasso,
+4354,Oriental products,konbu,
+4355,fresh herbs,sorrel leaves,
+4356,pasta/noodles,tiny soup pasta,
+4357,tomato sauces,tomato sauce,
+4358,tomato sauces,tomatoes in puree,
+4359,meat/poultry,veal bones,
+4360,meat/poultry,veal frankfurter,s
+4361,meat/poultry,veal scallops,
+4362,nuts and seeds,blanched almonds,
+4363,meat/poultry,extra lean beef,
+4364,Oriental products,wasabi,
+4365,spices and seasonings,white sesame seeds,
+4366,cereals,whole bran cereal,
+4367,dairy,whole milk,
+4368,fresh seafood,abalone steak,
+4369,alcoholic beverages,almond-flavored liqueur,
+4371,meat/poultry,andouille,
+4372,fresh seafood,angler,
+4373,alcoholic beverages,anise-flavored liqueur,
+4374,grains,arborio rice,
+4375,fresh vegetables,artichoke leaf,#NAME?
+4376,fresh vegetables,baby onion,s
+4377,fresh fruit,Bartlett pear,s
+4379,meat/poultry,beef round,
+4380,condiments/sauces,black olive,s
+4381,nuts and seeds,blanched cashews,
+4382,fresh seafood,blue crab,
+4383,fresh vegetables,boiled potato,es
+4384,beverages,boiling salted water,
+4385,soups,stock,
+4386,meat/poultry,boneless beef chuck,
+4387,meat/poultry,boneless chuck roast,
+4389,fresh vegetables,broccoli raab,
+4390,breads,buttered toast,
+4391,meat/poultry,calf's foot,
+4392,canned/bottled fruit,candied peel,
+4393,canned/bottled vegetables,canned hominy,
+4394,fresh seafood,catfish,
+4396,deli meats,chaurice sausage,
+4397,cookies/crackers,chocolate cookie crumbs,
+4398,baking products,coarse sugar,
+4399,grains,cooked short-grain rice,
+4400,meat/poultry,corned-beef brisket,
+4401,cookies/crackers,crackers,
+4402,deli meats,cooked bacon,
+4403,vinegars,distilled white vinegar,
+4404,dried beans,dried flageolets,
+4405,Oriental vegetables,dried lily buds,
+4406,dried fruit,dried prune,s
+4407,fresh seafood,Dungeness crab,
+4408,Mexican products,flour tortilla,s
+4409,fresh fruit,freestone peach,es
+4410,fresh herbs,lemon grass,
+4411,fresh fruit,freshly squeezed orange juice,
+4412,alcoholic beverages,fruit liqueur,
+4413,jams and jellies,fruit preserves,
+4414,fresh fruit,green apple,s
+4415,spices and seasonings,ground red chile,s
+4416,meat/poultry,ground smoked pork picnic shoulder,
+4417,canned/bottled juice,hard cider,
+4418,fresh vegetables,garlic head,s
+4419,meat/poultry,beef fat,
+4420,condiments/sauces,hot mustard,
+4421,frozen desserts,ice cream,
+4422,fresh vegetables,Italian tomato,es
+4423,spices and seasonings,juniper berries,
+4424,Oriental products,katsuobushi,
+4425,baking products,lemon extract,
+4426,Oriental vegetables,lily buds,
+4427,fresh fruit,lime wedge,s
+4428,fresh fruit,lingonberries,
+4429,jams and jellies,lingonberry preserves,
+4430,alcoholic beverages,liqueur,
+4431,sweeteners,liquid glucose,
+4432,fresh seafood,crayfish,
+4433,spices and seasonings,seasoning of choice,
+4434,meat/poultry,beef soup bone,s
+4435,meat/poultry,tender beef,
+4436,meat/poultry,boneless stewing beef,
+4437,fresh vegetables,large shallot,s
+4438,fresh vegetables,watercress sprig,s
+4439,oils and fats,solid vegetable shortening,
+4440,alcoholic beverages,Drambuie liqueur,
+4441,vinegars,rice wine vinegar,
+4442,fresh fruit,juiced lemon,s
+4443,fresh fruit,juiced lime,s
+4444,fresh fruit,rind of 1 lemon,
+4445,fresh fruit,zest of 1 orange,
+4446,cheese,whole-milk mozzarella cheese,
+4448,cheese,whole-milk ricotta cheese,
+4449,fresh vegetables,large bok choy leaf,#NAME?
+4450,fresh fruit,sliced strawberry,#NAME?
+4451,Oriental products,spring-roll wrapper,s
+4452,fresh seafood,whole salmon,
+4453,fresh seafood,whole fish,
+4454,fresh fruit,rind of 2 oranges,
+4455,fresh fruit,rind of 1 orange,
+4456,meat/poultry,pheasant breast,s
+4457,imported products,nopalitos tiernos en rajas,
+4458,fresh vegetables,bunch of beets,
+4459,fresh vegetables,small beet,s
+4460,meat/poultry,broiler-fryer quarter,s
+4461,spices and seasonings,Old Bay seasoning,
+4462,alcoholic beverages,Kahlua,
+4463,cookies/crackers,chocolate wafer crumbs,
+4464,candy,HERSHEY'S milk chocolate bar,s
+4465,baked goods,HERSHEY'S unsweetened baking chocolate,
+4466,spices and seasonings,Lawry's Lemon Pepper Seasoning,
+4467,spices and seasonings,Lawry's seasoned salt,
+4468,candy,dark sweet chocolate,
+4469,frozen meat/poultry/seafood,"Rock Cornish game hen, skinned",
+4470,meat/poultry,beef tri-tip roast,
+4471,meat/poultry,boneless beef top sirloin steak,
+4472,meat/poultry,boneless beef sirloin steak,
+4473,meat/poultry,boneless beef chuck shoulder steak,
+4474,oils and fats,sunflower oil,
+4475,baked goods,HERSHEY'S semi-sweet chocolate chips,
+4476,pasta/noodles,cooked cholesterol free noodles,
+4477,jams and jellies,apple jelly,
+4478,cookies/crackers,animal crackers,
+4479,bread products,loaf of bread,
+4480,bread products,loaf Italian bread,
+4481,bread products,loaf rye bread,
+4482,bread products,loaf raisin bread,
+4483,bread products,loaf whole wheat bread,
+4484,bread products,loaf white bread,
+4485,dairy,cube of margarine,
+4486,dairy,cube of butter,
+4487,spices and seasonings,Lawry's seasoned pepper,
+4488,spices and seasonings,Lawry's Garlic Powder with Parsley,
+4489,baking products,Gold Medal all-purpose flour,
+4490,baked goods,Gold Medal whole wheat flour,
+4491,fresh vegetables,head bibb lettuce,
+4492,fresh vegetables,head boston lettuce,
+4493,fresh vegetables,head green leaf lettuce,
+4494,fresh vegetables,head red leaf lettuce,
+4495,fresh vegetables,head romaine lettuce,
+4496,fresh vegetables,head bok choy,
+4499,pasta/noodles,Mueller's cholesterol free pasta,
+4500,meat/poultry,boneless beef chuck blade steak,
+4501,beverages,soda water,
+4502,canned/bottled juice,canned cocktail vegetable juice,
+4503,grains,"instant white rice, uncooked",
+4504,fresh herbs,fresh ginger,
+4505,fresh herbs,rosemary leaf,#NAME?
+4506,fresh herbs,oregano leaf,#NAME?
+4507,fresh herbs,basil leaf,#NAME?
+4508,fresh herbs,marjoram leaf,#NAME?
+4509,salad dressings,oil-based bottled Italian dressing,
+4510,alcoholic beverages,raspberry-flavored liqueur,
+4511,meat/poultry,boneless beef chuck top blade steak,s
+4512,meat/poultry,boneless rib eye steak,s
+4513,meat/poultry,cube chuck steak,s
+4514,meat/poultry,lean boneless beef sirloin,s
+4515,meat/poultry,beef short ribs,
+4516,meat/poultry,boneless beef shoulder,
+4517,meat/poultry,lean ground chuck,
+4518,meat/poultry,veal shoulder chop,s
+4519,meat/poultry,lean center-cut pork chop,s
+4520,meat/poultry,ham steak,s
+4521,meat/poultry,ground venison,
+4522,meat/poultry,lean boneless pork loin,
+4523,fresh vegetables,all-purpose potato,es
+4525,grains,basmati rice,
+4526,condiments/sauces,Calamata olive,s
+4527,tomato products,canned crushed tomatoes,
+4528,condiments/sauces,canned medium olives,
+4529,canned/bottled fruit,canned pear halves in light syrup,
+4530,tomato products,"canned stewed tomatoes, no salt added",
+4531,canned fish,canned water packed tuna,
+4532,pasta/noodles,capellini,
+4533,meat/poultry,chicken drumstick,s
+4534,breads,club roll,s
+4535,unnamed location,defatted pan drippings,
+4536,condiments/sauces,drained pimiento pieces,
+4537,dried beans,dried white beans,
+4538,fresh vegetables,fennel fronds,
+4539,fresh fruit,fresh pineapple chunks,
+4540,fresh herbs,fresh tarragon leaf,#NAME?
+4541,frozen vegetables,frozen chopped kale,
+4542,pickled fruit/vegetables,gherkin,s
+4543,spices and seasonings,ground hot red pepper,
+4544,fresh vegetables,large all-purpose potato,es
+4545,fresh vegetables,large avocado,es
+4546,fresh vegetables,large cucumber,s
+4547,fresh vegetables,large eggplant,s
+4548,fresh vegetables,large globe artichoke,s
+4549,fresh fruit,large navel orange,s
+4550,fresh fruit,large pineapple,s
+4551,fresh fruit,large tart apple,s
+4552,fresh vegetables,large yellow bell pepper,s
+4553,pasta/noodles,lasagna noodles,
+4554,fresh fruit,McIntosh apple,s
+4555,cheese,medium-sharp cheddar cheese,
+4556,condiments/sauces,oil-cured olive,s
+4557,fresh herbs,parsley leaf,#NAME?
+4558,dairy,part-skim ricotta cheese,
+4559,fresh fruit/vegetable juices,pear nectar,
+4560,jams and jellies,plum preserves,
+4561,alcoholic beverages,port wine,
+4562,baked goods,pound cake,
+4563,fresh fruit,red pear,s
+4564,spices and seasonings,red pepper seasoning,
+4565,bread products,refrigerated pizza dough,
+4566,fresh vegetables,ripe avocado,es
+4567,bread products,round loaf of bread,
+4568,alcoholic beverages,sake,
+4569,meat/poultry,skinless boneless chicken thigh,s
+4570,meat/poultry,skinless turkey drumstick,s
+4571,fresh vegetables,small jicama,s
+4572,fresh vegetables,small turnip,s
+4573,pasta/noodles,spaghettini,
+4574,fresh vegetables,sweet pepper,s
+4575,fresh fruit,sweet pitted cherries,
+4576,canned/bottled fruit,canned sweet pitted cherries,
+4577,Mexican products,tostada shell,s
+4578,baking products,unsweetened Dutch processed cocoa powder,
+4579,tomato products,canned whole tomatoes,
+4580,meat/poultry,whole turkey breast on bone,
+4581,meat/poultry,whole turkey breast,
+4582,fresh vegetables,small fennel head,s
+4583,fresh seafood,chowder clam,s
+4584,fresh seafood,monkfish fillet,s
+4585,grains,pecan rice,
+4586,fresh vegetables,fresh beets without tops,
+4587,meat/poultry,bone-in turkey breast with skin,
+4588,meat/poultry,boneless duck breast half,#NAME?
+4589,sauces and gravies,bottled black bean sauce,
+4590,fresh vegetables,fresh cranberry bean,s
+4591,imported products,caponata,
+4592,candy,chocolate toffee bar,s
+4593,baked goods,cornbread,
+4594,fresh vegetables,fresh shiitake mushroom,
+4595,fresh vegetables,mache,
+4596,meat/poultry,skinless duck leg,
+4597,meat/poultry,whole chicken leg,s
+4599,meat/poultry,skinless chicken drumstick,
+4600,meat/poultry,"chicken leg with thigh, skinned",s
+4601,candy,peppermint candy,#NAME?
+4602,fresh herbs,peppermint leaf,#NAME?
+4603,fresh fruit,fresh sweet cherry,#NAME?
+4604,fresh fruit/vegetable juices,cranberry blueberry cocktail juice,
+4605,sweeteners,grenadine,
+4606,fresh fruit,grapefruit rind,
+4607,bread products,biscuit crumbs,
+4608,baked goods,shortbread crumbs,
+4609,baking products,cornmeal,
+4610,grains,whole kasha,
+4611,meat/poultry,duck carcass,es
+4612,meat/poultry,turkey carcass,es
+4613,meat/poultry,Cornish game hen,s
+4614,fresh vegetables,cremini mushroom,s
+4615,alcoholic beverages,bitters,
+4616,meat/poultry,boneless veal shoulder,
+4617,Mexican products,canned whole green chiles,
+4618,cookies/crackers,cracker crumbs,
+4619,hot beverages,chocolate-covered coffee bean,s
+4620,dried vegetables,dried Chilean mushroom,s
+4621,dried beans,dried white pea beans,
+4622,imported products,dry-cured black olive,s
+4623,soups,fish boullion,
+4624,canned/bottled juice,guava passion fruit drink,
+4625,fresh vegetables,heart of Boston lettuce,
+4626,snack foods,hot-air popped popcorn,
+4627,spices and seasonings,liquid red pepper seasoning,
+4628,frozen baking products,loaf frozen bread dough,
+4629,canned/bottled vegetables,marinated mixed vegetables,
+4630,hot beverages,mild-flavored tea,
+4631,fresh vegetables,Napa cabbage,
+4632,pasta/noodles,no-cook lasagna sheets,
+4633,fresh fruit,orange slice,s
+4634,frozen baking products,Phyllo leaves,
+4635,baking products,shredded sweetened coconut,
+4636,grains,uncooked long-grain white rice,
+4637,meat/poultry,boneless lamb shoulder,
+4638,cookies/crackers,no-salt saltine crackers,
+4640,dried beans,dried black beans,
+4641,cereals,cooked oatmeal,
+4642,hot beverages,instant coffee granules,
+4643,grains,long grain enriched white rice,
+4644,frozen fruit,frozen grapefruit juice concentrate,

@@ -22,6 +22,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
+import speedy.model.database.Tuple;
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
@@ -35,7 +36,7 @@ public class TestBenchLLMSpider1 {
     private static final TestRunner testRunner = new TestRunner();
     private static final ExcelExporter exportExcel = new ExcelExporter();
     private Map<String, List<ExpVariant>> variants;
-    private String executorModel = "llama3";
+    private String executorModel = "llama3"; // useful only for GPT
 
     public TestBenchLLMSpider1() {
         List<String> multipleConditionsOptimizers = List.of(
@@ -55,6 +56,23 @@ public class TestBenchLLMSpider1 {
 
         }
     }
+    
+    @Test
+    public void testExpected() {
+        List<String> expTabs = new ArrayList<>();
+        for (String dbID : variants.keySet()) {
+            System.out.println("DB:" + dbID);
+            List<ExpVariant> variantsForDB = variants.get(dbID);
+            for (ExpVariant variant : variantsForDB) {
+                List<Tuple> expected = testRunner.computeExpected("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", variant);
+                String expTab = variant.getQueryNum() + "\t" + expected.size();
+                expTabs.add(expTab);
+            }
+        }
+        for (String expTab : expTabs) {
+            System.out.println(expTab);
+        }
+    }
 
     @Test
     public void testRunBatch() {
@@ -64,6 +82,7 @@ public class TestBenchLLMSpider1 {
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (String dbID : variants.keySet()) {
             System.out.println("DB:" + dbID);
+            //if (!dbID.equals("academic")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);

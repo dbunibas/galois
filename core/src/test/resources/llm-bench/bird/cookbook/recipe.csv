@@ -1,0 +1,879 @@
+"recipe_id","title","subtitle","servings","yield_unit","prep_min","cook_min","stnd_min"
+214,Raspberry Chiffon Pie,,10,"1 pie",20,8,305
+215,Apricot Yogurt Parfaits,,4,,5,2,65
+216,Fresh Apricot Bavarian,,8,,5,13,0
+217,Fresh Peaches,with Banana Cream Whip,4,,10,0,0
+218,Canned Cherry Crisp,,6,,10,5,0
+219,Low Calorie Blueberry Meringue Tarts,,8,"8 tarts",10,30,60
+220,Chocolate Cream Cheese Frosting,,12,,6,0,0
+221,Sweet Cherry Ice,,8,"2 quarts",20,5,240
+222,Iced Raspberry Mousse,,6,,15,5,80
+223,Kiwifruit Popsicles,,10,"10 popsicles",10,0,300
+224,Dessert Fruit Pizza,,6,,10,25,0
+225,Blueberry Cobbler,,4,,10,20,0
+226,Apple Upside Down Cake,,16,"1 cake",20,45,20
+227,Peaches Amaretto,,4,,15,10,0
+228,Homemade Cherry Pie Filling,,12,,10,20,60
+229,Raspberry-Pear Couscous Cake,,16,"1 cake",15,10,155
+230,Apricot Almond Bread Pudding,,8,,10,55,180
+231,Oregon Hazelnut Crunch,,32,"2 cups",15,10,20
+232,Apple Bean Cake,,12,"1 3-layer cake",30,40,10
+233,Foil Baked Banana Peach Delight,,4,,5,30,0
+234,Apricot Meringue Tart,,4,,15,35,60
+235,Basic Blueberry Pie Filling,,8,"1 pie",40,50,0
+236,Nectarine Meringue Crowns,,6,"2",25,60,30
+237,Cayuga Cookies,,12,"3 dozen",10,15,20
+238,Chewy Chocolate Hazelnut Cookies,,24,"4 dozen",20,9,15
+239,Oranges in Grand Marnier,,6,,15,30,135
+240,Citrus Pecan Topping,,4,"2 cups",15,15,0
+241,Brandy Pear Sorbet,,8,"1 quart",15,5,210
+242,Old-Fashioned Fresh Pear Pie,,8,"1 pie",25,45,30
+243,Butterscotch Crispies,,102,"8 1/2 dozen",30,10,15
+244,Grated Sweet Potato Pudding,,6,,10,60,10
+245,Peach Granita,,4,,10,30,240
+246,Light Apple Cake,,12,"1 cake",20,90,60
+247,Whole Wheat Sugar Cookies,,12,"3 dozen",25,10,10
+248,Oatmeal Cherry Braid,,12,"2 braids",50,25,105
+249,Cranberry-Pear Crisp,,8,,20,25,0
+250,Mom's Nectarine Lattice Pie,,8,"1 pie",25,60,30
+251,Bronx Brownies,,12,"1 dozen",15,50,30
+252,Oregon Hazelnut Brittle,,36,"3 dozen pieces",10,13,30
+253,Tutti Fruitti Rice Pudding,,4,,10,45,10
+254,No-Bake Fruit Crisp,,6,,15,5,0
+255,Super Chocolatey Cupcakes,,8,"8 cupcakes",10,40,20
+256,Chocolate Dipping Sauce,,32,"2 cups",10,12,0
+257,California Plum Sorbet,,6,,15,0,270
+258,Blueberry Crisp,,8,,20,20,10
+259,Cherry Yogurt Cheesecake,,8,"1 cake",20,5,420
+260,Fudgy Date Pudding Cake,,8,"1 cake",15,50,0
+261,Fruit a la Russe,,8,,20,15,0
+262,Heavenly Strawberry Cheesecake,,12,"1 cake",20,65,285
+263,Fresh Peach Buttermilk Sherbet,,10,"5 cups",10,0,240
+264,Peachy Orange Sorbet,,8,"1 quart",15,0,240
+265,Marshmallow Peach Cake,,9,"1 cake",20,35,0
+266,Golden Apricot Rice Pudding,,6,,20,25,30
+267,Chocolate Bananas D'amore,,4,"4 bananas",15,5,0
+268,Spirited Date Cake,,16,"1 cake",30,80,1440
+269,Fresh Peach Shortcake,a La Creme,12,,50,20,30
+270,Bill's Bean Fudge,,48,"3 pounds",10,10,60
+271,Microwave Fudge,,36,,10,2,60
+272,Apple Whole Grain Bread Pudding,,6,,15,50,0
+273,Plum-Nectarine Ambrosia,,6,,10,15,0
+274,Claret Spiced Oranges,,4,,10,10,240
+275,Poached Pear,with Raspberry Yogurt Mint Sauce,6,,20,70,90
+276,Pistachio Berry Vineyard Pears,,4,,25,35,20
+277,Open Sesame Blueberry Pie,,8,"1 10-inch pie",20,40,0
+278,Southern Sweet Potato Pie,,8,"1 pie",15,40,0
+279,Cantaloupe-Ginger Sorbet,,8,,20,10,270
+280,Sauteed Apple Slices,with Apricot Sauce,8,,15,3,30
+281,Possible Pumpkin Pie,,8,"1",15,55,0
+282,Sweet Cherry Sauce,,8,"2 cups",15,0,180
+283,Frozen Nectarine Yogurt,,6,,15,10,180
+284,Lemony Poached Golden Apples,,6,,10,35,0
+285,Old-Fashioned Peach Cobbler,,6,,10,27,0
+286,Pear Zinfandel Ice,,4,,15,0,240
+287,Banana Kiwi Pudding,,4,,10,20,30
+288,It's The Berries Pie,,6,"1 pie",10,10,205
+289,Nectarine Carrot Picnic Cake,,10,"1 cake",20,50,60
+290,Nectarine Lime Sorbet,,8,,10,10,240
+291,Strawberry Sorbet,,6,"2 cups",15,5,255
+292,Peach Oatmeal Cookies,,12,"3 dozen",20,15,10
+293,Apricot Applesauce Cake,,12,"1 cake",20,40,10
+294,Grape Frozen Yogurt,,4,,15,5,335
+295,Fresh Plum Souffle,,8,,20,5,270
+296,California Summer Fruit Tart,,6,"1 tart",20,10,80
+297,Very Berry Meringues,,6,,15,60,480
+298,Fresh Apricot Ice Cream,,16,"2 quarts",15,15,240
+299,Peach and Blueberry Crisp,,6,,60,20,5
+300,After School Fruit Cup,,4,,20,0,60
+301,Oh-So-Cool Lime Whip,with Orange Custard Sauce,4,,15,15,275
+302,Three-Melon Melange,,8,,15,0,60
+303,Buffalo Bread,,12,"1 bread",20,60,60
+304,Blueberry Sauce,,8,"2 cups",10,5,0
+305,Nectarine-Strawberry Shortcake Torte,,8,"1 cake",15,25,105
+307,Blueberry Snack Bars,,16,"16 bars",10,55,30
+308,Sherry Nectarine Sorbet,,8,"1",10,10,240
+309,Tart Cherry Salad Mold,,6,,10,10,120
+310,Quick Plum Buttermilk Loaf,,10,"1 loaf",10,50,60
+311,Peach Blueberry Crisp,,8,,15,25,10
+312,Swiss Blueberry Fool,,8,,15,10,0
+416,Orange Date Shake,,1,,5,0,0
+417,Quick Kiwifruit Refresher,,1,,5,0,0
+418,Applesauce the Easy Way,,6,,10,10,0
+419,Brussels Sprouts with Peppers and Potatoes,,6,,10,13,0
+420,Tomato-Cucumber Relish,,4,,15,7,120
+421,Idaho Potato Cream Sauce,,4,"2 cups",10,15,0
+422,Spicy Cranberry and Peach Salad Mold,,8,,5,15,120
+423,Confetti Appleslaw,,7,,15,0,30
+424,Garden Soup,,8,,10,45,0
+425,Glazed Fruit Kabobs,,4,,10,18,0
+426,Armenian Spinach Plum Salad,,4,,15,0,0
+427,Honey Sesame Dressing,,12,"3/4 cup",5,0,0
+428,Mushrooms Oriental,,4,,10,10,0
+429,Chinese Broccoli and Almonds,,4,,60,10,0
+430,Tangy Strawberry Soup,,6,,10,6,180
+431,Dilled Rice Salad,,6,,30,0,60
+432,St. Tropez Vegetables in Parchment,,6,,20,40,0
+433,Squash and Pepper Salad,,4,,10,4,0
+434,Sherried Sweet Potatoes,with Pecans,6,,5,50,0
+435,Sunshine Salad,,5,,15,0,0
+436,Hot Gazpacho,,9,"9 cups",15,10,0
+437,Texas Cabbage Fruit Salad,,8,,15,0,60
+438,Black and White Bean Salad,,8,,15,75,60
+439,Creamy Vegetable Dip,,16,"1 cup",5,0,60
+440,Tangy Cucumber Salad,,6,,15,0,80
+441,Yogurt Potato Salad,,8,,30,0,90
+442,Artichoke Rice Salad,,6,,15,25,0
+443,Steamed Sweet Potatoes,with Yogurt Herb Sauce,4,,5,18,0
+444,Zucchini,with Lemon and Parmesan,2,,10,3,0
+445,Provencale Tomato and Potato Soup,,6,cups,15,40,0
+446,Butternut Squash Souffle,,6,,20,60,30
+447,Mixed Sweet Bell Peppper & California Avocado Salad,,6,,15,10,15
+449,Fruit Soup,Sotsuppe (Scandinavian),18,,5,60,720
+450,Citrus Salad with California Avocado,,6,,30,15,0
+451,Pistachio-Stuffed Baked Apples,,6,,15,20,0
+452,Oriental Curry Veggies,,8,,15,2,60
+453,California Avocado and Mushroom Salad,,6,,30,0,0
+454,Green Beans with Mushrooms,,4,,10,15,0
+455,Tomato Stuffed Potatoes,,8,,10,15,0
+456,Very Berry Salad,,8,,10,0,30
+457,Western Spinach Salad,,6,,20,10,0
+458,Fast Pea Soup,,4,,10,10,60
+459,Potato Vegetable Salad,with Yogurt,6,,25,20,60
+460,Green Bean Almond Rice,,8,,10,35,0
+461,Lowfat Date Yogurt Shake,,1,,5,0,0
+463,Fresh Tomato Sauce,,8,"4 cups",10,30,0
+464,Slim Spud Slices,,1,,5,25,0
+465,Spinach Balls,,36,"36 balls",10,25,0
+466,Greek Stuffed Potato,,1,,15,70,0
+467,Apple-Grape Salad,,4,,5,5,90
+468,Green Apple-Tomatillo Sauce,,12,,20,55,0
+469,Warm Broccoli-Potato Salad,,8,,15,25,0
+470,Red Cabbage,,8,,15,22,0
+471,Cherry-Berry Conserve,,32,"4 half-pints",10,45,720
+472,Cherry Ambrosia Salad,,8,,20,0,0
+473,Microwave Sweet Potato Chips,,4,,3,8,0
+474,Tropical Date Shake,,1,,10,0,0
+475,Moist Golden Cornbread,,9,"1 8-inch square pan",10,25,0
+476,Oven Fries,,1,,30,40,0
+477,Red Onion Potato Salad,,6,,15,30,120
+478,Cream of Broccoli Soup,,4,"4 cups",5,30,0
+479,East Meets West Salad,,2,,5,3,0
+480,Apricot and Walnut Brown Rice Stuffing,,4,,15,30,0
+481,French Potato Salad,,4,,15,15,45
+482,Orange Spaghetti Squash,,4,,10,60,10
+483,Cherry Smoothie,,3,,10,0,0
+484,Fresh Mushroom Soup,,4,,10,15,0
+485,Slimline Blue Cheese Dressing and Dip,,20,"1 1/2 cups",10,0,30
+486,Squash Rolls,,24,"2 dozen",15,25,145
+487,California Marinated Salad,,6,"6 cups",20,0,120
+488,Ratatouille,,6,,20,25,0
+489,Pear-Yogurt Shake,,3,,10,0,0
+490," Kiwi Fruit, Orange and Avocado Salad ",,4,,15,0,0
+492,Green Bean Saute,,4,,10,15,0
+493,Steamed Pears,with Raspberry Yogurt Sauce,4,,15,5,60
+494,Texas Barbecue Potatoes,,4,,10,30,0
+495,Pistachio Fruits and Fun,,8,,15,0,60
+496,Peach Soup,,4,,5,15,90
+497," Microwave Glazed Carrots, Apples and Zucchini ",,5,,10,9,0
+499,Honeydew Melon Shake,,2,,5,0,0
+500,Tomato Pilaf,,4,"4 cups",10,25,0
+501,Strawberry-Banana Shake,,2,"2 cups",10,0,0
+502,Herbed Vegetable Combo,,4,,10,10,0
+503,Puree of Potatoes and Parsnips,,8,,10,25,0
+504,Pepper Relish,,96,"6 pints",20,40,240
+505,Mint-Glazed Carrots and Snow Peas,,4,,10,8,0
+506,Tomatillo Relish,,6,"3 cups",15,20,0
+507,Vegetable Packets,,4,,10,30,0
+508,Brown Rice Royal,,6,,5,10,0
+509,Lite 'n Lovely Gelatin Salad,,15,,20,5,360
+510,Steamed Carrots with Apricots,,8,,105,15,0
+511,Confetti Potato Salad,,12,,15,15,60
+512,Cherry Sweet Potatoes,,6,,5,30,0
+513,Acorn Squash and Apple Puree,,2,,15,16,0
+514,Harvest Rice,,6,,10,15,0
+515,Tote-Along Dressing,,20,"1 1/4 cups",5,7,60
+516,Beef Brisket,with Savory Carrots and Prunes,10,,15,165,0
+517,Beef and Two Pepper Stew,,4,,20,120,0
+518,Sherried Steak Strips,,2,,10,5,0
+519,Steak and Pepper Sandwiches,,4,,10,10,0
+520,Lamb Stew Provencal,,6,,20,135,0
+521,Greek-Style Lamb and Bean Skillet Dinner,,4,,8,12,0
+522,Butterflied Lamb Leg,with Orange Sauce,14,,15,50,0
+523,Quick Spanish Rice,,6,,5,20,0
+524,Zesty Lamb Taco Casserole,,4,,15,10,0
+525,Quick Lamb and Pasta Dinner Skillet,,6,,5,40,0
+526,Microwavable Savory Lamb Potatoes,,4,,5,20,0
+527,Grilled Lamb with Spanish Sherry Sauce,,6,,20,15,0
+528,Warm Moroccan Potato Lamb Salad,,4,,20,20,0
+529,Mesa Lamb and Bean Salad,,4,,20,0,0
+530,Mandarin Lamb with Oriental Noodles,,4,,10,15,0
+531,Lamb Tortellini Minestrone,,8,,5,15,0
+532,Stir Fry Vegetables,,4,,20,65,0
+533,Boonville Baked Beans,,14,,783,300,0
+534,Baja Beef and Pistachio Plate,,4,,15,10,0
+535,Italian-Style Pistachio Pasta,,4,,15,10,0
+536,Daube of Beef with Dried Mushrooms,Braised Beef Rump Roast,8,,25,180,0
+537,Middle Eastern Meatballs,,4,,35,45,0
+538,Braised Eye of the Round,,6,,15,60,0
+539,California Beef and Black Bean Chili,,6,,15,135,0
+540,Spinach Salad with Fruit and Beef,,4,,20,15,180
+541,Thai-Style Beef Salad,,4,,40,3,0
+542,Mediterranean Beef Stew,,12,,20,95,5
+543,Beef Fajitas,,6,,250,20,0
+544,Beef Pizza,,8,,20,15,0
+545,Beef and Spinach Pita Pockets,,4,,20,20,0
+546,Ginger-Orange Barbecued Beef Back Ribs,,6,,1455,50,0
+547,Roast Beef Pita Bread Sandwich,with California Avocado,6,,10,0,0
+548,Soft Taco,,2,,20,5,0
+549,Sesame Potato Sticks with Oriental Beef and Peppers,,4,,20,13,0
+550,Potato Sticks with Glazed Pork and Cabbage,,4,,20,20,0
+551,Western Pork Barbecue Supper,,4,,15,60,0
+552,Beef Jambalaya,,4,,20,25,5
+553,Gourmet Beef Burgers,,4,,20,8,0
+554,Spicy Beef Tortillas,,4,,5,15,0
+555,Summertime Beef Salad,,4,,30,14,0
+556,Apricot Relish Steak,,4,,15,15,0
+557,Meatball-Rice Soup,,6,,30,25,0
+558,Light and Colorful Stuffed Peppers,,4,,5,35,0
+559,Citrus Beef Ribbons,,48,"48 each",120,3,0
+560,Ranch-Style Beans,,10,"10 cups",20,200,0
+562,Rigatoni in Wild Mushroom Broth,with Parma Ham and Porcini,6,,15,15,0
+563,Mushroom and Beef Stir-Up,,4,,20,10,0
+564,Pork-Sweet Potato Stir-Fry,,6,,20,10,0
+565,Sweet Potato-Sausage Casserole,,6,,30,60,0
+566,Summer Beef Salad,,4,,30,10,0
+567,Oriental Pork and Beans,,4,,15,20,0
+568,Southwestern Black Beans and Rice,,4,,20,165,0
+569,Strawberry-Pork Salad,,6,,20,0,120
+570,Italian Brunch Rice,,8,,15,15,0
+571,Kabobs with Thyme Rice,,6,,240,15,0
+572,Spiced Pork and Apples,,2,,10,10,0
+573,Gingered Beef Stir Fry,,2,,20,15,0
+574,Five-Spice Fried Rice,,2,,15,10,0
+575,Vegetable Pork Stir-Fry,,6,,20,8,0
+576,Sherried Beef,,4,,60,10,0
+577,Holiday Stuffed Pork Roast,,6,,20,105,15
+578,Hot Hoppin' John Salad,,6,,20,15,0
+579,Peach Pita Sandwiches,,2,,10,0,0
+580,Sweet'N'Sour Pot Roast,with Pears,6,,10,150,0
+581,Mock Enchilada Casserole,,6,,10,30,0
+582,Ham Hock and Lima Bean Soup,,10,,15,180,0
+583,Ham and Bean Soup,,6,,240,160,0
+584,Hearty Ribs and Bean Bake,,6,,20,135,0
+585,Greek-Style Beans and Lamb,,6,,240,135,0
+586,Lima Beans and Ham,,4,,20,75,15
+587,Hoppin' John,,4,,240,75,0
+588,Pioneer Bean Pot,,4,,240,180,0
+589,Mixed Bean Casserole,,6,,10,55,0
+590,Mexican-Style Bean Sandwiches,,8,,20,25,0
+591,Bean Soup Romana,,8,"2",240,135,0
+592,Broiled Marinated Beef Top Loin,,4,,1440,20,0
+593,Stir-Fry Pork and Apricots,,4,,10,15,0
+594,Peppered Beef Tenderloin Bundles,,8,,30,15,0
+595,Beef Fajitas with Fresh Tomatoes,,5,,30,5,0
+596," Tomato, Pork and Pepper Kabob ",,4,,30,12,0
+597,Oriental Pork,,4,,70,15,0
+598,Hazelnut Beef Stir Fry,,4,,40,10,0
+599,Noodle-Crusted Quiche Noel,,8,,30,35,5
+600,Sweet and Sour Cherry Ham Salad,,8,,30,0,60
+601,Pears and Ribs in Honey Sauce,,8,,15,120,0
+602,Fruited Ham and Blueberry Salad,,6,,20,0,60
+603," Hearty Roast Beef, Pear and Pea Pod Salad ",,4,,20,0,0
+604,Lime-Basted Lamb Kabobs,,6,,40,16,0
+605,Tandoori Pork Saute,,4,,20,42,0
+606,Nectarine Beef Saute,,3,,15,10,0
+607,Southwest Spaghetti Pie,,6,,20,20,5
+608,German Egg Noodle and Meatball Soup,,8,,30,10,0
+609,Orzo and Pumpkin Soup with Sage,,10,,15,30,0
+610,Fettuccine with Lamb and Mint,,4,,10,15,0
+611,Texas Chili 'n Pasta,,8,,20,120,0
+612,Baked Beans,,8,,720,120,0
+613,Sweet and Sour Barbecue Sauce,,6,"1 cup",10,10,0
+614,Western Beans and Rice,,6,,10,20,0
+615,Moroccan Egg Salad,,6,,20,5,5
+616,Three Cheese Potatoes,,8,,10,30,0
+617,Asparagus Mushroom Frittata,,6,,10,17,0
+618,Hot or Cold Layered Potato Salad,,4,,20,20,0
+619,Pasta and Walnut Fruit Salad,,8,,20,10,60
+620,Springsweet Texas Onion Caviar,,6,,10,0,720
+621,Spaghetti Squash,with Parsley and Garlic,8,,10,33,0
+622,Pear Waldorf Salad,,6,,10,0,0
+623,Plum Wild Rice,,8,,20,0,0
+624,Greek Beans 'n Eggs,,4,,5,7,0
+625,Bean 'n' Vegetable Medley,,6,,10,30,0
+626,Spicy Vegetarian Chili,Vegetarian Chili,4,,15,30,0
+627,Fettuccine with Walnuts and California Avocado,,6,,15,6,0
+628,Pasta-Veggie Scramble,,2,,10,10,0
+629,Pasta with Sauteed Artichokes,,4,,15,7,0
+630,Rice Primavera,,6,,10,15,0
+631,Apple Stuffed Squash,,4,,15,60,0
+632,Basil Tomato Salad,,6,,10,0,60
+633,Pasta Pizza,,8,,20,25,0
+634,Sauce Raito,,4,"2 cups",20,50,0
+635,Avocado Pizza Pie,,6,,20,20,0
+636,Cheese Stuffed Tomatoes,,6,,15,20,0
+637,California Quesadilla,,6,,140,85,0
+638,California Sunshine Salad,,8,"1 quart",30,0,120
+639,Homemade Corn Tortillas,,6,"12 tortillas",15,15,0
+640,Brunch Rice,,6,,15,11,0
+641,Sherried Black Bean Soup,,6,,15,30,0
+642,Italian Stuffed Tomato Salad,,4,,20,0,0
+643,California Tree Fruit Salad with Honey-Vanilla Dressing,,4,,15,0,0
+644,Deep Dish Vegetable Pizza,,3,,15,43,120
+645,Broccoli Amandine,,4,,17,60,0
+646,Mushroom and Spinach Lasagne,,8,,25,60,0
+647,Brown Rice and Lentil Stew,,4,,15,60,0
+648,Warm Tomato-Pepper Pasta,,4,,10,17,0
+649,Curried Bean and Rice Salad,,4,,15,22,60
+650,Lasagne-Spinach Spirals,,6,,30,35,0
+651,Mama's Macaroni and Cheese,,8,,20,30,0
+652,Party-Fare Pistachio Pasta,,8,,15,7,0
+653,Rice Gazpacho,,10,,20,0,120
+654,Squash Stuffed with Rice,,8,,10,50,0
+655,Cheese and Chili Skins,,6,,10,20,0
+656,Stewed Tomatoes with Chickpeas,,6,"4 cups",10,21,0
+657,Meatless Chili,,18,,10,200,0
+658,Santa Fe Salad,,2,,15,0,180
+659,Ratatouille Pasta,,6,,15,25,0
+660,Pasta with Peanut Sauce,,4,,20,15,60
+661,Frijoles Rancheros,,6,"3 cups",10,25,0
+662,Tuscan Bean Salad,,8,,140,0,120
+663,Bryani,,6,,20,70,0
+664,Fresh Greens with Honey and Oranges,,6,,20,7,0
+665,Pear Brown Rice,,6,,20,0,60
+666,Saffron Risotto Primavera,,4,,20,40,0
+667,Bake Mine Vegetarian,,16,,25,85,0
+668,Fresh Greens with Pasta,,6,,10,13,0
+669,Mixed Bean Salad,,8,,15,3,720
+670,V-Egg-ie Good Pocket Sandwich,,1,,15,0,60
+671,Spring Butterflies,,8,,20,20,0
+672,Summer Vegetable Paella,,6,,10,8,0
+673," Middle Eastern ""Sweet Spice"" Brown Rice with Olives ",,4,,0,900,2100
+674,Star-Studded Tomatoes,,8,,40,10,0
+675,Cheery Cherry Pasta Salad,,8,"5 cups",10,10,120
+676,Double Corn Brunch Bake,,6,,10,40,0
+677,Slenderized Vichyssoise,,6,,10,30,120
+678,Peach Spinach Salad,,6,,20,0,0
+679,Gruyere Sauced Potatoes,,4,,15,22,0
+680,Spaghetti with Eggplant Sauce,,6,,15,35,0
+681,Bean Burritos,,6,,15,10,0
+682,"6 Bean Soup",,16,"1 gallon",240,60,0
+683,California Brown Rice Salad,,6,"1 quarts",135,40,60
+684,Keep 'em Low-Cal Topping,,4,,15,0,0
+685,Tofu Baked Ziti,,6,,15,45,0
+686,Mexican Fiesta Quiche,,6,,20,40,5
+687,Corn Chowder,,14,,20,45,0
+688,Plum Ratatouille,,6,,15,20,0
+689," White Bean, Olive and Tomato Salad ",,4,"4 cups",15,0,60
+690,Apple Brown Rice Stuffing,,6,,15,15,0
+691,Red Beans and Rice,,6,,10,20,0
+692,Top Hat Pizza,,10,,20,12,0
+693,Pistachio Pasta Salad Florentine,,4,"8 cups",10,15,0
+694,Snappy Bean Dip,,12,"1",15,0,0
+695,Artichoke and Mushroom Phyllo Pockets,,8,,15,30,0
+696,Crunchy Wild Rice Pilaf,,8,,15,30,0
+697,Three-Peas-in-a-Pasta,,6,,15,20,0
+698,Hazelnut Stuffed French Bread,,20,"2 loaves",155,30,0
+699,Stuffed Baked Potato,,4,,15,60,0
+700,Springtime Pasta,,4,,15,22,0
+701,Tortellini and Artichokes in Garlic Cream Sauce,,6,,10,12,0
+702,Fresh Tomato and Red Pepper Sauce,,4,"4 cups",10,20,0
+703,Lentil and Rice Salad,,4,,15,0,0
+704,Hazelnut Medley,,4,,30,30,0
+705,Sheepherder's Hearty Soup,,6,,15,25,0
+706,Pasta Stuffed Tomatoes,,8,,20,10,0
+707,Oriental Stuffed Tomatoes,,4,,10,27,0
+708,Black Bean and Rice Salad,,4,,15,0,0
+709,Asparagus and Herb-Scrambled Egg,with Flour Tortillas,8,,10,5,0
+710,White Bean Pistachio Salad Vinaigrette,,4,"2 cups",15,0,120
+711,Sicilian Deep Dish Pizza,,6,,30,35,0
+712,New Zealand Brown Rice Salad,,6,,150,20,120
+713,Pizza in a Tomato Shell,,4,,20,15,0
+714,-Sauteed Mushrooms-,,4,,15,3,0
+715,-Steamed Broccoli-,,4,,15,5,0
+716,-Green Beans and New Potatoes-,,4,,15,15,0
+717,-Steamed or Sauteed Zucchini-,,4,,10,5,0
+718,-Corn on the Cob-,,4,,10,8,0
+719,-Baked Potatoes-,,4,,5,60,0
+720,-Boiled or Mashed Potatoes-,,4,,15,15,0
+721,-Baked Sweet Potatoes-,,4,,10,60,0
+722,-Boiled or Mashed Sweet Potato-,,4,,10,35,0
+724,-Fresh Green Peas-,,4,,20,8,0
+725,-Boiled Fresh Snow Peas-,,4,,10,3,0
+726,-Asparagus Spears-,,4,,15,8,0
+727,-Beets-,,4,,10,45,0
+728,-Brussels Sprouts-,,4,,10,15,0
+729,-Cooked Cabbage-,,4,,10,20,0
+730,-Cooked Carrots-,,4,,10,10,0
+731,-Cauliflower-,,4,,10,10,0
+732,-Swiss Chard-,,4,,15,10,0
+733,-Broiled Eggplant-,,4,,10,10,0
+734,-Jicama-,,4,,10,0,0
+735,-Kale-,,4,,15,10,0
+736,-Frozen Lima Beans-,,4,,3,5,0
+737,-Creamed Corn-,,4,,2,5,0
+738,-Steamed Okra-,,4,,10,5,0
+739,-Boiled Onions-,,4,,10,20,0
+740,-Boiled Parsnips-,,4,,10,20,0
+741,-Sauteed Green Peppers-,,4,,10,10,0
+742,-Boiled Rutabaga-,,4,,10,25,0
+743,-Spinach-,,4,,15,5,0
+744,-Fresh Tomatoes-,,4,,10,0,0
+745,-Turnips-,,4,,10,15,0
+746,-Turnip Greens-,,4,,15,12,0
+747,-Cucumbers-,,4,,10,0,0
+748,-Iceberg Lettuce-,,4,,10,0,0
+749,-Celery Sticks-,,4,,10,0,0
+750,-Carrot Sticks-,,4,,10,0,0
+751,Applesauce,,4,,20,0,0
+752,-Bananas-,,4,,5,0,0
+753,-Apples-,,4,,3,0,0
+754,-Apricots-,,4,,5,0,0
+755,-Avocados-,,4,,5,0,0
+756,-Berries-,,4,,10,0,0
+757,-Blueberries-,,4,,5,0,0
+758,-Strawberries-,,4,,10,0,0
+759,-Cranberries-,,4,,10,0,0
+760,-Raspberries-,,4,,5,0,0
+761,-Sweet Cherries-,,4,,20,0,0
+762,-Figs-,,4,,5,0,0
+763,-Grapefruit-,,4,,10,0,0
+764,-Grapes-,,4,,10,0,0
+765,-Kiwi Fruit-,,4,,10,0,0
+766,-Kumquats-,,4,,5,0,0
+767,-Cantaloupe-,,4,,10,0,0
+768,-Casaba Melon-,,4,,10,0,0
+769,-Honeydew Melon-,,4,,10,0,0
+770,-Watermelon-,,4,,10,0,0
+771,-Nectarines-,,4,,5,0,0
+772,-Oranges-,,4,,5,0,0
+773,-Papayas-,,4,,5,0,0
+774,-Peaches-,,4,,5,0,0
+775,-Pears-,,4,,5,0,0
+776,-Persimmons-,,4,,5,0,0
+777,-Fresh Pineapple-,,4,,10,0,0
+778,-Plums-,,4,,5,0,0
+779,-Pomegranates-,,4,,15,0,0
+780,-Stewed Rhubarb-,,4,,10,15,0
+781,-Tangerines-,,4,,3,0,0
+782,-Dates-,,4,,5,0,0
+783,-Raisins-,,4,,3,0,0
+784,-Stewed Prunes-,,4,,2,20,0
+785,-Mangoes-,,4,,5,0,0
+786,-Asian Pears-,,4,,3,0,0
+787,-Steamed Artichokes-,,4,,15,45,0
+788,-Steamed Bok Choy-,,4,,15,9,0
+789,-Canned Peaches-,,4,,2,0,0
+790,-Canned Pears-,,4,,3,0,0
+791,-Unsweetened Canned Pineapple-,,4,,3,0,0
+792,-Canned Fruit Cocktail-,,4,,3,0,0
+793,-Canned Plums-,,4,,3,0,0
+794,-Canned Apricots-,,4,,3,0,0
+795,-Canned Sweet Cherries-,,4,,3,0,0
+796,-Canned Mandarin Oranges-,,4,,3,0,0
+797,-Canned Grapefruit Slices-,,4,,3,0,0
+798,-Canned Cranberry Sauce-,,4,,3,0,0
+799,-Canned Blueberries-,,4,,3,0,0
+800,-Canned Blackberries-,,4,,3,0,0
+801,-Canned Peas-,,4,,3,5,0
+802,-Canned Cut Green Beans-,,4,,3,5,0
+803,-Canned French Green Beans-,,4,,3,5,0
+804,-Canned Corn-,,4,,3,5,0
+805,-Canned Beets-,,4,,3,5,0
+806,-Canned Yams-,,4,,3,5,0
+807,-Canned Asparagus-,,4,,3,5,0
+808,-Canned Lima Beans-,,4,,3,5,0
+809,-Canned Spinach-,,4,,3,0,0
+810,-Canned Carrots-,,4,,3,5,0
+811,-Canned Tomatoes-,,4,,3,5,0
+812,-Brown Rice-,,4,,5,45,5
+813,-White Rice-,,4,,5,20,5
+814,-Polenta-,,4,,5,5,60
+815,-Steamed Barley-,,4,,5,50,0
+816,-Hominy Grits-,,4,,2,30,0
+818,-Whole Hominy-,,4,,720,180,0
+819,-Millet-,,4,,5,20,10
+820,-Rolled Oats-,,4,,2,5,3
+821,-Pasta-,,4,,2,12,0
+822,-Noodles-,,4,,2,12,0
+823,-Macaroni-,,4,,2,10,0
+824,-Wild Rice-,,4,,5,35,5
+825,-Whole Wheat Bread-,,4,,3,0,0
+826,-Enriched White Bread-,,4,,3,0,0
+827,-French Bread-,,4,,2,0,0
+828,-Italian Bread-,,4,,2,0,0
+829,-Rye Bread-,,4,,3,0,0
+830,-Soda Crackers-,,4,,3,0,0
+831,-Wheat Thins Crackers-,,4,,3,0,0
+832,-Ritz Crackers-,,4,,3,0,0
+833,-Butter Crackers-,,4,,3,0,0
+834,-Cheese Crackers-,,4,,3,0,0
+835,-Oyster Crackers-,,4,,3,0,0
+836,-Graham Crackers-,,4,,3,0,0
+837,-Animal Crackers-,,4,,3,0,0
+838,-Flour Tortillas-,,4,,3,0,0
+839,-Corn Tortillas-,,4,,3,0,0
+840,-Bagels-,,4,,3,0,0
+841,-Pumpernickel Bread-,,4,,3,0,0
+842,-Malt-O-Meal-,,4,,2,5,0
+843,-Cream of Wheat-,,4,,3,5,0
+844,-Hot Oat Bran Cereal-,,4,,3,10,0
+845,-Black Beans-,,4,,240,90,0
+846,-Baby Lima Beans-,,4,,240,60,0
+847,-Great Northern Beans-,,4,,240,60,0
+848,-Black-Eyed Peas-,,4,,240,60,0
+849,-Garbanzo Beans-,,4,,240,180,0
+850,-Kidney Beans-,,4,,240,60,0
+851,-Lentils-,,4,,5,35,0
+852,-Pinto Beans-,,4,,240,90,0
+853,-Navy Beans-,,4,,240,60,0
+854,-Split Peas-,,4,"2 cups",5,45,0
+856,-Tea-,,4,,5,0,0
+857,-Coffee-,,4,,10,0,0
+858,-Cappuccino-,,4,,5,0,0
+859,-Cafe Mocha-,,4,,0,0,0
+860,-Herb Tea-,,4,,5,0,0
+861,-Orange Juice-,,4,,3,0,0
+862,-Apple Juice-,,4,,0,0,0
+863,-Grapefruit Juice-,,4,,3,0,0
+864,-Lemonade-,,4,,5,0,0
+865,-Limeade-,,4,,5,0,0
+866,-Cranberry Juice Cocktail-,,4,,2,0,0
+867,-Grape Juice-,,4,,2,0,0
+868,-Red Wine-,,4,,2,0,0
+869,-White Wine-,,4,,3,0,0
+870,-Rose Wine-,,4,,3,0,0
+871,-Beer-,,4,,0,0,0
+872,-Light Beer-,,4,,2,0,0
+873,-Buttermilk-,,4,,0,0,0
+874,-Whole Milk-,,4,,3,0,0
+875,-2% Lowfat Milk-,,4,,0,0,0
+876,-1% Lowfat Milk-,,4,,0,0,0
+877,-Skim Milk-,,4,,2,0,0
+879,-Chocolate Milk Shake-,,4,,5,0,0
+880,-Vanilla Milk Shake-,,4,,10,0,0
+881,-Hot Chocolate-,,4,,10,0,0
+882,-Chocolate Milk-,,4,,7,0,0
+883,-Cola Drink-,,4,,2,0,0
+884,-Diet Soda Drink-,,4,,2,0,0
+885,-Club Soda-,,4,,2,0,0
+886,-Lemon-Lime Soda-,,4,,2,0,0
+887,-Lowfat Fruit Yogurt-,,4,,2,0,0
+888,-Nonfat Yogurt with Fruit-,,4,,2,0,0
+889,-Catsup-,,4,,3,0,0
+890,-Prepared Horseradish-,,4,,2,0,0
+891,-Prepared Mustard-,,4,,2,0,0
+892,-Dill Pickle-,,4,,2,0,0
+893,-Sweet Pickle-,,4,,3,0,0
+894,-Barbecue Sauce-,,4,,0,0,0
+895,-Soy Sauce-,,4,,2,0,0
+896,-Teriyaki Sauce-,,4,,3,0,0
+897,-Honey-,,4,,2,0,0
+898,-Jam-,,4,,2,0,0
+899,-Brown Sugar-,,4,,0,0,0
+900,-White Granulated Sugar-,,4,,1,0,0
+901,-Maple Flavored Syrup-,,4,,2,0,0
+902,-Blackstrap Molasses-,,4,,0,0,0
+903,-Peanut Butter-,,4,,3,0,0
+904,-Mayonnaise-,,4,,3,0,0
+905,-Low-Calorie Mayonnaise-,,4,,3,0,0
+906,-Blue Cheese Salad Dressing-,,4,,0,0,0
+907,-Low-Calorie Blue Cheese Salad Dressing-,,4,,3,0,0
+908,-French Salad Dressing-,,4,,2,0,0
+909,-Low-Calorie French Salad Dressing-,,4,,5,0,0
+910,-Italian Salad Dressing-,,4,,3,0,0
+911,-Low-Calorie Italian Salad Dressing-,,4,,3,0,0
+912,-Thousand Island Salad Dressing-,,4,,3,0,0
+913,-Low-Cal Thousand Island Salad Dressing-,,4,,3,0,0
+914,-Ranch Style Salad Dressing-,,4,,3,0,0
+915,-Low-Calorie Ranch Style Salad Dressing-,,4,,0,0,0
+916,-Steak Sauce-,,4,,0,0,0
+917,-Lowfat Cottage Cheese-,,4,,5,0,0
+918,-Dry Curd Cottage Cheese-,,4,,3,0,0
+919,-Whole Dry Roasted Almonds-,,4,,3,0,0
+920,-Whole Unsalted Cashew Nuts-,,4,,3,0,0
+921," -Dry Roasted, Salted Mixed Nuts- ",,4,,5,0,0
+922," -Roasted, Salted Peanuts- ",,4,,3,0,0
+923," -Dry Roasted, Unsalted Peanuts- ",,4,,2,0,0
+924," -Dried, Unsalted Pecan Halves- ",,4,,2,0,0
+925," -Dried, Unshelled Pistachio Nuts- ",,4,,2,0,0
+926,-Dry Roasted Sunflower Seeds-,,4,,0,0,0
+927,-Corn Chips-,,4,,3,0,0
+928,-Tortilla Chips-,,4,,3,0,0
+929,-Pretzel Twists-,,4,,3,0,0
+930,-Potato Chips-,,4,,2,0,0
+931,-All-Bran Cereal-,,4,,0,0,0
+932,-Cheerios Cereal-,,4,,3,0,0
+933,-Corn Flakes Cereal-,,4,,2,0,0
+934,-Raisin Bran Cereal-,,4,,3,0,0
+935,-Grape Nuts Cereal-,,4,,3,0,0
+936,-Special K Cereal-,,4,,5,0,0
+937,-Shredded Wheat Cereal-,,4,,3,0,0
+938,-Wheaties Cereal-,,4,,3,0,0
+939,-Cheddar Cheese-,,4,,3,0,0
+940,-Swiss Cheese-,,4,,5,0,0
+941,-Mozzarella Cheese-,,4,,3,0,0
+942,-Monterey Jack Cheese-,,4,,3,0,0
+943,-American Processed Cheese-,,4,,0,0,0
+944,-Cream Cheese-,,4,ounce,2,0,0
+945,-Parmesan Cheese-,,4,,2,0,0
+946,-Turkey Bologna-,,4,,3,0,0
+947,-Sliced Beef Lunchmeat-,,4,,3,0,0
+948,-Sliced Ham-,,4,,3,0,0
+949,-Hamburger Patty-,,4,,5,10,0
+1020,Healthclub Chicken Salad,,6,,25,0,0
+1021,Saffron Rice Salad,,4,,60,25,0
+1022,Turkey Pot Roast,,4,,20,75,0
+1023,Pop's Crusty Chicken,,6,,140,40,0
+1024,Turkey with Orange,,4,,15,70,0
+1025,Tart and Tasty Stuffing,,8,,10,9,0
+1026,Turkey Citrus Salad,,4,"0",30,0,0
+1027,Chicken-Pistachio Roll-Ups,,6,,35,29,180
+1028,Warm Chinese Chicken Salad,,4,,30,30,0
+1029,Chicken Lentil Salad,,4,,20,20,90
+1030,Tropical Stuffed Cornish Hens,,8,,15,90,0
+1031,Chicken in Tomato Marsala Sauce,,2,,15,25,0
+1032,Turkey Ring Meatloaf,,8,,15,45,0
+1033,Apple-Stuffed Turkey Tenderloins,,6,,20,40,0
+1034,Chicken and Rice Casserole with Summer Vegetables,,6,,20,70,0
+1035,Turkey Spaghetti Pie,,4,,10,55,0
+1036,Smoked Chicken Pizza,,6,,15,20,0
+1037,Gourmet Chicken Bake,,6,,720,75,0
+1038,Chicken Chutney Salad,,4,,25,0,0
+1039,Brown Rice Waldorf Salad,,6,,20,25,0
+1040,Idaho Potato Supreme,,4,,20,12,0
+1041,Stir-Fry Turkey Italiano,,2,,10,10,0
+1042,Turkey Pockets Al Greco,,8,,15,10,0
+1043,Chicken Spiral Pasta Salad,Chicken Pasta Salad,6,,20,40,60
+1044,Chicken Paprika,,2,,10,25,0
+1045,Chicken Nachos,,15,,10,6,0
+1046,Chicken Zucchini Stew,,4,,20,30,0
+1047,Apple Pie Turkey Salad,,6,,25,0,0
+1048,Ginger Chicken Stir-Fry,,6,,130,15,0
+1049,Turkey Parmigiana,,4,,10,10,0
+1050,Polynesian Pineapple Turkey,,6,,15,15,0
+1051,Tomato Cajun Chicken Salad,,6,,20,0,0
+1052,Chicken Provencale,,4,,15,11,0
+1053,Chicken Parmiagiana Spud,,4,,10,93,0
+1054,Lemon Rice,,4,,10,15,0
+1055,Southern Sweet Potato Chicken,,4,,10,60,0
+1057,Jambalaya,,8,,20,48,0
+1058,Poached Turkey Tenderloins with Tarragon Sauce,,4,,15,30,0
+1059,Chunky Chicken and Cucumber Salad,,4,,25,0,120
+1060,Breast of Chicken Italian,,1,,135,30,0
+1061,Poached Turkey Normandy,,4,,10,45,0
+1062,Hawaiian Turkey Salad,,6,,20,0,0
+1063,Dad's Favorite Turkey Kebabs,,4,,135,28,0
+1064,New England Turkey Chowder,,4,,15,30,0
+1065,Red Square Pistachio Stir Fry,,4,"6 cups",20,10,0
+1066,Savory Grilled Peaches,,4,,5,8,0
+1067,Scandinavian Chicken Soup,,6,"1",15,100,45
+1068,Turkey Tetrazzini,,4,,15,45,0
+1069,Easy Skillet Chicken,,4,,10,23,0
+1070,Chicken Rice Medley,,4,"0",15,45,0
+1071,Turkey Kabobs,,4,,20,10,0
+1072,Turkey Ham Strata,,4,,735,40,0
+1073,Barbecued Chicken on a Bun,,4,,20,35,0
+1074,Turkey Tenderloin Bundles,,2,,15,25,0
+1075,Poached Turkey Tenderloins,,4,,10,40,0
+1076,Pistachio Turkey Taco Salad,,4,,25,0,0
+1077,Turkey Rice Burgers,,10,,10,24,0
+1078,Chicken Tarragon,,4,,20,5,0
+1079,Oriental Stir-Fry,,3,,10,10,0
+1080,Peruvian Chicken with Plums,,8,,15,28,0
+1081,Poached Turkey Tenderloins - Microwave,,4,,5,10,0
+1082,Chicken Pocket Sandwich,,10,,20,0,0
+1083,Turkey Rolls Italian Style,,4,,10,15,5
+1084,Sonoma Turkey Risotto,,6,,10,30,0
+1085,Brown Rice Chicken Bake,,6,,10,20,0
+1086,Lemon Chicken and Rice,,4,,15,35,0
+1087,Turkey Topper,,4,,10,90,0
+1088,Chicken Mushroom Soup,,6,,15,50,0
+1089,Chicken Pasta Salad,,6,"0",15,95,60
+1090,Turkey Waldorf Sandwich,,4,,20,0,60
+1091,Chicken-Cabbage Stir-Fry,,4,,10,6,0
+1092,Hearty Healthy Chicken Salad,,6,,20,15,120
+1093,Peachy Parmesan Chicken,,4,,20,35,0
+1094,Turkey Sausage Patties,,6,,10,8,0
+1095,California-Style Turkey Burger,,6,,5,12,0
+1096,Tomato-Turkey Noodle Bake,,6,,15,50,10
+1097,Dilly Turkey Stuffed Tomatoes,,6,,20,15,120
+1098,Tipsy Turkey Stew,,6,,15,60,0
+1099,Sonoma Turkey Bouillabaisse,,8,,20,85,0
+1100,Simply Deluxe Microwave Chicken,,8,"0",10,12,2
+1101,Layered Chicken Salad,,4,,25,0,120
+1102,Grilled Chicken Salad,,4,,90,20,0
+1103,Turkey and Pineapple on Skewers,,4,,10,20,0
+1104,Turkey Pastrami and Swiss in Rye,,4,,10,0,0
+1105,Turkey Potato Salad,,3,,15,0,0
+1106,Turkey Medallions Piccata,,4,,15,10,0
+1107,Citrus Chicken,,8,,10,26,0
+1108,Turkey Yakitori,,4,,255,10,0
+1109,Basic Turkey Burger Plus,,4,,15,10,0
+1110,Chicken Italian,,6,,15,60,0
+1111,Best Bartlett Bake,,4,,15,12,0
+1112,Turkey Tarragon Pitas,,4,,80,0,0
+1113,Stuffed Chicken Breasts,,4,,25,20,0
+1114,Autumn Medley Stew,,8,"1",15,60,0
+1115,Pasta Shells A La Turkey Waldorf,,15,,20,10,60
+1116,Turkey Fajitas,,4,,75,12,0
+1117,Sesame Chicken Salad,,6,,30,0,0
+1118,Ginger Turkey Stir-Fry,,6,,85,15,0
+1119,Sonoma Turkey and Vegetables,,12,,15,135,0
+1120,Garlic Lime Chicken,,4,,40,12,0
+1121,Fresh Shrimp Sandwich,,6,,20,0,0
+1122,Dilled Potato Rounds Fish Fillets,with Creamy Mustard Sauce and Tomatoes,4,,15,12,0
+1123," Pacific Chicken, Shrimp and Kiwifruit Kabobs ",,4,,25,8,120
+1124,Ragout of Tuna,,6,,20,25,0
+1125,Blue Crab Salad,,4,,20,10,0
+1126,Gravlox,,14,,15,0,2880
+1127,Shrimp-Stuffed Shells,,4,,15,15,120
+1128,Poached Fish with Horseradish Sauce,,2,,5,10,0
+1129,Shrimp Marinara Pasta,,2,,10,25,0
+1130,Seafood Risotto,,4,,15,42,0
+1131," Fish Baked with Summer Squash, Onion and Herbs ",,4,,15,45,0
+1132,Tropical Date Sauce for Fish,,4,"1 cup",0,3,0
+1133,Oysters on Pasta,,6,,15,25,0
+1134,Bell Peppers Stuffed with Shrimp,,6,,20,53,0
+1135,Simply Snapper,,6,,20,40,0
+1136,Steamed Fish,,4,,10,18,0
+1137,Stir-Fry Shrimp Scramble,,6,,10,15,0
+1138,Sandlapper Salad,,8,,20,0,180
+1139,Gulf Coast Stir-Fry,,6,,20,17,0
+1140,Baked Tilapia with Mustard,,4,,5,20,0
+1141,Risotto Con Frutti Di Mare,,6,,15,31,10
+1142,Orange-Currant Couscous,,4,,5,5,5
+1143,Fish Florentine,,2,,10,30,0
+1144,Fish Chowder,,4,,140,55,0
+1145,English Style Catfish,with Root Vegetables and Sherry,2,,15,10,0
+1146,Swordfish Skewers with Pears,,4,,10,10,30
+1147,Sheepshead Bay Sea Bass,,6,,15,20,0
+1148,Risotto,,4,,15,30,5
+1149,Summer Seafood Salad,,4,,15,20,30
+1150,Seafood Marinara with Pasta,,2,,10,30,0
+1151,Chinese Steamed Fish,,4,"1",10,15,0
+1152,Shrimp with Snow Peas,,4,,10,15,0
+1153,Mariner Bean Salad Plate,,6,,20,0,120
+1154,Shrimp-Pear Pasta Salad,,6,,15,10,0
+1155,Shrimp Stir-Fry,,4,,20,5,0
+1156,Moroccan Catfish Couscous,,6,,25,50,0
+1157,Sole and Broccoli Roll-Ups,,6,,20,30,0
+1158,Seafood Pear Pasta,,4,,10,15,0
+1159,Native American Catfish,with Pine Nuts,4,,10,8,0
+1160,Stuffed Fish Turbans,,4,,15,30,0
+1161,Fish with Pear Jardiniere,,4,,15,20,0
+1162,Smoky Broiled Catfish,,4,,5,6,0
+1163,Shrimp Fried Rice,,4,,10,10,0
+1164,Elegant Oysters,,6,,15,15,0
+1165,Seafood Jambalaya,,6,,10,34,0
+1167,Spanish Clams and Rice,,6,,15,45,0
+1168,Crunchy Tuna Salad,,4,,15,0,30
+1169,Chinese Seafood Salad,,4,,20,0,0
+1170,Braised Catfish Fillet,,1,,0,20,15
+1171,Fisherman's Cioppino,,4,,10,38,0
+1172,Garlic-Soy Dipping Sauce,,4,,5,0,30
+1173,Shrimp Provencal,,4,,15,10,0
+1174,Clams Mariniere,,6,,15,10,0
+1175,Grilled Fish with Veracruz Sauce,,4,,10,28,0
+1176,Poached Shark,,4,,10,10,0
+1177,Fish and Vegetables in Foil,,4,,10,15,0
+1178,Quick Crawfish Jambalaya,,6,,15,42,0
+1179,Microwaved Fish with Italian Flair,,4,,10,11,5
+1180,Linguine with Clam Sauce,,4,,15,10,0
+1181,Basic Poached Fish,,6,,10,15,0
+1182,The 'T and T Deluxe',,3,,15,0,0
+1183,Crab Mousse,,20,"5 1/2 cups",20,5,180
+1184,Red Snapper Orlando,,4,,15,15,0
+1185,Microwave Trout Amandine,,2,,5,8,7
+1186,Fruitful Sole and Nectarines Remoulade,,4,,15,5,0
+1187,Catfish and Shrimp Soup,,8,,15,85,0
+1188,Baked Fish,,2,,10,25,0
+1189,Clam Chowder,,6,,20,70,0
+1190,Salmon Yakatori with Peaches,,4,,10,20,180
+1191,Basil Baked Cod Fillets,,2,,15,15,0
+1192,Green and Gold Fettuccine,with Salmon or Tuna,6,,15,20,0
+1193,Microwaved Oriental Swordfish Steaks,,4,,45,5,3
+1194,Sweet-Sour Shrimp,,4,,15,5,0
+1195,Molded Crabmeat Mousse,,3,,15,5,180
+1196,Cracked Wheat and Seafood Casserole,,3,,15,16,35
+1197,Wisconsin Berry Celebration Shrimp Salad,,4,,15,7,120
+1198,Soy Barbecued Shrimp,,4,,15,8,0
+1199,Catfish and Wild Rice Soup,,6,,15,95,0
+1200,Halibut in Tarragon,,4,,10,12,0
+1201,Fish and Tomato Zucchini Saffron Coulis,,4,,15,35,0
+1202,Shark Kabobs,,4,,75,10,0
+1203,Mushroom Baked Sole,,6,,15,30,0
+1204,Broiled Baby Snapper,,1,,10,25,0
+1205,Deviled Crab,,6,,15,12,0
+1206,Surimi Seafood Pilaf,with Artichoke Hearts,4,"6 cups",15,45,0
+1207,Soy-Mustard Vinegar Dipping Sauce,,4,,10,0,0
+1208,Long Island Fisherman Stew,,12,,25,35,0
+1209,Saffron Crawfish Risotto,,6,,15,40,0
+1210,Baked Sole Pacifica,,4,,10,20,0
+1211,Sweet-and-Sour Sauce,,5,"1 1/4 cups",10,10,0
+1212,Grilled Halibut,with Zinfandel Sauce,4,,15,25,0
+1213,Seafood Seasoning,,36,makes 3/4 cup,0,5,0
+1214,Broiled Scallops,with Honey-Lime Marinade,2,,10,7,60
+1215,Mussels with Linguine,,8,,20,60,0
+1216,Mesquite Grilled Shrimp,and Orange-Honey Sauce,4,,20,7,0
+1217,Catfish Pasta Primavera,,4,,20,30,0
+1218,Texas Shrimp Slaw,,6,,30,0,0
+1219,Crab Linguine,,6,,10,35,0
+1220,Grilled Tuna Steaks,with Mango Basil Relish,4,,20,12,0
+1344,Herbs and Orange Grilled Chicken,Herbs and Orange Grilled Chicken,4,,15,40,0
+1345,Easy Whole Salmon,(Dinner Party Bake or Barbecue),18,,30,30,0
+1346,Grilled Whole Salmon,,6,,20,20,0
+1347,Iceberg Salad Athena,,6,,20,0,0
+1348,Kahlua Chocolate Cheesecake,Kahlua Fantasy Chocolate Cheesecake,14,,40,40,60
+1349,Double Chocolate Mousse,,12,,90,0,480
+1350,Fruit and Green Salad,,2,,10,0,0
+1351,B.L.T. Salad,,6,,15,0,0
+1352,Mushroom-Orange Toss,,8,,10,0,0
+1353,Pineapple-Mushroom Salad,,8,,255,10,0
+1354,Creamy Mushroom Salad,,6,,20,0,120
+1356,Avocado Raspberry Spice Salad,,4,,30,0,0
+1359,Freeze and Bake Pie Crust,,8,,30,0,0
+1360,French Apple Pie,,8,"1 pie",30,45,30
+1361,Pat-In-The-Pan Nut Cookie Crust,,8,,15,0,0
+1366,-Garlic Bread-,,6,"1 loaf",10,25,0
+1372,Chocolate Snack Cake,Mix-In-The-Pan Chocolate Snack Cake,6,"1 cake",10,45,0
+1375,Marinated Flank Steak,,8,,250,10,0
+1376,Onion-Beer Tri-Tip Roast,,4,,380,35,20
+1377,Beef Kabobs Au Poivre,,4,,45,10,0
+1378,Dijon Vinaigrette,,12,"3/4 cups",5,0,0
+1379,Fresh Citrus Dressing,,8,"1/2 cup",5,0,0
+1380,Refreshing Mint Dressing,,6,"1/3 cup",5,0,0
+1381,Herb-Marinated Beef Steak,,4,,370,18,0
+1382,Peppercorn Beef Kabobs,,4,,15,12,0
+1383,Caribbean Style Steak,,4,,367,20,0
+1384,Salsa Flavored Beef Steak,,4,,370,24,0
+1385,Orange-Rosemary Steaks,,4,,35,22,0
+1387,Sunshine Valley Salad,,6,,15,0,0
+1389,Darvish Dressing,,8,"2 cups",10,0,0
+1390,Dill-Parsley Dressing,,4,"1 cup",5,0,0
+1391,Lemon-Mint Dressing,,4,"1 cup",5,0,0
+1392,Honey Dressing,,4,"1/2 cup",5,0,0
+1393,Hazelnut Bleu Cheese Dressing,,8,,15,0,0
+1394,Sweet and Sour Dressing,,6,,5,0,0
+1395,Raspberry Walnut Dressing,,4,,15,0,0
+1396,Athena Dressing,,6,,5,0,0
+1397,Caesar Salad Dressing,,6,,5,0,0
+1398,Yogurt-Honey Dressing,,6,"1 1/4 cups",5,0,0
+1399,Oriental Ginger-Nut Dressing,Oriental Ginger-Walnut Dressing,6,"3/4 cup",10,0,0
+1400,Creamy Dressing,,6,,5,0,0
+1401,Honey Lime Dressing,,4,"1/4 cup",10,0,0
+1408,Fudge Brownie Pie,,8,,20,30,0
+1409,Chocolate Banana Cream Pie,,8,,150,15,240
+1410,No-Bake Chocolate Cheesecake,,12,,30,0,120
+1411,Mexican Cocoa Torte,,10,,90,12,120
+1415," Endive, Apple and Walnut Trio ",,6,,15,0,0
+1423,-Quinoa-,,8,"4 cups",2,15,0
+1424,-Cooked Wheat Berries-,,6,"2 3/4 cups",3,60,0
+1425,-Triticale-,,6,"2 3/4 cups",3,40,0
+1426,-Pancakes-,,4,"8",10,10,0
+1427,-Waffles-,,8,"8 waffles",10,15,0
+1428,-French Toast-,,4,,5,10,0
+1429,-Mixed Green Salad-,,4,,0,0,0
+1432,Curried Chicken Livers Topped Spud,,1,,20,5,0
+1436,T.B.P.B. Smoothie,,1,,5,0,0

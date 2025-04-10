@@ -1,0 +1,455 @@
+"country","name","percentage"
+BERM,African Methodist Episcopal,11.0
+AUS,Anglican,26.1
+AXA,Anglican,29.0
+BERM,Anglican,23.0
+BS,Anglican,20.0
+CAYM,Anglican,5.7
+CDN,Anglican,8.0
+IRL,Anglican,3.0
+NORF,Anglican,39.0
+NZ,Anglican,24.0
+PNG,Anglican,5.0
+SLB,Anglican,34.0
+SY,Anglican,8.0
+TT,Anglican,14.4
+TUCA,Anglican,18.0
+VU,Anglican,15.0
+WL,Anglican,3.0
+GE,Armenian Apostolic,8.0
+IR,Bahai,1.0
+TUV,Bahai,1.0
+BS,Baptist,32.0
+NZ,Baptist,2.0
+SLB,Baptist,17.0
+TUCA,Baptist,40.0
+VIRG,Baptist,42.0
+BHT,Buddhist,75.0
+BRU,Buddhist,14.0
+CL,Buddhist,69.0
+IND,Buddhist,0.7
+J,Buddhist,84.0
+K,Buddhist,95.0
+LAO,Buddhist,60.0
+MACX,Buddhist,45.0
+MYA,Buddhist,89.0
+NEP,Buddhist,5.0
+RI,Buddhist,1.0
+ROK,Buddhist,47.4
+RP,Buddhist,3.0
+THA,Buddhist,95.0
+XMAS,Buddhist,36.0
+ROK,Chondogyo,0.2
+AUS,Christian,24.3
+BEN,Christian,15.0
+BF,Christian,10.0
+BI,Christian,67.0
+BRU,Christian,8.0
+CAM,Christian,33.0
+CI,Christian,12.0
+CL,Christian,8.0
+COCO,Christian,20.0
+COOK,Christian,100.0
+DJI,Christian,6.0
+DZ,Christian,0.5
+FJI,Christian,52.0
+G,Christian,55.0
+GAZA,Christian,0.7
+GH,Christian,24.0
+GNB,Christian,5.0
+GUY,Christian,57.0
+HONX,Christian,10.0
+IL,Christian,2.0
+IND,Christian,2.4
+IRQ,Christian,3.0
+JOR,Christian,8.0
+LB,Christian,10.0
+LS,Christian,80.0
+MA,Christian,1.1
+MH,Christian,100.0
+MOC,Christian,30.0
+MS,Christian,28.3
+MYA,Christian,4.0
+NAU,Christian,100.0
+RB,Christian,50.0
+RC,Christian,4.5
+RCB,Christian,50.0
+RG,Christian,8.0
+RL,Christian,30.0
+RM,Christian,41.0
+RMM,Christian,1.0
+ROK,Christian,48.6
+RT,Christian,20.0
+SD,Christian,60.0
+SN,Christian,2.0
+SUD,Christian,5.0
+SYR,Christian,10.0
+TCH,Christian,25.0
+THA,Christian,0.5
+TJ,Christian,1.0
+TN,Christian,1.0
+TO,Christian,100.0
+WAG,Christian,9.0
+WAL,Christian,10.0
+WAN,Christian,40.0
+WEST,Christian,8.0
+WS,Christian,99.7
+XMAS,Christian,18.0
+Z,Christian,60.0
+ZW,Christian,25.0
+AMSA,Christian Congregationalist,50.0
+AL,Christian Orthodox,20.0
+ARM,Christian Orthodox,94.0
+AZ,Christian Orthodox,4.8
+BG,Christian Orthodox,85.0
+BIH,Christian Orthodox,31.0
+BY,Christian Orthodox,60.0
+CY,Christian Orthodox,78.0
+CZ,Christian Orthodox,3.0
+ETH,Christian Orthodox,35.0
+GE,Christian Orthodox,75.0
+GR,Christian Orthodox,98.0
+HR,Christian Orthodox,11.1
+KAZ,Christian Orthodox,44.0
+MD,Christian Orthodox,98.5
+MK,Christian Orthodox,67.0
+MNE,Christian Orthodox,74.2
+RO,Christian Orthodox,70.0
+SF,Christian Orthodox,1.0
+SK,Christian Orthodox,4.1
+SRB,Christian Orthodox,85.0
+TM,Christian Orthodox,11.0
+UZB,Christian Orthodox,9.0
+VU,Church Christ,3.8
+BS,Church of God,6.0
+CAYM,Church of God,26.0
+TUCA,Church of God,12.0
+TUV,Church Tuvalu,97.0
+ROK,Confucianism,3.0
+ET,Coptic Christian,6.0
+IL,Druze,2.0
+NIUE,Ekalesia Niue,61.0
+VIRG,Episcopalian,17.0
+PNG,Evangelical Alliance,4.0
+BD,Hindu,16.0
+BHT,Hindu,25.0
+CL,Hindu,15.0
+FJI,Hindu,38.0
+GUAD,Hindu,4.0
+GUY,Hindu,33.0
+IND,Hindu,80.0
+MART,Hindu,5.0
+MS,Hindu,52.0
+NEP,Hindu,90.0
+RI,Hindu,2.0
+SME,Hindu,27.4
+THA,Hindu,0.1
+TT,Hindu,24.3
+IND,Jains,0.5
+BG,Jewish,0.8
+DZ,Jewish,0.5
+F,Jewish,1.0
+GAZA,Jewish,0.6
+GBZ,Jewish,2.0
+L,Jewish,3.0
+MA,Jewish,0.2
+MD,Jewish,1.5
+RA,Jewish,2.0
+ROU,Jewish,2.0
+TN,Jewish,1.0
+USA,Jewish,2.0
+WEST,Jewish,17.0
+IL,Judaism,82.0
+ZRE,Kimbanguist,10.0
+AXA,Methodist,23.9
+BS,Methodist,6.0
+NZ,Methodist,5.0
+TUCA,Methodist,16.0
+KIR,Mormon,6.0
+NIUE,Mormon,10.0
+AFG,Muslim,99.0
+AL,Muslim,70.0
+AZ,Muslim,93.4
+BD,Muslim,83.0
+BEN,Muslim,15.0
+BF,Muslim,50.0
+BG,Muslim,13.0
+BI,Muslim,1.0
+BIH,Muslim,40.0
+BRN,Muslim,100.0
+BRU,Muslim,63.0
+CAM,Muslim,16.0
+CI,Muslim,60.0
+CL,Muslim,8.0
+COCO,Muslim,80.0
+COM,Muslim,86.0
+CY,Muslim,18.0
+DJI,Muslim,94.0
+DZ,Muslim,99.0
+EAU,Muslim,16.0
+ET,Muslim,94.0
+ETH,Muslim,45.0
+F,Muslim,1.0
+FJI,Muslim,8.0
+G,Muslim,1.0
+GAZA,Muslim,98.7
+GBZ,Muslim,8.0
+GE,Muslim,11.0
+GH,Muslim,30.0
+GNB,Muslim,30.0
+GR,Muslim,1.3
+GUY,Muslim,9.0
+HR,Muslim,1.2
+IL,Muslim,14.0
+IND,Muslim,14.0
+IR,Muslim,99.0
+IRQ,Muslim,97.0
+JOR,Muslim,92.0
+KAZ,Muslim,47.0
+KWT,Muslim,85.0
+LAR,Muslim,97.0
+LB,Muslim,20.0
+MA,Muslim,98.7
+MAYO,Muslim,97.0
+MK,Muslim,30.0
+MNE,Muslim,17.7
+MNG,Muslim,4.0
+MOC,Muslim,20.0
+MS,Muslim,16.6
+MV,Muslim,100.0
+MW,Muslim,20.0
+MYA,Muslim,4.0
+NEP,Muslim,3.0
+NL,Muslim,3.0
+OM,Muslim,75.0
+PK,Muslim,97.0
+Q,Muslim,95.0
+RCA,Muslim,15.0
+RCB,Muslim,2.0
+RG,Muslim,85.0
+RI,Muslim,87.0
+RIM,Muslim,100.0
+RL,Muslim,70.0
+RM,Muslim,7.0
+RMM,Muslim,90.0
+RN,Muslim,80.0
+RP,Muslim,5.0
+RSA,Muslim,2.0
+RT,Muslim,10.0
+RWA,Muslim,1.0
+SA,Muslim,100.0
+SLO,Muslim,1.0
+SME,Muslim,19.6
+SN,Muslim,92.0
+SP,Muslim,100.0
+SRB,Muslim,3.2
+SUD,Muslim,70.0
+SYR,Muslim,90.0
+TAD,Muslim,85.0
+TCH,Muslim,50.0
+THA,Muslim,3.8
+TJ,Muslim,2.0
+TL,Muslim,1.0
+TM,Muslim,87.0
+TN,Muslim,98.0
+TR,Muslim,99.8
+TT,Muslim,6.0
+UAE,Muslim,96.0
+UZB,Muslim,88.0
+WAG,Muslim,90.0
+WAL,Muslim,60.0
+WAN,Muslim,50.0
+WEST,Muslim,75.0
+WSA,Muslim,100.0
+XMAS,Muslim,25.0
+Z,Muslim,1.0
+ZRE,Muslim,10.0
+ZW,Muslim,1.0
+S,Pentecostal,1.0
+NZ,Presbyterian,18.0
+PNG,Presbyterian,8.0
+VU,Presbyterian,36.7
+A,Protestant,6.0
+AMSA,Protestant,30.0
+ANG,Protestant,15.0
+ARU,Protestant,9.0
+AXA,Protestant,30.2
+B,Protestant,25.0
+BDS,Protestant,67.0
+BERM,Protestant,18.0
+BIH,Protestant,4.0
+BS,Protestant,12.0
+BVIR,Protestant,86.0
+BZ,Protestant,30.0
+CH,Protestant,44.3
+CZ,Protestant,4.6
+D,Protestant,45.0
+DK,Protestant,91.0
+EAK,Protestant,38.0
+EAU,Protestant,33.0
+F,Protestant,2.0
+FARX,Protestant,100.0
+FL,Protestant,8.3
+FPOL,Protestant,54.0
+FSM,Protestant,47.0
+GBZ,Protestant,11.0
+GROX,Protestant,100.0
+GUAD,Protestant,1.0
+H,Protestant,25.0
+HR,Protestant,0.4
+IS,Protestant,96.0
+JA,Protestant,55.9
+KAZ,Protestant,2.0
+KIR,Protestant,40.9
+MACX,Protestant,1.0
+MEX,Protestant,6.0
+MW,Protestant,55.0
+N,Protestant,87.8
+NAM,Protestant,50.0
+NCA,Protestant,30.0
+NIC,Protestant,5.0
+NL,Protestant,25.0
+NZ,Protestant,3.0
+P,Protestant,1.0
+PA,Protestant,15.0
+PNG,Protestant,26.0
+PR,Protestant,15.0
+RA,Protestant,2.0
+RCA,Protestant,25.0
+RCH,Protestant,11.0
+RH,Protestant,16.0
+RI,Protestant,6.0
+RO,Protestant,6.0
+ROU,Protestant,2.0
+RP,Protestant,9.0
+RWA,Protestant,9.0
+S,Protestant,94.0
+SF,Protestant,89.0
+SK,Protestant,8.4
+SLB,Protestant,5.0
+SME,Protestant,25.2
+SRB,Protestant,1.1
+TL,Protestant,1.0
+TT,Protestant,14.0
+USA,Protestant,56.0
+WD,Protestant,15.0
+WL,Protestant,7.0
+YV,Protestant,2.0
+ZRE,Protestant,20.0
+A,Roman Catholic,85.0
+AL,Roman Catholic,10.0
+AMSA,Roman Catholic,20.0
+AND,Roman Catholic,100.0
+ANG,Roman Catholic,38.0
+ARU,Roman Catholic,80.8
+AUS,Roman Catholic,26.0
+AXA,Roman Catholic,5.7
+B,Roman Catholic,75.0
+BDS,Roman Catholic,4.0
+BERM,Roman Catholic,15.0
+BG,Roman Catholic,0.7
+BIH,Roman Catholic,15.0
+BOL,Roman Catholic,95.0
+BR,Roman Catholic,70.0
+BS,Roman Catholic,19.0
+BVIR,Roman Catholic,10.0
+BZ,Roman Catholic,62.0
+C,Roman Catholic,85.0
+CAYM,Roman Catholic,11.0
+CDN,Roman Catholic,45.0
+CH,Roman Catholic,47.6
+CO,Roman Catholic,95.0
+COM,Roman Catholic,14.0
+CR,Roman Catholic,95.0
+CV,Roman Catholic,100.0
+CZ,Roman Catholic,39.2
+D,Roman Catholic,37.0
+DK,Roman Catholic,2.0
+DOM,Roman Catholic,95.0
+E,Roman Catholic,99.0
+EAK,Roman Catholic,28.0
+EAU,Roman Catholic,33.0
+EC,Roman Catholic,95.0
+ES,Roman Catholic,75.0
+F,Roman Catholic,90.0
+FGU,Roman Catholic,100.0
+FL,Roman Catholic,87.3
+FPOL,Roman Catholic,30.0
+FSM,Roman Catholic,50.0
+GBZ,Roman Catholic,74.0
+GQ,Roman Catholic,100.0
+GUAD,Roman Catholic,95.0
+GUAM,Roman Catholic,95.0
+H,Roman Catholic,67.5
+HCA,Roman Catholic,97.0
+HR,Roman Catholic,76.5
+I,Roman Catholic,98.0
+IRL,Roman Catholic,93.0
+IS,Roman Catholic,3.0
+JA,Roman Catholic,5.0
+KIR,Roman Catholic,52.6
+L,Roman Catholic,97.0
+M,Roman Catholic,98.0
+MACX,Roman Catholic,7.0
+MART,Roman Catholic,95.0
+MC,Roman Catholic,95.0
+MEX,Roman Catholic,89.0
+MNE,Roman Catholic,3.5
+MW,Roman Catholic,20.0
+N,Roman Catholic,1.0
+NCA,Roman Catholic,60.0
+NIC,Roman Catholic,95.0
+NIUE,Roman Catholic,7.2
+NL,Roman Catholic,34.0
+NORF,Roman Catholic,11.7
+NZ,Roman Catholic,15.0
+P,Roman Catholic,97.0
+PA,Roman Catholic,85.0
+PE,Roman Catholic,100.0
+PL,Roman Catholic,95.0
+PNG,Roman Catholic,22.0
+PR,Roman Catholic,85.0
+PY,Roman Catholic,90.0
+RA,Roman Catholic,90.0
+RCA,Roman Catholic,25.0
+RCH,Roman Catholic,89.0
+REUN,Roman Catholic,94.0
+RH,Roman Catholic,80.0
+RI,Roman Catholic,3.0
+RO,Roman Catholic,6.0
+ROU,Roman Catholic,66.0
+RP,Roman Catholic,83.0
+RSM,Roman Catholic,100.0
+RWA,Roman Catholic,65.0
+S,Roman Catholic,1.5
+SK,Roman Catholic,60.3
+SLB,Roman Catholic,19.0
+SLO,Roman Catholic,96.0
+SME,Roman Catholic,22.8
+SPMI,Roman Catholic,99.0
+SRB,Roman Catholic,5.5
+SY,Roman Catholic,90.0
+TL,Roman Catholic,98.0
+TT,Roman Catholic,32.2
+USA,Roman Catholic,28.0
+V,Roman Catholic,100.0
+VIRG,Roman Catholic,34.0
+VU,Roman Catholic,15.0
+WAFU,Roman Catholic,99.0
+WD,Roman Catholic,77.0
+WL,Roman Catholic,90.0
+YV,Roman Catholic,96.0
+ZRE,Roman Catholic,50.0
+BERM,Seventh-Day Adventist,5.0
+NORF,Seventh-Day Adventist,4.4
+PITC,Seventh-Day Adventist,100.0
+PNG,Seventh-Day Adventist,1.0
+SLB,Seventh-Day Adventist,10.0
+TUV,Seventh-Day Adventist,1.4
+VU,Seventh-Day Adventist,6.2
+IND,Sikh,2.0
+RC,Taoist,93.0
+SLB,United,11.0
+CAYM,United Church,11.8
+CDN,United Church,12.0
+NORF,Uniting Church Australia,16.4

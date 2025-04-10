@@ -1,0 +1,564 @@
+{
+    "name": "college_completion-{{QN}} llama3-nl Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-nl",
+            "maxIterations": 10,
+            "naturalLanguagePrompt": "{{PROMPT}}"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "college_completion",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "state_sector_grads",
+                    "attributes": [
+                        {
+                            "name": "stateid",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state_abbr",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "control",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "level",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "year",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gender",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "race",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "cohort",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_cohort",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_100",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_150",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_100_rate",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_150_rate",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_cohort_ct",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "institution_details",
+                    "attributes": [
+                        {
+                            "name": "unitid",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "chronname",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "level",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "control",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "basic",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "hbcu",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "flagship",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "long_x",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "lat_y",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "site",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "student_count",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "awards_per_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "awards_per_state_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "awards_per_natl_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "exp_award_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "exp_award_state_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "exp_award_natl_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "exp_award_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "ft_pct",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "fte_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "fte_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "med_sat_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "med_sat_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "aid_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "aid_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "endow_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "endow_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_100_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_100_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_150_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_150_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "pell_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "pell_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "retain_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "retain_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "ft_fac_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "ft_fac_percentile",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_year",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_grad_after4_first",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_grad_elsewhere_after4_first",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_enroll_after4_first",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_enroll_elsewhere_after4_first",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_grad_after6_first",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_grad_elsewhere_after6_first",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_enroll_after6_first",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_enroll_elsewhere_after6_first",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_grad_after4_transfer",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_grad_elsewhere_after4_transfer",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_enroll_after4_transfer",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_enroll_elsewhere_after4_transfer",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_grad_after6_transfer",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_grad_elsewhere_after6_transfer",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_enroll_after6_transfer",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vsa_enroll_elsewhere_after6_transfer",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "_similar",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state_sector_ct",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "carnegie_ct",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "counted_pct",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "nicknames",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "cohort_size",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "state_sector_details",
+                    "attributes": [
+                        {
+                            "name": "stateid",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state_post",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "level",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "control",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "schools_count",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "counted_pct",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "awards_per_state_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "awards_per_natl_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "exp_award_state_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "exp_award_natl_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state_appr_value",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "state_appr_rank",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_rate_rank",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "awards_per_rank",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "institution_grads",
+                    "attributes": [
+                        {
+                            "name": "unitid",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "year",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gender",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "race",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "cohort",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_cohort",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_100",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_150",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_100_rate",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "grad_150_rate",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/college_completion"
+    }
+}

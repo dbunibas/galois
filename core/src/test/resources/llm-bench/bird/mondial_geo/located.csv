@@ -1,0 +1,859 @@
+"city","province","country","river","lake","sea"
+City,Province,Coun,River,Lake,Sea
+Shkoder,Albania,AL,,Lake Skutari,
+Durres,Albania,AL,,,Mediterranean Sea
+Vlore,Albania,AL,,,Mediterranean Sea
+Kavalla,Anatoliki Makedhonia kai Thraki,GR,,,Mediterranean Sea
+Athens,Attiki,GR,,,Mediterranean Sea
+Piraeus,Attiki,GR,,,Mediterranean Sea
+Patrai,Dhytiki Ellas,GR,,,Mediterranean Sea
+Korfu,Ionioi Nisoi,GR,,,Mediterranean Sea
+Thessaloniki,Kedriki Makedhonia,GR,,,Mediterranean Sea
+Iraklion,Kriti,GR,,,Mediterranean Sea
+Ermoupoli,Notion Aiyaion,GR,,,Mediterranean Sea
+Volos,Thessalia,GR,,,Mediterranean Sea
+Mytilini,Voreion Aiyaion,GR,,,Mediterranean Sea
+Belgrade,Serbia,SRB,Donau,,
+Belgrade,Serbia,SRB,Save,,
+Strasbourg,Alsace,F,Rhein,,
+Bordeaux,Aquitaine,F,Garonne,,
+Brest,Bretagne,F,,,Atlantic Ocean
+Orleans,Centre,F,Loire,,
+Tours,Centre,F,Loire,,
+Chalons en Champagne,Champagne Ardenne,F,Marne,,
+Ajaccio,Corse,F,,,Mediterranean Sea
+Besancon,Franche Comte,F,Doubs,,
+Rouen,Haute Normandie,F,Seine,,
+Le Havre,Haute Normandie,F,Seine,,The Channel
+Paris,Ile de France,F,Seine,,
+Boulogne Billancourt,Ile de France,F,Seine,,
+Perpignan,Languedoc Roussillon,F,,,Mediterranean Sea
+Metz,Lorraine,F,Mosel,,
+Nancy,Lorraine,F,Mosel,,
+Toulouse,Midi Pyrenees,F,Garonne,,
+Nantes,Pays de la Loire,F,Loire,,
+Marseille,Provence Cote dAzur,F,,,Mediterranean Sea
+Nice,Provence Cote dAzur,F,,,Mediterranean Sea
+Toulon,Provence Cote dAzur,F,,,Mediterranean Sea
+Lyon,Rhone Alpes,F,Saone,,
+Lyon,Rhone Alpes,F,Saone,,
+Grenoble,Rhone Alpes,F,Isere,,
+Villeurbanne,Rhone Alpes,F,Rhone,,
+Sevilla,Andalusia,E,Guadalquivir,,
+Almeria,Andalusia,E,,,Mediterranean Sea
+Cadiz,Andalusia,E,,,Atlantic Ocean
+Cordoba,Andalusia,E,Guadalquivir,,
+Huelva,Andalusia,E,,,Atlantic Ocean
+Malaga,Andalusia,E,,,Mediterranean Sea
+Algeciras,Andalusia,E,,,Mediterranean Sea
+Zaragoza,Aragon,E,Ebro,,
+Gijon,Asturias,E,,,Atlantic Ocean
+Palma de Mallorca,Balearic Islands,E,,,Mediterranean Sea
+Bilbao,Basque Country,E,,,Atlantic Ocean
+Baracaldo,Basque Country,E,,,Atlantic Ocean
+Donostia,Basque Country,E,,,Atlantic Ocean
+Santa Cruz de Tenerife,Canary Islands,E,,,Atlantic Ocean
+Las Palmas de Gran Canaria,Canary Islands,E,,,Atlantic Ocean
+La Laguna,Canary Islands,E,,,Atlantic Ocean
+Santander,Cantabria,E,,,Atlantic Ocean
+Valladolid,Castile and Leon,E,Douro,,
+Barcelona,Catalonia,E,,,Mediterranean Sea
+Badalona,Catalonia,E,,,Mediterranean Sea
+Badajoz,Estremadura,E,Guadiana,,
+La Coruna,Galicia,E,,,Atlantic Ocean
+Vigo,Galicia,E,,,Atlantic Ocean
+Cartagena,Murcia,E,,,Mediterranean Sea
+Logrono,Rioja,E,Ebro,,
+Valencia,Valencia,E,,,Mediterranean Sea
+Alicante,Valencia,E,,,Mediterranean Sea
+Castellon de la Plana,Valencia,E,,,Mediterranean Sea
+Bregenz,Vorarlberg,A,,Bodensee,
+Vienna,Vienna,A,Donau,,
+Linz,Upper Austria,A,Donau,,
+Innsbruck,Tyrol,A,Inn,,
+Graz,Styria,A,Mur,,
+Salzburg,Salzburg,A,Salzach,,
+Ostrava,Severomoravsky,CZ,Oder,,
+Olomouc,Severomoravsky,CZ,March,,
+Stuttgart,Baden Wurttemberg,D,Neckar,,
+Mannheim,Baden Wurttemberg,D,Rhein,,
+Mannheim,Baden Wurttemberg,D,Neckar,,
+Karlsruhe,Baden Wurttemberg,D,Rhein,,
+Heidelberg,Baden Wurttemberg,D,Neckar,,
+Heilbronn,Baden Wurttemberg,D,Neckar,,
+Ulm,Baden Wurttemberg,D,Donau,,
+Ulm,Baden Wurttemberg,D,Iller,,
+Munich,Bayern,D,Isar,,
+Augsburg,Bayern,D,Lech,,
+Wurzburg,Bayern,D,Main,,
+Regensburg,Bayern,D,Donau,,
+Ingolstadt,Bayern,D,Donau,,
+Bremen,Bremen,D,Weser,,
+Bremerhaven,Bremen,D,Weser,,North Sea
+Hamburg,Hamburg,D,Elbe,,
+Wiesbaden,Hessen,D,Rhein,,
+Wiesbaden,Hessen,D,Main,,
+Frankfurt am Main,Hessen,D,Main,,
+Kassel,Hessen,D,Fulda,,
+Offenbach am Main,Hessen,D,Main,,
+Rostock,Mecklenburg Vorpommern,D,,,Baltic Sea
+Hannover,Niedersachsen,D,Leine,,
+Gottingen,Niedersachsen,D,Leine,,
+Wolfsburg,Niedersachsen,D,Aller,,
+Dusseldorf,Nordrhein Westfalen,D,Rhein,,
+Koln,Nordrhein Westfalen,D,Rhein,,
+Duisburg,Nordrhein Westfalen,D,Rhein,,
+Bonn,Nordrhein Westfalen,D,Rhein,,
+Krefeld,Nordrhein Westfalen,D,Rhein,,
+Leverkusen,Nordrhein Westfalen,D,Rhein,,
+Neuss,Nordrhein Westfalen,D,Rhein,,
+Mainz,Rheinland Pfalz,D,Rhein,,
+Ludwigshafen,Rheinland Pfalz,D,Rhein,,
+Koblenz,Rheinland Pfalz,D,Rhein,,
+Koblenz,Rheinland Pfalz,D,Mosel,,
+Saarbrucken,Saarland,D,Saar,,
+Dresden,Sachsen,D,Elbe,,
+Magdeburg,Sachsen Anhalt,D,Elbe,,
+Kiel,Schleswig Holstein,D,,,Baltic Sea
+Lubeck,Schleswig Holstein,D,,,Baltic Sea
+Szolnok,Szolnok,H,Theiss,,
+Budapest,Budapest (munic.),H,Donau,,
+Gyor,Gyor (munic.),H,Raab,,
+Szeged,Szeged (munic.),H,Theiss,,
+Turin,Piemonte,I,Po,,
+Bolzano,Trentino Alto Adige,I,Etsch,,
+Trento,Trentino Alto Adige,I,Etsch,,
+Verona,Veneto,I,Etsch,,
+Venice,Veneto,I,,,Mediterranean Sea
+Trieste,Friuli Venezia Giulia,I,,,Mediterranean Sea
+La Spezia,Liguria,I,,,Mediterranean Sea
+Genua,Liguria,I,,,Mediterranean Sea
+Piacenza,Emilia Romagna,I,Po,,
+Rimini,Emilia Romagna,I,,,Mediterranean Sea
+Livorno,Toscana,I,,,Mediterranean Sea
+Pisa,Toscana,I,Arno,,
+Firenze,Toscana,I,Arno,,
+Ancona,Marche,I,,,Mediterranean Sea
+Rome,Lazio,I,Tiber,,
+Pescara,Abruzzo,I,,,Mediterranean Sea
+Salerno,Campania,I,,,Mediterranean Sea
+Napoli,Campania,I,,,Mediterranean Sea
+Torre del Greco,Campania,I,,,Mediterranean Sea
+Bari,Puglia,I,,,Mediterranean Sea
+Taranto,Puglia,I,,,Mediterranean Sea
+Reggio di Calabria,Calabria,I,,,Mediterranean Sea
+Palermo,Sicilia,I,,,Mediterranean Sea
+Messina,Sicilia,I,,,Mediterranean Sea
+Catania,Sicilia,I,,,Mediterranean Sea
+Siracusa,Sicilia,I,,,Mediterranean Sea
+Cagliari,Sardegna,I,,,Mediterranean Sea
+Bratislava,Slovakia,SK,Donau,,
+Bratislava,Slovakia,SK,March,,
+Ljubljana,Slovenia,SLO,Save,,
+Aarau,AG,CH,Aare,,
+Basel,BS,CH,Rhein,,
+Bern,BE,CH,Aare,,
+Geneva,GE,CH,Rhone,Lac Leman,
+Chur,GR,CH,Rhein,,
+Luzern,LU,CH,Reuss,Vierwaldstattersee,
+Schaffhausen,SH,CH,Rhein,,
+Solothurn,SO,CH,Aare,,
+Bellinzona,TI,CH,Ticino,,
+Altdorf,UR,CH,Reuss,,
+Sion,VS,CH,Rhone,,
+Lausanne,VD,CH,,Lac Leman,
+Zurich,ZH,CH,Limmat,Zurichsee,
+Riga,Latvia,LV,Western Dwina,,Baltic Sea
+Warsaw,Warszwaskie,PL,Weichsel,,
+Bydgoszcz,Bydgoskie,PL,Weichsel,,
+Gdansk,Gdanskie,PL,Weichsel,,Baltic Sea
+Gdynia,Gdanskie,PL,,,Baltic Sea
+Krakow,Krakowskie,PL,Weichsel,,
+Opole,Opolskie,PL,Oder,,
+Szczecin,Szczecinskie,PL,Oder,,
+Wroclaw,Wroclawskie,PL,Oder,,
+Cherkasy,Cherkaska,UA,Dnepr,,
+Chernivtsi,Chernivetska,UA,Pruth,,
+Dnipropetrovsk,Dnipropetrovska,UA,Dnepr,,
+Dniprodzerzhynsk,Dnipropetrovska,UA,Dnepr,,
+Kherson,Khersonska,UA,Dnepr,,
+Kiev,Kyyivska,UA,Dnepr,,
+Kremenchuk,Poltavska,UA,Dnepr,,
+Zaporizhzhya,Zaporizka,UA,Dnepr,,
+Arkhangelsk,Arkhangelskaya oblast,R,Northern Dwina,,Barents Sea
+Severodvinsk,Arkhangelskaya oblast,R,,,Barents Sea
+Murmansk,Murmanskaya oblast,R,,,Barents Sea
+Kaliningrad,Kaliningradskaya oblast,R,,,Baltic Sea
+Sankt Peterburg,Sankt Peterburg,R,,,Baltic Sea
+Kaluga,Kaluzhskaya oblast,R,Oka,,
+Kostroma,Kostromskaya oblast,R,Volga,,
+Kolomna,Moskovskaya oblast,R,Oka,,
+Serpukhov,Moskovskaya oblast,R,Oka,,
+Ryazan,Ryazanskaya oblast,R,Oka,,
+Smolensk,Smolenskaya oblast,R,Dnepr,,
+Tver,Tverskaya oblast,R,Volga,,
+Yaroslavl,Yaroslavskaya oblast,R,Volga,,
+Rybinsk,Yaroslavskaya oblast,R,Volga,,
+Nizhniy Novgorod,Nizhegorodskaya oblast,R,Volga,,
+Nizhniy Novgorod,Nizhegorodskaya oblast,R,Oka,,
+Dzerzhinsk,Nizhegorodskaya oblast,R,Oka,,
+Kazan,Rep. of Tatarstan,R,Volga,,
+Astrakhan,Astrakhanskaya oblast,R,Volga,,
+Volgograd,Volgogradskaya oblast,R,Volga,,
+Samara,Samarskaya oblast,R,Volga,,
+Tolyatti,Samarskaya oblast,R,Volga,,
+Saratov,Saratovskaya oblast,R,Volga,,
+Balakovo,Saratovskaya oblast,R,Volga,,
+Engels,Saratovskaya oblast,R,Volga,,
+Simbirsk,Ulyanovskaya oblast,R,Volga,,
+Orenburg,Orenburgskaya oblast,R,Ural,,
+Orsk,Orenburgskaya oblast,R,Ural,,
+Kurgan,Kurganskaya oblast,R,Tobol,,
+Magnitogorsk,Chelyabinskaya oblast,R,Ural,,
+Biysk,Altayskiy kray,R,Katun,,
+Omsk,Omskaya oblast,R,Irtysch,,
+Kyzyl,Rep. of Tyva,R,Jenissej,,
+Abakan,Rep. of Khakassiya,R,Jenissej,,
+Krasnoyarsk,Krasnoyarskiy kray,R,Jenissej,,
+Irkutsk,Irkutskaya oblast,R,Angara,,
+Angarsk,Irkutskaya oblast,R,Angara,,
+Bratsk,Irkutskaya oblast,R,Angara,,
+Ust Ilimsk,Irkutskaya oblast,R,Angara,,
+Usolye Sibirskoye,Irkutskaya oblast,R,Angara,,
+Chita,Chitinskaya oblast,R,Schilka,,
+Yakutsk,Rep. of Sakha,R,Lena,,
+Vladivostok,Primorsky kray,R,,,Sea of Japan
+Nakhodka,Primorsky kray,R,,,Sea of Japan
+Khabarovsk,Khabarovskiy kray,R,Amur,,
+Komsomolsk na Amure,Khabarovskiy kray,R,Amur,,
+Blagoveshchensk,Amurskaya oblast,R,Amur,,
+Petropavlovsk Kamchatsky,Kamchatskaya oblast,R,,,Pacific Ocean
+Magadan,Magadanskaya oblast,R,,,Sea of Okhotsk
+Okhotsk,Magadanskaya oblast,R,,,Sea of Okhotsk
+Liege,Liege,B,Maas,,
+Namur,Namur,B,Maas,,
+Arnhem,Gelderland,NL,Rhein,,
+Nijmegen,Gelderland,NL,Rhein,,
+Rotterdam,Zuid Holland,NL,Rhein,,
+Maastricht,Limburg,NL,Maas,,
+Zagreb,Croatia,HR,Save,,
+Braila,Braila,RO,Donau,,
+Sfintu Gheorghe,Covasna,RO,Olt,,
+Galati,Galati,RO,Donau,,
+Miercurea Ciuc,Harghita,RO,Olt,,
+Slatina,Olt,RO,Olt,,
+Diyarbakir,Diyarbakir,TR,Tigris,,
+Erzincan,Erzincan,TR,Karasu,,
+Erzurum,Erzurum,TR,Karasu,,
+Mus,Mus,TR,Murat,,
+Copenhagen,Denmark,DK,,,Baltic Sea
+Aarhus,Denmark,DK,,,Kattegat
+Esbjerg,Denmark,DK,,,North Sea
+Tallinn,Estonia,EW,,,Baltic Sea
+Torshavn,Faroe Islands,FARX,,,Norwegian Sea
+Lahti,Haeme,SF,,Paeijaenne,
+Kuopio,Kuopio,SF,,Kallavesi,
+Lappeenrenta,Kymi,SF,,Saimaa,
+Kotka,Kymi,SF,Kymijoki,,Baltic Sea
+Rovaniemi,Lappia,SF,Ounasjoki,,
+Rovaniemi,Lappia,SF,Kemijoki,,
+Mikkeli,Mikkeli,SF,,Saimaa,
+Jyvaeskylae,Suomi,SF,,Paeijaenne,
+Oulu,Oulu,SF,Oulujoki,,Baltic Sea
+Pori,Turku-Pori,SF,Kokemaeenjoki,,
+Turku,Turku-Pori,SF,,,Baltic Sea
+Helsinki,Uusimaa,SF,,,Baltic Sea
+Espoo,Uusimaa,SF,,,Baltic Sea
+Vaasa,Vaasa,SF,,,Baltic Sea
+Oslo,Oslo,N,,,Skagerrak
+Moss,Oestfold,N,,,Skagerrak
+Hamar,Hedmark,N,,Mjoesa-See,
+Lillehammer,Oppland,N,,Mjoesa-See,
+Arendal,Aust Agder,N,,,Skagerrak
+Kristiansand,Vest Agder,N,,,Skagerrak
+Stavanger,Rogaland,N,,,North Sea
+Bergen,Hordaland,N,,,North Sea
+Molde,Moere og Romsdal,N,,,Norwegian Sea
+Trondheim,Soer Trondelag,N,,,Norwegian Sea
+Steinkjer,Nord Trondelag,N,,,Norwegian Sea
+Svolvaer,Nordland,N,,,Norwegian Sea
+Narvik,Nordland,N,,,Norwegian Sea
+Bodoe,Nordland,N,,,Norwegian Sea
+Tromsoe,Troms,N,,,Norwegian Sea
+Hammerfest,Finnmark,N,,,Barents Sea
+Vadsoe,Finnmark,N,,,Barents Sea
+Vanersborg,Alvsborg,S,Goetaaelv,Vaenern,
+Karlskrona,Blekinge,S,,,Baltic Sea
+Gavle,Gavleborg,S,,,Baltic Sea
+Goteborg,Goteborg och Bohus,S,Goetaaelv,,Kattegat
+Visby,Gotland,S,,,Baltic Sea
+Halmstad,Halland,S,,,Kattegat
+Jonkoping,Jonkoping,S,,Vaettern,
+Kalmar,Kalmar,S,,,Baltic Sea
+Malmo,Malmohus,S,,,Baltic Sea
+Helsingborg,Malmohus,S,,,Baltic Sea
+Lulea,Norrbotten,S,,,Baltic Sea
+Mariestad,Skaraborg,S,,Vaenern,
+Stockholm,Stockholm,S,,Maelaren,Baltic Sea
+Karlstad,Varmland,S,Klaraelv,Vaenern,
+Umea,Vasterbotten,S,Umeaelv,,
+Harnosand,Vasternorrland,S,,,Baltic Sea
+Vasteras,Vastmanland,S,,Maelaren,
+Monaco,Monaco,MC,,,Mediterranean Sea
+Saint Peter Port,Guernsey,GBG,,,The Channel
+Reykjavik,Iceland,IS,,,Atlantic Ocean
+Keflavik,Iceland,IS,,,Atlantic Ocean
+Hafnarfjoerdur,Iceland,IS,,,Atlantic Ocean
+Akureyri,Iceland,IS,,,Norwegian Sea
+Dublin,Ireland,IRL,,,Irish Sea
+Saint Helier,Jersey,GBJ,,,The Channel
+Valletta,Malta,M,,,Mediterranean Sea
+Douglas,Man,GBM,,,Irish Sea
+Faro,Algarve,P,,,Atlantic Ocean
+Lisbon,Lisbon,P,Tajo,,Atlantic Ocean
+Porto,Porto,P,Douro,,Atlantic Ocean
+Vila Nova de Gaia,Porto,P,Douro,,Atlantic Ocean
+Santarem,Santarem,P,Tajo,,
+Setubal,Setubal,P,,,Atlantic Ocean
+Viana do Castelo,Viana do Castelo,P,,,Atlantic Ocean
+Ponta Delgada,Azores,P,,,Atlantic Ocean
+Funchal,Madeira,P,,,Atlantic Ocean
+Longyearbyen,Svalbard,SVAX,,,Norwegian Sea
+Reading,Berkshire,GB,Thames,,
+Plymouth,Devon,GB,,,The Channel
+Bournemouth,Dorset,GB,,,The Channel
+Poole,Dorset,GB,,,The Channel
+Brighton,East Sussex,GB,,,The Channel
+Southend on Sea,Essex,GB,Thames,,North Sea
+London,Greater London,GB,Thames,,
+Southampton,Hampshire,GB,,,The Channel
+Portsmouth,Hampshire,GB,,,The Channel
+Havant,Hampshire,GB,,,The Channel
+Fareham,Hampshire,GB,,,The Channel
+Dover,Kent,GB,,,The Channel
+Oxford,Oxfordshire,GB,Thames,,
+Inverness,Highland,GB,,,North Sea
+Dundee,Tayside,GB,,,North Sea
+Colwyn Bay,Aberconwy and Colwyn,GB,,,Irish Sea
+Cardiff,Cardiff,GB,,,Irish Sea
+Belfast,Northern Ireland,GB,,,Irish Sea
+Kirkwall,Orkneys,GB,,,North Sea
+Stornoway,Outer Hebrides,GB,,,Atlantic Ocean
+Lerwick,Shetland,GB,,,North Sea
+Wuhu,Anhui,TJ,Jangtse,,
+Maanshan,Anhui,TJ,Jangtse,,
+Anqing,Anhui,TJ,Jangtse,,
+Tongling,Anhui,TJ,Jangtse,,
+Lanzhou,Gansu,TJ,Hwangho,,
+Haikou,Hainan,TJ,,,South China Sea
+Sanya,Hainan,TJ,,,South China Sea
+Zhengzhou,Henan,TJ,Hwangho,,
+Luoyang,Henan,TJ,Hwangho,,
+Kaifeng,Henan,TJ,Hwangho,,
+Wuhan,Hubei,TJ,Jangtse,,
+Huangshi,Hubei,TJ,Jangtse,,
+Yichang,Hubei,TJ,Jangtse,,
+Shashi,Hubei,TJ,Jangtse,,
+Xianning,Hubei,TJ,Jangtse,,
+Shishou,Hubei,TJ,Jangtse,,
+Yueyang,Hunan,TJ,Jangtse,,
+Nanjing,Jiangsu,TJ,Jangtse,,
+Changzhou,Jiangsu,TJ,Jangtse,,
+Zhenjiang,Jiangsu,TJ,Jangtse,,
+Nantong,Jiangsu,TJ,Jangtse,,
+Yangzhou,Jiangsu,TJ,Jangtse,,
+Jiujiang,Jiangxi,TJ,Jangtse,,
+Dalian,Liaoning,TJ,,,Yellow Sea
+Yingkou,Liaoning,TJ,,,Yellow Sea
+Jinan,Shandong,TJ,Hwangho,,
+Qingdao,Shandong,TJ,,,Yellow Sea
+Yantai,Shandong,TJ,,,Yellow Sea
+Weihai,Shandong,TJ,,,Yellow Sea
+Chongqing,Sichuan,TJ,Jangtse,,
+Luzhou,Sichuan,TJ,Jangtse,,
+Yibin,Sichuan,TJ,Jangtse,,
+Baotou,Nei Monggol,TJ,Hwangho,,
+Yinchuan,Ningxia Huizu,TJ,Hwangho,,
+Khorramshahr,Khuzestan,IR,Karun,,
+Khorramshahr,Khuzestan,IR,Karun,,
+Hyderabad,Pakistan,PK,Indus,,
+Karachi,Pakistan,PK,,,Arabian Sea
+Sukkur,Pakistan,PK,Indus,,
+Khorugh,Badakhshoni Kuni,TAD,Pjandsh,,
+Namangan,Namangan,UZB,Syrdarja,,
+Tbilisi,Georgia,GE,Kura,,
+Baku,Azerbaijan,AZ,,Caspian Sea,
+Manama,Bahrain,BRN,,,Persian Gulf
+Dhaka,Bangladesh,BD,Ganges,,
+Pathein,Ayeyarwady,MYA,Irawaddy,,
+Magway,Magway,MYA,Irawaddy,,
+Mandalay,Mandalay,MYA,Irawaddy,,
+Sagaing,Sagaing,MYA,Irawaddy,,
+Myitkyina,Kachin,MYA,Irawaddy,,
+Moulmein,Mon,MYA,Saluen,,Andaman Sea
+Gauhati,Assam,IND,Brahmaputra,,
+Patna,Bihar,IND,Ganges,,
+Panaji,Goa,IND,,,Arabian Sea
+Jamnagar,Gujarat,IND,,,Arabian Sea
+Trivandrum,Kerala,IND,,,Indian Ocean
+Cochin,Kerala,IND,,,Arabian Sea
+Mumbai,Maharashtra,IND,,,Arabian Sea
+Madras,Tamil Nadu,IND,,,Gulf of Bengal
+Kanpur,Uttar Pradesh,IND,Ganges,,
+Varanasi,Uttar Pradesh,IND,Ganges,,
+Allahabad,Uttar Pradesh,IND,Ganges,,
+Port Blair,Andaman and Nicobar Is.,IND,,,Gulf of Bengal
+Port Blair,Andaman and Nicobar Is.,IND,,,Andaman Sea
+Kavaratti,Lakshadweep Is.,IND,,,Arabian Sea
+Melaka,Melaka,MAL,,,Malakka Strait
+Penang,Pulau Pinang,MAL,,,Malakka Strait
+Vientiane,Laos,LAO,Mekong,,
+Phnom Penh,Cambodia,K,Mekong,,
+Can Tho,Vietnam,VN,Mekong,,
+Long Xuyen,Vietnam,VN,Mekong,,
+Atyrau,Atyrau,KAZ,Ural,Caspian Sea,
+Oral,Batys Qazaqstan,KAZ,Ural,,
+Aqtau,Mangghystau,KAZ,,Caspian Sea,
+Pavlodar,Pavlodar,KAZ,Irtysch,,
+Qostanay,Qostanay,KAZ,Tobol,,
+Qyzylorda,Qyzylorda,KAZ,Syrdarja,,
+Semey,Semey,KAZ,Irtysch,,
+Petropavl,Soltustik Qazaqstan,KAZ,Ischim,,
+Hamhung Hungnam,North Korea,NOK,,,Sea of Japan
+Chongjin,North Korea,NOK,,,Sea of Japan
+Sinuiju,North Korea,NOK,,,Yellow Sea
+Wonsan,North Korea,NOK,,,Sea of Japan
+Haeju,North Korea,NOK,,,Yellow Sea
+Anju,North Korea,NOK,,,Yellow Sea
+Songjin,North Korea,NOK,,,Sea of Japan
+Kusong,North Korea,NOK,,,Sea of Japan
+Sinpo,North Korea,NOK,,,Sea of Japan
+Kaesong,North Korea,NOK,,,Yellow Sea
+Flying Fish Cove,Christmas Island,XMAS,,,Indian Ocean
+West Island,Cocos Islands,COCO,,,Indian Ocean
+Gaza,Gaza Strip,GAZA,,,Mediterranean Sea
+Haifa,Haifa,IL,,,Mediterranean Sea
+Tel Aviv,Tel Aviv,IL,,,Mediterranean Sea
+Marsa Matruh,Matruh,ET,,,Mediterranean Sea
+El Tur,Sina al Janubiyah,ET,,,Red Sea
+El Arish,Sina ash Shamaliyah,ET,,,Mediterranean Sea
+Aswan,Aswan,ET,Nile,,
+Asyut,Asyut,ET,Nile,,
+Beni Suef,Beni Suef,ET,Nile,,
+El Giza,El Giza,ET,Nile,,
+El Minya,El Minya,ET,Nile,,
+Qena,Qena,ET,Nile,,
+El Uqsur,Qena,ET,Nile,,
+Sohag,Sohag,ET,Nile,,
+Bur Said,Bur Said (munic.),ET,,,Mediterranean Sea
+Alexandria,El Iskandariya,ET,,,Mediterranean Sea
+Cairo,El Qahira,ET,Nile,,
+Helwan,El Qahira,ET,Nile,,
+El Suweiz,El Suweiz,ET,,,Red Sea
+Jakarta,Indonesia,RI,,,Sunda Sea
+Semarang,Indonesia,RI,,,Sunda Sea
+Surabaya,Indonesia,RI,,,Sunda Sea
+Banda Aceh,Indonesia,RI,,,Indian Ocean
+Banda Aceh,Indonesia,RI,,,Andaman Sea
+Bengkulu,Indonesia,RI,,,Indian Ocean
+Bandar Lampung,Indonesia,RI,,,Indian Ocean
+Padang,Indonesia,RI,,,Indian Ocean
+Medan,Indonesia,RI,,,Malakka Strait
+Pontianak,Indonesia,RI,,,South China Sea
+Banjarmasin,Indonesia,RI,,,Sunda Sea
+Samarinda,Indonesia,RI,,,Sunda Sea
+Ujung Pandang,Indonesia,RI,,,Sunda Sea
+Ambon,Indonesia,RI,,,Sunda Sea
+Balikpapan,Indonesia,RI,,,Sunda Sea
+Manado,Indonesia,RI,,,Sulawesi Sea
+Pekalongan,Indonesia,RI,,,Sunda Sea
+Tegal,Indonesia,RI,,,Sunda Sea
+Pematang Siantar,Indonesia,RI,Asahan,,
+Probolinggo,Indonesia,RI,,,Sunda Sea
+Pangkal Pinang,Indonesia,RI,,,South China Sea
+Tanjung Balai,Indonesia,RI,,,Malakka Strait
+Batam,Indonesia,RI,,,South China Sea
+Pare Pare,Indonesia,RI,,,Sunda Sea
+Dili,Timor-Leste,TL,,,Sunda Sea
+Port Moresby,Papua New Guinea,PNG,,,Pacific Ocean
+Ar Ramadi,Al Anbar,IRQ,Euphrat,,
+Al Hillah,Babil,IRQ,Euphrat,,
+Baghdad,Baghdad,IRQ,Tigris,,
+Al Basrah,Al Basrah,IRQ,Schatt al Arab,,
+An Nasiriyah,Dhi Qar,IRQ,Euphrat,,
+Al Amarah,Maysan,IRQ,Tigris,,
+As Samawah,Al Muthanna,IRQ,Euphrat,,
+An Najaf,An Najaf,IRQ,Euphrat,,
+Mosul,Ninawa,IRQ,Tigris,,
+Diwaniyah,Al Qadisiyah,IRQ,Euphrat,,
+Samarra,Salah ad Din,IRQ,Tigris,,
+Al Kut,Wasit,IRQ,Tigris,,
+Kuwait,Kuwait,KWT,,,Persian Gulf
+Beirut,Lebanon,RL,,,Mediterranean Sea
+Hakodate,Hokkaido,J,,,Sea of Japan
+Hakodate,Hokkaido,J,,,Sea of Japan
+Aomori,Aomori,J,,,Sea of Japan
+Sendai,Miyagi,J,,,Pacific Ocean
+Akita,Akita,J,,,Sea of Japan
+Chiba,Chiba,J,,,Pacific Ocean
+Tokyo,Tokyo,J,,,Pacific Ocean
+Yokohama,Kanagawa,J,,,Pacific Ocean
+Kawasaki,Kanagawa,J,,,Pacific Ocean
+Niigata,Niigata,J,,,Sea of Japan
+Toyama,Toyama,J,,,Sea of Japan
+Kanazawa,Ishikawa,J,,,Sea of Japan
+Shizuoka,Shizuoka,J,,,Pacific Ocean
+Nagoya,Aichi,J,,,Pacific Ocean
+Tsu,Mie,J,,,Pacific Ocean
+Osaka,Osaka,J,,,Pacific Ocean
+Kobe,Hyogo,J,,,Pacific Ocean
+Wakayama,Wakayama,J,,,Pacific Ocean
+Tottori,Tottori,J,,,Sea of Japan
+Matsue,Shimane,J,,,Sea of Japan
+Okayama,Okayama,J,,,Pacific Ocean
+Hiroshima,Hiroshima,J,,,Pacific Ocean
+Tokushima,Tokushima,J,,,Pacific Ocean
+Takamatsu,Kagawa,J,,,Pacific Ocean
+Matsuyama,Ehime,J,,,Pacific Ocean
+Kochi,Kochi,J,,,Pacific Ocean
+Fukuoka,Fukuoka,J,,,Sea of Japan
+Kita Kyushu,Fukuoka,J,,,Sea of Japan
+Nagasaki,Nagasaki,J,,,East China Sea
+Oita,Oita,J,,,Sea of Japan
+Miyazaki,Miyazaki,J,,,Pacific Ocean
+Kagoshima,Kagoshima,J,,,East China Sea
+Naha,Okinawa,J,,,East China Sea
+Naha,Okinawa,J,,,East China Sea
+Pusan,South Korea,ROK,,,Sea of Japan
+Inchon,South Korea,ROK,,,Yellow Sea
+Ulsan,South Korea,ROK,,,Sea of Japan
+Mokpo,South Korea,ROK,,,Yellow Sea
+Kunsan,South Korea,ROK,,,Yellow Sea
+Yosu,South Korea,ROK,,,East China Sea
+Male,Maldives,MV,,,Indian Ocean
+Muscat,Oman,OM,,,Gulf of Oman
+Abu Dhabi,Abu Dhabi,UAE,,,Persian Gulf
+Dubai,Dubayy,UAE,,,Persian Gulf
+Sharjah,Ash Shariqah,UAE,,,Persian Gulf
+Aden,Yemen,YE,,,Gulf of Aden
+Manila,Philippines,RP,,,South China Sea
+Davao,Philippines,RP,,,Sulawesi Sea
+Cebu,Philippines,RP,,,Sulawesi Sea
+Zamboanga,Philippines,RP,,,Sulawesi Sea
+Cagayan de Oro,Philippines,RP,,,Sulawesi Sea
+Singapore,Singapore,SGP,,,South China Sea
+Colombo,Sri Lanka,CL,,,Indian Ocean
+Hualien,Taiwan,RC,,,Pacific Ocean
+Taitung,Taiwan,RC,,,Pacific Ocean
+Chilung,Taiwan,RC,,,East China Sea
+Hsinchu,Taiwan,RC,,,East China Sea
+Kaohsiung,Taiwan,RC,,,South China Sea
+Tainan,Taiwan,RC,,,South China Sea
+The Valley,Anguilla,AXA,,,Atlantic Ocean
+Saint Johns,Antigua and Barbuda,AG,,,Caribbean Sea
+Oranjestad,Aruba,ARU,,,Caribbean Sea
+Nassau,Bahamas,BS,,,Atlantic Ocean
+Bridgetown,Barbados,BDS,,,Atlantic Ocean
+Campeche,Campeche,MEX,,,Gulf of Mexico
+Ciudad Juarez,Chihuahua,MEX,Rio Grande,,
+Guadalajara,Jalisco,MEX,Rio Lerma,,
+Tampico,Tamaulipas,MEX,,,Gulf of Mexico
+Reynosa,Tamaulipas,MEX,Rio Grande,,
+Nuevo Laredo,Tamaulipas,MEX,Rio Grande,,
+Ciudad Madero,Tamaulipas,MEX,,,Gulf of Mexico
+Coatzacoalcos,Veracruz,MEX,,,Gulf of Mexico
+Veracruz Llave,Veracruz,MEX,,,Gulf of Mexico
+Hamilton,Bermuda,BERM,,,Atlantic Ocean
+Road Town,British Virgin Islands,BVIR,,,Caribbean Sea
+Edmonton,Alberta,CDN,Saskatchewan River,,
+Vancouver,British Columbia,CDN,,,Pacific Ocean
+Victoria,British Columbia,CDN,,,Pacific Ocean
+Saint Johns,Newfoundland,CDN,,,Atlantic Ocean
+Yellowknife,Northwest Territories,CDN,,Great Slave Lake,
+Halifax,Nova Scotia,CDN,,,Atlantic Ocean
+Hamilton,Ontario,CDN,,Lake Ontario,
+Toronto,Ontario,CDN,,Lake Ontario,
+Windsor,Ontario,CDN,Detroit River,,
+Oshawa,Ontario,CDN,,Lake Ontario,
+Saint Catharines,Ontario,CDN,,Lake Ontario,
+Thunder Bay,Ontario,CDN,,Lake Superior,
+Charlottetown,Prince Edward Island,CDN,,,Atlantic Ocean
+Montreal,Quebec,CDN,Saint Lawrence River,,
+Quebec,Quebec,CDN,Saint Lawrence River,,
+Saskatoon,Saskatchewan,CDN,Saskatchewan River,,
+Whitehorse,Yukon Territory,CDN,Yukon River,,
+Huntsville,Alabama,USA,Tennessee,,
+Little Rock,Arkansas,USA,Arkansas,,
+Los Angeles,California,USA,,,Pacific Ocean
+San Diego,California,USA,,,Pacific Ocean
+San Francisco,California,USA,,,Pacific Ocean
+Bridgeport,Connecticut,USA,,,Atlantic Ocean
+Hartford,Connecticut,USA,Connecticut River,,
+New Haven,Connecticut,USA,,,Atlantic Ocean
+Stamford,Connecticut,USA,,,Atlantic Ocean
+Jacksonville,Florida,USA,,,Atlantic Ocean
+Miami,Florida,USA,,,Atlantic Ocean
+Tampa,Florida,USA,,,Gulf of Mexico
+St. Petersburg,Florida,USA,,,Gulf of Mexico
+Savannah,Georgia,USA,,,Atlantic Ocean
+Honolulu,Hawaii,USA,,,Pacific Ocean
+Chicago,Illinois,USA,,Lake Michigan,
+Evansville,Indiana,USA,Ohio River,,
+Gary,Indiana,USA,,Lake Michigan,
+Wichita,Kansas,USA,Arkansas,,
+Kansas City,Kansas,USA,Missouri,,
+Louisville,Kentucky,USA,Ohio River,,
+New Orleans,Louisiana,USA,Mississippi,,
+Baton Rouge,Louisiana,USA,Mississippi,,
+Boston,Massachusetts,USA,,,Atlantic Ocean
+Springfield,Massachusetts,USA,Connecticut River,,
+Detroit,Michigan,USA,Detroit River,,
+Minneapolis,Minnesota,USA,Mississippi,,
+St. Paul,Minnesota,USA,Mississippi,,
+Kansas City,Missouri,USA,Missouri,,
+St. Louis,Missouri,USA,Mississippi,,
+St. Louis,Missouri,USA,Missouri,,
+Independence,Missouri,USA,Missouri,,
+Jefferson City,Missouri,USA,Missouri,,
+Omaha,Nebraska,USA,Missouri,,
+Reno,Nevada,USA,Truckee River,,
+Concord,New Hampshire,USA,Merrimack River,,
+Jersey City,New Jersey,USA,Hudson River,,
+Albuquerque,New Mexico,USA,Rio Grande,,
+New York,New York,USA,Hudson River,,Atlantic Ocean
+Buffalo,New York,USA,,Lake Erie,
+Rochester,New York,USA,,Lake Ontario,
+Yonkers,New York,USA,Hudson River,,
+Albany,New York,USA,Hudson River,,
+Bismarck,North Dakota,USA,Missouri,Lake Oahe,
+Cleveland,Ohio,USA,,Lake Erie,
+Cincinnati,Ohio,USA,Ohio River,,
+Toledo,Ohio,USA,,Lake Erie,
+Tulsa,Oklahoma,USA,Arkansas,,
+Portland,Oregon,USA,Columbia River,,
+Pittsburgh,Pennsylvania,USA,Ohio River,,
+Erie,Pennsylvania,USA,,Lake Erie,
+Providence,Rhode Island,USA,,,Atlantic Ocean
+Pierre,South Dakota,USA,Missouri,Lake Oahe,
+Memphis,Tennessee,USA,Mississippi,,
+Knoxville,Tennessee,USA,Tennessee,,
+Chattanooga,Tennessee,USA,Tennessee,,
+El Paso,Texas,USA,Rio Grande,,
+Corpus Christi,Texas,USA,,,Gulf of Mexico
+Salt Lake City,Utah,USA,,Great Salt Lake,
+Norfolk,Virginia,USA,,,Atlantic Ocean
+Chesapeake,Virginia,USA,,,Atlantic Ocean
+Newport News,Virginia,USA,,,Atlantic Ocean
+Portsmouth,Virginia,USA,,,Atlantic Ocean
+Milwaukee,Wisconsin,USA,,Lake Michigan,
+George Town,Cayman Islands,CAYM,,,Caribbean Sea
+Puntarenas,Puntarenas,CR,,,Pacific Ocean
+Limon,Limon,CR,,,Caribbean Sea
+Managua,Nicaragua,NIC,,Lake Managua,
+Granada,Nicaragua,NIC,,Lake Nicaragua,
+Panama City,Panama,PA,,,Pacific Ocean
+Havana,Ciudad de la Habana,C,,,Gulf of Mexico
+Roseau,Dominica,WD,,,Caribbean Sea
+Santo Domingo,Dominican Republic,DOM,,,Caribbean Sea
+Port-au-Prince,Haiti,RH,,,Caribbean Sea
+La Ceiba,Atlantida,HCA,,,Caribbean Sea
+Tela,Atlantida,HCA,,,Caribbean Sea
+Trujillo,Colon,HCA,,,Caribbean Sea
+Puerto Cortes,Cortes,HCA,,,Caribbean Sea
+Puerto Lempira,Gracias a Dios,HCA,,,Caribbean Sea
+Nuuk,Greenland,GROX,,,Atlantic Ocean
+Saint Georges,Grenada,WG,,,Caribbean Sea
+Basse-Terre,Guadeloupe,GUAD,,,Caribbean Sea
+Kingston,Jamaica,JA,,,Caribbean Sea
+Fort-de-France,Martinique,MART,,,Caribbean Sea
+Plymouth,Montserrat,MNTS,,,Caribbean Sea
+Willemstad,Netherlands Antilles,NA,,,Caribbean Sea
+Marigot,Saint Martin,SMAR,,,Caribbean Sea
+Leticia,Amazonas,CO,Amazonas,,
+Barranquilla,Atlantico,CO,Rio Magdalena,,
+Puerto Inirida,Guainia,CO,Orinoco,,
+Neiva,Huila,CO,Rio Magdalena,,
+Barrancabermeja,Santander del Sur,CO,Rio Magdalena,,
+Puerto Carreno,Vichada,CO,Orinoco,,
+San Juan,Puerto Rico,PR,,,Atlantic Ocean
+Basseterre,Saint Kitts and Nevis,KN,,,Caribbean Sea
+Castries,Saint Lucia,WL,,,Caribbean Sea
+Saint-Pierre,Saint Pierre and Miquelon,SPMI,,,Atlantic Ocean
+Kingstown,Saint Vincent and the Grenadines,WV,,,Caribbean Sea
+Port-of-Spain,Trinidad and Tobago,TT,,,Caribbean Sea
+Grand Turk,Turks and Caicos Islands,TUCA,,,Atlantic Ocean
+Charlotte Amalie,Virgin Islands,VIRG,,,Caribbean Sea
+Pago Pago,American Samoa,AMSA,,,Pacific Ocean
+Newcastle,New South Wales,AUS,,,Pacific Ocean
+Sydney,New South Wales,AUS,,,Pacific Ocean
+Wollongong,New South Wales,AUS,,,Pacific Ocean
+Sunshine Coast,New South Wales,AUS,,,Pacific Ocean
+Darwin,Northern Territory,AUS,,,Indian Ocean
+Brisbane,Queensland,AUS,,,Pacific Ocean
+Gold Coast,Queensland,AUS,,,Pacific Ocean
+Townsville,Queensland,AUS,,,Pacific Ocean
+Adelaide,South Australia,AUS,,,Indian Ocean
+Hobart,Tasmania,AUS,,,Pacific Ocean
+Melbourne,Victoria,AUS,,,Indian Ocean
+Geelong,Victoria,AUS,,,Indian Ocean
+Perth,Western Australia,AUS,,,Indian Ocean
+Albany,Western Australia,AUS,,,Indian Ocean
+Canberra,Australia Capital Territory,AUS,Murrumbidgee River,Lake Burley Griffin,
+Avarua,Cook Islands,COOK,,,Pacific Ocean
+Suva,Fiji,FJI,,,Pacific Ocean
+Papeete,French Polynesia,FPOL,,,Pacific Ocean
+Agana,Guam,GUAM,,,Pacific Ocean
+Dededo,Guam,GUAM,,,Pacific Ocean
+Tarawa,Kiribati,KIR,,,Pacific Ocean
+Majuro,Marshall Islands,MH,,,Pacific Ocean
+Kolonia,Micronesia,FSM,,,Pacific Ocean
+Palikir,Micronesia,FSM,,,Pacific Ocean
+Yaren,Nauru,NAU,,,Pacific Ocean
+Noumea,New Caledonia,NCA,,,Pacific Ocean
+Wellington,New Zealand,NZ,,,Pacific Ocean
+Auckland,New Zealand,NZ,,,Pacific Ocean
+Christchurch,New Zealand,NZ,,,Pacific Ocean
+Alofi,Niue,NIUE,,,Pacific Ocean
+Kingston,Norfolk Island,NORF,,,Pacific Ocean
+Saipan,Northern Mariana Islands,NMIS,,,Pacific Ocean
+Koror,Palau,PAL,,,Pacific Ocean
+Melekeok,Palau,PAL,,,Pacific Ocean
+Adamstown,Pitcairn Islands,PITC,,,Pacific Ocean
+Honiara,Solomon Islands,SLB,,,Pacific Ocean
+Nukualofa,Tonga,TO,,,Pacific Ocean
+Funafuti,Tuvalu,TUV,,,Pacific Ocean
+Port-Vila,Vanuatu,VU,,,Pacific Ocean
+Mata-Utu,Wallis and Futuna,WAFU,,,Pacific Ocean
+Apia,Samoa,WS,,,Pacific Ocean
+La Plata,Buenos Aires,RA,,,Atlantic Ocean
+Mar del Plata,Buenos Aires,RA,,,Atlantic Ocean
+Bahia Blanca,Buenos Aires,RA,,,Atlantic Ocean
+Resistencia,Chaco,RA,Parana,,
+Comodoro Rivadavia,Chubut,RA,,,Atlantic Ocean
+Rawson,Chubut,RA,,,Atlantic Ocean
+Corrientes,Corrientes,RA,Parana,,
+Parana,Entre Rios,RA,Parana,,
+Concordia,Entre Rios,RA,Uruguay,,
+Formosa,Formosa,RA,Paraguay,,
+Posadas,Misiones,RA,Parana,,
+Rio Gallegos,Santa Cruz,RA,,,Atlantic Ocean
+Santa Fe,Santa Fe,RA,Parana,,
+Rosario,Santa Fe,RA,Parana,,
+Buenos Aires,Distrito Federal,RA,Parana,,
+Maceio,Alagoas,BR,,,Atlantic Ocean
+Macapa,Amapa,BR,Amazonas,,
+Manaus,Amazonas,BR,Amazonas,,
+Manaus,Amazonas,BR,Rio Negro,,
+Salvador,Bahia,BR,,,Atlantic Ocean
+Ilheus,Bahia,BR,,,Atlantic Ocean
+Juazeiro,Bahia,BR,Rio Sao Francisco,,
+Fortaleza,Ceara,BR,,,Atlantic Ocean
+Vila Velha,Espirito Santo,BR,,,Atlantic Ocean
+Vitoria,Espirito Santo,BR,,,Atlantic Ocean
+Sao Luis,Maranhao,BR,,,Atlantic Ocean
+Belem,Para,BR,Tocantins,,Atlantic Ocean
+Joao Pessoa,Paraiba,BR,,,Atlantic Ocean
+Paranagua,Parana,BR,,,Atlantic Ocean
+Recife,Pernambuco,BR,,,Atlantic Ocean
+Rio de Janeiro,Rio de Janeiro,BR,,,Atlantic Ocean
+Niteroi,Rio de Janeiro,BR,,,Atlantic Ocean
+Natal,Rio Grande do Norte,BR,,,Atlantic Ocean
+Porto Alegre,Rio Grande do Sul,BR,,,Atlantic Ocean
+Rio Grande,Rio Grande do Sul,BR,,,Atlantic Ocean
+Uruguaiana,Rio Grande do Sul,BR,Uruguay,,
+Porto Velho,Rondonia,BR,Rio Madeira,,
+Florianopolis,Santa Catarina,BR,,,Atlantic Ocean
+Itajai,Santa Catarina,BR,,,Atlantic Ocean
+Sao Paulo,Sao Paulo,BR,,,Atlantic Ocean
+Santos,Sao Paulo,BR,,,Atlantic Ocean
+Sao Vicente,Sao Paulo,BR,,,Atlantic Ocean
+Aracaju,Sergipe,BR,,,Atlantic Ocean
+Valparaiso,Chile,RCH,,,Pacific Ocean
+Asuncion,Paraguay,PY,Paraguay,,
+Montevideo,Uruguay,ROU,,,Atlantic Ocean
+Cuzco,Cuzco,PE,Amazonas,,
+Iquitos,Loreto,PE,Amazonas,,
+Pucallpa,Ucayali,PE,Amazonas,,
+Georgetown,Guyana,GUY,,,Atlantic Ocean
+Paramaribo,Suriname,SME,,,Atlantic Ocean
+Ciudad Bolivar,Bolivar,YV,Orinoco,,
+Ciudad Guayana,Bolivar,YV,Orinoco,,
+Maracaibo,Zulia,YV,,Lake Maracaibo,Caribbean Sea
+Guayaquil,Ecuador,EC,,,Pacific Ocean
+Stanley,Falkland Islands,FALK,,,Atlantic Ocean
+Algier,Algeria,DZ,,,Mediterranean Sea
+Annaba,Algeria,DZ,,,Mediterranean Sea
+Skikda,Algeria,DZ,,,Mediterranean Sea
+Oran,Algeria,DZ,,,Mediterranean Sea
+Bejaia,Algeria,DZ,,,Mediterranean Sea
+Mostaganem,Algeria,DZ,,,Mediterranean Sea
+Tripoli,Libya,LAR,,,Mediterranean Sea
+Bengasi,Libya,LAR,,,Mediterranean Sea
+Bamako,Mali,RMM,Niger,,
+Rabat,Morocco,MA,,,Atlantic Ocean
+Agadir,Morocco,MA,,,Atlantic Ocean
+Kenitra,Morocco,MA,,,Atlantic Ocean
+Safi,Morocco,MA,,,Atlantic Ocean
+Tanger,Morocco,MA,,,Atlantic Ocean
+Casablanca,Morocco,MA,,,Atlantic Ocean
+Tetouan,Morocco,MA,,,Mediterranean Sea
+Niamey,Niger,RN,Niger,,
+Tunis,Tunisia,TN,,,Mediterranean Sea
+Luanda,Luanda,ANG,,,Atlantic Ocean
+Brazzaville,Congo,RCB,Zaire,,
+Kikwit,Bandundu,ZRE,Cuilo,,
+Bandundu,Bandundu,ZRE,Kwa,,
+Bandundu,Bandundu,ZRE,Kasai,,
+Matadi,Bas Zaire,ZRE,Zaire,,
+Boma,Bas Zaire,ZRE,Zaire,,
+Mbandaka,Equateur,ZRE,Zaire,,
+Kananga,Kasai Occidental,ZRE,Lulua,,
+Tshikapa,Kasai Occidental,ZRE,Kasai,,
+Bukavu,Kivu,ZRE,,Lake Kivu,
+Uvira,Kivu,ZRE,,Lake Tanganjika,
+Goma,Kivu,ZRE,,Lake Kivu,
+Kalemie,Shaba/Katanga,ZRE,Lukuga,Lake Tanganjika,
+Kinshasa,Kinshasa,ZRE,Zaire,,
+Lagos,Nigeria,WAN,,,Atlantic Ocean
+Onitsha,Nigeria,WAN,Niger,,
+Lome,Togo,RT,,,Atlantic Ocean
+Abidjan,Cote dIvoire,CI,,,Atlantic Ocean
+Accra,Ghana,GH,,,Atlantic Ocean
+Bujumbura,Burundi,BI,,Lake Tanganjika,
+Dar es Salaam,Daressalam,EAT,,,Indian Ocean
+Garoua,Nord,CAM,Benue,,
+Bangui,Central African Republic,RCA,Ubangi,,
+NDjamena,Chad,TCH,Schari,,
+Malabo,Equatorial Guinea,GQ,,,Atlantic Ocean
+Libreville,Gabon,G,,,Atlantic Ocean
+Praia,Cape Verde,CV,,,Atlantic Ocean
+Malakal,Aali an Nil,SUD,White Nile,,
+Juba,al Istiwaiyah,SUD,Bahr el-Djebel/Albert-Nil,,
+Khartoum,al Khartum,SUD,Nile,,
+Khartoum,al Khartum,SUD,Blue Nile,,
+Omdurman,al Khartum,SUD,Nile,,
+Omdurman,al Khartum,SUD,Blue Nile,,
+Khartoum North,al Khartum,SUD,Nile,,
+ad Damir,ash Shamaliyah,SUD,Nile,,
+Port Sudan,ash Sharqiyah,SUD,,,Red Sea
+Wad Madani,Nil al Asraq,SUD,Blue Nile,,
+Moroni,Comoros,COM,,,Indian Ocean
+Conakry,Guinea,RG,,,Atlantic Ocean
+Monrovia,Liberia,LB,,,Atlantic Ocean
+Djibouti,Djibouti,DJI,,,Gulf of Aden
+Mogadishu,Somalia,SP,,,Indian Ocean
+Mombasa,Coast,EAK,,,Indian Ocean
+Banjul,Gambia,WAG,Gambia,,Atlantic Ocean
+Dakar,Dakar,SN,,,Atlantic Ocean
+Saint Louis,Saint Louis,SN,Senegal,,
+Bissau,Guinea-Bissau,GNB,,,Atlantic Ocean
+Freetown,Sierra Leone,WAL,,,Atlantic Ocean
+Kampala,Uganda,EAU,,Lake Victoria,
+Xai Xai,Gaza,MOC,Limpopo,,Indian Ocean
+Maputo,Maputo (munic.),MOC,,,Indian Ocean
+Port Louis,Mauritius,MS,,,Indian Ocean
+Mamoutzou,Mayotte,MAYO,,,Indian Ocean
+Saint-Denis,Reunion,REUN,,,Indian Ocean
+Jamestown,Saint Helena,HELX,,,Atlantic Ocean
+Sao Tome,Sao Tome and Principe,STP,,,Atlantic Ocean
+Victoria,Seychelles,SY,,,Indian Ocean

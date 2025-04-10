@@ -1,0 +1,234 @@
+{
+    "name": "books-{{QN}} llama3-sql Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes"
+    ],
+
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-sql",
+            "maxIterations": 10
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "cookbook",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "nutrition",
+                    "attributes": [
+                        {
+                            "name": "recipe_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "protein",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "carbo",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "alcohol",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "total_fat",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sat_fat",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "cholestrl",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sodium",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "iron",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vitamin_c",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vitamin_a",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "fiber",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "pcnt_cal_carb",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "pcnt_cal_fat",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "pcnt_cal_prot",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "calories",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "ingredient",
+                    "attributes": [
+                        {
+                            "name": "ingredient_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "category",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "plural",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "recipe",
+                    "attributes": [
+                        {
+                            "name": "recipe_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "title",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "subtitle",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "servings",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yield_unit",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "prep_min",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "cook_min",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "stnd_min",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "quantity",
+                    "attributes": [
+                        {
+                            "name": "quantity_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "recipe_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "ingredient_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "max_qty",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "min_qty",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "unit",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "preparation",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "optional",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/cookbook"
+    }
+}

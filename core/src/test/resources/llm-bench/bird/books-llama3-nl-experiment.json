@@ -1,0 +1,359 @@
+{
+    "name": "books-{{QN}} llama3-nl Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-nl",
+            "maxIterations": 10,
+            "naturalLanguagePrompt": "{{PROMPT}}"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "books",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "order_status",
+                    "attributes": [
+                        {
+                            "name": "status_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "status_value",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "country",
+                    "attributes": [
+                        {
+                            "name": "country_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "country_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "address_status",
+                    "attributes": [
+                        {
+                            "name": "status_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "address_status",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "book",
+                    "attributes": [
+                        {
+                            "name": "book_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "title",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "isbn13",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "language_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "num_pages",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "publication_date",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "publisher_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "customer",
+                    "attributes": [
+                        {
+                            "name": "customer_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "first_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "last_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "email",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "book_author",
+                    "attributes": [
+                        {
+                            "name": "book_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "author_id",
+                            "type": "INTEGER",
+                            "key": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "author",
+                    "attributes": [
+                        {
+                            "name": "author_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "author_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "publisher",
+                    "attributes": [
+                        {
+                            "name": "publisher_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "publisher_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "customer_address",
+                    "attributes": [
+                        {
+                            "name": "customer_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "address_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "status_id",
+                            "type": "INTEGER",
+                            "key": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "shipping_method",
+                    "attributes": [
+                        {
+                            "name": "method_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "method_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "cost",
+                            "type": "REAL",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "cust_order",
+                    "attributes": [
+                        {
+                            "name": "order_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "order_date",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "customer_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "shipping_method_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "dest_address_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "order_line",
+                    "attributes": [
+                        {
+                            "name": "line_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "order_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "book_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "price",
+                            "type": "REAL",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "order_history",
+                    "attributes": [
+                        {
+                            "name": "history_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "order_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "status_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "status_date",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "address",
+                    "attributes": [
+                        {
+                            "name": "address_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "street_number",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "street_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "book_language",
+                    "attributes": [
+                        {
+                            "name": "language_id",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "language_code",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "language_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/books"
+    }
+}

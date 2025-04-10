@@ -68,20 +68,7 @@ public final class Experiment {
 //        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
         IAlgebraOperator operator = parse();
         log.info("Query operator {}", operator);
-        DBMSDB dbmsDatabase = createDatabaseForExpected();
-        String queryToExecute = query.getSql().replace("target.", "public.");
-        log.debug("Query for results:\n{}", queryToExecute);
-        ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
-        ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
-        List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
-        expectedITerator.close();
-        log.info("Expected size: {}", expectedResults.size());
-//        log.info("Expected");
-//        log.info("Query: " + query.getSql());
-//        for (Tuple expectedResult : expectedResults) {
-//            log.info(expectedResult.toString());
-//        }
-//        log.info("-----------------------------");
+        List<Tuple> expectedResults = computeExpected();
 
         GaloisDebug.log("Unoptimized");
         var unoptimizedResult = executeUnoptimizedExperiment(operator, expectedResults);
@@ -98,6 +85,24 @@ public final class Experiment {
             results.put(optimizer.getName(), result);
         }
         return results;
+    }
+
+    public List<Tuple> computeExpected() throws IllegalStateException, DAOException {
+        DBMSDB dbmsDatabase = createDatabaseForExpected();
+        String queryToExecute = query.getSql().replace("target.", "public.");
+        log.debug("Query for results:\n{}", queryToExecute);
+        ResultSet resultSet = QueryManager.executeQuery(queryToExecute, dbmsDatabase.getAccessConfiguration());
+        ITupleIterator expectedITerator = new DBMSTupleIterator(resultSet);
+        List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
+        expectedITerator.close();
+        log.info("Expected size: {}", expectedResults.size());
+//        log.info("Expected");
+//        log.info("Query: " + query.getSql());
+//        for (Tuple expectedResult : expectedResults) {
+//            log.info(expectedResult.toString());
+//        }
+//        log.info("-----------------------------");
+        return expectedResults;
     }
     
     @SuppressWarnings("unchecked")

@@ -1,0 +1,853 @@
+"river","country","province"
+River,Coun,Province
+Bahr el-Djebel/Albert-Nil,SUD,Aali an Nil
+Bahr el-Ghasal,SUD,Aali an Nil
+Pibor,SUD,Aali an Nil
+Sobat,SUD,Aali an Nil
+White Nile,SUD,Aali an Nil
+Tigris,IRQ,Ad Tamim
+Euphrat,TR,Adiyaman
+Amudarja,AFG,Afghanistan
+Pjandsh,AFG,Afghanistan
+Aare,CH,AG
+Limmat,CH,AG
+Reuss,CH,AG
+Rhein,CH,AG
+Murat,TR,Agri
+Glomma,N,Akershus
+Lagen,N,Akershus
+Euphrat,IRQ,Al Anbar
+Euphrat,IRQ,Al Basrah
+Schatt al Arab,IRQ,Al Basrah
+Tigris,IRQ,Al Basrah
+Bahr el-Djebel/Albert-Nil,SUD,al Istiwaiyah
+Blue Nile,SUD,al Khartum
+Nile,SUD,al Khartum
+White Nile,SUD,al Khartum
+Euphrat,IRQ,Al Muthanna
+Euphrat,IRQ,Al Qadisiyah
+Tennessee,USA,Alabama
+Rio Sao Francisco,BR,Alagoas
+Rio San Juan,CR,Alajuela
+Yukon River,USA,Alaska
+Black Drin,AL,Albania
+Drin,AL,Albania
+White Drin,AL,Albania
+Saskatchewan River,CDN,Alberta
+Guadiana,P,Algarve
+Rhein,F,Alsace
+Saar,F,Alsace
+Katun,R,Altayskiy kray
+Ob,R,Altayskiy kray
+Goetaaelv,S,Alvsborg
+Amazonas,BR,Amapa
+Amazonas,BR,Amazonas
+Rio Madeira,BR,Amazonas
+Rio Negro,BR,Amazonas
+Amazonas,CO,Amazonas
+Orinoco,YV,Amazonas
+Amur,R,Amurskaya oblast
+Euphrat,IRQ,An Najaf
+Guadalquivir,E,Andalusia
+Guadiana,E,Andalusia
+Jangtse,TJ,Anhui
+Rio Magdalena,CO,Antioquia
+Orinoco,YV,Anzoategui
+Orinoco,YV,Apure
+Garonne,F,Aquitaine
+Ebro,E,Aragon
+Tigris,IRQ,Arbil
+Colorado,USA,Arizona
+Arkansas,USA,Arkansas
+Mississippi,USA,Arkansas
+Northern Dwina,R,Arkhangelskaya oblast
+Petschora,R,Arkhangelskaya oblast
+Brahmaputra,IND,Arunachal Pradesh
+Atbara,SUD,ash Shamaliyah
+Nile,SUD,ash Shamaliyah
+Atbara,SUD,ash Sharqiyah
+Brahmaputra,IND,Assam
+Volga,R,Astrakhanskaya oblast
+Nile,ET,Aswan
+Nile,ET,Asyut
+Rio Magdalena,CO,Atlantico
+Ural,KAZ,Atyrau
+Murrumbidgee River,AUS,Australia Capital Territory
+Loire,F,Auvergne
+Douro,P,Aveiro
+Irawaddy,MYA,Ayeyarwady
+Kura,AZ,Azerbaijan
+Euphrat,IRQ,Babil
+Tigris,IRQ,Babil
+Donau,H,Bacs Kiskun
+Pjandsh,TAD,Badakhshoni Kuni
+Breg,D,Baden Wurttemberg
+Brigach,D,Baden Wurttemberg
+Donau,D,Baden Wurttemberg
+Iller,D,Baden Wurttemberg
+Neckar,D,Baden Wurttemberg
+Rhein,D,Baden Wurttemberg
+Tigris,IRQ,Baghdad
+Irawaddy,MYA,Bago
+Rio Sao Francisco,BR,Bahia
+Bahr el-Djebel/Albert-Nil,SUD,Bahr al Ghazal
+Bahr el-Ghasal,SUD,Bahr al Ghazal
+Colorado,MEX,Baja California
+Cuango,ZRE,Bandundu
+Cuilo,ZRE,Bandundu
+Fimi,ZRE,Bandundu
+Kasai,ZRE,Bandundu
+Kwa,ZRE,Bandundu
+Lukenie,ZRE,Bandundu
+Zaire,ZRE,Bandundu
+Brahmaputra,BD,Bangladesh
+Ganges,BD,Bangladesh
+Donau,H,Baranya
+Drau,H,Baranya
+Cuango,ZRE,Bas Zaire
+Zaire,ZRE,Bas Zaire
+Ebro,E,Basque Country
+Tigris,TR,Batman
+Ural,KAZ,Batys Qazaqstan
+Alz,D,Bayern
+Ammer,D,Bayern
+Donau,D,Bayern
+Iller,D,Bayern
+Inn,D,Bayern
+Isar,D,Bayern
+Lech,D,Bayern
+Main,D,Bayern
+Salzach,D,Bayern
+Wurm,D,Bayern
+Aare,CH,BE
+Guadiana,P,Beja
+Dnepr,BY,Belarus
+Western Dwina,BY,Belarus
+Nile,ET,Beni Suef
+Thames,GB,Berkshire
+Cuilo,ANG,Bie
+Weichsel,PL,Bielskie
+Ganges,IND,Bihar
+Murat,TR,Bingol
+Rhein,CH,BL
+Rio Magdalena,CO,Bolivar
+Orinoco,YV,Bolivar
+Paraguay,BOL,Bolivia
+Rio Desaguadero,BOL,Bolivia
+Rio Madeira,BOL,Bolivia
+Rio Mamore,BOL,Bolivia
+Theiss,H,Borsod Abauj Zemplen
+Save,BIH,Bosnia and Herzegovina
+Pruth,RO,Botosani
+Limpopo,RB,Botswana
+Doubs,F,Bourgogne
+Loire,F,Bourgogne
+Saone,F,Bourgogne
+Seine,F,Bourgogne
+Rio Magdalena,CO,Boyaca
+Karun,IR,Boyer Ahmad e Kohkiluyeh
+Douro,P,Braganca
+Donau,RO,Braila
+Elbe,D,Brandenburg
+Oder,D,Brandenburg
+Olt,RO,Brasov
+Weser,D,Bremen
+Columbia River,CDN,British Columbia
+Rhein,CH,BS
+Thames,GB,Buckinghamshire
+Donau,H,Budapest (munic.)
+Parana,RA,Buenos Aires
+Donau,BG,Bulgaria
+Raab,A,Burgenland
+Volta,BF,Burkina Faso
+Ruzizi,BI,Burundi
+Weichsel,PL,Bydgoskie
+Donau,RO,Calarasi
+Rio Magdalena,CO,Caldas
+Colorado,USA,California
+Truckee River,USA,California
+Mekong,K,Cambodia
+Donau,RO,Caras Severin
+Drau,A,Carinthia
+Tajo,P,Castelo Branco
+Douro,E,Castile and Leon
+Ebro,E,Castile and Leon
+Guadiana,E,Castile La Mancha
+Tajo,E,Castile La Mancha
+Ebro,E,Catalonia
+Garonne,E,Catalonia
+Zambezi,Z,Central
+Bomu,RCA,Central African Republic
+Sanga,RCA,Central African Republic
+Schari,RCA,Central African Republic
+Ubangi,RCA,Central African Republic
+Sanaga,CAM,Centre
+Loire,F,Centre
+Paraguay,RA,Chaco
+Parana,RA,Chaco
+Schari,TCH,Chad
+Karun,IR,Chahar Mahal e Bakhtiari
+Maas,F,Champagne Ardenne
+Marne,F,Champagne Ardenne
+Seine,F,Champagne Ardenne
+Ural,R,Chelyabinskaya oblast
+Dnepr,UA,Cherkaska
+Dnepr,UA,Chernihivska
+Dnjestr,UA,Chernivetska
+Pruth,UA,Chernivetska
+Theiss,UA,Chernivetska
+Rio Grande,MEX,Chihuahua
+Amur,R,Chitinskaya oblast
+Argun,R,Chitinskaya oblast
+Schilka,R,Chitinskaya oblast
+Volga,R,Chuvash Republic
+Rio Grande,MEX,Coahuila
+Arkansas,USA,Colorado
+Colorado,USA,Colorado
+Rio Grande,USA,Colorado
+Sanga,RCB,Congo
+Ubangi,RCB,Congo
+Zaire,RCB,Congo
+Connecticut River,USA,Connecticut
+Donau,RO,Constanta
+Parana,RA,Corrientes
+Uruguay,RA,Corrientes
+Bani,CI,Cote dIvoire
+Sanaga,CAM,Cote/Littoral
+Olt,RO,Covasna
+Donau,HR,Croatia
+Drau,HR,Croatia
+Mur,HR,Croatia
+Save,HR,Croatia
+Theiss,H,Csongrad
+Cuilo,ANG,Cuando Cubango
+Amazonas,PE,Cuzco
+Tigris,IRQ,Dahuk
+Dalaelv,S,Dalarna
+Oesterdalaelv,S,Dalarna
+Vaesterdalaelv,S,Dalarna
+Amudarja,TM,Dashhowuz
+Orinoco,YV,Delta Amacuro
+Euphrat,IRQ,Dhi Qar
+Parana,RA,Distrito Federal
+Tigris,TR,Diyarbakir
+Dnepr,UA,Dnipropetrovska
+Donau,RO,Dolj
+Nile,ET,Dumyat
+Nile,ET,El Buhayra
+Nile,ET,El Daqahliya
+Nile,ET,El Gharbiya
+Nile,ET,El Giza
+Nile,ET,El Minufiya
+Nile,ET,El Minya
+Nile,ET,El Qahira
+Nile,ET,El Qalubiya
+Murat,TR,Elazig
+Weichsel,PL,Elblaskie
+Po,I,Emilia Romagna
+Parana,RA,Entre Rios
+Uruguay,RA,Entre Rios
+Busira,ZRE,Equateur
+Ruki,ZRE,Equateur
+Tshuapa,ZRE,Equateur
+Ubangi,ZRE,Equateur
+Uelle,ZRE,Equateur
+Zaire,ZRE,Equateur
+Karasu,TR,Erzincan
+Karasu,TR,Erzurum
+Karun,IR,Esfahan
+Thames,GB,Essex
+Sanaga,CAM,Est
+Sanga,CAM,Est
+Narva,EW,Estonia
+Guadiana,E,Estremadura
+Tajo,E,Estremadura
+Atbara,ETH,Ethiopia
+Baro,ETH,Ethiopia
+Blue Nile,ETH,Ethiopia
+Jubba,ETH,Ethiopia
+Shabelle,ETH,Ethiopia
+Sobat,ETH,Ethiopia
+Guadiana,P,Evora
+Donau,H,Fejer
+Paatsjoki,N,Finnmark
+Paraguay,RA,Formosa
+Doubs,F,Franche Comte
+Saone,F,Franche Comte
+Oranje,RSA,Free State
+Vaal,RSA,Free State
+Donau,RO,Galati
+Pruth,RO,Galati
+Gambia,WAG,Gambia
+Hwangho,TJ,Gansu
+Limpopo,RSA,Gauteng
+Dalaelv,S,Gavleborg
+Limpopo,MOC,Gaza
+Euphrat,TR,Gaziantep
+Weichsel,PL,Gdanskie
+Rhone,CH,GE
+Maas,NL,Gelderland
+Rhein,NL,Gelderland
+Kura,GE,Georgia
+Volta,GH,Ghana
+Donau,RO,Giurgiu
+Thames,GB,Gloucestershire
+Parana,BR,Goias
+Tocantins,BR,Goias
+Oder,PL,Gorzowskie
+Goetaaelv,S,Goteborg och Bohus
+Inn,CH,GR
+Rhein,CH,GR
+Thames,GB,Greater London
+Orinoco,CO,Guainia
+Rio Negro,CO,Guainia
+Rio Lerma,MEX,Guanajuato
+Douro,P,Guarda
+Orinoco,YV,Guarico
+Gambia,RG,Guinea
+Niger,RG,Guinea
+Senegal,RG,Guinea
+Raab,H,Gyor (munic.)
+Raab,H,Gyor Sopron
+Kymijoki,SF,Haeme
+Theiss,H,Hajdu Bihar
+Elbe,D,Hamburg
+Olt,RO,Harghita
+Aruwimi,ZRE,Haut Zaire
+Bomu,ZRE,Haut Zaire
+Lomami,ZRE,Haut Zaire
+Lualaba,ZRE,Haut Zaire
+Semliki,ZRE,Haut Zaire
+Uelle,ZRE,Haut Zaire
+Zaire,ZRE,Haut Zaire
+Seine,F,Haute Normandie
+Glomma,N,Hedmark
+Klaraelv,N,Hedmark
+Lagen,N,Hedmark
+Amur,TJ,Heilongjiang
+Argun,TJ,Heilongjiang
+Hwangho,TJ,Henan
+Rio San Juan,CR,Heredia
+Fulda,D,Hessen
+Main,D,Hessen
+Rhein,D,Hessen
+Werra,D,Hessen
+Weser,D,Hessen
+Theiss,H,Heves
+Jangtse,TJ,Hubei
+Rio Magdalena,CO,Huila
+Jangtse,TJ,Hunan
+Donau,RO,Ialomita
+Pruth,RO,Iasi
+Joekulsa a Fjoellum,IS,Iceland
+Thjorsa,IS,Iceland
+Marne,F,Ile de France
+Seine,F,Ile de France
+Mississippi,USA,Illinois
+Ohio River,USA,Illinois
+Ohio River,USA,Indiana
+Asahan,RI,Indonesia
+Mississippi,USA,Iowa
+Missouri,USA,Iowa
+Angara,R,Irkutskaya oblast
+Lena,R,Irkutskaya oblast
+Dnjestr,UA,Ivano Frankivska
+Pruth,UA,Ivano Frankivska
+Theiss,UA,Ivano Frankivska
+Volga,R,Ivanovskaya oblast
+Rio Lerma,MEX,Jalisco
+Indus,IND,Jammu and Kashmir
+Jangtse,TJ,Jiangsu
+Jangtse,TJ,Jiangxi
+Moldau,CZ,Jihocesky
+March,CZ,Jihomoravsky
+Jordan,JOR,Jordan
+Doubs,CH,JU
+Irawaddy,MYA,Kachin
+Nile,ET,Kafr el Sheikh
+Oka,R,Kaluzhskaya oblast
+Arkansas,USA,Kansas
+Missouri,USA,Kansas
+Euphrat,IRQ,Karbala
+Kura,TR,Kars
+Kasai,ZRE,Kasai Occidental
+Lukenie,ZRE,Kasai Occidental
+Lulua,ZRE,Kasai Occidental
+Lomami,ZRE,Kasai Oriental
+Lukenie,ZRE,Kasai Oriental
+Tshuapa,ZRE,Kasai Oriental
+Weichsel,PL,Katowickie
+Saluen,MYA,Kayah
+Saluen,MYA,Kayin
+Thames,GB,Kent
+Mississippi,USA,Kentucky
+Ohio River,USA,Kentucky
+Tennessee,USA,Kentucky
+Amur,R,Khabarovskiy kray
+Amudarja,TAD,Khatlon
+Pjandsh,TAD,Khatlon
+Dnepr,UA,Khersonska
+Dnjestr,UA,Khmelnytska
+Syrdarja,TAD,Khujand
+Karun,IR,Khuzestan
+Schatt al Arab,IR,Khuzestan
+Weichsel,PL,Kieleckie
+Zaire,ZRE,Kinshasa
+Dnepr,UA,Kirovohradska
+Lomami,ZRE,Kivu
+Lualaba,ZRE,Kivu
+Ruzizi,ZRE,Kivu
+Semliki,ZRE,Kivu
+Gambia,SN,Kolda
+Donau,H,Komarom Esztergom
+Southern Morava,KOS,Kosovo
+White Drin,KOS,Kosovo
+Volga,R,Kostromskaya oblast
+Weichsel,PL,Krakowskie
+Angara,R,Krasnoyarskiy kray
+Chatanga,R,Krasnoyarskiy kray
+Jenissej,R,Krasnoyarskiy kray
+Pjandsh,TAD,Kulob
+Vuoksi,SF,Kuopio
+Tobol,R,Kurganskaya oblast
+Kymijoki,SF,Kymi
+Vuoksi,SF,Kymi
+Naryn,KGZ,Kyrgyzstan
+Dnepr,UA,Kyyivska
+Garonne,F,Languedoc Roussillon
+Rhone,F,Languedoc Roussillon
+Mekong,LAO,Laos
+Kemijoki,SF,Lappia
+Ounasjoki,SF,Lappia
+Paatsjoki,SF,Lappia
+Western Dwina,LV,Latvia
+Tiber,I,Lazio
+Amudarja,TM,Leban
+Jordan,RL,Lebanon
+Oder,PL,Legnickie
+Newa,R,Leningradskaya oblast
+Swir,R,Leningradskaya oblast
+Oranje,LS,Lesotho
+Rhein,FL,Liechtenstein
+Maas,B,Liege
+Maas,B,Limburg
+Maas,NL,Limburg
+Rio San Juan,CR,Limon
+Limpopo,RSA,Limpopo
+Don,R,Lipetskaya oblast
+Tajo,P,Lisbon
+Adda,I,Lombardia
+Po,I,Lombardia
+Ticino,I,Lombardia
+Amazonas,PE,Loreto
+Maas,F,Lorraine
+Mosel,F,Lorraine
+Saar,F,Lorraine
+Saone,F,Lorraine
+Mississippi,USA,Louisiana
+Donau,A,Lower Austria
+March,A,Lower Austria
+Reuss,CH,LU
+Luapula,Z,Luapula
+Weichsel,PL,Lubelskie
+Cuango,ANG,Lunda Norte
+Kasai,ANG,Lunda Norte
+Cuango,ANG,Lunda Sul
+Kasai,ANG,Lunda Sul
+Zambezi,Z,Lusaka
+Mosel,L,Luxembourg
+Dnjestr,UA,Lvivska
+Black Drin,MK,Macedonia
+Southern Morava,MK,Macedonia
+Kolyma,R,Magadanskaya oblast
+Rio Magdalena,CO,Magdalena
+Irawaddy,MYA,Magway
+Cuango,ANG,Malanje
+Euphrat,TR,Malatya
+Chire,MW,Malawi
+Bani,RMM,Mali
+Niger,RMM,Mali
+Senegal,RMM,Mali
+Irawaddy,MYA,Mandalay
+Zambezi,MOC,Manica
+Nelson River,CDN,Manitoba
+Saskatchewan River,CDN,Manitoba
+Tocantins,BR,Maranhao
+Tigris,TR,Mardin
+Connecticut River,USA,Massachusetts
+Merrimack River,USA,Massachusetts
+Paraguay,BR,Mato Grosso
+Paraguay,BR,Mato Grosso do Sul
+Parana,BR,Mato Grosso do Sul
+Senegal,RIM,Mauritania
+Tigris,IRQ,Maysan
+Elbe,D,Mecklenburg Vorpommern
+Oder,D,Mecklenburg Vorpommern
+Donau,RO,Mehedinti
+Rio Lerma,MEX,"Mexico, Estado de"
+Detroit River,USA,Michigan
+Rio Lerma,MEX,Michoacan
+Garonne,F,Midi Pyrenees
+Kymijoki,SF,Mikkeli
+Parana,BR,Minas Gerais
+Rio Sao Francisco,BR,Minas Gerais
+Mississippi,USA,Minnesota
+Parana,RA,Misiones
+Uruguay,RA,Misiones
+Mississippi,USA,Mississippi
+Mississippi,USA,Missouri
+Missouri,USA,Missouri
+Dnjestr,MD,Moldova
+Donau,MD,Moldova
+Pruth,MD,Moldova
+Saluen,MYA,Mon
+Orinoco,YV,Monagas
+Missouri,USA,Montana
+Oka,R,Moskovskaya oblast
+Cuilo,ANG,Moxico
+Kasai,ANG,Moxico
+Zambezi,ANG,Moxico
+Vaal,RSA,Mpumalanga
+Paatsjoki,R,Murmanskaya oblast
+Murat,TR,Mus
+Akagera,EAT,Mwanza
+Syrdarja,UZB,Namangan
+Oranje,NAM,Namibia
+Maas,B,Namur
+Ebro,E,Navarre
+Rio Lerma,MEX,Nayarit
+Missouri,USA,Nebraska
+Hwangho,TJ,Nei Monggol
+Colorado,USA,Nevada
+Truckee River,USA,Nevada
+Connecticut River,USA,New Hampshire
+Merrimack River,USA,New Hampshire
+Hudson River,USA,New Jersey
+Rio Grande,USA,New Mexico
+Darling River,AUS,New South Wales
+Murray River,AUS,New South Wales
+Murrumbidgee River,AUS,New South Wales
+Allegheny River,USA,New York
+Hudson River,USA,New York
+Niagara River,USA,New York
+Saint Lawrence River,USA,New York
+Rio San Juan,NIC,Nicaragua
+Aller,D,Niedersachsen
+Elbe,D,Niedersachsen
+Leine,D,Niedersachsen
+Werra,D,Niedersachsen
+Weser,D,Niedersachsen
+Niger,RN,Niger
+Benue,WAN,Nigeria
+Niger,WAN,Nigeria
+Blue Nile,SUD,Nil al Asraq
+White Nile,SUD,Nil al Asraq
+Euphrat,IRQ,Ninawa
+Tigris,IRQ,Ninawa
+Hwangho,TJ,Ningxia Huizu
+Oka,R,Nizhegorodskaya oblast
+Volga,R,Nizhegorodskaya oblast
+Maas,NL,Noord Brabant
+Benue,CAM,Nord
+Schari,CAM,Nord extreme
+Rhein,D,Nordrhein Westfalen
+Weser,D,Nordrhein Westfalen
+Rio Magdalena,CO,Norte de Santander
+Jordan,IL,North
+Tennessee,USA,North Carolina
+Missouri,USA,North Dakota
+Vaal,RSA,North West
+Oranje,RSA,Northern Cape
+Vaal,RSA,Northern Cape
+Mackenzie River,CDN,Northwest Territories
+Zambezi,Z,Northwestern
+Ob,R,Novosibirskaya oblast
+Rio Grande,MEX,Nuevo Leon
+Dnjestr,UA,Odeska
+Donau,UA,Odeska
+Glomma,N,Oestfold
+Ohio River,USA,Ohio
+Arkansas,USA,Oklahoma
+Donau,RO,Olt
+Olt,RO,Olt
+Irtysch,R,Omskaya oblast
+Ischim,R,Omskaya oblast
+Syrdarja,KAZ,Ongtustik Qazaqstan
+Detroit River,CDN,Ontario
+Niagara River,CDN,Ontario
+Oder,PL,Opolskie
+Lagen,N,Oppland
+Columbia River,USA,Oregon
+Tobol,R,Orenburgskaya oblast
+Ural,R,Orenburgskaya oblast
+Oka,R,Orjolskaya oblast
+Oulujoki,SF,Oulu
+Thames,GB,Oxfordshire
+Indus,PK,Pakistan
+Amazonas,BR,Para
+Tocantins,BR,Para
+Paraguay,PY,Paraguay
+Parana,PY,Paraguay
+Parana,BR,Parana
+Irtysch,KAZ,Pavlodar
+Loire,F,Pays de la Loire
+Allegheny River,USA,Pennsylvania
+Ohio River,USA,Pennsylvania
+Volga,R,Penzenskaya oblast
+Rio Sao Francisco,BR,Pernambuco
+Donau,H,Pest
+Po,I,Piemonte
+Ticino,I,Piemonte
+Weichsel,PL,Plockie
+Dnepr,UA,Poltavska
+Guadiana,P,Portalegre
+Tajo,P,Portalegre
+Douro,P,Porto
+Elbe,CZ,Praha
+Moldau,CZ,Praha
+Rhone,F,Provence Cote dAzur
+Narva,R,Pskovskaya oblast
+Ischim,KAZ,Qaraghandy
+Amudarja,UZB,Qaraqalpoghiston
+Nile,ET,Qena
+Hwangho,TJ,Qinghai
+Jangtse,TJ,Qinghai
+Tobol,KAZ,Qostanay
+Manicouagan,CDN,Quebec
+Riviere Richelieu,CDN,Quebec
+Saint Lawrence River,CDN,Quebec
+Darling River,AUS,Queensland
+Rio Lerma,MEX,Queretaro
+Syrdarja,KAZ,Qyzylorda
+Weichsel,PL,Radomskie
+Katun,R,Rep. of Altay
+Ural,R,Rep. of Bashkortostan
+Angara,R,Rep. of Buryatiya
+Vuoksi,R,Rep. of Karelia
+Jenissej,R,Rep. of Khakassiya
+Petschora,R,Rep. of Komi
+Volga,R,Rep. of Mariy El
+Kolyma,R,Rep. of Sakha
+Lena,R,Rep. of Sakha
+Volga,R,Rep. of Tatarstan
+Jenissej,R,Rep. of Tyva
+Mosel,D,Rheinland Pfalz
+Rhein,D,Rheinland Pfalz
+Saar,D,Rheinland Pfalz
+Isere,F,Rhone Alpes
+Loire,F,Rhone Alpes
+Rhone,F,Rhone Alpes
+Saone,F,Rhone Alpes
+Uruguay,BR,Rio Grande do Sul
+Ebro,E,Rioja
+Rio Madeira,BR,Rondonia
+Rio Negro,BR,Roraima
+Don,R,Rostovskaya oblast
+Akagera,RWA,Rwanda
+Ruzizi,RWA,Rwanda
+Oka,R,Ryazanskaya oblast
+Weichsel,PL,Rzeszowskie
+Mosel,D,Saarland
+Saar,D,Saarland
+Elbe,D,Sachsen
+Oder,D,Sachsen
+Elbe,D,Sachsen Anhalt
+Irawaddy,MYA,Sagaing
+Senegal,SN,Saint Louis
+Tigris,IRQ,Salah ad Din
+Enns,A,Salzburg
+Mur,A,Salzburg
+Salzach,A,Salzburg
+Amudarja,UZB,Samarqand
+Volga,R,Samarskaya oblast
+Euphrat,TR,Sanliurfa
+Parana,RA,Santa Fe
+Rio Magdalena,CO,Santander del Sur
+Tajo,P,Santarem
+Parana,BR,Sao Paulo
+Volga,R,Saratovskaya oblast
+Saskatchewan River,CDN,Saskatchewan
+Elbe,D,Schleswig Holstein
+Irtysch,KAZ,Semey
+Donau,SRB,Serbia
+Morava,SRB,Serbia
+Save,SRB,Serbia
+Southern Morava,SRB,Serbia
+Theiss,SRB,Serbia
+Western Morava,SRB,Serbia
+Rio Sao Francisco,BR,Sergipe
+Elbe,CZ,Severocesky
+March,CZ,Severomoravsky
+Oder,CZ,Severomoravsky
+Rhein,CH,SG
+Rhein,CH,SH
+Hwangho,TJ,Shaanxi
+Kasai,ZRE,Shaba/Katanga
+Lomami,ZRE,Shaba/Katanga
+Lualaba,ZRE,Shaba/Katanga
+Luapula,ZRE,Shaba/Katanga
+Lukuga,ZRE,Shaba/Katanga
+Lulua,ZRE,Shaba/Katanga
+Luvua,ZRE,Shaba/Katanga
+Saluen,MYA,Shan
+Hwangho,TJ,Shandong
+Jangtse,TJ,Shanghai (munic.)
+Nile,ET,Sharqiya
+Irtysch,KAZ,Shyghys Qazaqstan
+Olt,RO,Sibiu
+Jangtse,TJ,Sichuan
+Weichsel,PL,Siedleckie
+Tigris,TR,Siirt
+Tigris,TR,Sirnak
+Weichsel,PL,Skierniewickie
+Donau,SK,Slovakia
+March,SK,Slovakia
+Waag,SK,Slovakia
+Drau,SLO,Slovenia
+Mur,SLO,Slovenia
+Save,SLO,Slovenia
+Dnepr,R,Smolenskaya oblast
+Western Dwina,R,Smolenskaya oblast
+Aare,CH,SO
+Glomma,N,Soer Trondelag
+Nile,ET,Sohag
+Ischim,KAZ,Soltustik Qazaqstan
+Jubba,SP,Somalia
+Shabelle,SP,Somalia
+Drau,H,Somogy
+Colorado,MEX,Sonora
+Murray River,AUS,South Australia
+Missouri,USA,South Dakota
+Zambezi,Z,Southern
+Mur,A,Styria
+Raab,A,Styria
+Thames,GB,Surrey
+Euphrat,SYR,Syria
+Jordan,SYR,Syria
+Tigris,SYR,Syria
+Theiss,H,Szabolcs Szatmar
+Oder,PL,Szczecinskie
+Theiss,H,Szeged (munic.)
+Theiss,H,Szolnok
+Rio Grande,MEX,Tamaulipas
+Gambia,SN,Tambacounda
+Senegal,SN,Tambacounda
+Weichsel,PL,Tarnobrzeskie
+Weichsel,PL,Tarnowskie
+Donau,RO,Teleorman
+Mississippi,USA,Tennessee
+Tennessee,USA,Tennessee
+Dnjestr,UA,Ternopilska
+Chire,MOC,Tete
+Zambezi,MOC,Tete
+Rio Grande,USA,Texas
+Rhein,CH,TG
+Mekong,THA,Thailand
+Leine,D,Thuringen
+Werra,D,Thuringen
+Ticino,CH,TI
+Brahmaputra,TJ,Tibet
+Indus,TJ,Tibet
+Irawaddy,TJ,Tibet
+Jangtse,TJ,Tibet
+Mekong,TJ,Tibet
+Saluen,TJ,Tibet
+Tocantins,BR,Tocantins
+Rio Magdalena,CO,Tolima
+Donau,H,Tolna
+Ob,R,Tomskaya oblast
+Weichsel,PL,Torunskie
+Arno,I,Toscana
+Tiber,I,Toscana
+Naryn,UZB,Toshkent
+Syrdarja,UZB,Toshkent
+Drau,I,Trentino Alto Adige
+Etsch,I,Trentino Alto Adige
+Donau,RO,Tulcea
+Don,R,Tulskaya oblast
+Oka,R,Tulskaya oblast
+Kokemaeenjoki,SF,Turku-Pori
+Volga,R,Tverskaya oblast
+Inn,A,Tyrol
+Isar,A,Tyrol
+Lech,A,Tyrol
+Irtysch,R,Tyumenskaya oblast
+Ischim,R,Tyumenskaya oblast
+Ob,R,Tyumenskaya oblast
+Tobol,R,Tyumenskaya oblast
+Amazonas,PE,Ucayali
+Bahr el-Djebel/Albert-Nil,EAU,Uganda
+Semliki,EAU,Uganda
+Victoria Nile,EAU,Uganda
+Cuango,ANG,Uige
+Volga,R,Ulyanovskaya oblast
+Tiber,I,Umbria
+Donau,A,Upper Austria
+Dalaelv,S,Uppsala
+Reuss,CH,UR
+Uruguay,ROU,Uruguay
+Colorado,USA,Utah
+Ganges,IND,Uttar Pradesh
+Klaraelv,S,Varmland
+Raab,H,Vas
+Pruth,RO,Vaslui
+Umeaelv,S,Vasterbotten
+Dalaelv,S,Vastmanland
+Rhone,CH,VD
+Etsch,I,Veneto
+Mincio,I,Veneto
+Po,I,Veneto
+Connecticut River,USA,Vermont
+Raab,H,Veszprem
+Orinoco,CO,Vichada
+Murray River,AUS,Victoria
+Donau,A,Vienna
+Mekong,VN,Vietnam
+Douro,P,Vila Real
+Olt,RO,Vilcea
+Dnjestr,UA,Vinnytska
+Douro,P,Viseu
+Oka,R,Vladimirskaya oblast
+Don,R,Volgogradskaya oblast
+Volga,R,Volgogradskaya oblast
+Northern Dwina,R,Vologodskaya oblast
+Suchona,R,Vologodskaya oblast
+Iller,A,Vorarlberg
+Lech,A,Vorarlberg
+Rhein,A,Vorarlberg
+Don,R,Voronezhskaya oblast
+Rhone,CH,VS
+Elbe,CZ,Vychodocesky
+Weichsel,PL,Warszwaskie
+Columbia River,USA,Washington
+Tigris,IRQ,Wasit
+Jordan,WEST,West Bank
+Ganges,IND,West Bengal
+Ohio River,USA,West Virginia
+Zambezi,Z,Western
+Thames,GB,Wiltshire
+Mississippi,USA,Wisconsin
+Weichsel,PL,Wloclawskie
+Oder,PL,Wroclawskie
+Irtysch,TJ,Xinjiang Uygur
+Irawaddy,MYA,Yangon
+Volga,R,Yaroslavskaya oblast
+Amur,R,Yevreyskaya avt. oblast
+Yukon River,CDN,Yukon Territory
+Irawaddy,TJ,Yunnan
+Jangtse,TJ,Yunnan
+Mekong,TJ,Yunnan
+Saluen,TJ,Yunnan
+Theiss,UA,Zakarpatska
+Drau,H,Zala
+Mur,H,Zala
+Chire,MOC,Zambezia
+Zambezi,MOC,Zambezia
+Dnepr,UA,Zaporizka
+Limmat,CH,ZH
+Rhein,CH,ZH
+Oder,PL,Zielonogorskie
+Limpopo,ZW,Zimbabwe
+Zambezi,ZW,Zimbabwe
+Maas,NL,Zuid Holland
+Rhein,NL,Zuid Holland

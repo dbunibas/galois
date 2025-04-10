@@ -1,0 +1,436 @@
+"city","province","country","island"
+City,Province,Coun,Island
+Aberdeen,Grampian,GB,Great Britain
+Aberystwyth,Ceredigion,GB,Great Britain
+Adamstown,Pitcairn Islands,PITC,Pitcairn
+Agana,Guam,GUAM,Guam
+Ajaccio,Corse,F,Corse
+Akita,Akita,J,Honshu
+Akureyri,Iceland,IS,Iceland
+Alofi,Niue,NIUE,Niue
+Ambon,Indonesia,RI,Ambon
+Antananarivo,Antananarivo,RM,Madagaskar
+Antsirabe,Antananarivo,RM,Madagaskar
+Antsiranana,Antsiranana,RM,Madagaskar
+Aomori,Aomori,J,Honshu
+Apia,Samoa,WS,Upolu
+Auckland,New Zealand,NZ,Te Ika-a-Maui (North Island)
+Avarua,Cook Islands,COOK,Rarotonga
+Aylesbury,Buckinghamshire,GB,Great Britain
+Balikpapan,Indonesia,RI,Borneo
+Banda Aceh,Indonesia,RI,Sumatra
+Bandar Lampung,Indonesia,RI,Sumatra
+Bandar Seri Begawan,Brunei,BRU,Borneo
+Bandung,Indonesia,RI,Java
+Banjarmasin,Indonesia,RI,Borneo
+Barnsley,South Yorkshire,GB,Great Britain
+Barry,Vale of Glamorgan,GB,Great Britain
+Basildon,Essex,GB,Great Britain
+Basingstoke,Hampshire,GB,Great Britain
+Basse-Terre,Guadeloupe,GUAD,Basse-Terre
+Basseterre,Saint Kitts and Nevis,KN,Saint Kitts
+Batam,Indonesia,RI,Batam
+Bayamo,Granma,C,Cuba
+Bedford,Bedfordshire,GB,Great Britain
+Belfast,Northern Ireland,GB,Ireland
+Bengkulu,Indonesia,RI,Sumatra
+Beverley,Humberside,GB,Great Britain
+Binjai,Indonesia,RI,Sumatra
+Birmingham,West Midlands,GB,Great Britain
+Blackburn,Lancashire,GB,Great Britain
+Blackpool,Lancashire,GB,Great Britain
+Blitar,Indonesia,RI,Java
+Bogor,Indonesia,RI,Java
+Bolton,Greater Manchester,GB,Great Britain
+Bournemouth,Dorset,GB,Great Britain
+Bracknell,Berkshire,GB,Great Britain
+Bradford,West Yorkshire,GB,Great Britain
+Braintree,Essex,GB,Great Britain
+Bridgend,Bridgend,GB,Great Britain
+Bridgetown,Barbados,BDS,Barbados
+Brighton,East Sussex,GB,Great Britain
+Bristol,Avon,GB,Great Britain
+Bury,Greater Manchester,GB,Great Britain
+Caernarfon,Gwynedd,GB,Great Britain
+Cagayan de Oro,Philippines,RP,Mindanao
+Cagliari,Sardegna,I,Sardegna
+Camaguey,Camaguey,C,Cuba
+Cambridge,Cambridgeshire,GB,Great Britain
+Canterbury,Kent,GB,Great Britain
+Cardiff,Cardiff,GB,Great Britain
+Carlisle,Cumbria,GB,Great Britain
+Carmarthen,Carmarthenshire,GB,Great Britain
+Castries,Saint Lucia,WL,Saint Lucia
+Catania,Sicilia,I,Sicilia
+Cebu,Philippines,RP,Cebu
+Changhua,Taiwan,RC,Taiwan
+Charlotte Amalie,Virgin Islands,VIRG,Saint Thomas
+Chelmsford,Essex,GB,Great Britain
+Cheltenham,Gloucestershire,GB,Great Britain
+Chester,Cheshire,GB,Great Britain
+Chesterfield,Derbyshire,GB,Great Britain
+Chiai,Taiwan,RC,Taiwan
+Chiba,Chiba,J,Honshu
+Chichester,West Sussex,GB,Great Britain
+Chilung,Taiwan,RC,Taiwan
+Christchurch,New Zealand,NZ,Te Waka-a-Maui (South Island)
+Chungho,Taiwan,RC,Taiwan
+Chungli,Taiwan,RC,Taiwan
+Ciego de Avila,Ciego de Avila,C,Cuba
+Cienfuegos,Cienfuegos,C,Cuba
+Cirebon,Indonesia,RI,Java
+Colchester,Essex,GB,Great Britain
+Colombo,Sri Lanka,CL,Sri Lanka
+Colwyn Bay,Aberconwy and Colwyn,GB,Great Britain
+Copenhagen,Denmark,DK,Seeland
+Coventry,West Midlands,GB,Great Britain
+Crewe,Cheshire,GB,Great Britain
+Cwmbran,Monmouthshire,GB,Great Britain
+Darlington,Durham,GB,Great Britain
+Davao,Philippines,RP,Mindanao
+Dededo,Guam,GUAM,Guam
+Derby,Derbyshire,GB,Great Britain
+Dili,Timor-Leste,TL,Timor
+Doncaster,South Yorkshire,GB,Great Britain
+Dorchester,Dorset,GB,Great Britain
+Douglas,Man,GBM,Isle of Man
+Dover,Kent,GB,Great Britain
+Dublin,Ireland,IRL,Ireland
+Dudley,West Midlands,GB,Great Britain
+Dumfries,Dumfries and Galloway,GB,Great Britain
+Dundee,Tayside,GB,Great Britain
+Durham,Durham,GB,Great Britain
+Eastleigh,Hampshire,GB,Great Britain
+Ebbw Vale,Blaenau Gwent,GB,Great Britain
+Edinburgh,Lothian,GB,Great Britain
+Elmbridge,Surrey,GB,Great Britain
+Epping Forest,Essex,GB,Great Britain
+Exeter,Devon,GB,Great Britain
+Fareham,Hampshire,GB,Great Britain
+Fengshan,Taiwan,RC,Taiwan
+Fengyuan,Taiwan,RC,Taiwan
+Fianarantsoa,Fianarantsoa,RM,Madagaskar
+Flying Fish Cove,Christmas Island,XMAS,Christmas Island
+Fort-de-France,Martinique,MART,Martinique
+Fukui,Fukui,J,Honshu
+Fukuoka,Fukuoka,J,Kyushu
+Fukushima,Fukushima,J,Honshu
+Funafuti,Tuvalu,TUV,Fongafale
+Funchal,Madeira,P,Madeira
+Gateshead,Tyne and Wear,GB,Great Britain
+George Town,Cayman Islands,CAYM,Grand Cayman
+Gifu,Gifu,J,Honshu
+Glasgow,Strathclyde,GB,Great Britain
+Glenrothes,Fife,GB,Great Britain
+Gloucester,Gloucestershire,GB,Great Britain
+Gorontalo,Indonesia,RI,Sulawesi
+Grand Turk,Turks and Caicos Islands,TUCA,Grand Turk
+Guantanamo,Guantanamo,C,Cuba
+Guildford,Surrey,GB,Great Britain
+Hafnarfjoerdur,Iceland,IS,Iceland
+Haikou,Hainan,TJ,Hainan
+Hakodate,Hokkaido,J,Hokkaido
+Hamilton,Bermuda,BERM,Grand Bermuda
+Harrogate,North Yorkshire,GB,Great Britain
+Havana,Ciudad de la Habana,C,Cuba
+Havant,Hampshire,GB,Great Britain
+Haverfordwest,Pembrokeshire,GB,Great Britain
+Hertford,Hertfordshire,GB,Great Britain
+Hiroshima,Hiroshima,J,Honshu
+Hobart,Tasmania,AUS,Tasmania
+Holguin,Holguin,C,Cuba
+Honiara,Solomon Islands,SLB,Guadalcanal
+Horsham,West Sussex,GB,Great Britain
+Hsinchu,Taiwan,RC,Taiwan
+Hsinchuang,Taiwan,RC,Taiwan
+Hsintien,Taiwan,RC,Taiwan
+Hualien,Taiwan,RC,Taiwan
+Huddersfield,West Yorkshire,GB,Great Britain
+Hull,Humberside,GB,Great Britain
+Huntingdon,Cambridgeshire,GB,Great Britain
+Inverness,Highland,GB,Great Britain
+Ipswich,Suffolk,GB,Great Britain
+Iraklion,Kriti,GR,Kreta
+Jakarta,Indonesia,RI,Java
+Jambi,Indonesia,RI,Sumatra
+Jamestown,Saint Helena,HELX,Saint Helena
+Kagoshima,Kagoshima,J,Kyushu
+Kalookan,Philippines,RP,Luzon
+Kanazawa,Ishikawa,J,Honshu
+Kaohsiung,Taiwan,RC,Taiwan
+Kavaratti,Lakshadweep Is.,IND,Kavaratti
+Kawasaki,Kanagawa,J,Honshu
+Kediri,Indonesia,RI,Java
+Keflavik,Iceland,IS,Iceland
+Kings Lynn,Norfolk,GB,Great Britain
+Kingston,Jamaica,JA,Jamaica
+Kingston,Norfolk Island,NORF,Norfolk Island
+Kingston,Surrey,GB,Great Britain
+Kingston upon Hull,Humberside,GB,Great Britain
+Kingstown,Saint Vincent and the Grenadines,WV,Saint Vincent
+Kirklees,West Yorkshire,GB,Great Britain
+Kirkwall,Orkneys,GB,Orkney Mainland
+Kita Kyushu,Fukuoka,J,Kyushu
+Knowsley,Merseyside,GB,Great Britain
+Kobe,Hyogo,J,Honshu
+Kochi,Kochi,J,Shikoku
+Kofu,Yamanashi,J,Honshu
+Kolonia,Micronesia,FSM,Ponape
+Koror,Palau,PAL,Koror
+Kota Kinabalu,Sabah,MAL,Borneo
+Kuching,Sarawak,MAL,Borneo
+Kumamoto,Kumamoto,J,Kyushu
+Kyoto,Kyoto,J,Honshu
+La Laguna,Canary Islands,E,Teneriffa
+Lancaster,Lancashire,GB,Great Britain
+Las Palmas de Gran Canaria,Canary Islands,E,Gran Canaria
+Leeds,West Yorkshire,GB,Great Britain
+Leichester,Leicestershire,GB,Great Britain
+Lerwick,Shetland,GB,Shetland Mainland
+Lewes,East Sussex,GB,Great Britain
+Lincoln,Lincolnshire,GB,Great Britain
+Liverpool,Merseyside,GB,Great Britain
+Llandrindod Wells,Powys,GB,Great Britain
+Llangefni,Anglesey,GB,Anglesey
+London,Greater London,GB,Great Britain
+Longyearbyen,Svalbard,SVAX,Svalbard
+Luton,Bedfordshire,GB,Great Britain
+Macclesfield,Cheshire,GB,Great Britain
+Madiun,Indonesia,RI,Java
+Maebashi,Gumma,J,Honshu
+Magelang,Indonesia,RI,Java
+Maidstone,Kent,GB,Great Britain
+Majunga,Mahajanga,RM,Madagaskar
+Majuro,Marshall Islands,MH,Majuro
+Makati,Philippines,RP,Luzon
+Malabo,Equatorial Guinea,GQ,Bioko
+Malang,Indonesia,RI,Java
+Male,Maldives,MV,Male
+Mamoutzou,Mayotte,MAYO,Mayotte
+Manado,Indonesia,RI,Sulawesi
+Manama,Bahrain,BRN,Bahrain
+Manchester,Greater Manchester,GB,Great Britain
+Manila,Philippines,RP,Luzon
+Mansfield,Nottinghamshire,GB,Great Britain
+Manzanillo,Granma,C,Cuba
+Marigot,Saint Martin,SMAR,St. Martin
+Mata-Utu,Wallis and Futuna,WAFU,Uvea
+Matanzas,Matanzas,C,Cuba
+Matlock,Derbyshire,GB,Great Britain
+Matsue,Shimane,J,Honshu
+Matsuyama,Ehime,J,Shikoku
+Medan,Indonesia,RI,Sumatra
+Melekeok,Palau,PAL,Babelthuap
+Merthyr Tydfil,Merthyr Tydfil,GB,Great Britain
+Messina,Sicilia,I,Sicilia
+Middlesbrough,Cleveland,GB,Great Britain
+Milton Keynes,Buckinghamshire,GB,Great Britain
+Mito,Ibaraki,J,Honshu
+Miyazaki,Miyazaki,J,Kyushu
+Mold,Flintshire,GB,Great Britain
+Morioka,Iwate,J,Honshu
+Moroni,Comoros,COM,Grand Comoro
+Mytilini,Voreion Aiyaion,GR,Lesbos
+Nagano,Nagano,J,Honshu
+Nagasaki,Nagasaki,J,Kyushu
+Nagoya,Aichi,J,Honshu
+Naha,Okinawa,J,Okinawa
+Nara,Nara,J,Honshu
+Nassau,Bahamas,BS,New Providence
+Newark on Trent,Nottinghamshire,GB,Great Britain
+Newbury,Berkshire,GB,Great Britain
+Newcastle under Lyme,Staffordshire,GB,Great Britain
+Newcastle upon Tyne,Tyne and Wear,GB,Great Britain
+Newport,Newport,GB,Great Britain
+Newtown St. Boswells,Borders,GB,Great Britain
+Nicosia,Cyprus,CY,Cyprus
+Niigata,Niigata,J,Honshu
+Northallerton,North Yorkshire,GB,Great Britain
+Northampton,Northamptonshire,GB,Great Britain
+Norwich,Norfolk,GB,Great Britain
+Nottingham,Nottinghamshire,GB,Great Britain
+Noumea,New Caledonia,NCA,Grande Terre
+Nueva Gerona,Isla de la Juventud,C,Cuba
+Nukualofa,Tonga,TO,Tongatapu
+Nuneaton,Warwickshire,GB,Great Britain
+Nuuk,Greenland,GROX,Greenland
+Odense,Denmark,DK,Fuenen
+Oita,Oita,J,Kyushu
+Okayama,Okayama,J,Honshu
+Oldham,Greater Manchester,GB,Great Britain
+Oranjestad,Aruba,ARU,Aruba
+Osaka,Osaka,J,Honshu
+Otsu,Shiga,J,Honshu
+Oxford,Oxfordshire,GB,Great Britain
+Padang,Indonesia,RI,Sumatra
+Pago Pago,American Samoa,AMSA,Tutuila
+Palangkaraya,Indonesia,RI,Borneo
+Palembang,Indonesia,RI,Sumatra
+Palermo,Sicilia,I,Sicilia
+Palikir,Micronesia,FSM,Ponape
+Palma de Mallorca,Balearic Islands,E,Mallorca
+Panchiao,Taiwan,RC,Taiwan
+Pangkal Pinang,Indonesia,RI,Bangka
+Papeete,French Polynesia,FPOL,Tahiti
+Pare Pare,Indonesia,RI,Sulawesi
+Pasay,Philippines,RP,Luzon
+Pasig,Philippines,RP,Luzon
+Pasuruan,Indonesia,RI,Java
+Pekalongan,Indonesia,RI,Java
+Pekan Baru,Indonesia,RI,Sumatra
+Pematang Siantar,Indonesia,RI,Sumatra
+Peterborough,Cambridgeshire,GB,Great Britain
+Pinar del Rio,Pinar del Rio,C,Cuba
+Pingtung,Taiwan,RC,Taiwan
+Plymouth,Devon,GB,Great Britain
+Plymouth,Montserrat,MNTS,Montserrat
+Ponta Delgada,Azores,P,Sao Miguel
+Pontianak,Indonesia,RI,Borneo
+Pontypool,Torfaen,GB,Great Britain
+Poole,Dorset,GB,Great Britain
+Port Blair,Andaman and Nicobar Is.,IND,South Andaman Island
+Port Louis,Mauritius,MS,Mauritius
+Port Moresby,Papua New Guinea,PNG,New Guinea
+Port Talbot,Neath and Port Talbot,GB,Great Britain
+Port-au-Prince,Haiti,RH,Hispaniola
+Port-of-Spain,Trinidad and Tobago,TT,Trinidad
+Port-Vila,Vanuatu,VU,Efate
+Portsmouth,Hampshire,GB,Great Britain
+Praia,Cape Verde,CV,Santiago
+Preston,Lancashire,GB,Great Britain
+Probolinggo,Indonesia,RI,Java
+Quezon,Philippines,RP,Luzon
+Reading,Berkshire,GB,Great Britain
+Reigate,Surrey,GB,Great Britain
+Renfrew,Strathclyde,GB,Great Britain
+Reykjavik,Iceland,IS,Iceland
+Rhondda,Rhondda Cynon Taff,GB,Great Britain
+Rhymney Valley,Vale of Glamorgan,GB,Great Britain
+Road Town,British Virgin Islands,BVIR,Tortola
+Rochdale,Greater Manchester,GB,Great Britain
+Rochester upon Medway,Kent,GB,Great Britain
+Roseau,Dominica,WD,Dominica
+Rotherham,South Yorkshire,GB,Great Britain
+Ruthin,Denbighshire,GB,Great Britain
+Saga,Saga,J,Kyushu
+Saint Albans,Hertfordshire,GB,Great Britain
+Saint Georges,Grenada,WG,Grenada
+Saint Helens,Merseyside,GB,Great Britain
+Saint Helier,Jersey,GBJ,Jersey
+Saint Johns,Antigua and Barbuda,AG,Antigua
+Saint Johns,Newfoundland,CDN,Newfoundland
+Saint Peter Port,Guernsey,GBG,Guernsey
+Saint-Denis,Reunion,REUN,Reunion
+Saint-Pierre,Saint Pierre and Miquelon,SPMI,Saint Pierre
+Saipan,Northern Mariana Islands,NMIS,Saipan
+Salford,Greater Manchester,GB,Great Britain
+Salisbury,Wiltshire,GB,Great Britain
+Samarinda,Indonesia,RI,Borneo
+San Juan,Puerto Rico,PR,Puerto Rico
+Sanchuung,Taiwan,RC,Taiwan
+Sancti Spiritus,Sancti Spiritus,C,Cuba
+Sandakan,Sabah,MAL,Borneo
+Sandwell,West Midlands,GB,Great Britain
+Santa Clara,Villa Clara,C,Cuba
+Santa Cruz de Tenerife,Canary Islands,E,Teneriffa
+Santiago de Cuba,Santiago de Cuba,C,Cuba
+Santo Domingo,Dominican Republic,DOM,Hispaniola
+Sanya,Hainan,TJ,Hainan
+Sao Tome,Sao Tome and Principe,STP,Sao Tome
+Sapporo,Hokkaido,J,Hokkaido
+Sassari,Sardegna,I,Sardegna
+Scarborough,North Yorkshire,GB,Great Britain
+Sefton,Merseyside,GB,Great Britain
+Semarang,Indonesia,RI,Java
+Sendai,Miyagi,J,Honshu
+Sevenoaks,Kent,GB,Great Britain
+Sheffield,South Yorkshire,GB,Great Britain
+Shizuoka,Shizuoka,J,Honshu
+Shrewsbury,Shropshire,GB,Great Britain
+Sibu,Sarawak,MAL,Borneo
+Singapore,Singapore,SGP,Singapore
+Siracusa,Sicilia,I,Sicilia
+Slough,Berkshire,GB,Great Britain
+Solihull,West Midlands,GB,Great Britain
+Southampton,Hampshire,GB,Great Britain
+Southend on Sea,Essex,GB,Great Britain
+Stafford,Staffordshire,GB,Great Britain
+Stanley,Falkland Islands,FALK,East Falkland
+Stirling,Central,GB,Great Britain
+Stockport,Greater Manchester,GB,Great Britain
+Stockton on Tees,Cleveland,GB,Great Britain
+Stoke on Trent,Staffordshire,GB,Great Britain
+Stornoway,Outer Hebrides,GB,Lewis and Harris
+Stratford on Avon,Warwickshire,GB,Great Britain
+Stroud,Gloucestershire,GB,Great Britain
+Sukabumi,Indonesia,RI,Java
+Sunderland,Tyne and Wear,GB,Great Britain
+Surabaya,Indonesia,RI,Java
+Surakarta,Indonesia,RI,Java
+Sutton in Ashfield,Derbyshire,GB,Great Britain
+Suva,Fiji,FJI,Viti Levu
+Swale,Kent,GB,Great Britain
+Swansea,Swansea,GB,Great Britain
+Taichung,Taiwan,RC,Taiwan
+Tainan,Taiwan,RC,Taiwan
+Taipei,Taiwan,RC,Taiwan
+Taitung,Taiwan,RC,Taiwan
+Takamatsu,Kagawa,J,Shikoku
+Tamatave,Toamasina,RM,Madagaskar
+Tameside,Greater Manchester,GB,Great Britain
+Tanjung Balai,Indonesia,RI,Sumatra
+Taoyuan,Taiwan,RC,Taiwan
+Tarawa,Kiribati,KIR,Tarawa
+Taunton,Somerset,GB,Great Britain
+Tawai,Sabah,MAL,Borneo
+Tebing Tinggi,Indonesia,RI,Sumatra
+Tegal,Indonesia,RI,Java
+The Valley,Anguilla,AXA,Anguilla
+Tokushima,Tokushima,J,Shikoku
+Tokyo,Tokyo,J,Honshu
+Toliara,Toliara,RM,Madagaskar
+Tonbridge,Kent,GB,Great Britain
+Torshavn,Faroe Islands,FARX,Streymoy
+Tottori,Tottori,J,Honshu
+Toyama,Toyama,J,Honshu
+Trafford,Greater Manchester,GB,Great Britain
+Trowbridge,Wiltshire,GB,Great Britain
+Truro,Cornwall,GB,Great Britain
+Tsu,Mie,J,Honshu
+Tunbridge Wells,Kent,GB,Great Britain
+Ujung Pandang,Indonesia,RI,Sulawesi
+Urawa,Saitama,J,Honshu
+Utsonomiya,Tochigi,J,Honshu
+Valletta,Malta,M,Malta
+Victoria,British Columbia,CDN,Vancouver Island
+Victoria,Malta,M,Gozo
+Victoria,Seychelles,SY,Mahe
+Victoria de las Tunas,Las Tunas,C,Cuba
+Wakayama,Wakayama,J,Honshu
+Wakefield,West Yorkshire,GB,Great Britain
+Walsall,West Midlands,GB,Great Britain
+Warrington,Cheshire,GB,Great Britain
+Warwick,Warwickshire,GB,Great Britain
+Wellington,New Zealand,NZ,Te Ika-a-Maui (North Island)
+West Bromwich,West Midlands,GB,Great Britain
+West Island,Cocos Islands,COCO,Pulau Panjang
+Wigan,Greater Manchester,GB,Great Britain
+Willemstad,Netherlands Antilles,NA,Curacao
+Winchester,Hampshire,GB,Great Britain
+Windsor,Berkshire,GB,Great Britain
+Wiral,Merseyside,GB,Great Britain
+Wokingham,Berkshire,GB,Great Britain
+Wolverhampton,West Midlands,GB,Great Britain
+Worcester,Hereford and Worcester,GB,Great Britain
+Wrexham,Wrexham,GB,Great Britain
+Wycombe,Buckinghamshire,GB,Great Britain
+Yamagata,Yamagata,J,Honshu
+Yamaguchi,Yamaguchi,J,Honshu
+Yaren,Nauru,NAU,Nauru
+Yogyakarta,Indonesia,RI,Java
+Yokohama,Kanagawa,J,Honshu
+York,North Yorkshire,GB,Great Britain
+Ystrad Fawr,Caerphilly,GB,Great Britain
+Yungho,Taiwan,RC,Taiwan
+Yuzhno Sakhalinsk,Sakhalinskaya oblast,R,Sachalin
+Zamboanga,Philippines,RP,Mindanao

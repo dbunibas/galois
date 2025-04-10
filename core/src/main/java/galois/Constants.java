@@ -22,8 +22,15 @@ public class Constants {
 
     public static final String MODEL_LLAMA3 = "llama3";
     public static final String MODEL_GPT = "gpt";
-    public static final String LLM_MODEL = Constants.MODEL_LLAMA3;
+    public static final String MODEL_DEEPSEEK = "deepseek";
+    public static final String MODEL_QWEN = "qwen";
+    public static final String MODEL_MISTRAL = "mistral";
+    public static final String MODEL_GEMMA = "gemma";
+    
+    public static final String LLM_MODEL = Constants.MODEL_GEMMA;
 
-    public static final boolean CACHE_ENABLED = false;
-    public static final String CACHE_DIR = "";
+    public static final boolean CACHE_ENABLED = true;
+//    public static final String CACHE_DIR = "/Users/enzoveltri/git/galois/core/src/test/resources/llm-bench/cache/DeepSeek-R1-Distill-Llama-70B-free/";
+//    public static final String CACHE_DIR = "/Users/enzoveltri/git/galois/core/src/test/resources/llm-bench/cache/Qwen2.5-7B-Instruct-Turbo/";
+    public static final String CACHE_DIR = "/Users/enzoveltri/git/galois/core/src/test/resources/llm-bench/cache/gemma-2-9b-it/";
 }
