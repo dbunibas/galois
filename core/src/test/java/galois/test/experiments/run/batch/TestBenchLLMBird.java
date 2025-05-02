@@ -117,10 +117,13 @@ public class TestBenchLLMBird {
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
                 List<Tuple> expected = testRunner.computeExpected("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", variant);
-                String expTab = variant.getQueryNum() + "\t" + expected.size();
+                int cells = countCells(expected);
+                int attrs = countAttrs(expected);
+                String expTab = variant.getQueryNum() + "\t" + expected.size() + "\t" + cells + "\t" + attrs;
                 expTabs.add(expTab);
             }
         }
+        System.out.println("*********************************");
         for (String expTab : expTabs) {
             System.out.println(expTab);
         }
@@ -134,7 +137,7 @@ public class TestBenchLLMBird {
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (String dbID : variants.keySet()) {
             System.out.println("DB:" + dbID);
-//            if (!dbID.equals("world")) continue;
+//            if (!dbID.equals("address")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
 //                if (!variant.getQueryNum().equals("Q56")) continue;
@@ -201,6 +204,26 @@ public class TestBenchLLMBird {
                 .filter(file -> !file.isDirectory())
                 .map(File::getName)
                 .collect(Collectors.toSet());
+    }
+    
+    private int countCells(List<Tuple> tuples) {
+        int count = 0;
+        for (Tuple tuple : tuples) {
+            int cellsWithoutOID = tuple.getCells().size() - 1;
+            if (cellsWithoutOID > 0) count += cellsWithoutOID;
+        }
+        return count;
+    }
+    
+    private int countAttrs(List<Tuple> tuples) {
+        int count = 0;
+        if (tuples.size() > 0) {
+            Tuple tuple = tuples.get(0);
+            int cellsWithoutOID = tuple.getCells().size() - 1;
+            if (cellsWithoutOID > 0) return cellsWithoutOID;
+
+        }
+        return count;
     }
 
 }

@@ -32,7 +32,13 @@ public class LLMCache {
     }
     
     public String getFileName(IQueryExecutor queryExecutor) {
-        return String.format("%s/cache-%s-%s.json", CACHE_DIR, queryExecutor.getClass().getSimpleName(), Constants.LLM_MODEL);
+        String queryExecutorName = null;
+        if (queryExecutor == null) {
+            queryExecutorName = "LLM-Similarity";
+        } else {
+            queryExecutorName = queryExecutor.getClass().getSimpleName();
+        }
+        return String.format("%s/cache-%s-%s.json", CACHE_DIR, queryExecutorName, Constants.LLM_MODEL);
     }
 
     public boolean containsQuery(String prompt, int iteration, IQueryExecutor queryExecutor, String firstPrompt) {
@@ -85,7 +91,12 @@ public class LLMCache {
     }
 
     private void writeCache(Map<String, CacheEntry> cache, IQueryExecutor queryExecutor) {
-        String executorName = queryExecutor.getClass().getSimpleName();
+        String executorName = "";
+        if (queryExecutor == null) {
+            executorName = "LLM-Similarity";
+        } else {
+            executorName = queryExecutor.getClass().getSimpleName();
+        }
         String fileName = getFileName(queryExecutor);
         File file = new File(fileName);
         String updatedFileName = String.format("%s/cache-%s-updated.json", CACHE_DIR, executorName);

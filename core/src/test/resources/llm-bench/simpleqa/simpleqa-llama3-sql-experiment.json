@@ -1,0 +1,74 @@
+{
+  "name": "SimpleQA-{{QN}} Experiment-sql",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-sql",
+      "maxIterations": 1,
+      "normalizationStrategy": "lowerCase"
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "simpleqa",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "person",
+          "attributes": [
+            {
+              "name": "name",
+              "type": "STRING",
+              "key": true
+            }
+          ]
+        },
+        {
+          "tableName": "place",
+          "attributes": [
+            {
+              "name": "place",
+              "type": "STRING",
+              "key": true
+            }
+          ]
+        },
+        {
+          "tableName": "number",
+          "attributes": [
+            {
+              "name": "numerical_value",
+              "type": "STRING",
+              "key": true
+            }
+          ]
+        },
+        {
+          "tableName": "date",
+          "attributes": [
+            {
+              "name": "date_value",
+              "type": "STRING",
+              "key": true
+            }
+          ]
+        }
+      ]
+  },
+    "results": "/llm-bench/simpleqa/data"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "name": "Movies-{{QN}} Experiment-sql",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-sql",
+      "maxIterations": 100
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "directors_movies",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "movie",
+          "attributes": [
+            {
+              "name": "primarytitle",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "originaltitle",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "startyear",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "endyear",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "runtimeminutes",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "genres",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "director",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birthyear",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "deathyear",
+              "type": "INTEGER",
+              "nullable": true
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/llm-bench/galois/movies"
+  }
+}

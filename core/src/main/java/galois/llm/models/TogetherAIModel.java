@@ -140,6 +140,18 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         log.trace("Return null because there was an exception.");
         return null;
     }
+    
+    public String getModelResponse(String prompt) {
+        String jsonRequest = getJsonForRequest(prompt.replace("\n", "\\n"));
+        //log.info("JSON REQUEST:\n" + jsonRequest);
+        if (jsonRequest.isEmpty()) {
+            log.trace("Return null because jsonRequest is empty: " + jsonRequest);
+            return null;
+        }
+        String authorizationValue = "Bearer " + this.toghetherAiAPI;
+        String response = this.makeRequest(jsonRequest, authorizationValue);
+        return response;
+    }
 
     public int getInputTokens() {
         return inputTokens;
@@ -196,7 +208,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         return null;
     }
 
-    private String makeRequest(String jsonRequest, String authorizationValue) {
+    public String makeRequest(String jsonRequest, String authorizationValue) {
         int numRetry = 0;
         while (numRetry < TogetherAIConstants.MAX_RETRY) {
             HttpURLConnection connection = null;
@@ -224,6 +236,10 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 log.trace("ResponseText: {}", responseText);
                 return responseText;
             } catch (Exception e) {
+                if (e instanceof MaxTokensException) {
+                    log.error("Error with the context size", e);
+                    return null;
+                }
                 if (e instanceof IOException) {
                     log.trace("Request attempt number {} failed with exception: {}", numRetry, e.getMessage(), e);
                     numRetry++;
@@ -249,8 +265,13 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         os.flush();
         connection.connect();
         if (connection.getResponseCode() != 200) {
-            log.error("Error response: {}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())));
-            throw new IOException("Error response " + connection.getErrorStream());
+            String error = IOUtils.toString(new InputStreamReader(connection.getErrorStream()));
+            log.error("Error response: {}", error);
+            if (error.contains("invalid_request_error") && error.contains("max_tokens")) {
+                throw new MaxTokensException(error);
+            } else {
+                throw new IOException("Error response " + connection.getErrorStream());
+            }
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
         ResponseTogetherAI finalResponse = new ResponseTogetherAI();
@@ -298,6 +319,37 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         String responseText = response.toString().trim();
         log.debug("# API Response {}: \n{}", connection.getResponseCode(), responseText);
         return responseText;
+    }
+    
+    public String getJsonForRequest(String message) {
+        String jsonReturn = "{\n"
+                + "    \"model\": \"{$MODEL_NAME$}\",\n"
+                + "    \"max_tokens\": {$MAX_TOKENS$},\n"
+                + "    \"temperature\": {$TEMPERATURE$},\n"
+                + "    \"top_p\": {$TOP_P$},\n"
+                + "    \"top_k\": 50,\n"
+                + "    \"repetition_penalty\": 1,\n"
+                + "    \"stop\": [\n"
+                + "        \"<|eot_id|>\"\n"
+                + "    ],\n"
+                + (streamMode ? "    \"stream\": true,\n" : "")
+                + (streamMode ? "    \"stream_tokens\": true,\n" : "")
+                + (useSeed ? "    \"seed\": 42,\n" : "")
+                + (useLogProbs ? "    \"logprobs\": 1,\n" : "")
+                + "    \"messages\": [\n"
+                + "     {\n"
+                + "       \"role\": \"user\",\n"
+                + "       \"content\": \"{$CONTENT_MESSAGE$}\"\n"
+                + "     }\n"
+                + "    ]\n"
+                + "}";
+        jsonReturn = jsonReturn.replace("{$MODEL_NAME$}", this.modelName);
+        jsonReturn = jsonReturn.replace("{$MAX_TOKENS$}", this.maxTokens + "");
+        jsonReturn = jsonReturn.replace("{$TEMPERATURE$}", this.temperature + "");
+        jsonReturn = jsonReturn.replace("{$TOP_P$}", this.topP + "");
+        jsonReturn = jsonReturn.replace("{$CONTENT_MESSAGE$}", message);
+//            log.trace("JsonReturn: \n " + jsonReturn);
+        return jsonReturn.trim();
     }
 
     private String getJsonForRequest() {

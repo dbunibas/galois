@@ -41,6 +41,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.util.*;
 import net.sf.jsqlparser.expression.Expression;
+import speedy.model.database.TableAlias;
 
 @AllArgsConstructor
 @Data
@@ -161,6 +162,19 @@ public final class Experiment {
         }
         return results;
     }
+    
+    @SuppressWarnings("unchecked")
+    public Map<String, ExperimentResults> executeWithExpected(List<Tuple> expectedResults, IQueryExecutor queryExecutor, IDatabase database, TableAlias tableAlias) {
+        Map<String, ExperimentResults> results = new HashMap<>();
+        GaloisDebug.log("Unoptimized");
+        LLMQueryStatManager.getInstance().resetStats();
+        List<Tuple> actualResults = queryExecutor.execute(database, tableAlias, null);
+        ExperimentResults unoptimizedResult = toExperimentResults(actualResults, expectedResults, null);
+        GaloisDebug.log("Speedy Results:");
+        GaloisDebug.log(unoptimizedResult.toDebugString());
+        results.put("Unoptimized", unoptimizedResult);
+        return results;
+    }
 
     public IAlgebraOperator parse() {
 //        Previous strategy: use PostgreSQL query plan parser
@@ -181,7 +195,6 @@ public final class Experiment {
             TableAliasQueryParser tableAliasQueryParser = new TableAliasQueryParser();
             return scanNodeFactory.createScanNode(tableAliasQueryParser.parse(query.getSql()), null);
         }
-
         return sqlQueryParser.parse(query.getSql(), scanNodeFactory);
     }
 
@@ -275,6 +288,20 @@ public final class Experiment {
 
     public ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults, String optmizerName) {
         List<Tuple> results = TestUtils.toTupleList(actual);
+        log.info("Results size: " + results.size());
+        log.info("Results: " + results);
+        List<Double> scores = metrics
+                .stream()
+                //                .map(m -> m.getScore(query.getDatabase(), query.getResults(), results))
+                .map(m -> m.getScore(query.getDatabase(), expectedResults, results))
+                .toList();
+
+        // TODO [Stats]: Add stats to results
+//        return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
+        return new ExperimentResults(name, metrics, expectedResults, results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql(), optmizerName);
+    }
+    
+    public ExperimentResults toExperimentResults(List<Tuple> results, List<Tuple> expectedResults, String optmizerName) {
         log.info("Results size: " + results.size());
         log.info("Results: " + results);
         List<Double> scores = metrics

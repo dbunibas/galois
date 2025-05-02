@@ -1,0 +1,188 @@
+{
+  "name": "World1-{{QN}} Experiment-table",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-table",
+      "maxIterations": 100
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "world_1",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "city",
+          "attributes": [
+            {
+              "name": "id",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "country_code_3_letters",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "district",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "population",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "sqlite_sequence",
+          "attributes": [
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "seq",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "country",
+          "attributes": [
+            {
+              "name": "code_3_letters",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "continent",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "region",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "surface_area_in_km2",
+              "type": "REAL",
+              "nullable": true
+            },
+            {
+              "name": "independence_year",
+              "type": "REAL",
+              "nullable": true
+            },
+            {
+              "name": "population",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "life_expectancy",
+              "type": "REAL",
+              "nullable": true
+            },
+            {
+              "name": "gnp",
+              "type": "REAL",
+              "nullable": true
+            },
+            {
+              "name": "gnp_old",
+              "type": "REAL",
+              "nullable": true
+            },
+            {
+              "name": "local_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "government_form",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "head_of_state",
+              "type": "STRING",
+              "nullable": true
+            },
+            {
+              "name": "capital",
+              "type": "REAL",
+              "nullable": true
+            },
+            {
+              "name": "code_2_letters",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "country_language",
+          "attributes": [
+            {
+              "name": "country_code_3_letters",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "language",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "is_official",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "percentage",
+              "type": "REAL",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/llm-bench/galois/world_1"
+  }
+}

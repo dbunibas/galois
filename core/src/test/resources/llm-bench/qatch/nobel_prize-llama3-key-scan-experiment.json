@@ -1,0 +1,67 @@
+{
+    "name": "nobel_prize-{{QN}} lllama3-key-scan Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellLLMSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellLLMSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "CellLLMSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-key-scan",
+            "maxIterations": 10
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "nobel_prize",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "nobel_prize",
+                    "attributes": [
+                        {
+                            "name": "nobel_prize_laureate",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "nobel_prize",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "nationality",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "birth_date",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "birth_year",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/nobel_prize"
+    }
+}

@@ -43,6 +43,7 @@ import speedy.model.database.AttributeRef;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
 import speedy.model.database.Key;
+import speedy.model.database.TableAlias;
 import speedy.model.database.Tuple;
 import speedy.utility.SpeedyUtility;
 
@@ -50,15 +51,7 @@ import speedy.utility.SpeedyUtility;
 public class TestRunner {
 
     // TODO: Turn into service
-    public void execute(
-            String path,
-            String type,
-            ExpVariant variant,
-            List<IMetric> metrics,
-            Map<String, Map<String, ExperimentResults>> results,
-            String resultFileDir,
-            String resultFile
-    ) {
+    public void execute(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, String resultFileDir, String resultFile) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
             Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
@@ -113,9 +106,9 @@ public class TestRunner {
 //            throw new RuntimeException("Cannot run experiment: " + path, ioe);
         }
     }
-    
+
     public List<Tuple> computeExpected(String path, ExpVariant variant) {
-        try{
+        try {
 //            Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
             Experiment experiment = ExperimentParser.loadAndParseJSON(path);
             experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
@@ -128,7 +121,7 @@ public class TestRunner {
             return null;
         }
     }
-        
+
     public void executeGalois(
             String path,
             String type,
@@ -159,7 +152,7 @@ public class TestRunner {
             } else if (queryExecutor instanceof IGaloisOriginalExecutor) {
                 log.debug("Galois original executor, setting optimizers to null!");
                 experiment.setOptimizers(null);
-            }           
+            }
             GaloisDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
@@ -211,7 +204,7 @@ public class TestRunner {
             return null;
         }
     }
-    
+
     public void executeSingle(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, IOptimizer optimizer, Double llmProb) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -219,7 +212,9 @@ public class TestRunner {
             Experiment experiment = ExperimentParser.loadAndParseJSON(path);
             experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
             experiment.getQuery().setSql(variant.getQuerySql());
-            if (llmProb != null) experiment.getOperatorsConfiguration().getScan().setLlmProbThreshold(llmProb);
+            if (llmProb != null) {
+                experiment.getOperatorsConfiguration().getScan().setLlmProbThreshold(llmProb);
+            }
             log.info("*** Executing experiment with LLM Threshold {}", experiment.getOperatorsConfiguration().getScan().getLlmProbThreshold());
             log.debug("SQL query is {}", experiment.getQuery().getSql());
 
@@ -251,7 +246,50 @@ public class TestRunner {
 //            throw new RuntimeException("Cannot run experiment: " + path, ioe);
         }
     }
-        
+    
+    public void executeWithExpected(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, String resultFileDir, String resultFile, List<Tuple> expectedResults, IDatabase database, TableAlias tableAlias) {
+        try {
+            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+
+            IQueryExecutor queryExecutor = experiment.getOperatorsConfiguration().getScan().getQueryExecutor();
+            if (queryExecutor instanceof INLQueryExectutor nlExecutor) {
+                nlExecutor.setNaturalLanguagePrompt(variant.getPrompt());
+                log.debug("NL Executor Prompt: {}", nlExecutor.getNaturalLanguagePrompt());
+                experiment.setOptimizers(null);
+            } else if (queryExecutor instanceof ISQLExecutor sqlExecutor) {
+                sqlExecutor.setSql(variant.getQuerySql());
+                experiment.setOptimizers(null);
+            } else if (queryExecutor instanceof IGaloisOriginalExecutor) {
+                log.debug("Galois original executor, setting optimizers to null!");
+                experiment.setOptimizers(null);
+            } else {
+                List<IOptimizer> optimizers = loadOptimizers(variant);
+                experiment.setOptimizers(optimizers);
+            }
+            if (experiment.getOptimizers() != null && !experiment.getOptimizers().isEmpty()) {
+                log.debug("Optimizers:");
+                for (IOptimizer optimizer : experiment.getOptimizers()) {
+                    log.debug(optimizer.getName());
+                }
+            }
+            GaloisDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
+            metrics.clear();
+            metrics.addAll(experiment.getMetrics());
+            var expResults = experiment.executeWithExpected(expectedResults, queryExecutor, database, tableAlias);
+            log.info("Results: {}", expResults);
+            for (String expKey : expResults.keySet()) {
+                queryResults.put(type + "-" + expKey, expResults.get(expKey));
+            }
+        } catch (Exception ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+//            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+        }
+    }
+
+
     public Map<ITable, Map<Attribute, Double>> executeConfidenceEstimator(String path, ExpVariant variant) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -273,7 +311,7 @@ public class TestRunner {
         }
         return null;
     }
-    
+
     public Map<ITable, Double> executeConfidenceEstimatorSchema(String path, ExpVariant variant) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -295,7 +333,7 @@ public class TestRunner {
         }
         return null;
     }
-    
+
     public void executeConfidenceEstimatorQuery(String path, ExpVariant variant) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -319,7 +357,7 @@ public class TestRunner {
             log.error("Unable to execute experiment {}", path, ioe);
         }
     }
-    
+
     public QueryPlan planEstimation(String path, ExpVariant variant) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -365,7 +403,7 @@ public class TestRunner {
             return null;
         }
     }
-    
+
     public void executeCardinalityEstimatorQuery(String path, ExpVariant variant) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -441,7 +479,9 @@ public class TestRunner {
         ParserWhere parserWhere = new ParserWhere();
         parserWhere.parseWhere(variant.getQuerySql());
         String whereExpression = parserWhere.getWhereExpression();
-        if (whereExpression == null || whereExpression.isEmpty()) return null;
+        if (whereExpression == null || whereExpression.isEmpty()) {
+            return null;
+        }
         IDatabase database = experiment.getQuery().getDatabase();
         ParserFrom parserFrom = new ParserFrom();
         parserFrom.parseFrom(variant.getQuerySql());
@@ -678,11 +718,11 @@ public class TestRunner {
         log.debug("Keys To String: " + sReturn);
         return sReturn.substring(0, sReturn.length() - 2).trim();
     }
-    
+
     private String toStringKeyShort(Set<Key> keys, String tableName) {
         StringBuilder sb = new StringBuilder();
         for (Key key : keys) {
-            sb.append(key.getAttributes().toString().replace(tableName+".", "")
+            sb.append(key.getAttributes().toString().replace(tableName + ".", "")
                     .replace("[", "")
                     .replace("]", "")).append(", ");
         }
