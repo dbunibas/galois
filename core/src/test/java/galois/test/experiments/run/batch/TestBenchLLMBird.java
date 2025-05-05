@@ -114,12 +114,14 @@ public class TestBenchLLMBird {
         List<String> expTabs = new ArrayList<>();
         for (String dbID : variants.keySet()) {
             System.out.println("DB:" + dbID);
+//            if (!dbID.equalsIgnoreCase("world")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
                 List<Tuple> expected = testRunner.computeExpected("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", variant);
                 int cells = countCells(expected);
                 int attrs = countAttrs(expected);
                 String expTab = variant.getQueryNum() + "\t" + expected.size() + "\t" + cells + "\t" + attrs;
+//                String expTab = variant.getQueryNum() + "\t" + expected.size()  + "\t" + attrs;
                 expTabs.add(expTab);
             }
         }

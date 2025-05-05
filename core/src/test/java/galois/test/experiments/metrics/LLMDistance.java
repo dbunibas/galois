@@ -13,6 +13,7 @@ import galois.llm.query.utils.cache.LLMCache;
 import galois.utils.Mapper;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.math.NumberUtils;
 
 @Slf4j
 public class LLMDistance {
@@ -20,6 +21,8 @@ public class LLMDistance {
     private String modelName = TogetherAIConstants.MODEL_LLAMA3_1_8B;
     private TogetherAIModel llmModel = new TogetherAIModel(Constants.TOGETHERAI_API, modelName, true);
     private ObjectMapper objectMapper = Mapper.MAPPER;
+    private Double thresholdForNumeric = 0.1;
+    
     private String promptCell = "Given the following two cells, identify if they represent the same real entity.\n"
             + "\n"
             + "cell1: $CELL_1$\n"
@@ -34,12 +37,21 @@ public class LLMDistance {
             + "\n"
             + "Answer only with 'yes' or 'no'.";
 
-    public boolean areCellSimilar(String expected, String actual) {
+    public boolean areCellSimilar(String expected, String actual, String commonSubstring) {
         if (expected == null || actual == null) {
             return false;
         }
         if (expected.equalsIgnoreCase(actual)) {
             return true;
+        }
+        if (commonSubstring != null && getNumber(expected.replace(commonSubstring, "")) != null && getNumber(actual.replace(commonSubstring, "")) != null) {
+            Number nActual = getNumber(actual.replace(commonSubstring, ""));
+            Number nExpected = getNumber(expected.replace(commonSubstring, ""));
+            if (thresholdForNumeric != null) {
+                return Math.abs((nExpected.floatValue() - nActual.floatValue()) / nExpected.floatValue()) <= thresholdForNumeric;
+            } else {
+                return nActual.floatValue() == nExpected.floatValue();
+            }
         }
         LLMCache llmCache = LLMCache.getInstance();
         String editedPrompt = promptCell.replace("$CELL_1$", expected).replace("$CELL_2$", actual);
@@ -119,12 +131,21 @@ public class LLMDistance {
             Choice choice = responseAPI.getChoices().get(0);
             Message message = choice.getMessage();
             String content = message.getContent();
-            log.debug("Content: " + content);
+            //log.debug("Content: " + content);
             return content.equalsIgnoreCase("yes");
         } catch (JsonProcessingException exception) {
 
         }
         return false;
+    }
+
+    private Number getNumber(String value) {
+        try {
+            Number number = NumberUtils.createNumber(value);
+            return number;
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
     }
 
 }

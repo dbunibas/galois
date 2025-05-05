@@ -1,5 +1,5 @@
 {
-    "name": "nobel_prize-{{QN}} llama3-table Experiment",
+    "name": "chemical_elements-{{QN}} llama3-table Experiment",
     "metrics": [
         "CellPrecisionFilteredAttributes",
         "CellSimilarityPrecisionFilteredAttributes",
@@ -9,8 +9,7 @@
         "CellSimilarityF1ScoreFilteredAttributes",
         "TupleCardinality",
         "TupleConstraintFilteredAttributes",
-        "TupleSimilarityConstraintFilteredAttributes",
-        "TupleLLMSimilarityConstraintFilteredAttributes"
+        "TupleSimilarityConstraintFilteredAttributes"
     ],
     "dbms": "postgres",
     "operatorsConfig": {
@@ -22,43 +21,64 @@
     "query": {
         "sql": "{{QUERY_SQL}}",
         "schema": {
-            "name": "nobel_prize",
+            "name": "chemical_element",
             "schema": "target",
             "username": "pguser",
             "password": "pguser",
             "tables": [
                 {
-                    "tableName": "nobel_prize",
+                    "tableName": "chemical_element",
                     "attributes": [
                         {
-                            "name": "nobel_prize_laureate",
-                            "type": "STRING",
+                            "name": "atomic_number",
+                            "type": "INTEGER",
                             "key": true
                         },
                         {
-                            "name": "nobel_prize",
+                            "name": "symbol",
                             "type": "STRING",
                             "nullable": false
                         },
                         {
-                            "name": "nobel_prize_year",
+                            "name": "element",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "periodic_table_group",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "period",
                             "type": "INTEGER",
                             "nullable": true
                         },
                         {
-                            "name": "nationality",
+                            "name": "block",
                             "type": "STRING",
-                            "key": true
+                            "nullable": true
                         },
                         {
-                            "name": "birth_year",
-                            "type": "INTEGER",
+                            "name": "atomic_weight",
+                            "type": "REAL",
+                            "nullable": true
+                        },
+                        {
+                            "name": "origin",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "phase",
+                            "type": "STRING",
                             "nullable": true
                         }
+
                     ]
                 }
             ]
         },
-        "results": "/llm-bench/qatch/nobel_prize"
+        "results": "/llm-bench/qatch/chemical_element"
     }
 }

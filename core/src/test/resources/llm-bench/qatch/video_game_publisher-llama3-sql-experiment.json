@@ -1,5 +1,5 @@
 {
-    "name": "nobel_prize-{{QN}} llama3-nl Experiment",
+    "name": "video_game_publisher-{{QN}} llama3-sql Experiment",
     "metrics": [
         "CellPrecisionFilteredAttributes",
         "CellSimilarityPrecisionFilteredAttributes",
@@ -9,57 +9,45 @@
         "CellSimilarityF1ScoreFilteredAttributes",
         "TupleCardinality",
         "TupleConstraintFilteredAttributes",
-        "TupleSimilarityConstraintFilteredAttributes",
-        "TupleLLMSimilarityConstraintFilteredAttributes"
+        "TupleSimilarityConstraintFilteredAttributes"
     ],
     "dbms": "postgres",
     "operatorsConfig": {
         "scan": {
-            "queryExecutor": "togetherai-llama3-nl",
-            "maxIterations": 10,
-            "naturalLanguagePrompt": "{{PROMPT}}"
+            "queryExecutor": "togetherai-llama3-sql",
+            "maxIterations": 10
         }
     },
     "query": {
         "sql": "{{QUERY_SQL}}",
         "schema": {
-            "name": "nobel_prize",
+            "name": "video_game_publisher",
             "schema": "target",
             "username": "pguser",
             "password": "pguser",
             "tables": [
                 {
-                    "tableName": "nobel_prize",
+                    "tableName": "video_game_publisher",
                     "attributes": [
                         {
-                            "name": "nobel_prize_laureate",
+                            "name": "publisher_name",
                             "type": "STRING",
                             "key": true
                         },
                         {
-                            "name": "nobel_prize",
-                            "type": "STRING",
+                            "name": "established_in_year",
+                            "type": "INTEGER",
                             "nullable": false
                         },
                         {
-                            "name": "nobel_prize_year",
-                            "type": "INTEGER",
-                            "nullable": true
-                        },
-                        {
-                            "name": "nationality",
+                            "name": "nation",
                             "type": "STRING",
-                            "key": true
-                        },
-                        {
-                            "name": "birth_year",
-                            "type": "INTEGER",
                             "nullable": true
                         }
                     ]
                 }
             ]
         },
-        "results": "/llm-bench/qatch/nobel_prize"
+        "results": "/llm-bench/qatch/video_game_publisher"
     }
 }

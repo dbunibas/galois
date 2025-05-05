@@ -1,0 +1,317 @@
+sovereign_state_name,continent,capital,officialLanguage,populationNumber,area
+Afghanistan,Asia,Kabul,Arabic,37466414.0,652230.0
+Afghanistan,Asia,Kabul,Pashto,37466414.0,652230.0
+Afghanistan,Asia,Kabul,Dari,37466414.0,652230.0
+Afghanistan,Asia,Kabul,Uzbek language,37466414.0,652230.0
+Afghanistan,Asia,Kabul,Turkmen language,37466414.0,652230.0
+Afghanistan,Asia,Kabul,Balochi language,37466414.0,652230.0
+Afghanistan,Asia,Kabul,Nuristani languages,37466414.0,652230.0
+Afghanistan,Asia,Kabul,Pamir languages,37466414.0,652230.0
+Afghanistan,Asia,Kabul,Pashayi languages,37466414.0,652230.0
+Angola,Africa,Luanda,Portuguese language,32866270.0,1246700.0
+Argentina,South America,Buenos Aires,Spanish language,47327407.0,2780400.0
+Austria,Central Europe,Vienna,German language,8979894.0,83878.99
+Bahrain,Asia,Manama,Arabic,1492584.0,785.08
+Belgium,Northwestern Europe,City of Brussels,Dutch language,11584008.0,30688.0
+Belgium,Northwestern Europe,City of Brussels,French language,11584008.0,30688.0
+Belgium,Northwestern Europe,City of Brussels,German language,11584008.0,30688.0
+Bolivia,South America,Sucre,Spanish language,11051600.0,1098581.0
+Bolivia,South America,Sucre,Quechuan languages,11051600.0,1098581.0
+Bolivia,South America,Sucre,Guarani language,11051600.0,1098581.0
+Bolivia,South America,Sucre,Aymara language,11051600.0,1098581.0
+Bolivia,South America,La Paz,Spanish language,11051600.0,1098581.0
+Bolivia,South America,La Paz,Quechuan languages,11051600.0,1098581.0
+Bolivia,South America,La Paz,Guarani language,11051600.0,1098581.0
+Bolivia,South America,La Paz,Aymara language,11051600.0,1098581.0
+Brazil,South America,Brasília,Portuguese language,213317639.0,8515767.0
+Burkina Faso,Africa,Ouagadougou,French language,20488000.0,274200.0
+Canada,North America,Ottawa,English language,36991981.0,9984670.0
+Canada,North America,Ottawa,French language,36991981.0,9984670.0
+Central African Republic,Africa,Bangui,French language,4659080.0,622984.0
+Central African Republic,Africa,Bangui,Sango language,4659080.0,622984.0
+Chad,Africa,N'Djamena,Arabic,15477751.0,1284000.0
+Chad,Africa,N'Djamena,French language,15477751.0,1284000.0
+Chile,South America,Santiago,Spanish language,19458000.0,756102.0
+Colombia,South America,Bogotá,Spanish language,49065615.0,1141748.0
+Czech Republic,Europe,Prague,Czech language,10533000.0,78866.0
+Democratic Republic of the Congo,Central Africa,Kinshasa,French language,86790567.0,2344858.0
+Eritrea,East Africa,Asmara,Arabic,3497000.0,117600.0
+Eritrea,East Africa,Asmara,English language,3497000.0,117600.0
+Eritrea,East Africa,Asmara,Tigrinya language,3497000.0,117600.0
+Ethiopia,Africa,Addis Ababa,Amharic,104957438.0,1104300.0
+Gabon,Central Africa,Libreville,French language,2025137.0,267667.0
+Ghana,Africa,Accra,English language,32833031.0,238535.0
+Guatemala,Central America,Guatemala City,Spanish language,17263239.0,108889.0
+Guinea,West Africa,Conakry,French language,12717176.0,245857.0
+Guyana,South America,"Georgetown, Guyana",English language,777859.0,214970.0
+India,Asia,New Delhi,English language,1326093247.0,3287263.0
+India,Asia,New Delhi,Hindi,1326093247.0,3287263.0
+Indonesia,Southeast Asia and Oceania,Jakarta,Javanese language,275439000.0,1904570.0
+Indonesia,Southeast Asia and Oceania,Jakarta,Indonesian language,275439000.0,1904570.0
+Iran,Asia,Tehran,Persian language,86758304.0,1648195.0
+Italy,Southern and Western Europe,Rome,Italian language,60317000.0,301338.0
+Ivory Coast,Africa,Yamoussoukro,French language,24294750.0,322463.0
+Japan,Asia,Tokyo,Japanese language,125440000.0,377972.28
+Kazakhstan,Both Asia and Europe.,Astana,Russian language,19002586.0,2724900.0
+Kazakhstan,Both Asia and Europe.,Astana,Kazakh language,19002586.0,2724900.0
+Kenya,East Africa.,Nairobi,English language,48468138.0,581309.0
+Kenya,East Africa.,Nairobi,Swahili language,48468138.0,581309.0
+Kyrgyzstan,Central Asia,Bishkek,Russian language,6694200.0,199951.0
+Kyrgyzstan,Central Asia,Bishkek,Kyrgyz language,6694200.0,199951.0
+Laos,Asia,Vientiane,Lao language,6858160.0,236800.0
+Liberia,Africa,Monrovia,English language,5214030.0,111369.0
+Luxembourg,Europe,Luxembourg City,French language,645397.0,2586.4
+Luxembourg,Europe,Luxembourg City,German language,645397.0,2586.4
+Luxembourg,Europe,Luxembourg City,Luxembourgish,645397.0,2586.4
+Mali,Africa,Bamako,French language,20250833.0,1240192.0
+Malta,Southern Europe,Valletta,English language,465292.0,316.0
+Malta,Southern Europe,Valletta,Maltese language,465292.0,316.0
+Mauritania,Africa,Nouakchott,Arabic,4614974.0,1030700.0
+Mongolia,East Asia,Ulaanbaatar,Mongolian language,3409939.0,1564116.0
+Myanmar,Asia,Naypyidaw,Burmese language,53370609.0,676577.2
+Namibia,Africa,Windhoek,English language,2533794.0,825615.0
+Nepal,Asia,Kathmandu,Nepali language,30327877.0,147181.254346
+Niger,Africa,Niamey,French language,21477348.0,1267000.0
+Oman,Asia,Muscat,Arabic,4829480.0,309500.0
+Pakistan,Asia,Islamabad,Urdu,223773700.0,881913.0
+Paraguay,South America,Asunción,Spanish language,6811297.0,406756.0
+Paraguay,South America,Asunción,Guarani language,6811297.0,406756.0
+Peru,South America,Lima,Spanish language,29381884.0,1285216.0
+Peru,South America,Lima,Quechuan languages,29381884.0,1285216.0
+Peru,South America,Lima,Aymara language,29381884.0,1285216.0
+Philippines,Asia,Manila,English language,109035343.0,343448.0
+Philippines,Asia,Manila,Filipino language,109035343.0,343448.0
+Republic of the Congo,Central Africa,Brazzaville,French language,5260750.0,342000.0
+Russia,Europe,Moscow,Russian language,146804372.0,17075400.0
+Senegal,Africa,Dakar,French language,16876720.0,196722.0
+Senegal,Africa,Dakar,Wolof language,16876720.0,196722.0
+Senegal,Africa,Dakar,Badyara language,16876720.0,196722.0
+Senegal,Africa,Dakar,Balanta languages,16876720.0,196722.0
+Sierra Leone,Africa,Freetown,English language,7557212.0,71740.0
+Sierra Leone,Africa,Freetown,Krio language,7557212.0,71740.0
+South Korea,East Asia,Seoul,Korean language,51466201.0,100295.0
+South Sudan,East Africa,Juba,Arabic,12575714.0,644329.0
+South Sudan,East Africa,Juba,English language,12575714.0,644329.0
+Spain,Europe,Madrid,Spanish language,47415750.0,505990.0
+Sudan,Africa,Khartoum,Arabic,40533330.0,1886068.0
+Sudan,Africa,Khartoum,English language,40533330.0,1886068.0
+Suriname,South America,Paramaribo,Dutch language,563402.0,163270.0
+Switzerland,Europe,Bern,French language,8738791.0,41285.0
+Switzerland,Europe,Bern,German language,8738791.0,41285.0
+Switzerland,Europe,Bern,Italian language,8738791.0,41285.0
+Switzerland,Europe,Bern,Romansh language,8738791.0,41285.0
+Tajikistan,Central Asia,Dushanbe,Russian language,8921343.0,143100.0
+Tajikistan,Central Asia,Dushanbe,Tajik language,8921343.0,143100.0
+Uganda,Africa,Kampala,English language,47123531.0,241038.0
+Uganda,Africa,Kampala,Swahili language,47123531.0,241038.0
+United Arab Emirates,Asia,Abu Dhabi,Arabic,9890400.0,83600.0
+United States,North America,"Washington, D.C.",English language,331449281.0,9826675.0
+Uruguay,South America,Montevideo,Spanish language,3456750.0,176215.0
+Uzbekistan,Central Asia,Tashkent,Uzbek language,34915100.0,448978.0
+Vanuatu,Oceania,Port Vila,Bislama,276244.0,12190.0
+Vanuatu,Oceania,Port Vila,English language,276244.0,12190.0
+Vanuatu,Oceania,Port Vila,French language,276244.0,12190.0
+Venezuela,South America,Caracas,Spanish language,28515829.0,912050.0
+Vietnam,Asia,Hanoi,Vietnamese language,96208984.0,331690.0
+Zambia,Africa,Lusaka,English language,17094130.0,752618.0
+Belarus,Europe,NULL,Russian language,9200617.0,207595.0
+Belarus,Europe,NULL,Belarusian language,9200617.0,207595.0
+Benin,Africa,Porto-Novo,French language,11175692.0,114763.0
+Cape Verde,Africa,Praia,Portuguese language,555988.0,4033.0
+Cape Verde,Africa,Praia,Cape Verdean Creole,555988.0,4033.0
+Cuba,The Caribbean,Havana,Spanish language,11181595.0,109884.0
+East Timor,Asia,Dili,Portuguese language,1296311.0,14918.72
+East Timor,Asia,Dili,Tetum language,1296311.0,14918.72
+Ecuador,South America,Quito,Spanish language,18000062.0,255586.91
+Ecuador,South America,Quito,Kichwa language,18000062.0,255586.91
+Ecuador,South America,Quito,Shuar language,18000062.0,255586.91
+North Macedonia,Europe,Skopje,Albanian language,1836713.0,25713.0
+North Macedonia,Europe,Skopje,Macedonian language,1836713.0,25713.0
+Singapore,Southeast Asia,NULL,English language,5866139.0,719.1
+Singapore,Southeast Asia,NULL,Standard Chinese,5866139.0,719.1
+Singapore,Southeast Asia,NULL,Tamil language,5866139.0,719.1
+Singapore,Southeast Asia,NULL,Malay language,5866139.0,719.1
+Slovakia,Europe,NULL,Slovak language,5449270.0,49035.0
+Sri Lanka,South Asia,Sri Jayawardenepura Kotte,Tamil language,21444000.0,65610.0
+Sri Lanka,South Asia,Sri Jayawardenepura Kotte,Sinhala language,21444000.0,65610.0
+Sri Lanka,South Asia,Colombo,Tamil language,21444000.0,65610.0
+Sri Lanka,South Asia,Colombo,Sinhala language,21444000.0,65610.0
+Sweden,Europe,Stockholm,Swedish language,10409248.0,447425.16
+Ukraine,Eastern Europe,Kyiv,Ukrainian language,41167335.0,603550.0
+Yemen,Asia,Sanaa,Arabic,28250420.0,555000.0
+Yemen,Asia,Aden,Arabic,28250420.0,555000.0
+Brunei,Asia,Bandar Seri Begawan,English language,428697.0,5765.313533
+Brunei,Asia,Bandar Seri Begawan,Malay language,428697.0,5765.313533
+Equatorial Guinea,Africa,Malabo,French language,1267689.0,28051.0
+Equatorial Guinea,Africa,Malabo,Portuguese language,1267689.0,28051.0
+Equatorial Guinea,Africa,Malabo,Spanish language,1267689.0,28051.0
+Greece,Europe,Athens,Greek language,10432481.0,131957.0
+Greece,Europe,Athens,Demotic Greek,10432481.0,131957.0
+Iraq,Asia,Baghdad,Arabic,38274618.0,437072.0
+Iraq,Asia,Baghdad,Kurdish languages,38274618.0,437072.0
+Kuwait,Asia,Kuwait City,Arabic,4600000.0,17818.0
+Malaysia,Asia,Kuala Lumpur,Malay language,32447385.0,330290.0
+Nigeria,Africa,Abuja,English language,211400708.0,923768.0
+Republic of Ireland,Europe,Dublin,English language,5123536.0,69797.0
+Republic of Ireland,Europe,Dublin,Irish language,5123536.0,69797.0
+Turkmenistan,Asia,Ashgabat,Turkmen language,6117933.0,491210.0
+Azerbaijan,Europe,Baku,Azerbaijani language,10145212.0,86600.0
+Cameroon,Central Africa,Yaoundé,English language,24053727.0,475442.0
+Cameroon,Central Africa,Yaoundé,French language,24053727.0,475442.0
+Hungary,Europe,Budapest,Hungarian language,9769526.0,93011.4
+Romania,Europe,Bucharest,Romanian language,19053815.0,238397.0
+Albania,Europe,Tirana,Albanian language,2793592.0,28748.0
+Bosnia and Herzegovina,Southeast Europe,Sarajevo,Serbian language,3816459.0,51197.0
+Bosnia and Herzegovina,Southeast Europe,Sarajevo,Croatian language,3816459.0,51197.0
+Bosnia and Herzegovina,Southeast Europe,Sarajevo,Bosnian language,3816459.0,51197.0
+South Africa,Africa,Pretoria,English language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Sotho language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Afrikaans,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Xhosa language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Zulu language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Tswana language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Tsonga language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Northern Sotho language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Venda language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Southern Ndebele language,60142978.0,1221037.0
+South Africa,Africa,Pretoria,Swazi language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,English language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Sotho language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Afrikaans,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Xhosa language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Zulu language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Tswana language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Tsonga language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Northern Sotho language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Venda language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Southern Ndebele language,60142978.0,1221037.0
+South Africa,Africa,Cape Town,Swazi language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,English language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Sotho language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Afrikaans,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Xhosa language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Zulu language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Tswana language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Tsonga language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Northern Sotho language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Venda language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Southern Ndebele language,60142978.0,1221037.0
+South Africa,Africa,Bloemfontein,Swazi language,60142978.0,1221037.0
+Georgia ,Europe and West Asia.,Tbilisi,Georgian language,3717100.0,69700.0
+Georgia ,Europe and West Asia.,Tbilisi,Abkhaz language,3717100.0,69700.0
+Serbia,Europe,Belgrade,Serbian language,7022268.0,88499.0
+Andorra,Southwestern Europe,Andorra la Vella,Catalan language,78151.0,468.0
+Bulgaria,Europe,Sofia,Bulgarian language,7000039.0,110993.6
+Cyprus,Europe,Nicosia,Greek language,1141166.0,9242.45
+Cyprus,Europe,Nicosia,Turkish language,1141166.0,9242.45
+Cyprus,Europe,Nicosia,Modern Greek,1141166.0,9242.45
+Djibouti,Africa,Djibouti City,Arabic,956985.0,23200.0
+Djibouti,Africa,Djibouti City,French language,956985.0,23200.0
+Fiji,Oceania,Suva,English language,905502.0,18274.0
+Fiji,Oceania,Suva,Fijian language,905502.0,18274.0
+Fiji,Oceania,Suva,Fiji Hindi,905502.0,18274.0
+Iceland,Europe,Reykjavík,Icelandic language,364260.0,103004.0
+Panama,Central America,Panama City,Spanish language,4098587.0,74177.3
+State of Palestine,West Asia,Jerusalem,Arabic,5227193.0,6020.0
+State of Palestine,West Asia,Ramallah,Arabic,5227193.0,6020.0
+Armenia,Europe,Yerevan,Armenian language,2930450.0,29743.423459
+Botswana,Southern Africa.,Gaborone,English language,2291661.0,581737.0
+Kiribati,Oceania,South Tarawa,English language,119438.0,811.0
+Kiribati,Oceania,South Tarawa,Gilbertese language,119438.0,811.0
+Mozambique,Africa,Maputo,Portuguese language,29668834.0,801590.0
+Samoa,Oceania,Apia,English language,196440.0,2842.0
+Samoa,Oceania,Apia,Samoan language,196440.0,2842.0
+Taiwan,East Asia,Taipei,Taiwanese Hokkien,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Taiwanese Mandarin,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Amis language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Taiwanese Hakka,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Atayal language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Saisiyat language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Sakizaya language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Bunun language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Kanakanavu language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Kavalan language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Paiwan language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Puyuma language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Rukai language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Saaroa language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Seediq language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Tsou language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Yami language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,Truku language,23593794.0,36193.0
+Taiwan,East Asia,Taipei,O-Ku-Uā,23593794.0,36193.0
+Tonga,Oceania,Nukuʻalofa,English language,108020.0,748.506563
+Tonga,Oceania,Nukuʻalofa,Tongan language,108020.0,748.506563
+Liechtenstein,Europe,Vaduz,German language,37922.0,160.0
+Seychelles,Africa,"Victoria, Seychelles",English language,95843.0,459.0
+Seychelles,Africa,"Victoria, Seychelles",French language,95843.0,459.0
+Seychelles,Africa,"Victoria, Seychelles",Seychellois Creole,95843.0,459.0
+Togo,West Africa.,Lomé,French language,7797694.0,56785.0
+Vatican City,Europe,NULL,French language,453.0,0.440297
+Vatican City,Europe,NULL,Italian language,453.0,0.440297
+Vatican City,Europe,NULL,Latin,453.0,0.440297
+Bangladesh,Asia,Dhaka,Bengali language,165775000.0,147570.0
+San Marino,Southern Europe,City of San Marino,Italian language,33607.0,61.2
+Dominican Republic,North America,Santo Domingo,Spanish language,10403761.0,48670.82
+Moldova,Eastern Europe,Chișinău,Romanian language,2550900.0,33843.5
+Barbados,The Atlantic Ocean.,Bridgetown,English language,285719.0,439.0
+Barbados,The Atlantic Ocean.,Bridgetown,Bajan Creole,285719.0,439.0
+Costa Rica,Central America,"San José, Costa Rica",Spanish language,5213362.0,51100.0
+El Salvador,Central America,San Salvador,Spanish language,5744113.0,20742.0
+Guinea-Bissau,Africa,Bissau,Portuguese language,1861283.0,36125.0
+Haiti,"The Caribbean Sea, which is part of the continent of North America.",Port-au-Prince,French language,10981229.0,27750.0
+Haiti,"The Caribbean Sea, which is part of the continent of North America.",Port-au-Prince,Haitian Creole,10981229.0,27750.0
+Madagascar,Africa,Antananarivo,French language,25570895.0,587295.0
+Madagascar,Africa,Antananarivo,Malagasy language,25570895.0,587295.0
+Monaco,Western Europe,NULL,French language,38350.0,2.02
+Tanzania,East Africa,Dodoma,English language,57310019.0,947303.0
+Tanzania,East Africa,Dodoma,Swahili language,57310019.0,947303.0
+Trinidad and Tobago,South America,Port of Spain,English language,1369125.0,5128.0
+Comoros,Africa,"Moroni, Comoros",Arabic,902348.0,2034.0
+Comoros,Africa,"Moroni, Comoros",French language,902348.0,2034.0
+Comoros,Africa,"Moroni, Comoros",Comorian languages,902348.0,2034.0
+Burundi,East Africa,Gitega,English language,11530580.0,27834.0
+Burundi,East Africa,Gitega,French language,11530580.0,27834.0
+Burundi,East Africa,Gitega,Kirundi,11530580.0,27834.0
+Rwanda,Africa,Kigali,English language,13246394.0,26338.0
+Rwanda,Africa,Kigali,French language,13246394.0,26338.0
+Rwanda,Africa,Kigali,Kinyarwanda,13246394.0,26338.0
+Rwanda,Africa,Kigali,Swahili language,13246394.0,26338.0
+Zimbabwe,Southeast Africa,Harare,English language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Sotho language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Xhosa language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Chewa language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Tswana language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Tsonga language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Shona language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Kalanga language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Venda language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Northern Ndebele language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Tonga language (Zambia and Zimbabwe),15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Barwe,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Nambya language,15178979.0,390757.0
+Zimbabwe,Southeast Africa,Harare,Ndau dialect,15178979.0,390757.0
+Old Swiss Confederacy,Europe,NULL,NULL,NULL,NULL
+Belize,Central America,Belmopan,English language,374681.0,22966.0
+Honduras,Central America.,Tegucigalpa,Spanish language,8303771.0,112492.0
+Nauru,Oceania,Yaren District,English language,13650.0,21.0
+Nauru,Oceania,Yaren District,Nauruan language,13650.0,21.0
+Dominica,The Caribbean,Roseau,English language,73925.0,751.096551
+Federated States of Micronesia,Oceania,Palikir,English language,105544.0,702.0
+Maldives,Asia,Malé,Maldivian language,436330.0,298.0
+Nicaragua,Central America,Managua,Spanish language,5142098.0,130375.0
+São Tomé and Príncipe,Africa,São Tomé,Portuguese language,204327.0,1001.0
+The Gambia,Africa,Banjul,English language,2639916.0,11300.0
+Marshall Islands,Oceania,Majuro,English language,53127.0,181.43
+Marshall Islands,Oceania,Majuro,Marshallese language,53127.0,181.43
+Palau,Oceania,Ngerulmud,English language,21729.0,465.550362
+Palau,Oceania,Ngerulmud,Japanese language,21729.0,465.550362
+Palau,Oceania,Ngerulmud,Palauan language,21729.0,465.550362
+Qatar,Asia,Doha,Arabic,2639211.0,11437.0
+Somalia,Africa,Mogadishu,Arabic,11031386.0,637657.0
+Somalia,Africa,Mogadishu,Somali language,11031386.0,637657.0
+Malawi,Southeastern Africa,Lilongwe,English language,18622104.0,118484.0
+Malawi,Southeastern Africa,Lilongwe,Chewa language,18622104.0,118484.0
+Mauritius,Africa,Port Louis,English language,1264613.0,2040.0
+Mauritius,Africa,Port Louis,French language,1264613.0,2040.0
+Sovereign state,NULL,NULL,NULL,NULL,NULL

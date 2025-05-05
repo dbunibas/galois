@@ -19,16 +19,16 @@ public class TestLLMDistance {
         LLMDistance distance = new LLMDistance();
         String cell1 = "attribute=nobel_prize, value=chemistry";
         String cell2 = "attribute=nobel_prize, value=noble prize in chemistry";
-        boolean areSimilar = distance.areCellSimilar(cell1, cell2);
+        boolean areSimilar = distance.areCellSimilar(cell1, cell2, null);
         System.out.println(cell1 + " ---" + cell2 + ": " + areSimilar);
-        areSimilar = distance.areCellSimilar(cell2, cell1);
+        areSimilar = distance.areCellSimilar(cell2, cell1, null);
         System.out.println(cell1 + " ---" + cell2 + ": " + areSimilar);
         String cell3 = "attribute=nobel_prize, value=noble prize in peace";
         String cell4 = "attribute=nobel_prize, value=peace";
-        System.out.println(cell1 + " ---" + cell3 + ": " + distance.areCellSimilar(cell1, cell3));
-        System.out.println(cell1 + " ---" + cell4 + ": " + distance.areCellSimilar(cell1, cell4));
-        System.out.println(cell2 + " ---" + cell3 + ": " + distance.areCellSimilar(cell2, cell3));
-        System.out.println(cell2 + " ---" + cell4 + ": " + distance.areCellSimilar(cell2, cell4));
+        System.out.println(cell1 + " ---" + cell3 + ": " + distance.areCellSimilar(cell1, cell3, null));
+        System.out.println(cell1 + " ---" + cell4 + ": " + distance.areCellSimilar(cell1, cell4, null));
+        System.out.println(cell2 + " ---" + cell3 + ": " + distance.areCellSimilar(cell2, cell3, null));
+        System.out.println(cell2 + " ---" + cell4 + ": " + distance.areCellSimilar(cell2, cell4, null));
     }
     
     @Test

@@ -1,5 +1,5 @@
 {
-    "name": "nobel_prize-{{QN}} llama3-nl Experiment",
+    "name": "airport-{{QN}} llama3-table Experiment",
     "metrics": [
         "CellPrecisionFilteredAttributes",
         "CellSimilarityPrecisionFilteredAttributes",
@@ -9,57 +9,60 @@
         "CellSimilarityF1ScoreFilteredAttributes",
         "TupleCardinality",
         "TupleConstraintFilteredAttributes",
-        "TupleSimilarityConstraintFilteredAttributes",
-        "TupleLLMSimilarityConstraintFilteredAttributes"
+        "TupleSimilarityConstraintFilteredAttributes"
     ],
     "dbms": "postgres",
     "operatorsConfig": {
         "scan": {
-            "queryExecutor": "togetherai-llama3-nl",
-            "maxIterations": 10,
-            "naturalLanguagePrompt": "{{PROMPT}}"
+            "queryExecutor": "togetherai-llama3-table",
+            "maxIterations": 10
         }
     },
     "query": {
         "sql": "{{QUERY_SQL}}",
         "schema": {
-            "name": "nobel_prize",
+            "name": "airport",
             "schema": "target",
             "username": "pguser",
             "password": "pguser",
             "tables": [
                 {
-                    "tableName": "nobel_prize",
+                    "tableName": "airport",
                     "attributes": [
                         {
-                            "name": "nobel_prize_laureate",
+                            "name": "iata_code",
                             "type": "STRING",
                             "key": true
                         },
                         {
-                            "name": "nobel_prize",
+                            "name": "icao_code",
                             "type": "STRING",
                             "nullable": false
                         },
                         {
-                            "name": "nobel_prize_year",
-                            "type": "INTEGER",
-                            "nullable": true
-                        },
-                        {
-                            "name": "nationality",
+                            "name": "airport_name",
                             "type": "STRING",
-                            "key": true
+                            "nullable": false
                         },
                         {
-                            "name": "birth_year",
-                            "type": "INTEGER",
-                            "nullable": true
+                            "name": "standard_timezone",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "nation",
+                            "type": "STRING",
+                            "nullable": false
                         }
                     ]
                 }
             ]
         },
-        "results": "/llm-bench/qatch/nobel_prize"
+        "results": "/llm-bench/qatch/airport"
     }
 }

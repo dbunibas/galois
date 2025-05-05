@@ -114,12 +114,14 @@ public class TestBenchLLMQatch {
         List<String> expTabs = new ArrayList<>();
         for (String dbID : variants.keySet()) {
             System.out.println("DB:" + dbID);
+            if (!dbID.equalsIgnoreCase("video_game_publisher")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
                 List<Tuple> expected = testRunner.computeExpected("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", variant);
                 int cells = countCells(expected);
                 int attrs = countAttrs(expected);
-                String expTab = variant.getQueryNum() + "\t" + expected.size() + "\t" + cells + "\t" + attrs;
+//                String expTab = variant.getQueryNum() + "\t" + expected.size() + "\t" + cells + "\t" + attrs;
+                String expTab = variant.getQueryNum() + "\t" + expected.size()  + "\t" + attrs;
                 expTabs.add(expTab);
             }
         }
@@ -140,7 +142,8 @@ public class TestBenchLLMQatch {
 //            if (!dbID.equals("address")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
-//                if (!variant.getQueryNum().equals("Q56")) continue;
+//                if (!variant.getQueryNum().equals("Q7")) continue;
+//                if (!variant.getQueryNum().equalsIgnoreCase("Q73")) continue;
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
                 testRunner.executeSingle("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);

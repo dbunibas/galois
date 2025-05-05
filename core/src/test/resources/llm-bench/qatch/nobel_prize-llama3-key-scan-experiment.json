@@ -19,7 +19,7 @@
     "operatorsConfig": {
         "scan": {
             "queryExecutor": "togetherai-llama3-key-scan",
-            "maxIterations": 10
+            "maxIterations": 100
         }
     },
     "query": {
@@ -44,14 +44,14 @@
                             "nullable": false
                         },
                         {
+                            "name": "nobel_prize_year",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
                             "name": "nationality",
                             "type": "STRING",
                             "key": true
-                        },
-                        {
-                            "name": "birth_date",
-                            "type": "STRING",
-                            "nullable": true
                         },
                         {
                             "name": "birth_year",
