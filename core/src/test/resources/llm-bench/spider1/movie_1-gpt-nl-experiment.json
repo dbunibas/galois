@@ -1,0 +1,103 @@
+{
+  "name": "movie_1-{{QN}} gpt-nl Experiment",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "open-ai-nl",
+      "maxIterations": 10,
+      "naturalLanguagePrompt": "{{PROMPT}}"
+    }
+  },
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "movie_1",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "movie",
+          "attributes": [
+            {
+              "name": "mID",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "title",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "director",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "rating",
+          "attributes": [
+            {
+              "name": "rID",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "mID",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "stars",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "ratingDate",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "reviewer",
+          "attributes": [
+            {
+              "name": "rID",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/llm-bench/spider1/movie_1"
+  }
+}

@@ -17,11 +17,13 @@ public class CellPrecisionFilteredAttributes implements IMetric {
 
     @Override
     public Double getScore(IDatabase database, List<Tuple> expected, List<Tuple> result) {
-
-        if(expected.isEmpty() && result.isEmpty()) {
+        if ((result == null || result.isEmpty()) && !expected.isEmpty()) {
+            return 0.0;
+        }
+        if(expected.isEmpty() && (result == null || result.isEmpty())) {
             return 1.0;
         }
-
+        
         CellNormalizer cellNormalizer = new CellNormalizer();
 
         Set<String> expectedCells = new HashSet<>();
@@ -36,7 +38,7 @@ public class CellPrecisionFilteredAttributes implements IMetric {
         commonCells.retainAll(expectedCells);
 
         int totalCells = resultCells.size(); // excluded the OIDs
-
+        if (totalCells == 0) return 0.0;
         return (double) commonCells.size() / totalCells;
     }
 

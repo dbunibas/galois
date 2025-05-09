@@ -1,0 +1,169 @@
+{
+    "name": "world-{{QN}} gpt-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "open-ai-table",
+            "maxIterations": 10
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "world",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "country",
+                    "attributes": [
+                        {
+                            "name": "code",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "continent",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "region",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "surfacearea",
+                            "type": "REAL",
+                            "nullable": true
+                        },
+                        {
+                            "name": "indepyear",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "lifeexpectancy",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gnp",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gnpold",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "localname",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "governmentform",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "headofstate",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "capital",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "code2",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "countrylanguage",
+                    "attributes": [
+                        {
+                            "name": "countrycode",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "language",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "isofficial",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "percentage",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "city",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "countrycode",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "district",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/world"
+    }
+}

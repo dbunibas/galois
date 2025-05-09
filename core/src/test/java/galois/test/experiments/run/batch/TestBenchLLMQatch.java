@@ -61,47 +61,6 @@ public class TestBenchLLMQatch {
     }
 
     @Test
-    public void testGenerateSchema() {
-        String basefolder = "/Users/enzoveltri/git/galois/core/src/test/resources/llm-bench/qatch/";
-        String database = "world";
-        String folder = basefolder + "/" + database;
-        Set<String> listFiles = listFiles(folder);
-        ObjectMapper objectMapper = new ObjectMapper();
-        ArrayNode jsonArray = objectMapper.createArrayNode();
-        for (String fileName : listFiles) {
-            String filePath = folder + "/" + fileName;
-            try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-                String headerLine = br.readLine();
-                if (headerLine != null) {
-                    String[] headers = headerLine.split(",");
-                    ObjectNode tableNode = objectMapper.createObjectNode();
-                    tableNode.put("tableName", fileName.replace(".csv", ""));
-                    ArrayNode attributesArray = objectMapper.createArrayNode();
-                    for (String header : headers) {
-                        ObjectNode attributeNode = objectMapper.createObjectNode();
-                        attributeNode.put("name", header.replace("\"", "").trim());
-                        attributeNode.put("type", "STRING");
-                        attributeNode.put("nullable", true);
-                        attributesArray.add(attributeNode);
-                    }
-                    tableNode.set("attributes", attributesArray);
-                    jsonArray.add(tableNode);
-                }
-            } catch (IOException e) {
-                System.err.println("Error reading file: " + fileName);
-                e.printStackTrace();
-            }
-        }
-        try {
-            String jsonOutput = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonArray);
-            System.out.println(jsonOutput);
-        } catch (IOException e) {
-            System.err.println("Error writing JSON output");
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     public void testLoad() {
         for (String dbID : variants.keySet()) {
             System.out.println("DB:" + dbID);
@@ -114,7 +73,7 @@ public class TestBenchLLMQatch {
         List<String> expTabs = new ArrayList<>();
         for (String dbID : variants.keySet()) {
             System.out.println("DB:" + dbID);
-            if (!dbID.equalsIgnoreCase("video_game_publisher")) continue;
+//            if (!dbID.equalsIgnoreCase("video_game_publisher")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
                 List<Tuple> expected = testRunner.computeExpected("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", variant);
@@ -142,13 +101,14 @@ public class TestBenchLLMQatch {
 //            if (!dbID.equals("address")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
-//                if (!variant.getQueryNum().equals("Q7")) continue;
+//                if (!variant.getQueryNum().equals("Q116")) continue;
 //                if (!variant.getQueryNum().equalsIgnoreCase("Q73")) continue;
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
                 testRunner.executeSingle("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
 //                testRunner.executeSingle("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, allConditionPushdownWithFilter);
                 exportExcel.export(fileName, EXP_NAME, metrics, results);
+//                break;
             }
         }
         log.info("Results\n{}", printMap(results));

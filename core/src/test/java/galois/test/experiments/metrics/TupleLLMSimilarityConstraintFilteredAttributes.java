@@ -183,7 +183,7 @@ public class TupleLLMSimilarityConstraintFilteredAttributes implements IMetric {
         return blocking;
     }
 
-    private Key findMaxKey(Set<Key> keysInDB, List<Tuple> result) {
+    public static Key findMaxKey(Set<Key> keysInDB, List<Tuple> result) {
         int maxCoverage = 0;
         Key keyMax = null;
         for (Key key : keysInDB) {
@@ -197,7 +197,7 @@ public class TupleLLMSimilarityConstraintFilteredAttributes implements IMetric {
         return keyMax;
     }
 
-    private boolean match(Key key, Tuple tuple) {
+    private static boolean match(Key key, Tuple tuple) {
         for (AttributeRef attribute : key.getAttributes()) {
             if (tuple.getCell(attribute) == null) {
                 return false;
@@ -212,7 +212,7 @@ public class TupleLLMSimilarityConstraintFilteredAttributes implements IMetric {
 //            keyString += attribute.getName() + ": " + tuple.getCell(attribute) + ";";
             keyString += attribute.getName() + ": " + getCellFromAttr(tuple, attribute).getValue().getPrimitiveValue() + ";";
         }
-        return keyString;
+        return keyString.toLowerCase();
     }
     
     private Cell getCellFromAttr(Tuple tuple, AttributeRef aRef) {

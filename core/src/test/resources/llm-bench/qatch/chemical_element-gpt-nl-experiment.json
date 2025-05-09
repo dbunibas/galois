@@ -1,0 +1,86 @@
+{
+    "name": "chemical_elements-{{QN}} gpt-nl Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "open-ai-nl",
+            "maxIterations": 10,
+            "naturalLanguagePrompt": "{{PROMPT}}"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "chemical_element",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "chemical_element",
+                    "attributes": [
+                        {
+                            "name": "atomic_number",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "symbol",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "element",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "periodic_table_group",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "period",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "block",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "atomic_weight",
+                            "type": "REAL",
+                            "nullable": true
+                        },
+                        {
+                            "name": "origin",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "phase",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/chemical_element"
+    }
+}

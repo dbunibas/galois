@@ -1,0 +1,64 @@
+{
+    "name": "nobel_prize-{{QN}} gpt-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "open-ai-table",
+            "maxIterations": 10
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "nobel_prize",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "nobel_prize",
+                    "attributes": [
+                        {
+                            "name": "nobel_prize_laureate",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "nobel_prize",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "nobel_prize_year",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "nationality",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "birth_year",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/nobel_prize"
+    }
+}

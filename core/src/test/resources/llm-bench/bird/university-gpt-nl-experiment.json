@@ -1,0 +1,165 @@
+{
+    "name": "university-{{QN}} gpt-nl Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "open-ai-nl",
+            "maxIterations": 10,
+            "naturalLanguagePrompt": "{{PROMPT}}"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "university",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "university_year",
+                    "attributes": [
+                        {
+                            "name": "university_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "year",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "num_students",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "student_staff_ratio",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "pct_international_students",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "pct_female_students",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "university_ranking_year",
+                    "attributes": [
+                        {
+                            "name": "university_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "ranking_criteria_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "year",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "score",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "country",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "ranking_system",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "system_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "ranking_criteria",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "ranking_system_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "criteria_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "university",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "university_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/university"
+    }
+}

@@ -13,7 +13,7 @@
         "TupleCardinality",
         "TupleConstraintFilteredAttributes",
         "TupleSimilarityConstraintFilteredAttributes",
-        "TupleSimilarityConstraintFilteredAttributes"
+        "TupleCellSimilarityFilteredAttributes"
     ],
     "dbms": "postgres",
     "operatorsConfig": {

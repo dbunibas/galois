@@ -1,0 +1,137 @@
+{
+  "name": "architecture-{{QN}} gpt-nl Experiment",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "open-ai-nl",
+      "maxIterations": 10,
+      "naturalLanguagePrompt": "{{PROMPT}}"
+    }
+  },
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "architecture",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "architect",
+          "attributes": [
+            {
+              "name": "id",
+              "type": "STRING",
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "nationality",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "gender",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "bridge",
+          "attributes": [
+            {
+              "name": "architect_id",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "id",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "location",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "length_meters",
+              "type": "REAL",
+              "nullable": false
+            },
+            {
+              "name": "length_feet",
+              "type": "REAL",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "mill",
+          "attributes": [
+            {
+              "name": "architect_id",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "id",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "location",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "type",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "built_year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "notes",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        }   
+      ]
+    },
+    "results": "/llm-bench/spider1/architecture"
+  }
+}

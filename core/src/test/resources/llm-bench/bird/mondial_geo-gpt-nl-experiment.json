@@ -1,0 +1,900 @@
+{
+    "name": "mondial_geo-{{QN}} gpt-nl Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "open-ai-nl",
+            "maxIterations": 10,
+            "naturalLanguagePrompt": "{{PROMPT}}"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "mondial_geo",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "country",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "code",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "capital",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "REAL",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "borders",
+                    "attributes": [
+                        {
+                            "name": "country1",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country2",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "length",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "desert",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "longitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "latitude",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "target",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "target",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "island",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "islands",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "height",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "type",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "longitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "latitude",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "mergeswith",
+                    "attributes": [
+                        {
+                            "name": "sea1",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sea2",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "located",
+                    "attributes": [
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "river",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "lake",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sea",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "ismember",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "organization",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "type",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "river",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "river",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "lake",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sea",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "length",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sourcelongitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sourcelatitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "mountains",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "SourceAltitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "EstuaryLongitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "EstuaryLatitude",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "language",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "percentage",
+                            "type": "REAL",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "lake",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "depth",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "altitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "type",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "river",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "longitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "latitude",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "sea",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "depth",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_river",
+                    "attributes": [
+                        {
+                            "name": "river",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_sea",
+                    "attributes": [
+                        {
+                            "name": "sea",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "islandin",
+                    "attributes": [
+                        {
+                            "name": "island",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sea",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "lake",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "river",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "encompasses",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "continent",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "percentage",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "continent",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "REAL",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "province",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "capital",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "capprov",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_desert",
+                    "attributes": [
+                        {
+                            "name": "desert",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "organization",
+                    "attributes": [
+                        {
+                            "name": "abbreviation",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "established",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "locatedon",
+                    "attributes": [
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "island",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "population",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population_growth",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "infant_mortality",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_island",
+                    "attributes": [
+                        {
+                            "name": "island",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_source",
+                    "attributes": [
+                        {
+                            "name": "river",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_estuary",
+                    "attributes": [
+                        {
+                            "name": "river",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "religion",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "percentage",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "economy",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gdp",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "agriculture",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "service",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "industry",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "inflation",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_mountain",
+                    "attributes": [
+                        {
+                            "name": "mountain",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "ethnicgroup",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "percentage",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "city",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "longitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "latitude",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "politics",
+                    "attributes": [
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "independence",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "dependent",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "government",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "mountainonisland",
+                    "attributes": [
+                        {
+                            "name": "mountain",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "island",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_lake",
+                    "attributes": [
+                        {
+                            "name": "lake",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "mountain",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "mountains",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "height",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "type",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "longitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "latitude",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/mondial_geo"
+    }
+}

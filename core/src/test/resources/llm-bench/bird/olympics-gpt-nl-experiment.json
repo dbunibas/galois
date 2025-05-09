@@ -1,0 +1,250 @@
+{
+    "name": "olympics-{{QN}} gpt-nl Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "open-ai-nl",
+            "maxIterations": 10,
+            "naturalLanguagePrompt": "{{PROMPT}}"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "olympics",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "games_city",
+                    "attributes": [
+                        {
+                            "name": "games_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "city_id",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "city",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "city_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "person_region",
+                    "attributes": [
+                        {
+                            "name": "person_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "region_id",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "medal",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "medal_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "sport",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sport_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "games_competitor",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "games_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "person_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "age",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "event",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "sport_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "event_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "noc_region",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "noc",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "region_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "competitor_event",
+                    "attributes": [
+                        {
+                            "name": "event_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "competitor_id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "medal_id",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "games",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "games_year",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "games_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "season",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "person",
+                    "attributes": [
+                        {
+                            "name": "id",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "full_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gender",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "height",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "weight",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/olympics"
+    }
+}

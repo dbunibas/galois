@@ -26,8 +26,7 @@ public class CellSimilarityF1ScoreFilteredAttributes implements IMetric {
         CellSimilarityRecallFilteredAttributes recallMetric = new CellSimilarityRecallFilteredAttributes();
         Double recall = recallMetric.getScore(database, expected, result);
 
-        if(precision == null || recall == null || precision + recall == 0)
-            return null;
+        if(precision == null || recall == null || precision + recall == 0) return 0.0;
 
         return 2 * (precision * recall) / (precision + recall);
     }

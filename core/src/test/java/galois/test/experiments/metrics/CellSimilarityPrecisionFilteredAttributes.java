@@ -35,6 +35,7 @@ public class CellSimilarityPrecisionFilteredAttributes implements IMetric {
 
         double count = 0.0;
         double totCells = resultCells.size(); // exclude the OIDs
+        if (totCells == 0) return 0.0;
         double threshold;
 
         EditDistance editDist = new EditDistance();
@@ -51,7 +52,7 @@ public class CellSimilarityPrecisionFilteredAttributes implements IMetric {
 
         //System.out.println("Count: "+count);
         //System.out.println("Total Cells: "+totCells);
-
+         
         return count / totCells;
     }
 }

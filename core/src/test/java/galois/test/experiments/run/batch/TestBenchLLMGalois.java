@@ -23,6 +23,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import speedy.model.database.Tuple;
+import speedy.persistence.Types;
+import static speedy.persistence.Types.DOUBLE_PRECISION;
+import static speedy.persistence.Types.INTEGER;
+import static speedy.persistence.Types.LONG;
+import static speedy.persistence.Types.REAL;
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
@@ -56,20 +61,23 @@ public class TestBenchLLMGalois {
 
         }
     }
-    
+
     @Test
     public void testExpected() {
         List<String> expTabs = new ArrayList<>();
         for (String dbID : variants.keySet()) {
             System.out.println("DB:" + dbID);
-//            if (!dbID.equalsIgnoreCase("world1")) continue;
+            if (!dbID.equalsIgnoreCase("world1")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
                 List<Tuple> expected = testRunner.computeExpected("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", variant);
                 int cells = countCells(expected);
                 int attrs = countAttrs(expected);
-              String expTab = variant.getQueryNum() + "\t" + expected.size() + "\t" + cells + "\t" + attrs;
-//                String expTab = variant.getQueryNum() + "\t" + expected.size()  + "\t" + attrs;
+                int attrNumerical = countNumerical(expected);
+                int attrCategorical = countCategorical(expected, attrNumerical);
+
+//                String expTab = variant.getQueryNum() + "\t" + expected.size() + "\t" + cells + "\t" + attrs;
+                String expTab = variant.getQueryNum() + "\t" + attrNumerical + "\t" + attrCategorical;
 
                 expTabs.add(expTab);
             }
@@ -91,9 +99,10 @@ public class TestBenchLLMGalois {
 //            if (!dbID.equals("academic")) continue;
             List<ExpVariant> variantsForDB = variants.get(dbID);
             for (ExpVariant variant : variantsForDB) {
+//                if (!variant.getQueryNum().equalsIgnoreCase("Q2")) continue;
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
                 testRunner.execute("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-                testRunner.executeSingle("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-table-experiment.json","TABLE", variant, metrics, results,allConditionPushdownWithFilter);
+                testRunner.executeSingle("/llm-bench/" + EXP_NAME + "/" + dbID + "-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
                 exportExcel.export(fileName, EXP_NAME, metrics, results);
             }
         }
@@ -102,10 +111,10 @@ public class TestBenchLLMGalois {
 
     private Map<String, List<ExpVariant>> loadQuestions() {
         List<String> singleConditionOptimizers = List.of(
-//                "AllConditionsPushdownOptimizer",
+                //                "AllConditionsPushdownOptimizer",
                 "AllConditionsPushdownOptimizer-WithFilter"
         );
-        
+
         System.out.println("Open: " + QUERIES_PATH);
         try (FileInputStream fis = new FileInputStream(new File(QUERIES_PATH)); Workbook workbook = new XSSFWorkbook(fis)) {
             Map<String, List<ExpVariant>> queries = new HashMap<>();
@@ -148,25 +157,53 @@ public class TestBenchLLMGalois {
             return null;
         }
     }
-    
+
     private int countCells(List<Tuple> tuples) {
         int count = 0;
         for (Tuple tuple : tuples) {
             int cellsWithoutOID = tuple.getCells().size() - 1;
-            if (cellsWithoutOID > 0) count += cellsWithoutOID;
+            if (cellsWithoutOID > 0) {
+                count += cellsWithoutOID;
+            }
         }
         return count;
     }
-    
+
     private int countAttrs(List<Tuple> tuples) {
         int count = 0;
         if (tuples.size() > 0) {
             Tuple tuple = tuples.get(0);
             int cellsWithoutOID = tuple.getCells().size() - 1;
-            if (cellsWithoutOID > 0) return cellsWithoutOID;
+            if (cellsWithoutOID > 0) {
+                return cellsWithoutOID;
+            }
 
         }
         return count;
+    }
+
+    private int countNumerical(List<Tuple> tuples) {
+        int count = 0;
+        Tuple firstTuple = tuples.get(0);
+        String[] numericalTypes = {INTEGER, LONG, REAL, DOUBLE_PRECISION};
+        for (speedy.model.database.Cell cell : firstTuple.getCells()) {
+            if (cell.isOID()) {
+                continue;
+            }
+            for (String numericalType : numericalTypes) {
+                if (Types.checkType(numericalType, cell.getValue().getPrimitiveValue().toString())) {
+                    count++;
+                    System.out.println("Count numerical");
+                    break;
+                }
+            }
+        }
+        return count;
+    }
+
+    private int countCategorical(List<Tuple> tuples, int numerical) {
+        Tuple firstTuple = tuples.get(0);
+        return firstTuple.getCells().size() - 1 - numerical;
     }
 
 }
