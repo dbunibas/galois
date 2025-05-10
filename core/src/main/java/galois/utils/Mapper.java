@@ -82,10 +82,20 @@ public class Mapper {
     }
 
     public static String toCleanJsonObject(String response) {
+        response = cleaningReasoningResponse(response);
         return getContentBetween(response, "{", "}");
     }
 
+    private static String cleaningReasoningResponse(String response) {
+        if (response.contains("<think>") && response.contains("</think>")) {
+            String [] splits = response.split("</think>");
+            response = splits[splits.length - 1].trim();
+        }
+        return response;
+    }
+
     public static String toCleanJsonList(String response, boolean removeDuplicates) {
+        response = cleaningReasoningResponse(response);
         if(!response.contains("[") && !response.contains("]") && isBetween(response, "{", "}")){ //Single object
             response = "[" + response + "]";
         }
