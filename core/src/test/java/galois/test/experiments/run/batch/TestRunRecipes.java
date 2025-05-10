@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
-public class TestRunPeople {
+public class TestRunRecipes {
 
     private static final String EXP_NAME = "PEOPLE";
     private static final String RESULT_FILE_DIR = "src/test/resources/results/";
@@ -37,7 +37,7 @@ public class TestRunPeople {
     private final List<ExpVariant> variants;
     private String executorModel = "llama3";
 
-    public TestRunPeople() {
+    public TestRunRecipes() {
         List<String> singleConditionOptimizers = List.of(
                 "AllConditionsPushdownOptimizer",
                 "AllConditionsPushdownOptimizer-WithFilter"

@@ -32,10 +32,10 @@ public class TestBenchLLM {
     private static final String QUERIES_PATH = "src/test/resources/llm-bench/dataset.xlsx";
     private static final TestRunner testRunner = new TestRunner();
     private static final ExcelExporter exportExcel = new ExcelExporter();
-    private String executorModel = "llama3";
-    private String name = Constants.TOGETHERAI_MODEL;
-//    private String executorModel = "gpt";
-//    private String name = Constants.OPEN_AI_CHAT_MODEL_NAME.name();
+//    private String executorModel = "llama3";
+//    private String name = Constants.TOGETHERAI_MODEL;
+    private String executorModel = "gpt";
+    private String name = Constants.OPEN_AI_CHAT_MODEL_NAME;
 
     private List<ExpVariant> variants;
     private Map<String, VariantConfig> variantConfigs;
@@ -58,6 +58,7 @@ public class TestBenchLLM {
             testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
             exportExcel.export(fileName, dataset, metrics, results);
+            break;
         }
         log.info("Results\n{}", printMap(results));
 

@@ -48,12 +48,12 @@ public class ConversationalChainFactory {
         return new TogetherAIModel(apiKey, modelName, TogetherAIConstants.STREAM_MODE);
     }
 
-    public static ConversationalChain buildOpenAIConversationalChain(String apiKey, OpenAiChatModelName modelName) {
+    public static ConversationalChain buildOpenAIConversationalChain(String apiKey, String modelName) {
         ChatLanguageModel model = buildOpenAIChatLanguageModel(apiKey, modelName);
         return ConversationalChain.builder().chatLanguageModel(model).build();
     }
 
-    public static ChatLanguageModel buildOpenAIChatLanguageModel(String apiKey, OpenAiChatModelName modelName) {
+    public static ChatLanguageModel buildOpenAIChatLanguageModel(String apiKey, String modelName) {
         return OpenAiChatModel.builder()
                 .apiKey(apiKey)
                 .modelName(modelName)

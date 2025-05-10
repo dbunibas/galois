@@ -62,7 +62,7 @@ public class ConversationalRetrievalChainFactory {
         return oldPromptTemplate != null ? PromptTemplate.from(oldPromptTemplate.template().replaceAll("\\{\\{question}}", "{{userMessage}}").replaceAll("\\{\\{information}}", "{{contents}}")) : PromptTemplate.from("Answer the following question to the best of your ability: {{userMessage}}\n\nBase your answer on the following information:\n{{contents}}");
     }
 
-    public static Chain<String, String> buildOpenAIConversationalRetrievalChain(String apiKey, OpenAiChatModelName modelName, ContentRetriever contentRetriever) {
+    public static Chain<String, String> buildOpenAIConversationalRetrievalChain(String apiKey, String modelName, ContentRetriever contentRetriever) {
         ChatLanguageModel model = buildOpenAIChatLanguageModel(apiKey, modelName);
         return ConversationalRetrievalChain.builder()
                 .chatLanguageModel(model)
