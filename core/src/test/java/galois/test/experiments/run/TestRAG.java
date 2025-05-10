@@ -1,6 +1,5 @@
 package galois.test.experiments.run;
 
-import ai.djl.modality.nlp.embedding.TextEmbedding;
 import dev.langchain4j.data.document.Document;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;

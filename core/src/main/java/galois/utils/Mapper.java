@@ -96,6 +96,8 @@ public class Mapper {
 
     public static String toCleanJsonList(String response, boolean removeDuplicates) {
         response = cleaningReasoningResponse(response);
+        response = cleaningJsonProlog(response);
+        response = removeEmptyJsonObjects(response);
         if(!response.contains("[") && !response.contains("]") && isBetween(response, "{", "}")){ //Single object
             response = "[" + response + "]";
         }
@@ -129,6 +131,16 @@ public class Mapper {
             jsonList = removeDuplicates(jsonList);
         }
         return jsonList;
+    }
+
+    private static String removeEmptyJsonObjects(String response) {
+        return response.replaceAll("\\{}", "");
+    }
+
+    private static String cleaningJsonProlog(String response) {
+        response = response.replaceAll("```json", "");
+        response = response.replaceAll("```", "");
+        return response.trim();
     }
 
     private static String removeDuplicates(String jsonList) {

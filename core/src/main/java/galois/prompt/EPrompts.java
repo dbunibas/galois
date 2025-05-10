@@ -51,10 +51,12 @@ public enum EPrompts {
 
     FROM_TABLE_MISTRAL("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nInclude all the values that you know. Just report the table without any comment.", null, null, MistralTableEntitiesParser::parse),
 
-    FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
+//    FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
+    FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nAssume you have access to a dataset with the following schema:\n${jsonSchema}\n\nRespond with a JSON object containing only the answer. Do not include explanations or comments.", null, null, JSONEntitiesParser::parse),
 
     // Natural Language
-    NATURAL_LANGUAGE_JSON("${prompt}\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
+//    NATURAL_LANGUAGE_JSON("${prompt}\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
+    NATURAL_LANGUAGE_JSON("Question: ${prompt}\nAssume you have access to a dataset with the following schema:\n${jsonSchema}\n\nRespond with JSON only. Don't add any comment", null, null, JSONEntitiesParser::parse),
 
     // Iterative
     LIST_DIFFERENT_VALUES("List different values.", null, null, null),
