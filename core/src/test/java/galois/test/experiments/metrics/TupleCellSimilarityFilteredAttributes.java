@@ -19,6 +19,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
 
     private CellNormalizer normalizer = new CellNormalizer();
     private EditDistance editDist = new EditDistance();
+    private LLMDistance llmDistance = new LLMDistance();
 
     @Override
     public String getName() {
@@ -165,8 +166,10 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
                 String expectedNormalized = normalizer.normalize(expectedValue.getPrimitiveValue());
                 double threshold = expectedNormalized.length() * 0.1;
                 if (editDist.getScoreForCells(expectedNormalized, actualNormalized, threshold) == false) {
+                    String attributeName = cell.getAttribute()+": ";
+                    return llmDistance.areCellSimilar(attributeName +expectedNormalized, attributeName+ actualNormalized, null);
 //                    log.debug("Return false because: " + actualNormalized + " --- " + expectedNormalized);
-                    return false;
+//                    return false;
                 }
             }
         }
