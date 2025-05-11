@@ -8,6 +8,10 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -58,7 +62,6 @@ public class TestBenchLLM {
             testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
             exportExcel.export(fileName, dataset, metrics, results);
-            break;
         }
         log.info("Results\n{}", printMap(results));
 
@@ -111,6 +114,21 @@ public class TestBenchLLM {
             System.out.println("Error in loading queries - File: " + QUERIES_PATH);
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void exportConfidences(){
+        StringBuilder result = new StringBuilder("Query ID\tTABLE Conf\tSQL Conf\tNL Conf\n");
+        for (ExpVariant variant : this.variants) {
+            result.append(variant.getQueryNum()).append("\t");
+            result.append(testRunner.getConfidenceValue("TABLE", variant)).append("\t");
+            result.append(testRunner.getConfidenceValue("SQL", variant)).append("\t");
+            result.append(testRunner.getConfidenceValue("NL", variant)).append("\n");
+        }
+        log.info("### Confidences ##\n{}", result);
+        StringSelection selection = new StringSelection(result.toString());
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
     }
 
     private class VariantConfig {

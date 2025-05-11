@@ -1,17 +1,15 @@
 package galois.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-
-import static galois.utils.FunctionalUtils.orElseThrow;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.extern.slf4j.Slf4j;
+
+import static galois.utils.FunctionalUtils.orElseThrow;
 
 @Slf4j
 public class Mapper {

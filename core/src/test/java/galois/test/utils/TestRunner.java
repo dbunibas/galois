@@ -1,5 +1,6 @@
 package galois.test.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
@@ -13,6 +14,7 @@ import galois.optimizer.IndexedConditionPushdownOptimizer;
 import galois.optimizer.NullOptimizer;
 import galois.optimizer.QueryPlan;
 import galois.optimizer.estimators.ConfidenceEstimator;
+import galois.optimizer.estimators.ResultConfidenceEstimator;
 import galois.parser.ParserException;
 import galois.parser.ParserFrom;
 import galois.parser.ParserWhere;
@@ -24,31 +26,26 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.utils.GaloisDebug;
 import galois.utils.Mapper;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.expression.Expression;
+import org.jetbrains.annotations.NotNull;
+import speedy.model.database.*;
+import speedy.utility.SpeedyUtility;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import net.sf.jsqlparser.expression.Expression;
-import speedy.model.database.Attribute;
-import speedy.model.database.AttributeRef;
-import speedy.model.database.IDatabase;
-import speedy.model.database.ITable;
-import speedy.model.database.Key;
-import speedy.model.database.TableAlias;
-import speedy.model.database.Tuple;
-import speedy.utility.SpeedyUtility;
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class TestRunner {
+
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final ResultConfidenceEstimator resultConfidenceEstimator = new ResultConfidenceEstimator();
 
     // TODO: Turn into service
     public void execute(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, String resultFileDir, String resultFile) {
@@ -88,8 +85,8 @@ public class TestRunner {
             log.info("Results: {}", expResults);
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
+                exportResultAndConfidence(type, variant, expResults.get(expKey));
             }
-
             // Extract numbers after "Only results, same order: \n"
             /*String regex = "Only results, same order: \\n([\\d, ]+)-*$";
             Pattern pattern = Pattern.compile(regex);
@@ -196,12 +193,133 @@ public class TestRunner {
             log.info("Results: {}", expResults);
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
+                exportResultAndConfidence(type, variant, expResults.get(expKey));
             }
             return expResults;
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);
 //            throw new RuntimeException("Cannot run experiment: " + path, ioe);
             return null;
+        }
+    }
+
+    private void exportResultAndConfidence(String type, ExpVariant variant, ExperimentResults experimentResults) {
+        String modelName = getModelName();
+        log.debug("Exporting Result and Confidence - Type: {} Query id: {} Model: {} \n Query: {} \n Prompt: {} \nResult: {}", type, variant.getQueryNum(), modelName, variant.getQuerySql(), variant.getPrompt(), experimentResults.toDebugString());
+        String confidenceExportPath = getConfidenceResultPath(type, variant);
+        File confidenceExportFile = new File(confidenceExportPath);
+        confidenceExportFile.getParentFile().mkdirs();
+        ConfidenceResult confidenceResult = loadConfidenceResult(confidenceExportFile);
+        if (confidenceResult == null) {
+            confidenceResult = new ConfidenceResult();
+            confidenceResult.setSql(variant.getQuerySql());
+            confidenceResult.setPrompt(variant.getPrompt());
+            confidenceResult.setType(type);
+            confidenceResult.setQueryNum(variant.getQueryNum());
+            confidenceResult.setModelName(modelName);
+            confidenceResult.setTuples(filterResults(experimentResults.getActualResults(), experimentResults.getExpectedResults()));
+            confidenceResult.setExpected(linearizeTuples(experimentResults.getExpectedResults()));
+        }
+        if (confidenceResult.getConfidence() == null) {
+            log.debug("Computing confidence...");
+            String question = type.equalsIgnoreCase("SQL") ? variant.getQuerySql() : variant.getPrompt();
+            Double confidenceValue = resultConfidenceEstimator.estimateConfidence(question, confidenceResult.getTuples());
+            confidenceResult.setConfidence(confidenceValue);
+            saveConfidenceResult(confidenceExportFile, confidenceResult);
+        }
+        confidenceResult.setExpected(linearizeTuples(experimentResults.getExpectedResults()));
+        saveConfidenceResult(confidenceExportFile, confidenceResult);
+    }
+
+    private static @NotNull String getModelName() {
+        String modelName;
+        if (Constants.LLM_MODEL.equals(Constants.MODEL_LLAMA3)) {
+            modelName = Constants.TOGETHERAI_MODEL;
+        } else if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) {
+            modelName = Constants.OPEN_AI_CHAT_MODEL_NAME;
+        } else {
+            throw new IllegalArgumentException("Unknown model " + Constants.LLM_MODEL);
+        }
+        return modelName;
+    }
+
+    private String getConfidenceResultPath(String type, ExpVariant variant){
+        return Constants.EXPORT_EXCEL_PATH + "/confidence/" + variant.getQueryNum() + "-" + type + "-" + getModelName() + ".json";
+    }
+
+    public String getConfidenceValue(String type, ExpVariant variant) {
+        ConfidenceResult confidenceResult = loadConfidenceResult(new File(getConfidenceResultPath(type, variant)));
+        if(confidenceResult == null || confidenceResult.getConfidence() == null) return "";
+        return DecimalFormat.getInstance().format(confidenceResult.getConfidence());
+    }
+
+    private List<String> filterResults(List<Tuple> actualResults, List<Tuple> expectedResults) {
+        List<String> tupleList = new ArrayList<>();
+        for (Tuple actualResult : actualResults) {
+            if (actualResult == null) continue;
+            Tuple filteredTuple = filter(actualResult, getAttributeNames(expectedResults.getFirst()));
+            String tupleString = linearizeTuple(filteredTuple);
+            tupleList.add(tupleString);
+        }
+        log.trace("Original tuples: {}\nFiltered tuples: {}\nExpected results: {}", actualResults, tupleList, expectedResults);
+        return tupleList;
+    }
+
+    private List<String> linearizeTuples(List<Tuple> expectedResults) {
+        List<String> tupleList = new ArrayList<>();
+        for (Tuple expectedTuple : expectedResults) {
+            tupleList.add(linearizeTuple(expectedTuple));
+        }
+        return tupleList;
+    }
+
+    private String linearizeTuple(Tuple filteredTuple) {
+        return filteredTuple.getCells().stream()
+                .filter(c->!c.isOID())
+                .map(c -> c.getAttribute() + ": " + c.getValue())
+                .collect(Collectors.joining(" | ")).trim();
+    }
+
+    private List<String> getAttributeNames(Tuple firstTuple) {
+        List<Cell> cells = firstTuple.getCells();
+        List<String> attributeNames = new ArrayList<>();
+        for (Cell cell : cells) {
+            if (!cell.isOID()) {
+                attributeNames.add(cell.getAttribute());
+            }
+        }
+        return attributeNames;
+    }
+
+    private Tuple filter(Tuple tuple, List<String> expectedAttributes) {
+        Set<String> attributeSet = new HashSet<>(expectedAttributes);
+        Tuple filtered = new Tuple(tuple.getOid());
+        for (Cell cell : tuple.getCells()) {
+            if (attributeSet.contains(cell.getAttribute())) {
+                filtered.addCell(cell);
+            }
+        }
+        return filtered;
+    }
+
+    private ConfidenceResult loadConfidenceResult(File confidenceExportFile) {
+        if (!confidenceExportFile.canRead()) {
+            return null;
+        }
+        try {
+            return mapper.readValue(confidenceExportFile, ConfidenceResult.class);
+        } catch (IOException e) {
+            log.error("Unable to load confidence result", e);
+            return null;
+        }
+    }
+
+    private void saveConfidenceResult(File confidenceExportFile, ConfidenceResult confidenceResult) {
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(confidenceExportFile, confidenceResult);
+        } catch (IOException e) {
+            log.error("Unable to export confidence result", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -246,7 +364,7 @@ public class TestRunner {
 //            throw new RuntimeException("Cannot run experiment: " + path, ioe);
         }
     }
-    
+
     public void executeWithExpected(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, String resultFileDir, String resultFile, List<Tuple> expectedResults, IDatabase database, TableAlias tableAlias) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -573,7 +691,7 @@ public class TestRunner {
             }
             String endPrompt = "\n";
             endPrompt += """
-                          Respond with JSON only with a numerical property with name "cardinality".""";
+                    Respond with JSON only with a numerical property with name "cardinality".""";
             String promptNoPushDown = prompt + endPrompt;
             promptAllConditionPushDown += endPrompt;
             List<String> promptSingleConditionPushDown = new ArrayList<>();
@@ -803,5 +921,18 @@ public class TestRunner {
         public String toString() {
             return "DebugOptimizer{" + "optimizer=" + optimizer + ", prompt=" + prompt + '}';
         }
+    }
+
+    @Data
+    static
+    class ConfidenceResult {
+        private List<String> tuples;
+        private List<String> expected;
+        private Double confidence;
+        private String queryNum;
+        private String type;
+        private String modelName;
+        private String prompt;
+        private String sql;
     }
 }
