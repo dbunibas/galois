@@ -227,8 +227,6 @@ public class TestRunner {
             confidenceResult.setConfidence(confidenceValue);
             saveConfidenceResult(confidenceExportFile, confidenceResult);
         }
-        confidenceResult.setExpected(linearizeTuples(experimentResults.getExpectedResults()));
-        saveConfidenceResult(confidenceExportFile, confidenceResult);
     }
 
     private static @NotNull String getModelName() {
