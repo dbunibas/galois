@@ -11,7 +11,10 @@ import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.cache.CacheEntry;
 import galois.llm.query.utils.cache.LLMCache;
 import galois.utils.Mapper;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -22,20 +25,42 @@ public class LLMDistance {
     private TogetherAIModel llmModel = new TogetherAIModel(Constants.TOGETHERAI_API, modelName, true);
     private ObjectMapper objectMapper = Mapper.MAPPER;
     private Double thresholdForNumeric = 0.1;
-    
+
     private String promptCell = "Given the following two cells, identify if they represent the same real entity.\n"
             + "\n"
             + "cell1: $CELL_1$\n"
             + "cell2: $CELL_2$\n"
             + "\n"
             + "Answer only with 'yes' or 'no'.";
-    
+
     private String promptTuple = "Given the following two tuples, identify if they represent the same real entity.\n"
             + "\n"
             + "tuple1: $TUPLE_1$\n"
             + "tuple2: $TUPLE_2$\n"
             + "\n"
             + "Answer only with 'yes' or 'no'.";
+
+    private String promptCellPartitions = "Given a single value and an array of values in JSON format, identify and return the first value in the array that represents the same real-world entity as the single value. If multiple matches exist, return the first occurrence. If no match is found, return \\\"\\\". The result should be in JSON format with a 'result' property.\n"
+            + "\n"
+            + "Example Input:\n"
+            + "Attribute: country\n"
+            + "Single value: 'United States'\n"
+            + "Array: ['Italy', 'United States of America', 'USA', 'Germany']\n"
+            + "Example Output:\n"
+            + "{\\\"result\\\": 'United States of America'}\n"
+            + "\n"
+            + "Instructions:\n"
+            + "\n"
+            + "Input: A single value and a JSON array.\n"
+            + "Task: Find the first matching entity in the array.\n"
+            + "Output: Return the match in JSON object format or '{}' if none found. Respond with a JSON object containing only the answer. Do not include explanations or comments.\n"
+            + "\n"
+            + "Input:\n"
+            + "Attribute: $ATTRIBUTE$\n"
+            + "Single value: '$VALUE$'\n"
+            + "Array: [$ARRAY$]\n"
+            + "\n"
+            + "Output:\n";
 
     public boolean areCellSimilar(String expected, String actual, String commonSubstring) {
         if (expected == null || actual == null) {
@@ -91,7 +116,7 @@ public class LLMDistance {
         }
         return false;
     }
-    
+
     public boolean areTupleSimilar(String expected, String actual) {
         if (expected == null || actual == null) {
             return false;
@@ -137,6 +162,45 @@ public class LLMDistance {
 
         }
         return false;
+    }
+    
+    public String findSimilar(String attribute, String value, Set<String> candidates) {
+        //if (true) return null;
+        if (candidates.isEmpty()) return null;
+        String arrayString = candidates.stream().map(s -> "'" + s + "'").collect(Collectors.joining(","));
+        String prompt = promptCellPartitions.replace("$ATTRIBUTE$", attribute);
+        prompt = prompt.replace("$VALUE$", value);
+        prompt = prompt.replace("$ARRAY$", arrayString);
+        LLMCache llmCache = LLMCache.getInstance();
+//        log.error("Prompt: {}", prompt);
+        String response = null;
+        if (llmCache.containsQuery(prompt, 0, null, prompt)) {
+            //log.debug("Cache hit for {}, returning cached value!", editedPrompt);
+            CacheEntry entry = llmCache.getResponse(prompt, 0, null, prompt);
+            response = entry.response();
+        } else {
+            try {
+                TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
+                response = llmModel.getModelResponse(prompt);
+                llmCache.updateCache(prompt, 0, null, prompt, response, 0, 0, 0, 0);
+            } catch (Exception e) {
+                log.error("Exception in making the request: {}", e);
+            }
+        }
+        if (response == null || response.isBlank()) {
+            return null;
+        }
+        try {
+            ResponseTogetherAI responseAPI = objectMapper.readValue(response, ResponseTogetherAI.class);
+            Choice choice = responseAPI.getChoices().get(0);
+            Message message = choice.getMessage();
+            String content = message.getContent();
+            Map<String, Object> responseMap = Mapper.fromJsonToMap(content);
+            if (responseMap == null || responseMap.isEmpty()) return null;
+            return responseMap.get("result").toString();
+        } catch (Exception exception) {
+            return null;
+        }
     }
 
     private Number getNumber(String value) {

@@ -62,6 +62,9 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         for (String value : expectedPartition.keySet()) {
             List<Tuple> tuplesExpected = expectedPartition.get(value);
             List<Tuple> tuplesActual = resultPartition.get(value);
+            if (tuplesActual == null) {
+                tuplesActual = findPossibleMatchesWithDistance(value,attributeKey, resultPartition);
+            }
             if (tuplesActual != null) {
                 numerator += computeMatches(tuplesExpected, tuplesActual);   
             }
@@ -207,5 +210,12 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             }
         }
         return toReturn;
+    }
+
+    private List<Tuple> findPossibleMatchesWithDistance(String value, String attribute,  Map<String, List<Tuple>> resultPartition) {
+        Set<String> candidateValues = resultPartition.keySet();
+        String similarKeyValue = llmDistance.findSimilar(attribute, value, candidateValues);
+        if (similarKeyValue == null || similarKeyValue.isEmpty()) return null;
+        return resultPartition.get(similarKeyValue);
     }
 }
