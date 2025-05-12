@@ -167,6 +167,9 @@ public class LLMDistance {
     public String findSimilar(String attribute, String value, Set<String> candidates) {
         //if (true) return null;
         if (candidates.isEmpty()) return null;
+        if (getNumber(value) != null) {
+            return findNumericSimilar(attribute, value, candidates);
+        }
         String arrayString = candidates.stream().map(s -> "'" + s + "'").collect(Collectors.joining(","));
         String prompt = promptCellPartitions.replace("$ATTRIBUTE$", attribute);
         prompt = prompt.replace("$VALUE$", value);
@@ -205,11 +208,24 @@ public class LLMDistance {
 
     private Number getNumber(String value) {
         try {
+//            log.error("Value: " + value);
             Number number = NumberUtils.createNumber(value);
+//            log.error(number.toString());
             return number;
         } catch (NumberFormatException nfe) {
-            return null;
+            try {
+                value = value.replace(",", ".");
+                Number number = NumberUtils.createNumber(value);
+                return number;
+            } catch (NumberFormatException internalNfe) {
+                return null;
+            }
         }
+    }
+
+    private String findNumericSimilar(String attribute, String value, Set<String> candidates) {
+        Number nActual = getNumber(value);
+        return null;
     }
 
 }
