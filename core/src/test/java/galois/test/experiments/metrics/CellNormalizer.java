@@ -1,5 +1,6 @@
 package galois.test.experiments.metrics;
 
+import java.text.Normalizer;
 import java.util.regex.*;
 public class CellNormalizer {
 
@@ -18,7 +19,12 @@ public class CellNormalizer {
         } else if (cell instanceof String) {
             String strCell = (String) cell;
             strCell = strCell.replaceAll(",", "");
-
+            //Strip accent letters
+            strCell = java.text.Normalizer.normalize(strCell, Normalizer.Form.NFD);
+            strCell = strCell.replaceAll("[^\\p{ASCII}]", "");
+            strCell = strCell.replaceAll("\\p{M}", "");
+            strCell = strCell.replaceAll("'", "");
+            //------
             // Patterns for million, billion, and thousand
             Pattern millionPattern = Pattern.compile("(\\d+(\\.\\d+)?)\\s*(million|m)", Pattern.CASE_INSENSITIVE);
             Pattern billionPattern = Pattern.compile("(\\d+(\\.\\d+)?)\\s*(billion|b)", Pattern.CASE_INSENSITIVE);

@@ -99,6 +99,7 @@ public class LLMCache {
         }
         String fileName = getFileName(queryExecutor);
         File file = new File(fileName);
+        file.getParentFile().mkdirs();
         String updatedFileName = String.format("%s/cache-%s-updated.json", CACHE_DIR, executorName);
         File updatedFile = new File(updatedFileName);
 
