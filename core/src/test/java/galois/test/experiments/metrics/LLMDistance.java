@@ -69,9 +69,11 @@ public class LLMDistance {
         if (expected.equalsIgnoreCase(actual)) {
             return true;
         }
-        if (commonSubstring != null && getNumber(expected.replace(commonSubstring, "")) != null && getNumber(actual.replace(commonSubstring, "")) != null) {
+        log.error("Compare: " + actual + " --- " + expected + " **** " + commonSubstring);
+        if (commonSubstring != null && getNumber(expected.replace(commonSubstring, "").trim()) != null && getNumber(actual.replace(commonSubstring, "").trim()) != null) {
             Number nActual = getNumber(actual.replace(commonSubstring, ""));
             Number nExpected = getNumber(expected.replace(commonSubstring, ""));
+            log.error("Compare numerical values: " + nActual +  " ---" + nExpected);
             if (thresholdForNumeric != null) {
                 return Math.abs((nExpected.floatValue() - nActual.floatValue()) / nExpected.floatValue()) <= thresholdForNumeric;
             } else {
@@ -93,7 +95,9 @@ public class LLMDistance {
                 response = entry.response();
             } else {
                 try {
-                    TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
+//                    TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
+                    TimeUnit.MILLISECONDS.sleep((long) 100);
+                    log.error("compare using LLM: \n" + editedPrompt);
                     response = llmModel.getModelResponse(editedPrompt);
                     llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
                 } catch (Exception e) {
@@ -139,7 +143,8 @@ public class LLMDistance {
                 response = entry.response();
             } else {
                 try {
-                    TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
+//                    TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
+                    TimeUnit.MILLISECONDS.sleep((long) 100);
                     response = llmModel.getModelResponse(editedPrompt);
                     llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
                 } catch (Exception e) {
@@ -206,7 +211,7 @@ public class LLMDistance {
         }
     }
 
-    private Number getNumber(String value) {
+    public Number getNumber(String value) {
         try {
 //            log.error("Value: " + value);
             Number number = NumberUtils.createNumber(value);

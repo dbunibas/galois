@@ -20,6 +20,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
     private CellNormalizer normalizer = new CellNormalizer();
     private EditDistance editDist = new EditDistance();
     private LLMDistance llmDistance = new LLMDistance();
+    private double thresholdEditDistance = 0.1;
 
     @Override
     public String getName() {
@@ -35,8 +36,8 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             return 0.0;
         }
         List<String> expectedAttributes = getAttributeNames(expected.get(0));
-        
-        return computeScoreWithAttrWithMoreDistinctValues(expected, filterAttributes(result, expectedAttributes));
+        return computeScoreNoPartition(expected, filterAttributes(result, expectedAttributes));
+        //return computeScoreWithAttrWithMoreDistinctValues(expected, filterAttributes(result, expectedAttributes));
 
         /*Set<Key> keysInDB = new HashSet<>();
         keysInDB.addAll(database.getKeys());
@@ -48,28 +49,53 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             return computeScoreWithKey(key, expected, result);
         } */
     }
-
-    private Double computeScoreWithAttrWithMoreDistinctValues(List<Tuple> expected, List<Tuple> result) {
-        //Tuple firstTuple = expected.get(0);
-        
-        String attributeKey = getAttributeLikelyBeKey(expected);
-//        log.debug("Attribute Key: " + attributeKey);
-        int denominator = expected.size();
-        double numerator = 0;
-        
-        Map<String, List<Tuple>> expectedPartition = createPartitionByAttribute(expected, attributeKey);
-        Map<String, List<Tuple>> resultPartition = createPartitionByAttribute(result, attributeKey);
-        for (String value : expectedPartition.keySet()) {
-            List<Tuple> tuplesExpected = expectedPartition.get(value);
-            List<Tuple> tuplesActual = resultPartition.get(value);
-            if (tuplesActual == null) {
-                tuplesActual = findPossibleMatchesWithDistance(value,attributeKey, resultPartition);
+    
+    private Double computeScoreNoPartition(List<Tuple> expected, List<Tuple> result) {
+        if (expected.size() > result.size()) return computeScoreNoPartition(result, expected); 
+        double tp = 0;
+        Set<Tuple> matchedExpected = new HashSet<>();
+        Set<Tuple> matchedActual = new HashSet<>();
+        for (Tuple tupleActual : result) {
+            for (Tuple tupleExpected : expected) {
+                if (matchedExpected.contains(tupleExpected)) continue;
+                if (matchExact(tupleActual, tupleExpected)) {
+                    tp++;
+                    matchedExpected.add(tupleExpected);
+                    matchedActual.add(tupleActual);
+                    break;
+                }
             }
-            if (tuplesActual != null) {
-                numerator += computeMatches(tuplesExpected, tuplesActual);   
+            if (matchedActual.contains(tupleActual)) continue;
+            for (Tuple tupleExpected : expected) {
+                if (matchedExpected.contains(tupleExpected)) continue;
+                if (matchSimilar(tupleActual, tupleExpected)) {
+                    tp++;
+                    matchedExpected.add(tupleExpected);
+                    matchedActual.add(tupleActual);
+                    break;
+                }
             }
         }
-        return numerator / denominator;
+        for (Tuple tupleActual : result) {
+            if (matchedActual.contains(tupleActual)) continue;
+            for (Tuple tupleExpected : expected) {
+                if (matchedExpected.contains(tupleExpected)) continue;
+                if (matchSimilarLLM(tupleActual, tupleExpected)) {
+                    tp++;
+                    matchedExpected.add(tupleExpected);
+                    matchedActual.add(tupleActual);
+                    break;
+                }
+            }
+        }
+        double fp = result.size() - tp;
+        double fn = expected.size() - tp;
+        double precision = tp / (tp + fp);
+        double recall = tp / (tp + fn);
+        if ((tp + fp)== 0) precision = 0;
+        if ((tp + fn) == 0) recall = 0;
+        if ((precision + recall) == 0) return 0.0;
+        return (2 * precision * recall) / (precision + recall);
     }
 
     private String getAttributeLikelyBeKey(List<Tuple> expected) {
@@ -133,53 +159,68 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         }
         return null;
     }
-    
-    private int computeMatches(List<Tuple> expected, List<Tuple> actual) {
-        int counter = 0;
-        List<Tuple> te = new ArrayList<>(expected);
-        List<Tuple> ta = new ArrayList<>(actual);
-        Iterator<Tuple> iteratorExpected = te.iterator();
-        Iterator<Tuple> iteratorActual = ta.iterator();
-        while (iteratorExpected.hasNext()) {
-            Tuple tupleExpected = iteratorExpected.next();
-            while (iteratorActual.hasNext()) {
-                Tuple tupleActual = iteratorActual.next();
-                if (match(tupleActual, tupleExpected)) {
-                    counter++;
-                    iteratorActual.remove();
-                    if (tupleExpected != null) {
-                        iteratorExpected.remove();
-                    }
-                    break;
-                }
-            }
-
+   
+    private boolean matchExact(Tuple tupleActual, Tuple tupleExpected) {
+        if (tupleActual == null || tupleExpected == null) return false;
+        if (tupleActual.toStringNoOID().equalsIgnoreCase(tupleExpected.toStringNoOID())) {
+            log.error("Actual: " + tupleActual.toStringNoOID());
+            log.error("Expected: " + tupleExpected.toStringNoOID());
+            log.error("------------------------------");
+            log.info("MATCH exact");
+            return true;
         }
-        return counter;
+        return false;
     }
 
-    private boolean match(Tuple tupleActual, Tuple tupleExpected) {
-//        log.debug("Match: " + tupleActual + " vs " + tupleExpected);
+    private boolean matchSimilar(Tuple tupleActual, Tuple tupleExpected) {
         if (tupleActual == null || tupleExpected == null) return false;
+        List<String> categoricalAttributes = new ArrayList<>();
+        List<String> numericalAttributes = new ArrayList<>();
+        findTypes(tupleActual, categoricalAttributes, numericalAttributes);
+        log.error("Numerical Attributes: " + numericalAttributes);
+        log.error("Categorical Attributes: " + categoricalAttributes);
+        if (!checkNumericalAttributes(tupleActual, tupleExpected, numericalAttributes)) {
+            log.error("NON MATCH due to numerical values");
+            return false;
+        }
+        String signatureActual = generateSignatureNormalizeCategorical(tupleActual, categoricalAttributes);
+        String signatureExpected = generateSignatureNormalizeCategorical(tupleExpected, categoricalAttributes);
+        if (editDist.getScoreForCells(signatureExpected, signatureActual, thresholdEditDistance)) {
+            log.error("MATCH SIGNATURE and CHECK NUMERICAL");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean matchSimilarLLM(Tuple tupleActual, Tuple tupleExpected) {
+        if (tupleActual == null || tupleExpected == null) {
+            return false;
+        }
+        List<String> categoricalAttributes = new ArrayList<>();
+        List<String> numericalAttributes = new ArrayList<>();
+        findTypes(tupleActual, categoricalAttributes, numericalAttributes);
+        log.error("Numerical Attributes: " + numericalAttributes);
+        log.error("Categorical Attributes: " + categoricalAttributes);
+        if (!checkNumericalAttributes(tupleActual, tupleExpected, numericalAttributes)) {
+            log.error("NON MATCH due to numerical values");
+            return false;
+        }
+        log.error("Starting Check using LLM Similarity");
         for (Cell cell : tupleActual.getCells()) {
             if (!cell.isOID()) {
                 Object actualValue = cell.getValue().getPrimitiveValue();
                 IValue expectedValue = getValueForAttr(tupleExpected, cell.getAttribute());
                 String actualNormalized = normalizer.normalize(actualValue);
                 String expectedNormalized = normalizer.normalize(expectedValue.getPrimitiveValue());
-                double threshold = expectedNormalized.length() * 0.1;
-                if (editDist.getScoreForCells(expectedNormalized, actualNormalized, threshold) == false) {
-                    String attributeName = cell.getAttribute()+": ";
-                    return llmDistance.areCellSimilar(attributeName +expectedNormalized, attributeName+ actualNormalized, null);
-//                    log.debug("Return false because: " + actualNormalized + " --- " + expectedNormalized);
-//                    return false;
+                String attributeName = cell.getAttribute() + ": ";
+                if (!llmDistance.areCellSimilar(attributeName + expectedNormalized, attributeName + actualNormalized, attributeName)) {
+                    return false;
                 }
             }
         }
-//        log.debug("Return True");
         return true;
     }
-
+    
     private List<Tuple> filterAttributes(List<Tuple> resultOriginal, List<String> expectedAttributes) {
         List<Tuple> result = new ArrayList<>();
         for (Tuple tuple : resultOriginal) {
@@ -218,4 +259,43 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         if (similarKeyValue == null || similarKeyValue.isEmpty()) return null;
         return resultPartition.get(similarKeyValue);
     }
+
+    private void findTypes(Tuple tuple, List<String> categoricalAttributes, List<String> numericalAttributes) {
+        for (Cell cell : tuple.getCells()) {
+            if (cell.isOID()) continue;
+            if (llmDistance.getNumber(cell.getValue().getPrimitiveValue().toString()) == null) {
+                categoricalAttributes.add(cell.getAttribute());
+            } else {
+                numericalAttributes.add(cell.getAttribute());
+            }
+        }
+    }
+    
+    private String generateSignatureNormalizeCategorical(Tuple tuple, List<String> categoricalAttributes) {
+        String signature = "";
+        for (String categoricalAttribute : categoricalAttributes) {
+            signature += categoricalAttribute + "= "+ normalizer.normalize(getValueForAttr(tuple, categoricalAttribute).getPrimitiveValue().toString()) + ", ";
+        }
+        signature = signature.trim();
+        return signature.substring(0, signature.length() - 1);
+    }
+    
+    private boolean checkNumericalAttributes(Tuple actual, Tuple expected, List<String> numericalAttributes) {
+        for (String numericalAttribute : numericalAttributes) {
+            IValue actualValue = getValueForAttr(actual, numericalAttribute);
+            IValue expectedValue = getValueForAttr(expected, numericalAttribute);
+            log.error("Compare: " + actualValue + "---" + expectedValue);
+            if (!llmDistance.areCellSimilar(expectedValue.getPrimitiveValue().toString(), actualValue.getPrimitiveValue().toString(), "")) return false;
+        }
+        return true;
+    }
+
+    private List<Tuple> getNonMatched(List<Tuple> actual, Set<Tuple> matched) {
+        List<Tuple> nonMatched = new ArrayList<>();
+        for (Tuple tuple : actual) {
+            if (!matched.contains(tuple)) nonMatched.add(tuple);
+        }
+        return nonMatched;
+    }
+
 }
