@@ -212,6 +212,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
                 IValue expectedValue = getValueForAttr(tupleExpected, cell.getAttribute());
                 String actualNormalized = normalizer.normalize(actualValue);
                 String expectedNormalized = normalizer.normalize(expectedValue.getPrimitiveValue());
+                if (actualNormalized.equalsIgnoreCase("null") || expectedNormalized.equalsIgnoreCase("null")) return false;
                 String attributeName = cell.getAttribute() + ": ";
                 if (!llmDistance.areCellSimilar(attributeName + expectedNormalized, attributeName + actualNormalized, attributeName)) {
                     return false;

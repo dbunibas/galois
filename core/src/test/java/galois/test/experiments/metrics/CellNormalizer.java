@@ -52,7 +52,7 @@ public class CellNormalizer {
             }
         } else {
             // Handle other types if necessary
-            return cell.toString();
+            return cell.toString().toLowerCase();
         }
     }
 
