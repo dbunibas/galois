@@ -69,11 +69,11 @@ public class LLMDistance {
         if (expected.equalsIgnoreCase(actual)) {
             return true;
         }
-        log.error("Compare: " + actual + " --- " + expected + " **** " + commonSubstring);
+//        log.error("Compare: " + actual + " --- " + expected + " **** " + commonSubstring);
         if (commonSubstring != null && getNumber(expected.replace(commonSubstring, "").trim()) != null && getNumber(actual.replace(commonSubstring, "").trim()) != null) {
             Number nActual = getNumber(actual.replace(commonSubstring, ""));
             Number nExpected = getNumber(expected.replace(commonSubstring, ""));
-            log.error("Compare numerical values: " + nActual +  " ---" + nExpected);
+//            log.error("Compare numerical values: " + nActual +  " ---" + nExpected);
             if (thresholdForNumeric != null) {
                 return Math.abs((nExpected.floatValue() - nActual.floatValue()) / nExpected.floatValue()) <= thresholdForNumeric;
             } else {
@@ -97,7 +97,7 @@ public class LLMDistance {
                 try {
 //                    TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
                     TimeUnit.MILLISECONDS.sleep((long) 100);
-                    log.error("compare using LLM: \n" + editedPrompt);
+//                    log.error("compare using LLM: \n" + editedPrompt);
                     response = llmModel.getModelResponse(editedPrompt);
                     llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
                 } catch (Exception e) {

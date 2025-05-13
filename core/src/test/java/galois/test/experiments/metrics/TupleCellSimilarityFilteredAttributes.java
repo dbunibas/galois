@@ -163,10 +163,10 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
     private boolean matchExact(Tuple tupleActual, Tuple tupleExpected) {
         if (tupleActual == null || tupleExpected == null) return false;
         if (tupleActual.toStringNoOID().equalsIgnoreCase(tupleExpected.toStringNoOID())) {
-            log.error("Actual: " + tupleActual.toStringNoOID());
-            log.error("Expected: " + tupleExpected.toStringNoOID());
-            log.error("------------------------------");
-            log.info("MATCH exact");
+//            log.error("Actual: " + tupleActual.toStringNoOID());
+//            log.error("Expected: " + tupleExpected.toStringNoOID());
+//            log.error("------------------------------");
+//            log.info("MATCH exact");
             return true;
         }
         return false;
@@ -177,16 +177,16 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         List<String> categoricalAttributes = new ArrayList<>();
         List<String> numericalAttributes = new ArrayList<>();
         findTypes(tupleActual, categoricalAttributes, numericalAttributes);
-        log.error("Numerical Attributes: " + numericalAttributes);
-        log.error("Categorical Attributes: " + categoricalAttributes);
+//        log.error("Numerical Attributes: " + numericalAttributes);
+//        log.error("Categorical Attributes: " + categoricalAttributes);
         if (!checkNumericalAttributes(tupleActual, tupleExpected, numericalAttributes)) {
-            log.error("NON MATCH due to numerical values");
+//            log.error("NON MATCH due to numerical values");
             return false;
         }
         String signatureActual = generateSignatureNormalizeCategorical(tupleActual, categoricalAttributes);
         String signatureExpected = generateSignatureNormalizeCategorical(tupleExpected, categoricalAttributes);
         if (editDist.getScoreForCells(signatureExpected, signatureActual, thresholdEditDistance)) {
-            log.error("MATCH SIGNATURE and CHECK NUMERICAL");
+//            log.error("MATCH SIGNATURE and CHECK NUMERICAL");
             return true;
         }
         return false;
@@ -199,13 +199,13 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         List<String> categoricalAttributes = new ArrayList<>();
         List<String> numericalAttributes = new ArrayList<>();
         findTypes(tupleActual, categoricalAttributes, numericalAttributes);
-        log.error("Numerical Attributes: " + numericalAttributes);
-        log.error("Categorical Attributes: " + categoricalAttributes);
+//        log.error("Numerical Attributes: " + numericalAttributes);
+//        log.error("Categorical Attributes: " + categoricalAttributes);
         if (!checkNumericalAttributes(tupleActual, tupleExpected, numericalAttributes)) {
-            log.error("NON MATCH due to numerical values");
+//            log.error("NON MATCH due to numerical values");
             return false;
         }
-        log.error("Starting Check using LLM Similarity");
+//        log.error("Starting Check using LLM Similarity");
         for (Cell cell : tupleActual.getCells()) {
             if (!cell.isOID()) {
                 Object actualValue = cell.getValue().getPrimitiveValue();
