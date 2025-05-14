@@ -1,6 +1,5 @@
 package galois.optimizer.estimators;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class ResultConfidenceEstimator {

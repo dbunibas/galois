@@ -1,18 +1,9 @@
 package galois.test.experiments.metrics;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import speedy.model.database.Cell;
-import speedy.model.database.IDatabase;
-import speedy.model.database.IValue;
-import speedy.model.database.Key;
-import speedy.model.database.Tuple;
+import speedy.model.database.*;
+
+import java.util.*;
 
 @Slf4j
 public class TupleCellSimilarityFilteredAttributes implements IMetric {
@@ -36,6 +27,8 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             return 0.0;
         }
         List<String> expectedAttributes = getAttributeNames(expected.get(0));
+//        List<String> expectedAttributes = Arrays.asList("surname");
+//        List<String> expectedAttributes = Arrays.asList("surname", "jersey_number_euro2016");
         return computeScoreNoPartition(expected, filterAttributes(result, expectedAttributes));
         //return computeScoreWithAttrWithMoreDistinctValues(expected, filterAttributes(result, expectedAttributes));
 
@@ -221,7 +214,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         }
         return true;
     }
-    
+
     private List<Tuple> filterAttributes(List<Tuple> resultOriginal, List<String> expectedAttributes) {
         List<Tuple> result = new ArrayList<>();
         for (Tuple tuple : resultOriginal) {
@@ -254,7 +247,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         return toReturn;
     }
 
-    private List<Tuple> findPossibleMatchesWithDistance(String value, String attribute,  Map<String, List<Tuple>> resultPartition) {
+    private List<Tuple> findPossibleMatchesWithDistance(String value, String attribute, Map<String, List<Tuple>> resultPartition) {
         Set<String> candidateValues = resultPartition.keySet();
         String similarKeyValue = llmDistance.findSimilar(attribute, value, candidateValues);
         if (similarKeyValue == null || similarKeyValue.isEmpty()) return null;
@@ -271,21 +264,21 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             }
         }
     }
-    
+
     private String generateSignatureNormalizeCategorical(Tuple tuple, List<String> categoricalAttributes) {
-        String signature = "";
+        StringBuilder signature = new StringBuilder();
         for (String categoricalAttribute : categoricalAttributes) {
-            signature += categoricalAttribute + "= "+ normalizer.normalize(getValueForAttr(tuple, categoricalAttribute).getPrimitiveValue().toString()) + ", ";
+            signature.append(categoricalAttribute).append("= ").append(normalizer.normalize(getValueForAttr(tuple, categoricalAttribute).getPrimitiveValue().toString())).append(", ");
         }
-        signature = signature.trim();
+        signature = new StringBuilder(signature.toString().trim());
         return signature.substring(0, signature.length() - 1);
     }
-    
+
     private boolean checkNumericalAttributes(Tuple actual, Tuple expected, List<String> numericalAttributes) {
         for (String numericalAttribute : numericalAttributes) {
             IValue actualValue = getValueForAttr(actual, numericalAttribute);
             IValue expectedValue = getValueForAttr(expected, numericalAttribute);
-            log.error("Compare: " + actualValue + "---" + expectedValue);
+            log.trace("Compare: {} -- {}", actualValue, expectedValue);
             if (!llmDistance.areCellSimilar(expectedValue.getPrimitiveValue().toString(), actualValue.getPrimitiveValue().toString(), "")) return false;
         }
         return true;
