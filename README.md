@@ -10,6 +10,13 @@ In addition, the following tools/subscriptions are needed:
 - **TogetherAI API Key** - optional - A valid subscription on TogetherAI is needed to run larger models (as `llama3.1:70b`), or to run RAG experiments. In order to use TogetherAI, the `TOGETHERAI_API` need to be specified.
 - **ChromaDB** - optional - Needed only for RAG experiments
 
+To simplify project startup, a `docker-compose.yml` file containing all the necessary tools is available in the repository.
+
+```shell
+cd docker
+docker-compose up -d
+```
+
 ### Datasets
 All datasets are available in the [resources](core/src/test/resources) folder
 
