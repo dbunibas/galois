@@ -270,6 +270,9 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         for (String categoricalAttribute : categoricalAttributes) {
             signature.append(categoricalAttribute).append("= ").append(normalizer.normalize(getValueForAttr(tuple, categoricalAttribute).getPrimitiveValue().toString())).append(", ");
         }
+        if(signature.toString().trim().isEmpty()){
+            return "";
+        }
         signature = new StringBuilder(signature.toString().trim());
         return signature.substring(0, signature.length() - 1);
     }
@@ -278,6 +281,12 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         for (String numericalAttribute : numericalAttributes) {
             IValue actualValue = getValueForAttr(actual, numericalAttribute);
             IValue expectedValue = getValueForAttr(expected, numericalAttribute);
+            if(actualValue == null && expectedValue == null){
+                return true;
+            }
+            if(actualValue == null || expectedValue == null){
+                return false;
+            }
             log.trace("Compare: {} -- {}", actualValue, expectedValue);
             if (!llmDistance.areCellSimilar(expectedValue.getPrimitiveValue().toString(), actualValue.getPrimitiveValue().toString(), "")) return false;
         }
