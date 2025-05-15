@@ -1,0 +1,316 @@
+{
+    "name": "Soccer-{{QN}} Experiment-table",
+    "metrics": [
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "open-ai-table",
+            "maxIterations": 10,
+            "normalizationStrategy": "lowerCase"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY-SQL}}",
+        "schema": {
+            "name": "soccer",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "italy_euro2016_squad",
+                    "attributes": [
+                        {
+                            "name": "surname",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "jersey_number_euro2016",
+                            "type": "INTEGER",
+                            "nullable": false
+                        },
+                        {
+                            "name": "date_of_birth_iso",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "club_serie_a_2016_2017",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2016_2017",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2016_2017",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2016_2017",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2016_2017",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2016_2017",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "club_serie_a_2012_2013",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2012_2013",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2012_2013",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2012_2013",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2012_2013",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2012_2013",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "club_serie_a_2013_2014",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2013_2014",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2013_2014",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2013_2014",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2013_2014",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2013_2014",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "club_serie_a_2014_2015",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2014_2015",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2014_2015",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2014_2015",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2014_2015",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2014_2015",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "club_serie_a_2015_2016",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2015_2016",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2015_2016",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2015_2016",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2015_2016",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2015_2016",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "club_serie_a_2017_2018",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2017_2018",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2017_2018",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2017_2018",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2017_2018",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2017_2018",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "club_serie_a_2018_2019",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2018_2019",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2018_2019",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2018_2019",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2018_2019",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2018_2019",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "club_serie_a_2019_2020",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2019_2020",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2019_2020",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2019_2020",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2019_2020",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2019_2020",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "club_serie_a_2020_2021",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "appearances_serie_a_2020_2021",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "goals_serie_a_2020_2021",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "assists_serie_a_2020_2021",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "yellow_cards_serie_a_2020_2021",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "red_cards_serie_a_2020_2021",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/soccer/italy_euro2016_squad"
+    }
+}
