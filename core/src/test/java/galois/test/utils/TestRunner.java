@@ -231,12 +231,10 @@ public class TestRunner {
 
     private static @NotNull String getModelName() {
         String modelName;
-        if (Constants.LLM_MODEL.equals(Constants.MODEL_LLAMA3)) {
-            modelName = Constants.TOGETHERAI_MODEL;
-        } else if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) {
+        if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) {
             modelName = Constants.OPEN_AI_CHAT_MODEL_NAME;
         } else {
-            throw new IllegalArgumentException("Unknown model " + Constants.LLM_MODEL);
+            modelName = Constants.TOGETHERAI_MODEL;
         }
         return modelName;
     }
