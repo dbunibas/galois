@@ -28,7 +28,7 @@ public class AllConditionsPushdownOptimizer implements IOptimizer {
     @Override
     public IAlgebraOperator optimize(IDatabase database, String sql, IAlgebraOperator query) {
         // TODO: Add scan to abstract component
-        log.warn("Naïve implementation, for testing purposes only!");
+        log.info("Naïve implementation, for testing purposes only!");
         IAlgebraOperator root = query.clone();
         IAlgebraOperator currentNode = root;
         while (currentNode != null) {

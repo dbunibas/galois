@@ -47,7 +47,6 @@ public class TestRunner {
     private final ObjectMapper mapper = new ObjectMapper();
     private final ResultConfidenceEstimator resultConfidenceEstimator = new ResultConfidenceEstimator();
 
-    // TODO: Turn into service
     public void execute(String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, String resultFileDir, String resultFile) {
         try {
             log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
@@ -82,7 +81,7 @@ public class TestRunner {
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
             var expResults = experiment.execute();
-            log.info("Results: {}", expResults);
+            log.debug("Results: {}", expResults);
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
                 exportResultAndConfidence(type, variant, expResults.get(expKey));
@@ -154,7 +153,7 @@ public class TestRunner {
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
             var expResults = experiment.executeGalois(dbConfidence, confidenceThreshold, removeFromAlgebraTree);
-            log.info("Results: {}", expResults);
+            log.debug("Results: {}", expResults);
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
             }
@@ -190,7 +189,7 @@ public class TestRunner {
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
             var expResults = experiment.executeSingle(optimizer);
-            log.info("Results: {}", expResults);
+            log.debug("Results: {}", expResults);
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
                 exportResultAndConfidence(type, variant, expResults.get(expKey));
@@ -351,7 +350,7 @@ public class TestRunner {
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
             var expResults = experiment.executeSingle(optimizer);
-            log.info("Results: {}", expResults);
+            log.debug("Results: {}", expResults);
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
             }
@@ -393,7 +392,7 @@ public class TestRunner {
             metrics.clear();
             metrics.addAll(experiment.getMetrics());
             var expResults = experiment.executeWithExpected(expectedResults, queryExecutor, database, tableAlias);
-            log.info("Results: {}", expResults);
+            log.debug("Results: {}", expResults);
             for (String expKey : expResults.keySet()) {
                 queryResults.put(type + "-" + expKey, expResults.get(expKey));
             }

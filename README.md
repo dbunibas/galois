@@ -1,41 +1,34 @@
-# Galois
+# RelationalFactQA
+### A Benchmark for Evaluating Tabular Fact Retrieval from Large Language Models
 
 
 ### Requirements
+RelationalFactQA is part of Galois.
 Galois is written in Java, and require a working JDK (>=21).
 
 In addition, the following tools/subscriptions are needed:
 - **PostgreSQL** - required for all projects
-- **Ollama** - required to run experiments locally. In order to use Ollama. Note that Ollama might have low perfomances on some hosts, and it is suggested only for small models (e.g.: llama3.1:8b).
-- **TogetherAI API Key** - optional - A valid subscription on TogetherAI is needed to run larger models (as `llama3.1:70b`), or to run RAG experiments. In order to use TogetherAI, the `TOGETHERAI_API` need to be specified.
-- **ChromaDB** - optional - Needed only for RAG experiments
+- **OpenAI API Key** - optional - A valid subscription on OpenAI is needed to run proprietary models (as `gpt-4.1`). In order to use OpenAI, the `Constants.EXECUTOR` should be set to `TOGETHERAI_EXECUTOR`, and the `TOGETHERAI_API` need to be specified.
+- **TogetherAI API Key** - optional - A valid subscription on TogetherAI is needed to run larger models (as `llama3.1:70b`), or to run RAG experiments. In order to use TogetherAI, the `Constants.EXECUTOR` should be set to `TOGETHERAI_EXECUTOR`, and the `TOGETHERAI_API` need to be specified.
 
-To simplify project startup, a `docker-compose.yml` file containing all the necessary tools is available in the repository.
+To simplify project startup, a `docker-compose.yml` file containing a postgres DBMS is available in the repository.
 
 ```shell
 cd docker
-docker-compose up -d
+docker compose up -d
 ```
 
-### Datasets
-All datasets are available in the [resources](core/src/test/resources) folder
+This command will start PostgreSQL in the background. 
 
-### Experiments
-The project contains several Experiments. For each experiments, queries and prompt are defined in the corresponding test executor classes:
-- [TestRunFlight2Batch](core/src/test/java/galois/test/experiments/run/batch/TestRunFlight2Batch.java)
-- [TestRunFlight4Batch](core/src/test/java/galois/test/experiments/run/batch/TestRunFlight4Batch.java)
-- [TestRunMoviesBatch](core/src/test/java/galois/test/experiments/run/batch/TestRunMoviesBatch.java)
-- [TestRunRAGFortuneBatch](core/src/test/java/galois/test/experiments/run/batch/TestRunRAGFortuneBatch.java)
-- [TestRunRAGPremierLeagueBatch](core/src/test/java/galois/test/experiments/run/batch/TestRunRAGPremierLeagueBatch.java)
-- [TestRunSpiderGeoBatch](core/src/test/java/galois/test/experiments/run/batch/TestRunSpiderGeoBatch.java)
-- [TestRunUSAPresidentsBatch](core/src/test/java/galois/test/experiments/run/batch/TestRunUSAPresidentsBatch.java)
-- [TestRunVenezuelaPresidentsBatch](core/src/test/java/galois/test/experiments/run/batch/TestRunVenezuelaPresidentsBatch.java)
-- [TestRunWorld1Batch](core/src/test/java/galois/test/experiments/run/batch/TestRunWorld1Batch.java)
+### How to Run Experiments
 
-### How to run an experiment
+All 696 queries in the benchmark can be automatically executed using the [`TestBenchLLM`](core/src/test/java/galois/test/experiments/run/batch/TestBenchLLM.java) class.
 
-`./gradlew -i :core:test --tests "galois.test.experiments.run.batch.<EXPERIMENT-TO-EXECUTE>"`
+By default, the test runs all queries listed in the Excel file specified by the `TestBenchLLM.QUERIES_PATH` property.  
+You can also create a custom Excel file with a subset of queries if you want to run a smaller experiment.
 
-For example
+The language model used for the experiments is defined by the `Constants.SELECTED_MODEL` property. You can change this to select a different model (e.g., GPT, LLaMA).
 
-`./gradlew -i :core:test --tests "galois.test.experiments.run.batch.TestRunFlight2Batch"`
+Once the project is properly configured, you can launch the benchmark with the following command:
+
+`./gradlew -i :core:test --rerun --tests "galois.test.experiments.run.batch.TestBenchLLM"`

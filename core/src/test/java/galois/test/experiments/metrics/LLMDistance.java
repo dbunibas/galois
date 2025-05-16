@@ -80,6 +80,11 @@ public class LLMDistance {
                 return nActual.floatValue() == nExpected.floatValue();
             }
         }
+
+        if(true){
+            //TODO: LLMDistance is currently disabled
+            return false;
+        }
         LLMCache llmCache = LLMCache.getInstance();
         String editedPrompt = promptCell.replace("$CELL_1$", expected).replace("$CELL_2$", actual);
         String response = null;

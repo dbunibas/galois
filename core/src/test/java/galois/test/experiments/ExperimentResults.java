@@ -77,6 +77,7 @@ public class ExperimentResults {
         String basePath = System.getProperty("user.dir");
         Path filePath = Paths.get(basePath, "src", "test", "resources", "results", nameReplaced + ".txt");
         try {
+            filePath.getParent().toFile().mkdirs();
             Files.write(Paths.get(filePath.toUri()), result.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();

@@ -131,7 +131,7 @@ public class LLMScan extends Scan {
     private void checkSourceTarget(IDatabase source, IDatabase target) {
         // TODO: Switch source and target?
         if (target != null) {
-            logger.warn("Target database is ignored when using LLM algebra...");
+            logger.info("Target database is ignored when using LLM algebra...");
         }
 
         if (!(source instanceof LLMDB)) {
@@ -168,7 +168,7 @@ public class LLMScan extends Scan {
 
         @Override
         public void close() {
-            logger.warn("LLMScanTupleIterator close is not implemeted yet!");
+            logger.info("LLMScanTupleIterator close is not implemeted yet!");
         }
 
         @Override

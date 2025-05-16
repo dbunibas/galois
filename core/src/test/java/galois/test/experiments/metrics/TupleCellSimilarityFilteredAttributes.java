@@ -186,6 +186,10 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
     }
 
     private boolean matchSimilarLLM(Tuple tupleActual, Tuple tupleExpected) {
+        if(true){
+            //TODO: matchSimilarLLM is currently disabled
+            return false;
+        }
         if (tupleActual == null || tupleExpected == null) {
             return false;
         }

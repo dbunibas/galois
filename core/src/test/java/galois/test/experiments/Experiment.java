@@ -68,7 +68,7 @@ public final class Experiment {
 //        Document queryPlan = planner.planFrom(query.getSql());
 //        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
         IAlgebraOperator operator = parse();
-        log.info("Query operator {}", operator);
+        log.debug("Query operator {}", operator);
         List<Tuple> expectedResults = computeExpected();
 
         GaloisDebug.log("Unoptimized");
@@ -115,7 +115,7 @@ public final class Experiment {
         LogicalPlanOptimizer optimizer = new LogicalPlanOptimizer();
         operator = optimizer.optimizeByConfidence(operator, sqlQuery, database, dbConfidence, threshold, removeFromAlgebraTree);
         String optimizations = optimizer.getOptimizations();
-        log.info("Query operator {}", operator);
+        log.debug("Query operator {}", operator);
         DBMSDB dbmsDatabase = createDatabaseForExpected();
         String queryToExecute = query.getSql().replace("target.", "public.");
         log.debug("Query for results: \n" + queryToExecute);
@@ -138,7 +138,7 @@ public final class Experiment {
     public Map<String, ExperimentResults> executeSingle(IOptimizer optimizer) {
         Map<String, ExperimentResults> results = new HashMap<>();
         IAlgebraOperator operator = parse();
-        log.info("Query operator {}", operator);
+        log.debug("Query operator {}", operator);
         DBMSDB dbmsDatabase = createDatabaseForExpected();
         String queryToExecute = query.getSql().replace("target.", "public.");
         log.debug("Query for results: \n" + queryToExecute);
@@ -184,7 +184,7 @@ public final class Experiment {
 //        IAlgebraOperator operator = parser.parse(queryPlan, query.getDatabase(), operatorsConfiguration, query.getSql());
 //        return operator;
         SQLQueryParser sqlQueryParser = new SQLQueryParser();
-        log.info("Parsing the query using SQLQueryParser - {}", sqlQueryParser.getClass());
+        log.debug("Parsing the query using SQLQueryParser - {}", sqlQueryParser.getClass());
         IQueryExecutor scanQueryExecutor = operatorsConfiguration.getScan().getQueryExecutor();
         String normalizationStrategy = operatorsConfiguration.getScan().getNormalizationStrategy();
         Double llmProbThreshold = operatorsConfiguration.getScan().getLlmProbThreshold();
@@ -247,7 +247,7 @@ public final class Experiment {
                     throw new IllegalStateException(ioe);
                 }
                 CSVFile fileToImport = new CSVFile(speedyFile.getAbsolutePath());
-                System.out.println("File to import: " + speedyFile.getAbsolutePath());
+                log.debug("File to import: {}", speedyFile.getAbsolutePath());
                 speedyFiles.add(speedyFile);
                 fileToImport.setHasHeader(true);
                 fileToImport.setSeparator(',');
@@ -272,7 +272,7 @@ public final class Experiment {
     private ExperimentResults executeUnoptimizedExperiment(IAlgebraOperator operator, List<Tuple> expectedResults) {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
-        log.info("Unoptimized operator - {}", operator.getClass());
+        log.debug("Unoptimized operator - {}", operator.getClass());
         ITupleIterator iterator = operator.execute(query.getDatabase(), query.getDatabase());
         return toExperimentResults(iterator, expectedResults, null);
     }
@@ -281,7 +281,7 @@ public final class Experiment {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
         IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), query.getSql(), operator);
-        log.info("Optimized operator: {}", optimizedOperator);
+        log.debug("Optimized operator: {}", optimizedOperator);
         ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), query.getDatabase());
         return toExperimentResults(iterator, expectedResults, optimizer.getName());
     }
@@ -289,7 +289,7 @@ public final class Experiment {
     public ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults, String optmizerName) {
         List<Tuple> results = TestUtils.toTupleList(actual);
         log.info("Results size: " + results.size());
-        log.info("Results: " + results);
+        log.debug("Results: {}", results);
         List<Double> scores = metrics
                 .stream()
                 //                .map(m -> m.getScore(query.getDatabase(), query.getResults(), results))

@@ -8,17 +8,6 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
-
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -26,20 +15,26 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
 public class TestBenchLLM {
 
     private static final String RESULT_FILE_DIR = "src/test/resources/results/";
-    private static final String RESULT_FILE = "bird-results.txt";
+    private static final String RESULT_FILE = "llm-bench-results.txt";
     private static final String QUERIES_PATH = "src/test/resources/llm-bench/dataset.xlsx";
+    //    private static final String QUERIES_PATH = "src/test/resources/llm-bench/dataset-soccer.xlsx";
     private static final TestRunner testRunner = new TestRunner();
     private static final ExcelExporter exportExcel = new ExcelExporter();
-//    private String executorModel = "llama3";
-//    private String name = Constants.TOGETHERAI_MODEL;
-    private String executorModel = "gpt";
-    private String name = Constants.OPEN_AI_CHAT_MODEL_NAME;
 
     private List<ExpVariant> variants;
     private Map<String, VariantConfig> variantConfigs;
@@ -50,21 +45,20 @@ public class TestBenchLLM {
 
     @Test
     public void testBench() {
-        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
-        String fileName = exportExcel.getFileName(name);
+        String fileName = exportExcel.getFileName(Constants.SELECTED_MODEL);
         for (ExpVariant variant : this.variants) {
             VariantConfig vc = this.variantConfigs.get(variant.getQueryNum());
             String dbID = vc.db_id;
             String dataset = vc.dataset;
-            testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
+            testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + getExecutorModel() + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + getExecutorModel() + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + getExecutorModel() + "-table-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
             exportExcel.export(fileName, dataset, metrics, results);
         }
-        log.info("Results\n{}", printMap(results));
-
+        log.debug("Results\n{}", printMap(results));
     }
 
     private void initVariants() {
@@ -116,19 +110,9 @@ public class TestBenchLLM {
         }
     }
 
-    @Test
-    public void exportConfidences(){
-        StringBuilder result = new StringBuilder("Query ID\tTABLE Conf\tSQL Conf\tNL Conf\n");
-        for (ExpVariant variant : this.variants) {
-            result.append(variant.getQueryNum()).append("\t");
-            result.append(testRunner.getConfidenceValue("TABLE", variant)).append("\t");
-            result.append(testRunner.getConfidenceValue("SQL", variant)).append("\t");
-            result.append(testRunner.getConfidenceValue("NL", variant)).append("\n");
-        }
-        log.info("### Confidences ##\n{}", result);
-        StringSelection selection = new StringSelection(result.toString());
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, selection);
+
+    private String getExecutorModel() {
+        return Constants.SELECTED_MODEL.toString().toLowerCase().contains("gpt") ? "gpt" : "llama3";
     }
 
     private class VariantConfig {

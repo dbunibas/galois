@@ -15,6 +15,10 @@ import java.util.Map;
 public class ResultConfidenceEstimator {
 
     public Double estimateConfidence(String question, List<String> tuples){
+        if(true){
+            //TODO: ResultConfidenceEstimator is disabled for performace
+            return null;
+        }
         String prompt = """
                 You have just generated the following answer to a given question.
                 

@@ -9,7 +9,9 @@ import galois.utils.excelreport.SheetReport;
 import galois.utils.excelreport.persistance.DAOReportExcel;
 import lombok.extern.slf4j.Slf4j;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -55,12 +57,12 @@ public class ExcelExporter {
             addLLMStats(optmizers, resultExp, dataSheet);
         }
         File exportFile = new File(fileName);
-        log.info("Writing file {}", exportFile);
+        log.info("Final results exported in: {}", exportFile);
         daoReportExcel.saveReport(reportExcel, exportFile);
-//        try {
-//            Desktop.getDesktop().open(exportFile);
-//        } catch (IOException e) {
-//        }
+        try {
+            Desktop.getDesktop().open(exportFile);
+        } catch (IOException e) {
+        }
     }
    
     private void createHeaders(List<String> optmizers, SheetReport dataSheet) {
