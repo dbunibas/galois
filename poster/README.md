@@ -18,11 +18,11 @@
 ### Experiments
 
 ### Related Work
-[1] Satriani D. et al: [RelationalFactQA: A Benchmark for Evaluating Tabular Fact Retrieval from Large Language Models](https://arxiv.org/abs/2505.21409)
-[2] Liu, C. et al: [Palimpzest: Optimizing AI-Powered Analytics with Declarative Query Processing](https://palimpzest.org/research/)
-[3] Shankar S., et al: [DocETL: Agentic Query Rewriting and Evaluation for Complex Document Processing](https://arxiv.org/abs/2410.12189)
-[4] Patel, L. et al: [Semantic Operators: A Declarative Model for Rich, AI-based Data Processing](https://arxiv.org/abs/2407.11418)
-[5] Yu, T. et al.: [Spider: A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Text-to-SQL Parsing](https://arxiv.org/abs/1809.08887)
+1. Satriani D. et al: [RelationalFactQA: A Benchmark for Evaluating Tabular Fact Retrieval from Large Language Models](https://arxiv.org/abs/2505.21409)
+2. Liu, C. et al: [Palimpzest: Optimizing AI-Powered Analytics with Declarative Query Processing](https://palimpzest.org/research/)
+3. Shankar S., et al: [DocETL: Agentic Query Rewriting and Evaluation for Complex Document Processing](https://arxiv.org/abs/2410.12189)
+4. Patel, L. et al: [Semantic Operators: A Declarative Model for Rich, AI-based Data Processing](https://arxiv.org/abs/2407.11418)
+5. Yu, T. et al.: [Spider: A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Text-to-SQL Parsing](https://arxiv.org/abs/1809.08887)
 
 
 
