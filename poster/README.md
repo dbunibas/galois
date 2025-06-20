@@ -31,16 +31,21 @@ Full paper is available [here](https://www.eurecom.fr/en/publication/8182).
 If you would like to cite our work, please use the following citation:
 
 ```
-@inproceedings{GaloisSIGMOD2025,
-    title={GALOIS: Logical and Physical Optimizations for SQL Query Execution over Large Language Models},
-    author={Satriani, Dario and Veltri, Enzo and Santoro, Donatello and Rosato, Sara and Varriale, Simone and Papotti, Paolo},
-    booktitle = {Proceedings of the ACM on Management of Data (PACMMOD)},
-    date = 2025,
-    journal = {Proc. ACM Manag. Data},
-    month = June,
-    volume = {3},
-    number = {3},
-    articleno = {181},
-    doi= https://doi.org/10.1145/3725411
+@article{GaloisSIGMOD2025,
+	author = {Satriani, Dario and Veltri, Enzo and Santoro, Donatello and Rosato, Sara and Varriale, Simone and Papotti, Paolo},
+	title = {Logical and Physical Optimizations for SQL Query Execution over Large Language Models},
+	year = {2025},
+	issue_date = {June 2025},
+	publisher = {Association for Computing Machinery},
+	address = {New York, NY, USA},
+	volume = {3},
+	number = {3},
+	url = {https://doi.org/10.1145/3725411},
+	doi = {10.1145/3725411},
+	journal = {Proc. ACM Manag. Data},
+	month = jun,
+	articleno = {181},
+	numpages = {28},
+	keywords = {large language models, query optimization, sql}
 }
 ```
