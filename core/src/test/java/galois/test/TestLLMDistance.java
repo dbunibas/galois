@@ -1,7 +1,7 @@
 package galois.test;
 
 import galois.test.experiments.metrics.LLMDistance;
-import galois.test.experiments.metrics.TupleLLMSimilarityConstraintFilteredAttributes;
+import galois.test.experiments.metrics.TupleCellSimilarityFilteredAttributes;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -50,12 +50,29 @@ public class TestLLMDistance {
         Tuple t3 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn"), Arrays.asList("N.", "Verdi", 20, 111));
         Tuple t4 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn"), Arrays.asList("Nicola", "Verdi", 20, 111));
         Tuple t5 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn"), Arrays.asList("Alberto", "Angela", 50, 6678));
-        Tuple t6 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn"), Arrays.asList("Mario", "Rossi", 30, 245));
+        Tuple t6 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn"), Arrays.asList("Mario", "Rossi", 60, 778));
         
         List<Tuple> expected = Arrays.asList(t4, t1, t5);
         List<Tuple> actual = Arrays.asList(t2, t3, t6);
         
-        TupleLLMSimilarityConstraintFilteredAttributes metric = new TupleLLMSimilarityConstraintFilteredAttributes();
+        TupleCellSimilarityFilteredAttributes metric = new TupleCellSimilarityFilteredAttributes();
+        Double score = metric.getScore(null, expected, actual);
+        System.out.println(score);
+    }
+    
+    @Test
+    public void testTupleLLMSimilarity2() {
+        Tuple t1 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn", "country"), Arrays.asList("Mario", "Rossi", 30, 245, "Italy"));
+        Tuple t2 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn", "country"), Arrays.asList("M.", "Rossi", 30, 245, "Italia"));
+        Tuple t3 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn", "country"), Arrays.asList("N.", "Verdi", 20, 111, "United States of America"));
+        Tuple t4 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn", "country"), Arrays.asList("Nicola", "Verdi", 20, 111, "USA"));
+        Tuple t5 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn", "country"), Arrays.asList("Alberto", "Angela", 50, 6678, "America"));
+        Tuple t6 = generateTuple(1, "people", Arrays.asList("name", "surname", "age", "ssn", "country"), Arrays.asList("Mario", "Rossi", 60, 778, "Italy"));
+        
+        List<Tuple> expected = Arrays.asList(t4, t1, t5);
+        List<Tuple> actual = Arrays.asList(t2, t3, t6);
+        
+        TupleCellSimilarityFilteredAttributes metric = new TupleCellSimilarityFilteredAttributes();
         Double score = metric.getScore(null, expected, actual);
         System.out.println(score);
     }
