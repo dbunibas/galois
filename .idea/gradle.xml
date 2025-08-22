@@ -8,9 +8,9 @@
         <option name="gradleJvm" value="graalvm-jdk-21" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/../Speedy/core" />
-            <option value="$PROJECT_DIR$/../Speedy/jep" />
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Speedy/core" />
+            <option value="$PROJECT_DIR$/Speedy/jep" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/sql-parser" />
           </set>

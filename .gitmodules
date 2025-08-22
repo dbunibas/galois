@@ -1,0 +1,4 @@
+[submodule "Speedy"]
+	path = Speedy
+	url = https://github.com/dbunibas/Speedy.git
+	branch = gradle
