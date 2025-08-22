@@ -2,8 +2,8 @@ package galois.llm.query.utils.cache;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import galois.Constants;
 import galois.llm.query.IQueryExecutor;
+import galois.utils.Configuration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,9 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static galois.Constants.CACHE_DIR;
-import static galois.Constants.CACHE_ENABLED;
 
 @Slf4j
 public class LLMCache {
@@ -30,7 +27,7 @@ public class LLMCache {
 
     private LLMCache() {
     }
-    
+
     public String getFileName(IQueryExecutor queryExecutor) {
         String queryExecutorName = null;
         if (queryExecutor == null) {
@@ -38,11 +35,11 @@ public class LLMCache {
         } else {
             queryExecutorName = queryExecutor.getClass().getSimpleName();
         }
-        return String.format("%s/cache-%s-%s.json", CACHE_DIR, queryExecutorName, Constants.LLM_MODEL);
+        return String.format("%s/cache-%s-%s.json", Configuration.getInstance().getCacheAbsolutePath(), queryExecutorName, Configuration.getInstance().getLLMModel());
     }
 
     public boolean containsQuery(String prompt, int iteration, IQueryExecutor queryExecutor, String firstPrompt) {
-        if (!CACHE_ENABLED)
+        if (!Configuration.getInstance().isCacheEnabled())
             return false;
 
         Map<String, CacheEntry> cache = loadCache(queryExecutor);
@@ -51,7 +48,7 @@ public class LLMCache {
     }
 
     public CacheEntry getResponse(String prompt, int iteration, IQueryExecutor queryExecutor, String firstPrompt) {
-        if (!CACHE_ENABLED)
+        if (!Configuration.getInstance().isCacheEnabled())
             throw new UnsupportedOperationException("Cannot use cache when it is disabled!");
 
         Map<String, CacheEntry> cache = loadCache(queryExecutor);
@@ -60,7 +57,7 @@ public class LLMCache {
     }
 
     public void updateCache(String prompt, int iteration, IQueryExecutor queryExecutor, String firstPrompt, String response, double inputTokens, double outputTokens, long timeMillis, int baseLLMRequestsIncrement) {
-        if (!CACHE_ENABLED) return;
+        if (!Configuration.getInstance().isCacheEnabled()) return;
         Map<String, CacheEntry> cache = loadCache(queryExecutor);
         String key = getKey(prompt, iteration, firstPrompt);
         cache.put(key, new CacheEntry(response, inputTokens, outputTokens, timeMillis, baseLLMRequestsIncrement));
@@ -100,7 +97,7 @@ public class LLMCache {
         String fileName = getFileName(queryExecutor);
         File file = new File(fileName);
         file.getParentFile().mkdirs();
-        String updatedFileName = String.format("%s/cache-%s-updated.json", CACHE_DIR, executorName);
+        String updatedFileName = String.format("%s/cache-%s-updated.json", Configuration.getInstance().getCacheAbsolutePath(), executorName);
         File updatedFile = new File(updatedFileName);
 
         try {

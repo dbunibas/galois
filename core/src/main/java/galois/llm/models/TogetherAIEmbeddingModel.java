@@ -6,8 +6,8 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.DimensionAwareEmbeddingModel;
 import dev.langchain4j.model.output.Response;
-import galois.Constants;
 import galois.llm.models.togetherai.TogetherAIConstants;
+import galois.utils.Configuration;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -81,7 +81,7 @@ public class TogetherAIEmbeddingModel extends DimensionAwareEmbeddingModel {
         while (numRetry < TogetherAIConstants.MAX_RETRY) {
             HttpURLConnection connection = null;
             try {
-                TimeUnit.MILLISECONDS.sleep(Constants.WAIT_TIME_MS_TOGETHERAI);
+                TimeUnit.MILLISECONDS.sleep(Configuration.getInstance().getTogetheraiWaitTimeMs());
                 URL url = URI.create(TogetherAIConstants.BASE_ENDPOINT + "embeddings").toURL();
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setConnectTimeout(TogetherAIConstants.CONNECTION_TIMEOUT);
@@ -101,8 +101,8 @@ public class TogetherAIEmbeddingModel extends DimensionAwareEmbeddingModel {
                     log.error("Generic Exception with the request. Skipping retry", e);
                     return null;
                 }
-            }finally{
-                if(connection != null){
+            } finally {
+                if (connection != null) {
                     connection.disconnect();
                 }
             }
@@ -117,7 +117,7 @@ public class TogetherAIEmbeddingModel extends DimensionAwareEmbeddingModel {
         os.write(input, 0, input.length);
         os.flush();
         connection.connect();
-        if(connection.getResponseCode() != 200){
+        if (connection.getResponseCode() != 200) {
             log.error("Error response: {}\nRequest: {}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())), jsonRequest);
             throw new IOException("Error response " + connection.getErrorStream());
         }

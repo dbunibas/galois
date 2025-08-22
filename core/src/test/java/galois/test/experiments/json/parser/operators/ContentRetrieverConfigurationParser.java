@@ -17,10 +17,10 @@ import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.chroma.ChromaEmbeddingStore;
-import galois.Constants;
 import galois.llm.models.LMFactory;
 import galois.llm.models.TogetherAIEmbeddingModel;
 import galois.test.experiments.json.config.ContentRetrieverConfigurationJSON;
+import galois.utils.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.IDatabase;
 
@@ -71,7 +71,7 @@ public class ContentRetrieverConfigurationParser {
                     .build();
         } else if (contentRetrieverConf.getEmbeddingModelEngine().equalsIgnoreCase("togetherai")) {
             return TogetherAIEmbeddingModel.builder()
-                    .toghetherAiAPI(Constants.TOGETHERAI_API)
+                    .toghetherAiAPI(Configuration.getInstance().getTogetheraiApiKey())
                     .modelName(contentRetrieverConf.getEmbeddingModel())
                     .build();
         }

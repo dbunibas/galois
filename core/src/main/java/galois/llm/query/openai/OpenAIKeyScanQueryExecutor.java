@@ -3,12 +3,12 @@ package galois.llm.query.openai;
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
-import galois.Constants;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.IQueryExecutorBuilder;
 import galois.prompt.EPrompts;
+import galois.utils.Configuration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.Attribute;
@@ -64,15 +64,15 @@ public class OpenAIKeyScanQueryExecutor extends AbstractKeyBasedQueryExecutor {
     @Override
     protected Chain<String, String> getConversationalChain() {
         if (contentRetriever == null) {
-            return buildOpenAIConversationalChain(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
+            return buildOpenAIConversationalChain(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         } else {
-            return buildOpenAIConversationalRetrievalChain(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME, contentRetriever);
+            return buildOpenAIConversationalRetrievalChain(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName(), contentRetriever);
         }
     }
 
     @Override
     protected ChatLanguageModel getChatLanguageModel() {
-        return buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
+        return buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
     }
 
     @Override

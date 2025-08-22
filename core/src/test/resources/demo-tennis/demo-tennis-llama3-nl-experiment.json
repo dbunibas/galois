@@ -1,0 +1,54 @@
+{
+  "name": "Web-Tennis-{{QN}} Experiment-nl",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-nl",
+      "maxIterations": 5,
+      "naturalLanguagePrompt": "{{NL-PROMPT}}"
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "web_tennis",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "wimbledon_champions",
+          "attributes": [
+            {
+              "name": "tournament_year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "player_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "player_surname",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/web-tennis/data"
+  }
+}

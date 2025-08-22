@@ -18,6 +18,7 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
+import galois.utils.Configuration;
 import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -385,7 +386,7 @@ public class TestRunMoviesBatch {
         prompt += "?\n";
         prompt += "Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.\n"
                 + "Respond with JSON only with a numerical property with name \"popularity\".";
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
+        TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);

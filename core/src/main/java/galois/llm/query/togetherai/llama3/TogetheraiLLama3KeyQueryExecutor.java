@@ -3,18 +3,9 @@ package galois.llm.query.togetherai.llama3;
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
-import galois.Constants;
 import galois.llm.query.*;
-
-import static galois.llm.query.ConversationalChainFactory.*;
-import static galois.llm.query.ConversationalRetrievalChainFactory.buildOllamaLlama3ConversationalRetrivalChain;
-import static galois.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
-import static galois.llm.query.utils.QueryUtils.mapToTuple;
 import galois.prompt.EPrompts;
-import static galois.utils.FunctionalUtils.orElse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import galois.utils.Configuration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.Attribute;
@@ -22,6 +13,16 @@ import speedy.model.database.ITable;
 import speedy.model.database.TableAlias;
 import speedy.model.database.Tuple;
 import speedy.model.expressions.Expression;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
+import static galois.llm.query.ConversationalChainFactory.buildTogetherAiChatLanguageModel;
+import static galois.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
+import static galois.llm.query.utils.QueryUtils.mapToTuple;
+import static galois.utils.FunctionalUtils.orElse;
 
 @Slf4j
 @Getter
@@ -60,16 +61,16 @@ public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecu
 
     @Override
     protected Chain<String, String> getConversationalChain() {
-        if(contentRetriever == null) {
-            return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
-        }else {
-            return buildTogetherAIConversationalRetrivalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, contentRetriever);
+        if (contentRetriever == null) {
+            return buildTogetherAIConversationalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel());
+        } else {
+            return buildTogetherAIConversationalRetrivalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), contentRetriever);
         }
     }
-    
+
     @Override
     protected ChatLanguageModel getChatLanguageModel() {
-        return buildTogetherAiChatLanguageModel(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+        return buildTogetherAiChatLanguageModel(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel());
     }
 
     @Override
@@ -86,7 +87,7 @@ public class TogetheraiLLama3KeyQueryExecutor extends AbstractKeyBasedQueryExecu
     public static TogetheraiLLama3KeyQueryExecutorBuilder builder() {
         return new TogetheraiLLama3KeyQueryExecutorBuilder();
     }
-    
+
     @Override
     public IQueryExecutorBuilder getBuilder() {
         return builder();

@@ -4,17 +4,18 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import galois.Constants;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.ConversationalChainFactory;
+import galois.utils.Configuration;
 
 public class LMFactory {
 
-    public static ChatLanguageModel getLMModel(){
+    public static ChatLanguageModel getLMModel() {
         ChatLanguageModel model;
-        if (Constants.LLM_MODEL.equals(Constants.MODEL_LLAMA3)) {
-             model = new TogetherAIModel(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, TogetherAIConstants.STREAM_MODE);
-        }else if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) {
-            model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
-        }else {
-            throw new IllegalArgumentException("Unknown model " + Constants.LLM_MODEL);
+        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_LLAMA3)) {
+            model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), TogetherAIConstants.STREAM_MODE);
+        } else if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT)) {
+            model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
+        } else {
+            throw new IllegalArgumentException("Unknown model " + Configuration.getInstance().getLLMModel());
         }
         return model;
     }

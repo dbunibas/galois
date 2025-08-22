@@ -9,6 +9,7 @@ import galois.llm.query.IQueryExecutor;
 import galois.llm.query.IQueryExecutorBuilder;
 import galois.llm.query.togetherai.llama3.TogetheraiLlama3NLQueryExecutor;
 import galois.prompt.EPrompts;
+import galois.utils.Configuration;
 
 import static galois.llm.query.ConversationalChainFactory.buildOpenAIConversationalChain;
 import static galois.llm.query.ConversationalRetrievalChainFactory.buildOpenAIConversationalRetrievalChain;
@@ -28,9 +29,9 @@ public class OpenAINLQueryExecutor extends TogetheraiLlama3NLQueryExecutor imple
     @Override
     protected Chain<String, String> getConversationalChain() {
         if (getContentRetriever() == null) {
-            return buildOpenAIConversationalChain(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
+            return buildOpenAIConversationalChain(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         } else {
-            return buildOpenAIConversationalRetrievalChain(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME, getContentRetriever());
+            return buildOpenAIConversationalRetrievalChain(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName(), getContentRetriever());
         }
     }
 

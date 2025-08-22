@@ -1,6 +1,5 @@
 package galois.test;
 
-import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.QueryUtils;
@@ -8,17 +7,18 @@ import galois.parser.ParserWhere;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.json.parser.ExperimentParser;
 import galois.test.model.ExpVariant;
+import galois.utils.Configuration;
 import galois.utils.Mapper;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import org.junit.jupiter.api.Test;
-import speedy.model.database.Attribute;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
 import speedy.model.database.Key;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class TestPopularity {
@@ -375,11 +375,11 @@ public class TestPopularity {
                 }
                 prompt += "?\n";
                 prompt += """
-                          Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.
-                          Respond with JSON only with a numerical property with name "popularity".""";
+                        Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.
+                        Respond with JSON only with a numerical property with name "popularity".""";
                 System.out.println(variant.getQuerySql());
 //                System.out.println("Prompt: " + prompt);
-                TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
+                TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
                 String response = model.generate(prompt);
 //                System.out.println("Response: " + response);
                 String cleanResponse = Mapper.toCleanJsonObject(response);
@@ -435,7 +435,7 @@ public class TestPopularity {
                 }
                 String endPrompt = "\n";
                 endPrompt += """
-                          Respond with JSON only with a numerical property with name "cardinality".""";
+                        Respond with JSON only with a numerical property with name "cardinality".""";
 
                 String promptNoPushDown = prompt + endPrompt;
                 promptAllConditionPushDown += endPrompt;
@@ -466,7 +466,7 @@ public class TestPopularity {
     }
 
     private Integer getCardinality(String prompt) {
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
+        TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);

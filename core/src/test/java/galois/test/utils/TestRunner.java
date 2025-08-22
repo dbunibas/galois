@@ -24,6 +24,7 @@ import galois.test.experiments.json.parser.ExperimentParser;
 import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
+import galois.utils.Configuration;
 import galois.utils.GaloisDebug;
 import galois.utils.Mapper;
 import lombok.Data;
@@ -231,21 +232,21 @@ public class TestRunner {
 
     private static @NotNull String getModelName() {
         String modelName;
-        if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) {
-            modelName = Constants.OPEN_AI_CHAT_MODEL_NAME;
+        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT)) {
+            modelName = Configuration.getInstance().getOpenaiModelName();
         } else {
-            modelName = Constants.TOGETHERAI_MODEL;
+            modelName = Configuration.getInstance().getTogetheraiModel();
         }
         return modelName;
     }
 
-    private String getConfidenceResultPath(String type, ExpVariant variant){
-        return Constants.EXPORT_EXCEL_PATH + "/confidence/" + variant.getQueryNum() + "-" + type + "-" + getModelName() + ".json";
+    private String getConfidenceResultPath(String type, ExpVariant variant) {
+        return Configuration.getInstance().getExportExcelAbsolutePath() + "/confidence/" + variant.getQueryNum() + "-" + type + "-" + getModelName() + ".json";
     }
 
     public String getConfidenceValue(String type, ExpVariant variant) {
         ConfidenceResult confidenceResult = loadConfidenceResult(new File(getConfidenceResultPath(type, variant)));
-        if(confidenceResult == null || confidenceResult.getConfidence() == null) return "";
+        if (confidenceResult == null || confidenceResult.getConfidence() == null) return "";
         return DecimalFormat.getInstance().format(confidenceResult.getConfidence());
     }
 
@@ -271,7 +272,7 @@ public class TestRunner {
 
     private String linearizeTuple(Tuple filteredTuple) {
         return filteredTuple.getCells().stream()
-                .filter(c->!c.isOID())
+                .filter(c -> !c.isOID())
                 .map(c -> c.getAttribute() + ": " + c.getValue())
                 .collect(Collectors.joining(" | ")).trim();
     }
@@ -572,7 +573,7 @@ public class TestRunner {
         prompt += "Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.\n"
                 + "Respond with JSON only with a numerical property with name \"popularity\".";
         log.debug("Prompt Populatity: {}", prompt);
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_1_70B, TogetherAIConstants.STREAM_MODE);
+        TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_1_70B, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);
@@ -749,7 +750,7 @@ public class TestRunner {
     }
 
     private Integer getCardinality(String prompt) {
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_1_70B, TogetherAIConstants.STREAM_MODE);
+        TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_1_70B, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(prompt);
         log.debug("Cardinality prompt: " + prompt);
         log.debug("Cardinality response: " + response);
@@ -765,7 +766,7 @@ public class TestRunner {
     }
 
     private Integer getOptimizerNumber(String prompt, int maxIndex) {
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_1_70B, TogetherAIConstants.STREAM_MODE);
+        TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_1_70B, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(prompt);
         log.debug("LLMOptimization prompt: " + prompt);
         log.debug("LLMOptimization response: " + response);

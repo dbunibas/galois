@@ -1,48 +1,41 @@
 package galois.optimizer.estimators;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiChatModelName;
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.ConversationalChainFactory;
 import galois.parser.ParserProvenance;
 import galois.parser.ParserWhere;
+import galois.utils.Configuration;
 import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
-import speedy.model.database.Attribute;
-import speedy.model.database.IDatabase;
-import speedy.model.database.ITable;
+import net.sf.jsqlparser.expression.Expression;
+import speedy.model.database.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static galois.utils.Mapper.toCleanJsonList;
-import java.util.HashSet;
-import java.util.Set;
-import speedy.model.database.AttributeRef;
-import speedy.model.database.Key;
-import net.sf.jsqlparser.expression.Expression;
 
 @Slf4j
 public class ConfidenceEstimator {
-    
-  private String togetherAIModelName = Constants.TOGETHERAI_MODEL;
-    
-  public Map<ITable, Map<Attribute, Double>> getEstimation(IDatabase database) {
+
+    private String togetherAIModelName = Configuration.getInstance().getTogetheraiModel();
+
+    public Map<ITable, Map<Attribute, Double>> getEstimation(IDatabase database) {
 //        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return the results in JSON with the properties \"attribute\" and \"confidence\"";
         String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return an higher score if you are able to return accurate and factual data. Return a lower score if you can't return accurate and factual data. Return the results in JSON with the properties \"attribute\" and \"confidence\"";
         Map<ITable, Map<Attribute, Double>> confidenceForDB = new HashMap<>();
         for (String tableName : database.getTableNames()) {
             ITable table = database.getTable(tableName);
             List<Attribute> attributes = table.getAttributes();
-            String schema = getRelationalSchema(attributes,tableName);
+            String schema = getRelationalSchema(attributes, tableName);
             String promptTable = prompt.replace("${relationalSchema}", schema);
             if (log.isDebugEnabled()) log.debug(promptTable);
-            ChatLanguageModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-            if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
-            String response = model.generate(promptTable);            
+            ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
+            if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+                model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
+            String response = model.generate(promptTable);
             if (log.isDebugEnabled()) log.debug(response);
             String cleanedResponse = toCleanJsonList(response, true);
             if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedResponse);
@@ -58,7 +51,7 @@ public class ConfidenceEstimator {
         }
         return confidenceForDB;
     }
-    
+
     public Map<ITable, Double> getEstimationSchema(IDatabase database) {
 //        String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return the results in JSON with the properties \"attribute\" and \"confidence\"";
         String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence in popolating such schema based on your internal knowledge. Give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return an higher score if you are able to return accurate and factual data. Return a lower score if you can't return accurate and factual data. Return the result in JSON with the property \"confidence\"";
@@ -66,12 +59,13 @@ public class ConfidenceEstimator {
         for (String tableName : database.getTableNames()) {
             ITable table = database.getTable(tableName);
             List<Attribute> attributes = table.getAttributes();
-            String schema = getRelationalSchema(attributes,tableName);
+            String schema = getRelationalSchema(attributes, tableName);
             String promptTable = prompt.replace("${relationalSchema}", schema);
             if (log.isDebugEnabled()) log.debug(promptTable);
-            ChatLanguageModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-            if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
-            String response = model.generate(promptTable);            
+            ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
+            if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+                model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
+            String response = model.generate(promptTable);
             if (log.isDebugEnabled()) log.debug(response);
             String cleanedResponse = Mapper.toCleanJsonObject(response);
             if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedResponse);
@@ -79,7 +73,7 @@ public class ConfidenceEstimator {
         }
         return confidenceForDB;
     }
-    
+
     public void getEstimationForQuery(IDatabase database, List<String> tableNames, String querySQL) {
         /*String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, in populating the data given a SQL query. Give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return a higher score if you are able to return accurate and factual data. Return a lower score if you can't return accurate and factual data or you may not have information on all the data. Return the results in JSON with the property \"confidence\".\n"
                 + "\n"
@@ -94,7 +88,7 @@ public class ConfidenceEstimator {
         for (String tableName : tableNames) {
             ITable table = database.getTable(tableName);
             List<Attribute> attributes = table.getAttributes();
-            String schema = getRelationalSchema(attributes,tableName);
+            String schema = getRelationalSchema(attributes, tableName);
             relationalSchema += schema + " ";
         }
         for (Key key : database.getKeys()) {
@@ -103,7 +97,7 @@ public class ConfidenceEstimator {
                 if (tableNames.contains(tableName)) {
                     keys.add(attribute.getName());
                 }
-             }
+            }
         }
         relationalSchema = relationalSchema.trim();
         String promptTable = prompt.replace("${relationalSchema}", relationalSchema);
@@ -115,12 +109,13 @@ public class ConfidenceEstimator {
         String whereExpression = parserWhere.getWhereExpression().trim();
         promptTable = promptTable.replace("${conditions}", whereExpression);
         if (log.isDebugEnabled()) log.debug("Request:\n {}", promptTable);
-        ChatLanguageModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
-        String response = model.generate(promptTable);   
+        ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
+        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+            model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
+        String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response:\n {}", response);
     }
-    
+
     public Map<String, String> getEstimationForQuery2(IDatabase database, List<String> tableNames, String querySQL) {
 //        String prompt1 = "Given the following schema:\n"
 //                + "'''\n${relationalSchema}\n'''\n"
@@ -145,12 +140,11 @@ public class ConfidenceEstimator {
                 + "'''\n${conditions}\n'''\n"
                 + "\n"
                 + "Estimate your confidence for the conditions. Return the confidence for each attribute. Use the value of \"high\" and \"low\" for the confidence.";
-        
 
 
         String prompt2 = "Considering only the attributes in the condition ${conditionAttributes}, return a confidence for them in retrieving the values for the following attributes: ${attrs}.\n"
                 + "Assign a confidence score based on previous observation, but in addition update your confidence considering that you should use those attribute values to find factual an real values for ${attrs}";
-        
+
 //        String promptJSON = "Return your answer in a single JSON format without any comment using the property \"attribute\" and \"confidence\". For high confidence return \"high\" for low confidence return \"low\".";
         String promptJSON = "Return your answer in a valid JSON format using for each attribute the property \"attribute\" and \"confidence\". Return the result as a JSON list. For confidence use the following values \"high\", \"medium\" or \"low\".";
         String promptJSONNoCode = "Do not return your answer with any code. " + promptJSON;
@@ -158,30 +152,31 @@ public class ConfidenceEstimator {
         for (String tableName : tableNames) {
             ITable table = database.getTable(tableName);
             List<Attribute> attributes = table.getAttributes();
-            String schema = getRelationalSchema(attributes,tableName);
+            String schema = getRelationalSchema(attributes, tableName);
             relationalSchema += schema + " ";
         }
         relationalSchema = relationalSchema.trim();
         String promptTable = prompt1.replace("${relationalSchema}", relationalSchema);
-        
+
         ParserWhere parserWhere = new ParserWhere();
         parserWhere.parseWhere(querySQL);
         String whereExpression = parserWhere.getWhereExpression().trim();
         promptTable = promptTable.replace("${conditions}", whereExpression);
-        
+
         ParserProvenance parserProvenance = new ParserProvenance(database);
         parserProvenance.parse(querySQL);
         Set<String> attrs = parserProvenance.getAttributesInSelect();
         Set<String> attrsTotal = parserProvenance.getAttributeProvenance();
         String as = (attrs.toString().replace("[", "")).replace("]", "");
         String attrsString = "(" + as + ")";
-        promptTable = promptTable.replace("${attrs}", attrsString);        
+        promptTable = promptTable.replace("${attrs}", attrsString);
         if (log.isDebugEnabled()) log.debug("Prompt: \n {}", promptTable);
-        ChatLanguageModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
+        ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
+        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+            model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response: \n {}", response);
-        
+
 //        prompt2 = prompt2.replace("${attrs}", attrsString);
 //        attrsTotal.removeAll(attrs);
 //        String as2 = (prompt2.toString().replace("[", "")).replace("]", "");
@@ -193,7 +188,7 @@ public class ConfidenceEstimator {
         promptJSON = response + "\n\n" + promptJSON;
         if (log.isDebugEnabled()) log.debug("Prompt: \n {}", promptJSON);
         String responseJSON = model.generate(promptJSON);
-        if (log.isDebugEnabled()) log.debug("Response: \n {}",responseJSON);
+        if (log.isDebugEnabled()) log.debug("Response: \n {}", responseJSON);
         String cleanedResponse = Mapper.toCleanJsonList(responseJSON, true);
         if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedResponse);
         Map<String, String> confidencesForAttrsConditions = new HashMap<>();
@@ -202,26 +197,27 @@ public class ConfidenceEstimator {
             confidences = Mapper.fromJsonToListOfMaps(cleanedResponse, false);
         } catch (Exception e) {
             log.error("Error in parsing the response for confidence.");
-            responseJSON = model.generate(responseJSON + "\n" +promptJSONNoCode);
-            if (log.isDebugEnabled()) log.debug("Response: \n {}",responseJSON);
+            responseJSON = model.generate(responseJSON + "\n" + promptJSONNoCode);
+            if (log.isDebugEnabled()) log.debug("Response: \n {}", responseJSON);
             cleanedResponse = Mapper.toCleanJsonList(responseJSON, true);
             if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedResponse);
             try {
-                 confidences = Mapper.fromJsonToListOfMaps(cleanedResponse, false);
-            } catch (Exception internal) {}
+                confidences = Mapper.fromJsonToListOfMaps(cleanedResponse, false);
+            } catch (Exception internal) {
+            }
         }
         if (confidences == null) return confidencesForAttrsConditions;
         for (Map<String, Object> confidence : confidences) {
             String attribute = confidence.get("attribute").toString();
             String confidenceString = confidence.get("confidence").toString();
             if (whereExpression.contains(attribute)) {
-                 if (log.isDebugEnabled()) log.debug("Attribute: {} - Confidence: {}", attribute, confidenceString);
-                 confidencesForAttrsConditions.put(attribute, confidenceString);
+                if (log.isDebugEnabled()) log.debug("Attribute: {} - Confidence: {}", attribute, confidenceString);
+                confidencesForAttrsConditions.put(attribute, confidenceString);
             }
         }
         return confidencesForAttrsConditions;
     }
-    
+
     public Double getEstimationConfidence(IDatabase database, List<String> tableNames, String querySQL, List<Expression> conditionsPushDown) {
         /*String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, in populating the data given a SQL query. Give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return a higher score if you are able to return accurate and factual data. Return a lower score if you can't return accurate and factual data or you may not have information on all the data. Return the results in JSON with the property \"confidence\".\n"
                 + "\n"
@@ -233,22 +229,22 @@ public class ConfidenceEstimator {
                 + "- The *set of attributes* for which I want to retrieve reliable and factual data;\n"
                 + "- The *set of conditions* that you can use to retrieve specified values for the set of attributes;\n"
                 + "- The *sql query* that we run over the retrieved data. Consider the difficulty of the query in estimating how the retrieved values for the *set of attributes* will help in getting reliable and factual responses.";
-        
+
         String prompt2 = "*json schema*: ${relationalSchema}\n"
                 + "*set of attributes*: ${keys}\n"
                 + "*set of conditions*: ${conditions}\n"
                 + "*sql query*: ${sqlQuery}";
-        
+
         String promptResult = "Return the confidence value in JSON format with an attribute \"confidence\"";
-        
+
         String prompt = prompt1 + "\n\n" + prompt2 + "\n\n" + promptResult;
-        
+
         String relationalSchema = "";
         Set<String> keys = new HashSet<>();
         for (String tableName : tableNames) {
             ITable table = database.getTable(tableName);
             List<Attribute> attributes = table.getAttributes();
-            String schema = getRelationalSchema(attributes,tableName);
+            String schema = getRelationalSchema(attributes, tableName);
             relationalSchema += schema + " ";
         }
         for (Key key : database.getKeys()) {
@@ -257,7 +253,7 @@ public class ConfidenceEstimator {
                 if (tableNames.contains(tableName)) {
                     keys.add(attribute.getName());
                 }
-             }
+            }
         }
         relationalSchema = relationalSchema.trim();
         String promptTable = prompt.replace("${relationalSchema}", relationalSchema);
@@ -270,8 +266,9 @@ public class ConfidenceEstimator {
         }
         promptTable = promptTable.replace("${conditions}", conditionExpression);
         if (log.isDebugEnabled()) log.debug("Request:\n {}", promptTable);
-        ChatLanguageModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
+        ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
+        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+            model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response JSON:\n {}", response);
         String cleanedJson = Mapper.toCleanJsonObject(response);
@@ -281,13 +278,14 @@ public class ConfidenceEstimator {
             jsonResponseObj = Mapper.fromJsonToMap(cleanedJson);
         } catch (Exception e) {
             log.error("Error in parsing the response for confidence value.");
-            response = model.generate(response + "\n" +promptResult);
-            if (log.isDebugEnabled()) log.debug("Response JSON: \n {}",response);
+            response = model.generate(response + "\n" + promptResult);
+            if (log.isDebugEnabled()) log.debug("Response JSON: \n {}", response);
             cleanedJson = Mapper.toCleanJsonObject(response);
             if (log.isDebugEnabled()) log.debug("Cleaned Response: {}", cleanedJson);
             try {
-                 jsonResponseObj = Mapper.fromJsonToMap(cleanedJson);
-            } catch (Exception internal) {}
+                jsonResponseObj = Mapper.fromJsonToMap(cleanedJson);
+            } catch (Exception internal) {
+            }
         }
         for (String propName : jsonResponseObj.keySet()) {
             if (propName.equalsIgnoreCase("confidence")) {
@@ -295,13 +293,13 @@ public class ConfidenceEstimator {
                 try {
                     return Double.valueOf(sConf.replace(",", "."));
                 } catch (NumberFormatException nfe) {
-                    
+
                 }
             }
         }
         return null;
     }
-    
+
     public Double getEstimationConfidence2(IDatabase database, List<String> tableNames, String querySQL, List<Expression> conditionsPushDown) {
         /*String prompt = "Given the following relational schema ${relationalSchema} please give me your confidence, based on your internal knowledge, in populating the data given a SQL query. Give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence. Return a higher score if you are able to return accurate and factual data. Return a lower score if you can't return accurate and factual data or you may not have information on all the data. Return the results in JSON with the property \"confidence\".\n"
                 + "\n"
@@ -319,13 +317,13 @@ public class ConfidenceEstimator {
                 + "\n"
                 + "Return the confidence value in JSON format with an attribute \"confidence\"";
 
-           
+
         String relationalSchema = "";
         Set<String> keys = new HashSet<>();
         for (String tableName : tableNames) {
             ITable table = database.getTable(tableName);
             List<Attribute> attributes = table.getAttributes();
-            String schema = getRelationalSchema(attributes,tableName);
+            String schema = getRelationalSchema(attributes, tableName);
             relationalSchema += schema + " ";
         }
         for (Key key : database.getKeys()) {
@@ -334,7 +332,7 @@ public class ConfidenceEstimator {
                 if (tableNames.contains(tableName)) {
                     keys.add(attribute.getName());
                 }
-             }
+            }
         }
         relationalSchema = relationalSchema.trim();
         String promptTable = prompt.replace("${relationalSchema}", relationalSchema);
@@ -347,8 +345,9 @@ public class ConfidenceEstimator {
         }
         promptTable = promptTable.replace("${conditions}", conditionExpression);
         if (log.isDebugEnabled()) log.debug("Request:\n {}", promptTable);
-        ChatLanguageModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
+        ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
+        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+            model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response JSON:\n {}", response);
         String cleanedJson = Mapper.toCleanJsonObject(response);
@@ -360,13 +359,13 @@ public class ConfidenceEstimator {
                 try {
                     return Double.valueOf(sConf.replace(",", "."));
                 } catch (NumberFormatException nfe) {
-                    
+
                 }
             }
         }
         return null;
     }
-    
+
     public void getCardinalityEstimationForQuery(IDatabase database, List<String> tableNames, String querySQL) {
         ParserWhere parserWhere = new ParserWhere();
         parserWhere.parseWhere(querySQL);
@@ -381,9 +380,9 @@ public class ConfidenceEstimator {
         for (String tableName : tableNames) {
             ITable table = database.getTable(tableName);
             List<Attribute> attributes = table.getAttributes();
-            String schema = getRelationalSchema(attributes,tableName);
+            String schema = getRelationalSchema(attributes, tableName);
             relationalSchema += schema + " ";
-            tables += tableName+ " ";
+            tables += tableName + " ";
         }
         relationalSchema = relationalSchema.trim();
         tables = tables.trim();
@@ -394,18 +393,19 @@ public class ConfidenceEstimator {
                 conditions += parserWhere.getExpressions().get(i) + ";\n";
             }
         }
-        conditions += allConditions+";\n";
+        conditions += allConditions + ";\n";
         String promptTable = prompt.replace("${tables}", tables);
         promptTable = promptTable.replace("${relationalSchema}", relationalSchema);
         promptTable = promptTable.replace("${sqlQuery}", querySQL);
-        promptTable = promptTable.replace("${conditions}", conditions);       
+        promptTable = promptTable.replace("${conditions}", conditions);
         if (log.isDebugEnabled()) log.debug(promptTable);
-        ChatLanguageModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
-        String response = model.generate(promptTable);   
+        ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
+        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+            model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
+        String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug(response);
     }
-    
+
     public Map<ITable, Map<Attribute, Double>> getEstimation(IDatabase database, List<String> tableNames, String querySQL) {
 //        String prompt = "Given the following relational schema ${relationalSchema} and the query to execute over it ${query} please give me your confidence, based on your internal knowledge, for every attribute. give me a value between 0 and 1, where 1 is perfect confidence and 0 is no confidence.";
 //        String prompt = "Given the following relational schema ${relationalSchema} and the query to execute over it ${query} please give me for every attribute of the schema your confidence in populating the values of the query results, based on your internal knowledge. Give me a value between 0.0 and 1.0, where 1.0 is perfect confidence and 0.0 is no confidence.";
@@ -421,18 +421,19 @@ public class ConfidenceEstimator {
         for (String tableName : tableNames) {
             ITable table = database.getTable(tableName);
             List<Attribute> attributes = table.getAttributes();
-            String schema = getRelationalSchema(attributes,tableName);
+            String schema = getRelationalSchema(attributes, tableName);
             String promptTable = prompt.replace("${relationalSchema}", schema);
             promptTable = promptTable.replace("${query}", querySQL);
             if (log.isDebugEnabled()) log.debug(promptTable);
-            ChatLanguageModel model = new TogetherAIModel(Constants.TOGETHERAI_API, togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-            if (Constants.LLM_MODEL.equals(Constants.MODEL_GPT)) model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Constants.OPEN_AI_API_KEY, Constants.OPEN_AI_CHAT_MODEL_NAME);
-            String response = model.generate(promptTable);            
+            ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
+            if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+                model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
+            String response = model.generate(promptTable);
             if (log.isDebugEnabled()) log.debug(response);
         }
         return confidenceForDB;
     }
-    
+
     private String getRelationalSchema(List<Attribute> attributes, String tableName) {
         String schema = tableName + "(";
         for (Attribute attribute : attributes) {
@@ -441,11 +442,11 @@ public class ConfidenceEstimator {
             String type = attribute.getType();
             schema += type + " " + name + ", ";
         }
-        schema = schema.substring(0, schema.length()-2);
+        schema = schema.substring(0, schema.length() - 2);
         schema += ")";
         return schema;
     }
-    
+
     private Attribute findAttribute(List<Attribute> attributes, String attributeName) {
         for (Attribute attribute : attributes) {
             if (attribute.getName().equalsIgnoreCase(attributeName)) return attribute;

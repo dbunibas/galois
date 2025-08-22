@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import galois.utils.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -39,7 +41,7 @@ public class TestBenchLLM {
 //    private String executorModel = "llama3";
 //    private String name = Constants.TOGETHERAI_MODEL;
     private String executorModel = "gpt";
-    private String name = Constants.OPEN_AI_CHAT_MODEL_NAME;
+    private String name = Configuration.getInstance().getOpenaiModelName();
 
     private List<ExpVariant> variants;
     private Map<String, VariantConfig> variantConfigs;

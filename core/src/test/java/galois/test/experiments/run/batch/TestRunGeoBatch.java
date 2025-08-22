@@ -1,7 +1,6 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
-import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.QueryUtils;
@@ -16,11 +15,14 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
+import galois.utils.Configuration;
 import galois.utils.Mapper;
-import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
+import speedy.model.database.IDatabase;
+import speedy.model.database.ITable;
+import speedy.model.database.Key;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,9 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import speedy.model.database.IDatabase;
-import speedy.model.database.ITable;
-import speedy.model.database.Key;
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
@@ -190,7 +189,7 @@ public class TestRunGeoBatch {
         log.info("Results\n{}", printMap(results));
     }
 
-    private Double getPopularity(String expPath, String tableName, ExpVariant variant){
+    private Double getPopularity(String expPath, String tableName, ExpVariant variant) {
         Experiment experiment = null;
         try {
             experiment = ExperimentParser.loadAndParseJSON(expPath);
@@ -215,7 +214,7 @@ public class TestRunGeoBatch {
         prompt += "?\n";
         prompt += "Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.\n"
                 + "Respond with JSON only with a numerical property with name \"popularity\".";
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
+        TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);

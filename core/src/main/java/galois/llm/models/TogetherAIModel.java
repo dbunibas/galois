@@ -11,9 +11,9 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.output.FinishReason;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.model.output.TokenUsage;
-import galois.Constants;
 import galois.llm.models.togetherai.*;
 import galois.llm.query.LLMQueryStatManager;
+import galois.utils.Configuration;
 import galois.utils.Mapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -213,7 +213,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         while (numRetry < TogetherAIConstants.MAX_RETRY) {
             HttpURLConnection connection = null;
             try {
-                TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI * (numRetry + 1));
+                TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs() * (numRetry + 1));
                 URL url = URI.create(TogetherAIConstants.BASE_ENDPOINT + "chat/completions").toURL();
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setConnectTimeout(TogetherAIConstants.CONNECTION_TIMEOUT);
@@ -223,9 +223,9 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 connection.setRequestProperty("Authorization", authorizationValue);
                 connection.setDoOutput(true);
                 String responseText;
-                if(streamMode) {
+                if (streamMode) {
                     responseText = getStringStreamMode(jsonRequest, connection);
-                }else{
+                } else {
                     responseText = getStringStandardMode(jsonRequest, connection);
                 }
                 if (checkJSON && !Mapper.isJSON(responseText)) {
@@ -285,7 +285,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             }
             StreamResponse streamResponse = objectMapper.readValue(dataChunk, StreamResponse.class);
             finalResponse.setUsage(streamResponse.getUsage());
-            if(!streamResponse.choices.isEmpty()){
+            if (!streamResponse.choices.isEmpty()) {
                 messageContent.append(streamResponse.choices.get(0).delta.content);
             }
         }

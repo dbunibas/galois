@@ -1,7 +1,6 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
-import galois.Constants;
 import galois.llm.algebra.LLMScan;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
@@ -18,21 +17,18 @@ import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
+import galois.utils.Configuration;
 import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import speedy.model.database.IDatabase;
 import speedy.model.database.ITable;
 import speedy.model.database.Key;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static speedy.utility.SpeedyUtility.printMap;
 
 @Slf4j
@@ -132,7 +128,7 @@ public class TestRunVenezuelaPresidentsBatch {
                 .prompt("List the name of the last Venezuela president where party is Military")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        
+
         ExpVariant q10 = ExpVariant.builder()
                 .queryNum("Q10")
                 .querySql("SELECT p.name, p.party, start_year, end_year, p.cardinal_number FROM target.world_presidents p WHERE p.country ='Venezuela' AND start_year > 1900 AND end_year < 2000 AND party ='Democratic Action'")
@@ -140,7 +136,7 @@ public class TestRunVenezuelaPresidentsBatch {
                 .prompt("List the name, the party, the start and end year and the cardinal number of Democratic Action Venezuela president who served between 1900 and 2000")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        
+
         ExpVariant q11 = ExpVariant.builder()
                 .queryNum("Q11")
                 .querySql("SELECT p.name, p.party, start_year, end_year, p.cardinal_number FROM target.world_presidents p WHERE p.country ='Venezuela' AND start_year > 1800 AND end_year < 1900 AND party ='Conservative'")
@@ -148,7 +144,7 @@ public class TestRunVenezuelaPresidentsBatch {
                 .prompt("List the name, the party, the start and end year and the cardinal number of Conservative president who served between 1800 and 1900")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        
+
         ExpVariant q12 = ExpVariant.builder()
                 .queryNum("Q12")
                 .querySql("SELECT p.party, count(p.party) num FROM target.world_presidents p WHERE p.country ='Venezuela' AND start_year > 1800 AND end_year < 1900 group by p.party order by num desc")
@@ -156,7 +152,7 @@ public class TestRunVenezuelaPresidentsBatch {
                 .prompt("List the party name and the number of times that the party have elected a Venezuela president between the 1800 and 1900.")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        
+
         ExpVariant q13 = ExpVariant.builder()
                 .queryNum("Q13")
                 .querySql("SELECT party, count(p.party) num FROM target.world_presidents p WHERE p.country ='Venezuela' AND start_year > 1900 AND end_year < 2000 group by p.party order by num desc")
@@ -196,7 +192,7 @@ public class TestRunVenezuelaPresidentsBatch {
         }
         log.info("Results\n{}", printMap(results));
     }
-    
+
     @Test
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
@@ -205,7 +201,7 @@ public class TestRunVenezuelaPresidentsBatch {
             break;
         }
     }
-    
+
     @Test
     public void testConfidenceEstimator() {
         // confidence for every attribute
@@ -215,7 +211,7 @@ public class TestRunVenezuelaPresidentsBatch {
             break;
         }
     }
-        
+
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
@@ -223,7 +219,7 @@ public class TestRunVenezuelaPresidentsBatch {
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
         }
     }
-    
+
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
@@ -232,7 +228,7 @@ public class TestRunVenezuelaPresidentsBatch {
 //            break;
         }
     }
-    
+
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
@@ -242,8 +238,10 @@ public class TestRunVenezuelaPresidentsBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            if (execute) testRunner.execute("/presidents/presidents-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            if (execute) testRunner.execute("/presidents/presidents-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute)
+                testRunner.execute("/presidents/presidents-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute)
+                testRunner.execute("/presidents/presidents-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             String configPathTable = "/presidents/presidents-" + executorModel + "-table-experiment.json";
             String configPathKey = "/presidents/presidents-" + executorModel + "-key-scan-experiment.json";
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
@@ -269,24 +267,30 @@ public class TestRunVenezuelaPresidentsBatch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
-                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                if (execute)
+                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                if (execute)
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 IOptimizer allCondition = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allCondition);
-                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allCondition);
+                if (execute)
+                    testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allCondition);
+                if (execute)
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allCondition);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                    if (execute)
+                        testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                    if (execute)
+                        testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
-    
+
     @Test
     public void testAllConditionPushDown() {
         List<IMetric> metrics = new ArrayList<>();
@@ -427,7 +431,7 @@ public class TestRunVenezuelaPresidentsBatch {
         }
         log.info("Results\n{}", printMap(results));
     }
-    
+
     @Test
     public void testCardinalityRun() {
         List<IMetric> metrics = new ArrayList<>();
@@ -440,7 +444,7 @@ public class TestRunVenezuelaPresidentsBatch {
         String configPathKey = "/presidents/presidents-" + executorModel + "-key-scan-experiment.json";
         int i = 0;
         for (ExpVariant variant : variants) {
-           IOptimizer o = optimizers.get(i);
+            IOptimizer o = optimizers.get(i);
             testRunner.executeSingle(configPathTable, "TABLE-CARDINALITY", variant, metrics, results, o);
 //            testRunner.executeSingle(configPathKey, "KEY-SCAN-CARDINALITY", variant, metrics, results, o);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
@@ -472,7 +476,7 @@ public class TestRunVenezuelaPresidentsBatch {
         prompt += "?\n";
         prompt += "Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.\n"
                 + "Respond with JSON only with a numerical property with name \"popularity\".";
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
+        TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);

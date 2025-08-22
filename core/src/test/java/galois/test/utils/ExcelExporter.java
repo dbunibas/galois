@@ -1,8 +1,8 @@
 package galois.test.utils;
 
-import galois.Constants;
 import galois.test.experiments.ExperimentResults;
 import galois.test.experiments.metrics.IMetric;
+import galois.utils.Configuration;
 import galois.utils.excelreport.ReportExcel;
 import galois.utils.excelreport.ReportRow;
 import galois.utils.excelreport.SheetReport;
@@ -12,15 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.*;
 
 @Slf4j
 public class ExcelExporter {
 
     public String getFileName(String expName) {
-        String pathExport = Constants.EXPORT_EXCEL_PATH;
-        String fileName = pathExport + expName + "-" + Constants.LLM_MODEL + "-" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + ".xlsx";
+        String pathExport = Configuration.getInstance().getExportExcelAbsolutePath();
+        String fileName = pathExport + "/" + expName + "-" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()) + ".xlsx";
         return fileName;
     }
 
@@ -62,7 +61,7 @@ public class ExcelExporter {
 //        } catch (IOException e) {
 //        }
     }
-   
+
     private void createHeaders(List<String> optmizers, SheetReport dataSheet) {
         ReportRow rowHeader = dataSheet.addRow();
         rowHeader.addCell("");

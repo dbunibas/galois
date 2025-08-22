@@ -2,10 +2,10 @@ package galois.llm.query.togetherai.llama3;
 
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
-import galois.Constants;
 import galois.llm.query.*;
 import galois.llm.query.utils.QueryUtils;
 import galois.prompt.EPrompts;
+import galois.utils.Configuration;
 import galois.utils.GaloisDebug;
 import lombok.Getter;
 import lombok.Setter;
@@ -131,9 +131,9 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
     @Override
     protected Chain<String, String> getConversationalChain() {
         if (contentRetriever == null) {
-            return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+            return buildTogetherAIConversationalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel());
         } else {
-            return buildTogetherAIConversationalRetrivalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, contentRetriever);
+            return buildTogetherAIConversationalRetrivalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), contentRetriever);
         }
     }
 

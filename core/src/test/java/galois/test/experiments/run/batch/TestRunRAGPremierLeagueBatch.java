@@ -3,7 +3,6 @@ package galois.test.experiments.run.batch;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galois.sqlparser.SQLQueryParser;
-import galois.Constants;
 import galois.llm.algebra.LLMScan;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
@@ -21,6 +20,7 @@ import galois.test.model.ExpVariant;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
 import galois.test.utils.TestUtils;
+import galois.utils.Configuration;
 import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -179,10 +179,10 @@ public class TestRunRAGPremierLeagueBatch {
             ExperimentResults experimentResults = experiment.toExperimentResults(actual, expectedResults, "PZ-" + pzVariant);
             log.warn("{}", experimentResults.getScores());
             double quality = (
-                    (experimentResults.getScores().get(5) != null ? experimentResults.getScores().get(5)  : 0)  + //CellSimilarityF1Score
-                            (experimentResults.getScores().get(6) != null ? experimentResults.getScores().get(6)  : 0) + //TupleCardinality
-                            (experimentResults.getScores().get(8) != null ? experimentResults.getScores().get(8)  : 0) //TupleSimilarityConstraint
-                    ) / 3.0;
+                    (experimentResults.getScores().get(5) != null ? experimentResults.getScores().get(5) : 0) + //CellSimilarityF1Score
+                            (experimentResults.getScores().get(6) != null ? experimentResults.getScores().get(6) : 0) + //TupleCardinality
+                            (experimentResults.getScores().get(8) != null ? experimentResults.getScores().get(8) : 0) //TupleSimilarityConstraint
+            ) / 3.0;
             log.info("\n******** \n* PZ {} - Query {}\n* Total Used Tokens: {}\n* Quality: {}\n********", pzVariant, variant.getQueryNum(), totalUsedTokens, experimentResults.toDebugString());
             resultString.append((quality + "").replace(".", ",") + "\t" + totalUsedTokens + "\n");
         }
@@ -214,8 +214,10 @@ public class TestRunRAGPremierLeagueBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            if (execute) testRunner.execute("/rag-premierleague/pl2425-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            if (execute) testRunner.execute("/rag-premierleague/pl2425-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute)
+                testRunner.execute("/rag-premierleague/pl2425-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute)
+                testRunner.execute("/rag-premierleague/pl2425-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             String configPathTable = "/rag-premierleague/pl2425-" + executorModel + "-table-experiment.json";
             String configPathKey = "/rag-premierleague/pl2425-" + executorModel + "-key-scan-experiment.json";
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
@@ -241,18 +243,24 @@ public class TestRunRAGPremierLeagueBatch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
-                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                if (execute)
+                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                if (execute)
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 IOptimizer allCondition = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allCondition);
-                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allCondition);
+                if (execute)
+                    testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, allCondition);
+                if (execute)
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, allCondition);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                    if (execute)
+                        testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                    if (execute)
+                        testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
             }
             exportExcel.export(fileName, EXP_NAME, metrics, results);
@@ -359,7 +367,7 @@ public class TestRunRAGPremierLeagueBatch {
         prompt += "?\n";
         prompt += "Return a value between 0 and 1. Where 1 is very popular and 0 is not popular at all.\n"
                 + "Respond with JSON only with a numerical property with name \"popularity\".";
-        TogetherAIModel model = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
+        TogetherAIModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_8B, TogetherAIConstants.STREAM_MODE);
         String response = model.generate(prompt);
         String cleanResponse = Mapper.toCleanJsonObject(response);
         Map<String, Object> parsedResponse = Mapper.fromJsonToMap(cleanResponse);

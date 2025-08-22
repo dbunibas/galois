@@ -3,12 +3,12 @@ package galois.llm.query.togetherai.llama3;
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
-import galois.Constants;
 import galois.llm.query.AbstractKeyBasedQueryExecutor;
 import galois.llm.query.AbstractQueryExecutorBuilder;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.IQueryExecutorBuilder;
 import galois.prompt.EPrompts;
+import galois.utils.Configuration;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.Attribute;
@@ -63,16 +63,16 @@ public class TogetheraiLlama3KeyScanQueryExecutor extends AbstractKeyBasedQueryE
 
     @Override
     protected Chain<String, String> getConversationalChain() {
-        if(contentRetriever == null) {
-            return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
-        }else {
-            return buildTogetherAIConversationalRetrivalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, contentRetriever);
+        if (contentRetriever == null) {
+            return buildTogetherAIConversationalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel());
+        } else {
+            return buildTogetherAIConversationalRetrivalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), contentRetriever);
         }
     }
 
     @Override
     protected ChatLanguageModel getChatLanguageModel() {
-        return buildTogetherAiChatLanguageModel(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
+        return buildTogetherAiChatLanguageModel(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel());
     }
 
     @Override

@@ -1,0 +1,27 @@
+# TogetherAI config
+togetherai.api-key=YOUR_API_KEY
+togetherai.model=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+## Wait time ms (for tier-2 40 for tier-1 110 otherwise 1000 for unpaid tier)
+togetherai.wait-time-ms=40
+
+# OpenAI config
+openai.api-key=YOUR_API_KEY
+openai.model-name=gpt-4o-mini
+
+# Ollama config
+ollama.model=llama3.2:latest
+ollama.url=http://127.0.0.1:11434
+
+# LLM model configuration
+llm-model=llama3
+
+# Cache configuration
+cache.enabled=false
+## Cache files absolute path
+cache.path=/XXX/YYY/ZZZ/cache
+
+# Export config
+## Result files absolute path
+export.results-path=/XXX/YYY/ZZZ/results
+## Excel results absolute path
+export.excel-path=/XXX/YYY/ZZZ/excel

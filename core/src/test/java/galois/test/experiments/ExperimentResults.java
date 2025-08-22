@@ -3,6 +3,8 @@ package galois.test.experiments;
 import galois.llm.query.LLMQueryStatManager;
 import galois.test.experiments.metrics.IMetric;
 import java.io.File;
+
+import galois.utils.Configuration;
 import lombok.Data;
 import speedy.model.database.Tuple;
 
@@ -74,19 +76,20 @@ public class ExperimentResults {
         sb.append("------------------------------------------------------------------------------------\n");
         String result = sb.toString();
         String nameReplaced = name.replace(" ", "_");
-        String basePath = System.getProperty("user.dir");
-        Path filePath = Paths.get(basePath, "src", "test", "resources", "results", nameReplaced + ".txt");
+//        String basePath = System.getProperty("user.dir");
+//        Path filePath = Paths.get(basePath, "src", "test", "resources", "results", nameReplaced + ".txt");
+        Path filePath = Paths.get(Configuration.getInstance().getResultsAbsolutePath(), nameReplaced + ".txt");
         try {
             Files.write(Paths.get(filePath.toUri()), result.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (exportActualResults) {
-            Path filePathCSV = Paths.get(basePath, "src", "test", "resources", "results", nameReplaced + ".csv");
+            Path filePathCSV = Paths.get(Configuration.getInstance().getResultsAbsolutePath(),nameReplaced + ".csv");
             saveActualResult(filePathCSV);
         }
         if (exportResults) {
-            Path basePathExp = Paths.get(basePath, "src", "test", "resources", "results");
+            Path basePathExp = Paths.get(Configuration.getInstance().getResultsAbsolutePath());
             String pathExpected = basePathExp.toString() + File.separator + nameReplaced + "_expected.csv";
             String pathActual = basePathExp.toString() + File.separator + nameReplaced + "_actual.csv";
             if (optimizerName != null && !optimizerName.isEmpty()) {
@@ -164,7 +167,9 @@ public class ExperimentResults {
             String[] headers = getHeaders(firstTuple);
             CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(headers).build();
             try {
-                PrintWriter writer = new PrintWriter(filePathCSV.toFile());
+                File file = filePathCSV.toFile();
+                file.getParentFile().mkdirs();
+                PrintWriter writer = new PrintWriter(file);
                 CSVPrinter printer = new CSVPrinter(writer, csvFormat);
                 for (Tuple tuple : actualResults) {
                     printer.printRecord(getCellContent(tuple));

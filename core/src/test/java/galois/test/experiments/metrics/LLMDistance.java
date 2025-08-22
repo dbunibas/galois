@@ -10,6 +10,7 @@ import galois.llm.models.togetherai.ResponseTogetherAI;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.cache.CacheEntry;
 import galois.llm.query.utils.cache.LLMCache;
+import galois.utils.Configuration;
 import galois.utils.Mapper;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +24,7 @@ public class LLMDistance {
 
 //    private String modelName = TogetherAIConstants.MODEL_LLAMA3_1_8B;
     private String modelName = TogetherAIConstants.MODEL_LLAMA3_3_70B;
-    private TogetherAIModel llmModel = new TogetherAIModel(Constants.TOGETHERAI_API, modelName, true);
+    private TogetherAIModel llmModel = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), modelName, true);
     private ObjectMapper objectMapper = Mapper.MAPPER;
     private Double thresholdForNumeric = 0.1;
 
@@ -135,7 +136,7 @@ public class LLMDistance {
                 response = entry.response();
             } else {
                 try {
-//                    TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
+//                    TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
                     TimeUnit.MILLISECONDS.sleep((long) 100);
 //                    log.error("compare using LLM: \n" + editedPrompt);
                     response = llmModel.getModelResponse(editedPrompt);
@@ -183,7 +184,7 @@ public class LLMDistance {
                 response = entry.response();
             } else {
                 try {
-//                    TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
+//                    TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
                     TimeUnit.MILLISECONDS.sleep((long) 100);
                     response = llmModel.getModelResponse(editedPrompt);
                     llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
@@ -230,7 +231,7 @@ public class LLMDistance {
             response = entry.response();
         } else {
             try {
-                TimeUnit.MILLISECONDS.sleep((long) Constants.WAIT_TIME_MS_TOGETHERAI);
+                TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
                 response = llmModel.getModelResponse(prompt);
                 llmCache.updateCache(prompt, 0, null, prompt, response, 0, 0, 0, 0);
             } catch (Exception e) {

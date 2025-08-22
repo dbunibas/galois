@@ -1,43 +1,31 @@
 package galois.llm.query.togetherai.llama3;
 
 import dev.langchain4j.chain.Chain;
-import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
-import galois.Constants;
-import galois.llm.query.AbstractEntityQueryExecutor;
-import galois.llm.query.AbstractQueryExecutorBuilder;
-import galois.llm.query.IQueryExecutor;
-import galois.llm.query.IQueryExecutorBuilder;
+import galois.llm.query.*;
+import galois.llm.query.utils.QueryUtils;
 import galois.prompt.EPrompts;
+import galois.utils.Configuration;
+import galois.utils.GaloisDebug;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import speedy.model.database.Attribute;
-import speedy.model.database.ITable;
+import speedy.model.database.*;
+import speedy.model.expressions.Expression;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static galois.llm.query.ConversationalChainFactory.buildTogetherAIConversationalChain;
-import galois.llm.query.ISQLExecutor;
-import galois.llm.query.utils.QueryUtils;
-
 import static galois.llm.query.ConversationalRetrievalChainFactory.buildTogetherAIConversationalRetrivalChain;
 import static galois.llm.query.utils.QueryUtils.*;
-import static galois.llm.query.utils.QueryUtils.isAlreadyContained;
 import static galois.utils.FunctionalUtils.orElse;
-import galois.utils.GaloisDebug;
-import java.util.ArrayList;
-import java.util.Map;
-import speedy.model.database.AttributeRef;
-import speedy.model.database.IDatabase;
-import speedy.model.database.TableAlias;
-import speedy.model.database.Tuple;
-import speedy.model.expressions.Expression;
 
 @Slf4j
 @Getter
 @Setter
-public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor implements ISQLExecutor{
+public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecutor implements ISQLExecutor {
 
     private final EPrompts firstPrompt;
     private final EPrompts iterativePrompt;
@@ -100,11 +88,11 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                 int initialTuples = tuples.size();
                 for (Map<String, Object> map : parsedResponse) {
                     Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
-                    if(!isAlreadyContained(tuple, tuples)){
+                    if (!isAlreadyContained(tuple, tuples)) {
                         tuples.add(tuple);
                     }
                 }
-                if(tuples.size() == initialTuples){
+                if (tuples.size() == initialTuples) {
                     log.info("Iteration {} did not add any new tuples. Avoid proceeding with further iterations", i);
                     return tuples;
                 }
@@ -118,7 +106,7 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
                     log.debug("Parsed response is: {}", parsedResponse);
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = QueryUtils.mapToTupleIgnoreMissingAttributes(map, tableAlias);
-                        if(!isAlreadyContained(tuple, tuples)){
+                        if (!isAlreadyContained(tuple, tuples)) {
                             tuples.add(tuple);
                         }
                     }
@@ -139,10 +127,10 @@ public class TogetheraiLlama3SQLQueryExecutor extends AbstractEntityQueryExecuto
 
     @Override
     protected Chain<String, String> getConversationalChain() {
-        if(contentRetriever == null) {
-            return buildTogetherAIConversationalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL);
-        }else {
-            return buildTogetherAIConversationalRetrivalChain(Constants.TOGETHERAI_API, Constants.TOGETHERAI_MODEL, contentRetriever);
+        if (contentRetriever == null) {
+            return buildTogetherAIConversationalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel());
+        } else {
+            return buildTogetherAIConversationalRetrivalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), contentRetriever);
         }
     }
 

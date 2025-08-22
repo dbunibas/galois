@@ -1,16 +1,15 @@
 package galois.test;
 
-import galois.Constants;
-import galois.llm.models.IModel;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
+import galois.utils.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 public class TestTogetherAIModel {
 
-    private String API_KEI = Constants.TOGETHERAI_API;
+    private String API_KEI = Configuration.getInstance().getTogetheraiApiKey();
 
     @Test
     public void testRequestText() {

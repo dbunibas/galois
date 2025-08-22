@@ -20,6 +20,7 @@ import galois.llm.database.LLMDB;
 import galois.llm.models.TogetherAIEmbeddingModel;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.togetherai.llama3.TogetheraiLlama3NLQueryExecutor;
+import galois.utils.Configuration;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -188,7 +189,7 @@ public class TestRAG {
                     .build();
         } else if (config.embeddingModelEngine == EEmbeddingModelEngine.T_AI) {
             return TogetherAIEmbeddingModel.builder()
-                    .toghetherAiAPI(Constants.TOGETHERAI_API)
+                    .toghetherAiAPI(Configuration.getInstance().getTogetheraiApiKey())
                     .modelName(config.embeddingModel)
                     .build();
         }

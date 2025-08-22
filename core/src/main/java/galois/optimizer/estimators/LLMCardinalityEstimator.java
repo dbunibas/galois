@@ -3,6 +3,7 @@ package galois.optimizer.estimators;
 import galois.llm.models.IModel;
 import galois.llm.models.OllamaModel;
 import galois.prompt.EEstimatorPrompt;
+import galois.utils.Configuration;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.ITable;
@@ -10,7 +11,6 @@ import speedy.model.expressions.Expression;
 
 import java.util.Map;
 
-import static galois.Constants.OLLAMA_MODEL;
 import static galois.utils.Mapper.fromJsonToMap;
 
 @Slf4j
@@ -22,7 +22,7 @@ public class LLMCardinalityEstimator implements IEstimator {
     private final EEstimatorPrompt conditionalEstimatorPrompt = EEstimatorPrompt.JSON_CONDITIONAL_CARDINALITY_ESTIMATOR;
     // TODO: Models should not be configurable from the builder (even in the query executors)!
     @Builder.Default
-    private final IModel model = new OllamaModel(OLLAMA_MODEL);
+    private final IModel model = new OllamaModel(Configuration.getInstance().getOllamaModel());
 
     @Override
     public double estimate(ITable table) {

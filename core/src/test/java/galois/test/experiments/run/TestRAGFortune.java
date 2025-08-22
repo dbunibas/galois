@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
+import galois.utils.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ public class TestRAGFortune {
     @Test
     public void testGenerateDocuments() throws IOException {
         new File(EXPORT_PATH).getAbsoluteFile().mkdirs();
-        TogetherAIModel toghetherAiModel = new TogetherAIModel(Constants.TOGETHERAI_API, TogetherAIConstants.MODEL_LLAMA3_1_70B, true);
+        TogetherAIModel toghetherAiModel = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), TogetherAIConstants.MODEL_LLAMA3_1_70B, true);
         toghetherAiModel.setTemperature(0.7);
         InputStream csvDataset = TestRAG.class.getResourceAsStream("/rag/" + EXP_NAME + "/fortune1000_2024.csv");
         CsvMapper mapper = new CsvMapper();
