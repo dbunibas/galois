@@ -41,7 +41,9 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+## Properties ##
 gradle.properties
+core/src/main/resources/configuration.properties
 
 ## movies dataset ##
 core/src/test/resources/movies/movies-data
