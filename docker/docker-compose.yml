@@ -1,12 +1,13 @@
 version: '3.3'
+name: 'galois'
 services:
   postgres:
-    image: postgres
+    image: postgres:11.10
     restart: always
     volumes:
       - ./data/db/data/:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=floq
+      - POSTGRES_DB=galois
       - POSTGRES_USER=pguser
       - POSTGRES_PASSWORD=pguser
     ports:
@@ -14,7 +15,7 @@ services:
     expose:
       - 5432
   chromadb:
-    image: chromadb/chroma
+    image: chromadb/chroma:0.6.4.dev226
     restart: always
     volumes:
       - ./chroma-data:/chroma/chroma
@@ -22,15 +23,15 @@ services:
       - 8000:8000
     expose:
       - 8000
-  ollama:
-    image: ollama/ollama
-    ports:
-        - 11434:11434
-    volumes:
-        - ./ollama/ollama:/root/.ollama
-        - ./entrypoint.sh:/entrypoint.sh
-    container_name: ollama
-    pull_policy: always
-    tty: true
-    restart: always
-    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+  # ollama:
+  #   image: ollama/ollama
+  #   ports:
+  #       - 11434:11434
+  #   volumes:
+  #       - ./ollama/ollama:/root/.ollama
+  #       - ./entrypoint.sh:/entrypoint.sh
+  #   container_name: ollama
+  #   pull_policy: always
+  #   tty: true
+  #   restart: always
+  #   entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]

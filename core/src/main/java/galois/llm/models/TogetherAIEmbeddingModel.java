@@ -1,5 +1,6 @@
 package galois.llm.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.data.embedding.Embedding;
@@ -153,6 +154,7 @@ public class TogetherAIEmbeddingModel extends DimensionAwareEmbeddingModel {
 
     @Data
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     static class EmbeddingResponse {
         public String model;
         public String object;

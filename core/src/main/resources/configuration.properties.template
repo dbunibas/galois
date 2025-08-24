@@ -12,6 +12,9 @@ openai.model-name=gpt-4o-mini
 ollama.model=llama3.2:latest
 ollama.url=http://127.0.0.1:11434
 
+# Chroma config
+chroma.url=http://localhost:8000
+
 # LLM model configuration
 llm-model=llama3
 

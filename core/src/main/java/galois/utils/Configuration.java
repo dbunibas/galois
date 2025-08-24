@@ -62,6 +62,10 @@ public class Configuration {
         return props.getProperty("ollama.model");
     }
 
+    public String getChromaUrl() {
+        return props.getProperty("chroma.url");
+    }
+
     public String getLLMModel() {
         return props.getProperty("llm-model");
     }

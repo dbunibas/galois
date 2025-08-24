@@ -66,7 +66,7 @@ public class ContentRetrieverConfigurationParser {
     private EmbeddingModel buildEmbeddingModel(ContentRetrieverConfigurationJSON contentRetrieverConf) {
         if (contentRetrieverConf.getEmbeddingModelEngine().equalsIgnoreCase("ollama")) {
             return OllamaEmbeddingModel.builder()
-                    .baseUrl("http://127.0.0.1:11434")
+                    .baseUrl(Configuration.getInstance().getOllamaUrl())
                     .modelName(contentRetrieverConf.getEmbeddingModel())
                     .build();
         } else if (contentRetrieverConf.getEmbeddingModelEngine().equalsIgnoreCase("togetherai")) {
@@ -81,7 +81,7 @@ public class ContentRetrieverConfigurationParser {
     private EmbeddingStore<TextSegment> buildEmbeddingStore(ContentRetrieverConfigurationJSON contentRetrieverConf) {
         EmbeddingStore<TextSegment> embeddingStore = ChromaEmbeddingStore
                 .builder()
-                .baseUrl("http://localhost:8000")
+                .baseUrl(Configuration.getInstance().getChromaUrl())
                 .collectionName(contentRetrieverConf.getEmbeddingStoreCollectionName())
                 .logRequests(true)
                 .logResponses(true)
