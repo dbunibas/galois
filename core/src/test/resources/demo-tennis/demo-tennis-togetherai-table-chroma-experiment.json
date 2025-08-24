@@ -1,0 +1,71 @@
+{
+  "name": "Web-Tennis-{{QN}} Experiment-table-RAG",
+  "metrics": [
+    "CellPrecision",
+    "CellSimilarityPrecision",
+    "CellRecall",
+    "CellSimilarityRecall",
+    "CellF1Score",
+    "CellSimilarityF1Score",
+    "TupleCardinality",
+    "TupleConstraint",
+    "TupleSimilarityConstraint"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-table",
+      "maxIterations": 5,
+      "naturalLanguagePrompt": "{{NL-PROMPT}}",
+      "contentRetriever": {
+        "embeddingStoreCollectionName": "rag_demo_tennis_400_50_BGE-Large-PROCESSED",
+        "embeddingModelEngine": "togetherai",
+        "embeddingModel": "BAAI/bge-large-en-v1.5",
+        "maxResults": 100,
+        "minScore": 0.75,
+        "maxSegmentSizeInTokens": 400,
+        "maxOverlapSizeInTokens": 50,
+        "processDocuments": true,
+        "documentsToLoad": "./src/test/resources/demo-tennis/documents/"
+      }
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "web_tennis",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "wimbledon_champions",
+          "attributes": [
+            {
+              "name": "tournament_year",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "player_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "player_surname",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "gender",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/demo-tennis/data"
+  }
+}

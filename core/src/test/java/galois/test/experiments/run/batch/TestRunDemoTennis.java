@@ -29,13 +29,12 @@ public class TestRunDemoTennis {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
-    private String executorModel = "llama3";
 
     public TestRunDemoTennis() {
         ExpVariant q1 = ExpVariant.builder()
                 .queryNum("Q1")
-                .querySql("select t.player_name, t.player_surname from wimbledon_champions t where t.tournament_year = 2023")
-                .prompt("List the player name and player surname of the 2023 Wimbledon champion.")
+                .querySql("select t.player_name, t.player_surname from wimbledon_champions t where t.tournament_year = 2023 and t.gender = 'male'")
+                .prompt("List the player name and player surname of the male 2023 Wimbledon champion.")
                 .build();
         variants = List.of(q1);
     }
@@ -58,7 +57,26 @@ public class TestRunDemoTennis {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/demo-tennis/demo-tennis-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/demo-tennis/demo-tennis-togetherai-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+        log.info("Results\n{}", printMap(results));
+    }
+
+    @Test
+    public void testRunContentRetriever() {
+        ExpVariant qC = ExpVariant.builder()
+                .queryNum("QC")
+                .querySql("select t.player_name, t.player_surname from wimbledon_champions t where t.tournament_year = 2025 and t.gender = 'male'")
+                .prompt("List the player name and player surname of the male 2025 Wimbledon champion.")
+                .build();
+        List<ExpVariant> variantsOverride = List.of(qC);
+
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+        for (ExpVariant variant : variantsOverride) {
+            testRunner.execute("/demo-tennis/demo-tennis-togetherai-table-chroma-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));

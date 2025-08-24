@@ -1,5 +1,5 @@
 {
-  "name": "Web-Tennis-{{QN}} Experiment-nl",
+  "name": "Web-Tennis-{{QN}} Experiment-table",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -14,7 +14,7 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-nl",
+      "queryExecutor": "togetherai-llama3-table",
       "maxIterations": 5,
       "naturalLanguagePrompt": "{{NL-PROMPT}}"
     }
@@ -33,7 +33,8 @@
             {
               "name": "tournament_year",
               "type": "INTEGER",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "player_name",
@@ -42,6 +43,11 @@
             },
             {
               "name": "player_surname",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "gender",
               "type": "STRING",
               "nullable": false
             }
