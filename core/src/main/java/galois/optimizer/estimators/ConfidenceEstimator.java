@@ -33,7 +33,7 @@ public class ConfidenceEstimator {
             String promptTable = prompt.replace("${relationalSchema}", schema);
             if (log.isDebugEnabled()) log.debug(promptTable);
             ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-            if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+            if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
                 model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
             String response = model.generate(promptTable);
             if (log.isDebugEnabled()) log.debug(response);
@@ -63,7 +63,7 @@ public class ConfidenceEstimator {
             String promptTable = prompt.replace("${relationalSchema}", schema);
             if (log.isDebugEnabled()) log.debug(promptTable);
             ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-            if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+            if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
                 model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
             String response = model.generate(promptTable);
             if (log.isDebugEnabled()) log.debug(response);
@@ -110,7 +110,7 @@ public class ConfidenceEstimator {
         promptTable = promptTable.replace("${conditions}", whereExpression);
         if (log.isDebugEnabled()) log.debug("Request:\n {}", promptTable);
         ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response:\n {}", response);
@@ -172,7 +172,7 @@ public class ConfidenceEstimator {
         promptTable = promptTable.replace("${attrs}", attrsString);
         if (log.isDebugEnabled()) log.debug("Prompt: \n {}", promptTable);
         ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response: \n {}", response);
@@ -267,7 +267,7 @@ public class ConfidenceEstimator {
         promptTable = promptTable.replace("${conditions}", conditionExpression);
         if (log.isDebugEnabled()) log.debug("Request:\n {}", promptTable);
         ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response JSON:\n {}", response);
@@ -346,7 +346,7 @@ public class ConfidenceEstimator {
         promptTable = promptTable.replace("${conditions}", conditionExpression);
         if (log.isDebugEnabled()) log.debug("Request:\n {}", promptTable);
         ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug("Response JSON:\n {}", response);
@@ -400,7 +400,7 @@ public class ConfidenceEstimator {
         promptTable = promptTable.replace("${conditions}", conditions);
         if (log.isDebugEnabled()) log.debug(promptTable);
         ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(promptTable);
         if (log.isDebugEnabled()) log.debug(response);
@@ -426,7 +426,7 @@ public class ConfidenceEstimator {
             promptTable = promptTable.replace("${query}", querySQL);
             if (log.isDebugEnabled()) log.debug(promptTable);
             ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), togetherAIModelName, TogetherAIConstants.STREAM_MODE);
-            if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+            if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
                 model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
             String response = model.generate(promptTable);
             if (log.isDebugEnabled()) log.debug(response);

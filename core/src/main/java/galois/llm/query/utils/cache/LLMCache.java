@@ -35,7 +35,7 @@ public class LLMCache {
         } else {
             queryExecutorName = queryExecutor.getClass().getSimpleName();
         }
-        return String.format("%s/cache-%s-%s.json", Configuration.getInstance().getCacheAbsolutePath(), queryExecutorName, Configuration.getInstance().getLLMModel());
+        return String.format("%s/cache-%s-%s.json", Configuration.getInstance().getCacheAbsolutePath(), queryExecutorName, Configuration.getInstance().getLLMProvider());
     }
 
     public boolean containsQuery(String prompt, int iteration, IQueryExecutor queryExecutor, String firstPrompt) {

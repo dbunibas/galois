@@ -1,5 +1,5 @@
 {
-  "name": "Web-Tennis-{{QN}} Experiment-table-RAG",
+  "name": "Web-Tennis-{{QN}} Experiment-table",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -14,20 +14,9 @@
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-table",
+      "queryExecutor": "open-ai-table",
       "maxIterations": 5,
-      "naturalLanguagePrompt": "{{NL-PROMPT}}",
-      "contentRetriever": {
-        "embeddingStoreCollectionName": "rag_demo_tennis_400_50_BGE-Large-PROCESSED",
-        "embeddingModelEngine": "togetherai",
-        "embeddingModel": "BAAI/bge-large-en-v1.5",
-        "maxResults": 100,
-        "minScore": 0.75,
-        "maxSegmentSizeInTokens": 400,
-        "maxOverlapSizeInTokens": 50,
-        "processDocuments": true,
-        "documentsToLoad": "./src/test/resources/demo-tennis/documents/"
-      }
+      "naturalLanguagePrompt": "{{NL-PROMPT}}"
     }
   },
   "query": {

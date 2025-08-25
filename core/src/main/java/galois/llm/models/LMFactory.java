@@ -10,12 +10,12 @@ public class LMFactory {
 
     public static ChatLanguageModel getLMModel() {
         ChatLanguageModel model;
-        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_LLAMA3)) {
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_TOGETHERAI)) {
             model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), TogetherAIConstants.STREAM_MODE);
-        } else if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT)) {
+        } else if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI)) {
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         } else {
-            throw new IllegalArgumentException("Unknown model " + Configuration.getInstance().getLLMModel());
+            throw new IllegalArgumentException("Unknown provider " + Configuration.getInstance().getLLMProvider());
         }
         return model;
     }

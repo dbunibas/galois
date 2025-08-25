@@ -33,7 +33,7 @@ public class ResultConfidenceEstimator {
         prompt = prompt.replace("{question}", question);
         prompt = prompt.replace("{answer}", String.join("\n", tuples));
         ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), TogetherAIConstants.STREAM_MODE);
-        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT))
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
         String response = model.generate(prompt);
         log.trace("Confidence estimator prompt: {}\nResponse: {}", prompt, response);

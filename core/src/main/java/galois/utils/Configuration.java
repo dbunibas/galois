@@ -66,8 +66,8 @@ public class Configuration {
         return props.getProperty("chroma.url");
     }
 
-    public String getLLMModel() {
-        return props.getProperty("llm-model");
+    public String getLLMProvider() {
+        return props.getProperty("llm-provider");
     }
 
     public boolean isCacheEnabled() {

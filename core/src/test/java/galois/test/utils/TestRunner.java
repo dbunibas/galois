@@ -2,6 +2,7 @@ package galois.test.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import galois.Constants;
+import galois.GaloisPipeline;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.IGaloisOriginalExecutor;
@@ -232,7 +233,7 @@ public class TestRunner {
 
     private static @NotNull String getModelName() {
         String modelName;
-        if (Configuration.getInstance().getLLMModel().equals(Constants.MODEL_GPT)) {
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI)) {
             modelName = Configuration.getInstance().getOpenaiModelName();
         } else {
             modelName = Configuration.getInstance().getTogetheraiModel();
@@ -479,40 +480,8 @@ public class TestRunner {
             Experiment experiment = ExperimentParser.loadAndParseJSON(path);
             experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
             experiment.getQuery().setSql(variant.getQuerySql());
-            log.debug("SQL query is {}", experiment.getQuery().getSql());
-            IDatabase database = experiment.getQuery().getDatabase();
-            ParserFrom parserFrom = new ParserFrom();
-            parserFrom.parseFrom(experiment.getQuery().getSql());
-            List<String> tables = parserFrom.getTables();
-//            String query = experiment.getQuery().getSql();
-//            int indexOfFrom = query.indexOf("FROM", 0);
-//            String queryFrom = query.substring(indexOfFrom).trim();
-//            query = "SELECT * " + queryFrom;
-//            query = query.replace("target.", "");
-            String query = experiment.getQuery().getSql();
-            query = query.replace("target.", "");
-            ConfidenceEstimator estimator = new ConfidenceEstimator();
-            Map<String, String> estimation = estimator.getEstimationForQuery2(database, tables, query);
-            ParserWhere parserWhere = new ParserWhere();
-            parserWhere.parseWhere(experiment.getQuery().getSql());
-            List<Expression> expressions = parserWhere.getExpressions();
-            List<Expression> expressionPushDown = new ArrayList<>();
-            int indexPushDown = 0;
-            List<Integer> indexes = new ArrayList<>();
-            for (Expression expression : expressions) {
-                for (String attr : estimation.keySet()) {
-                    if (estimation.get(attr).contains("high") && expression.toString().contains(attr)) { // TOOO add more values
-                        expressionPushDown.add(expression);
-                        indexes.add(indexPushDown);
-                    }
-                }
-                indexPushDown++;
-            }
-            log.info("Pushdown: {}", expressionPushDown);
-            Double confidence = estimator.getEstimationConfidence(database, tables, query, expressionPushDown);
-            log.info("Confidence Keys: {}", confidence);
-            QueryPlan plan = new QueryPlan(expressionPushDown, confidence, expressions.size(), indexes);
-            return plan;
+            GaloisPipeline pipeline = new GaloisPipeline();
+            return pipeline.estimateBestPlan(experiment.getQuery().getDatabase(), experiment.getQuery().getSql());
         } catch (Exception ioe) {
             log.error("Unable to execute experiment {}", path, ioe);
             return null;
