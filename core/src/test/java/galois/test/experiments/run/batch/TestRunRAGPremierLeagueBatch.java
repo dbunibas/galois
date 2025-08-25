@@ -3,6 +3,8 @@ package galois.test.experiments.run.batch;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.galois.sqlparser.SQLQueryParser;
+import galois.Constants;
+import galois.GaloisPipeline;
 import galois.llm.algebra.LLMScan;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
@@ -59,7 +61,7 @@ public class TestRunRAGPremierLeagueBatch {
 
     private final List<ExpVariant> variants;
 
-    private String executorModel = "llama3";
+    private String executorModel = "togetherai";
 
     public TestRunRAGPremierLeagueBatch() {
         List<String> singleConditionOptimizers = List.of(
@@ -147,11 +149,54 @@ public class TestRunRAGPremierLeagueBatch {
     }
 
     @Test
+    public void testRunBatchTogetherAI() {
+        executeExperiments(Constants.PROVIDER_TOGETHERAI);
+    }
+
+    private void executeExperiments(String provider) {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME + "-" + provider);
+
+        for (ExpVariant variant : variants) {
+            String configPathNl = "/rag-premierleague/pl2425-" + provider + "-nl-experiment.json";
+            String configPathSql = "/rag-premierleague/pl2425-" + provider + "-sql-experiment.json";
+            String configPathTable = "/rag-premierleague/pl2425-" + provider + "-table-experiment.json";
+            String configPathKeyScan = "/rag-premierleague/pl2425-" + provider + "-key-scan-experiment.json";
+
+            testRunner.execute(configPathNl, "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathSql, "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathTable, "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathKeyScan, "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            executeFullPipeline(configPathTable, configPathKeyScan, variant, metrics, results);
+
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+
+        log.info("Results\n{}", printMap(results));
+    }
+
+    private void executeFullPipeline(String configPathTable, String configPathKeyScan, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
+        double threshold = 0.6;
+        GaloisPipeline pipeline = new GaloisPipeline();
+        QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant);
+        IOptimizer optimizer = pipeline.selectOptimizer(planEstimation, true);
+        Double confidence = planEstimation.getConfidenceKeys();
+        if (confidence != null && confidence > threshold) {
+            // Execute KEY-SCAN
+            testRunner.executeSingle(configPathKeyScan, "Galois Full (Key-Scan)", variant, metrics, results, optimizer);
+        } else {
+            // Execute TABLE
+            testRunner.executeSingle(configPathTable, "Galois Full (Table)", variant, metrics, results, optimizer);
+        }
+    }
+
+    @Test
     public void testComparePalimpzest() throws IOException {
-        String pzResultPath = "/Users/donatello/Projects/research/[Related Tools]/palimpzest/exp-results/PL/";
-        String pzVariant = "Maximum Quality";
-//        String pzVariant = "MaxQuality@FixedCost";
-//        String pzVariant = "Minimum Cost";
+        String pzResultPath = TestRunRAGPremierLeagueBatch.class.getResource("/palimpzest-exp-results/PL/").getPath();
+        String pzVariant = "without-description/Maximum Quality";
+//        String pzVariant = "without-description/MaxQuality@FixedCost";
+//        String pzVariant = "without-description/Minimum Cost";
         MainMemoryDB pzResults = new DAOMainMemoryDatabase().loadCSVDatabase(pzResultPath + File.separator + pzVariant, ';', null, false, true);
         StringBuilder resultString = new StringBuilder();
         for (ExpVariant variant : variants) {
@@ -164,7 +209,7 @@ public class TestRunRAGPremierLeagueBatch {
             Number totalUsedTokens = (Number) pzVariantDetails.get("total_used_tokens");
 
             //QUALITY
-            Experiment experiment = ExperimentParser.loadAndParseJSON("/rag-premierleague/pl2425-llama3-pz-experiment.json"); //Used only for load expected result
+            Experiment experiment = ExperimentParser.loadAndParseJSON("/rag-premierleague/pl2425-togetherai-pz-experiment.json"); //Used only for load expected result
             experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
             experiment.getQuery().setSql(variant.getQuerySql());
             DBMSDB dbmsDatabase = experiment.createDatabaseForExpected();
@@ -195,11 +240,11 @@ public class TestRunRAGPremierLeagueBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/rag-premierleague/pl2425-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/rag-premierleague/pl2425-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/rag-premierleague/pl2425-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/rag-premierleague/pl2425-llama3-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/rag-premierleague/pl2425-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/rag-premierleague/pl2425-togetherai-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/rag-premierleague/pl2425-togetherai-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/rag-premierleague/pl2425-togetherai-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/rag-premierleague/pl2425-togetherai-key-experiment.json", "KEY", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/rag-premierleague/pl2425-togetherai-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -273,7 +318,7 @@ public class TestRunRAGPremierLeagueBatch {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         ExpVariant variant = variants.get(0);
-        String configPath = "/rag-premierleague/pl2425-llama3-table-experiment.json";
+        String configPath = "/rag-premierleague/pl2425-togetherai-table-experiment.json";
         String type = "TABLE";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
@@ -287,7 +332,7 @@ public class TestRunRAGPremierLeagueBatch {
     @Test
     public void testConfidenceEstimatorSchema() {
         for (ExpVariant variant : variants) {
-            String configPath = "/rag-premierleague/pl2425-llama3-table-experiment.json";
+            String configPath = "/rag-premierleague/pl2425-togetherai-table-experiment.json";
             testRunner.executeConfidenceEstimatorSchema(configPath, variant);
             break;
         }
@@ -297,7 +342,7 @@ public class TestRunRAGPremierLeagueBatch {
     public void testConfidenceEstimator() {
         // confidence for every attribute
         for (ExpVariant variant : variants) {
-            String configPath = "/rag-premierleague/pl2425-llama3-table-experiment.json";
+            String configPath = "/rag-premierleague/pl2425-togetherai-table-experiment.json";
             testRunner.executeConfidenceEstimator(configPath, variant);
             break;
         }
@@ -306,7 +351,7 @@ public class TestRunRAGPremierLeagueBatch {
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/rag-premierleague/pl2425-llama3-table-experiment.json";
+            String configPath = "/rag-premierleague/pl2425-togetherai-table-experiment.json";
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
 //            break;
         }
@@ -318,10 +363,10 @@ public class TestRunRAGPremierLeagueBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/rag-premierleague/pl2425-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/rag-premierleague/pl2425-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            String tableExp = "/rag-premierleague/pl2425-llama3-table-experiment.json";
-            String keyExp = "/rag-premierleague/pl2425-llama3-key-scan-experiment.json";
+            testRunner.execute("/rag-premierleague/pl2425-togetherai-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/rag-premierleague/pl2425-togetherai-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String tableExp = "/rag-premierleague/pl2425-togetherai-table-experiment.json";
+            String keyExp = "/rag-premierleague/pl2425-togetherai-key-scan-experiment.json";
 //            Double popularity = getPopularity(tableExp, "usa_state", variant);
             Double popularity = testRunner.getPopularity(tableExp, variant);
             if (popularity >= 0.7) {
