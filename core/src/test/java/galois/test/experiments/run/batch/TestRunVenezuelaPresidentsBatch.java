@@ -1,6 +1,8 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
+import galois.Constants;
+import galois.GaloisPipeline;
 import galois.llm.algebra.LLMScan;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
@@ -42,7 +44,7 @@ public class TestRunVenezuelaPresidentsBatch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
-    private String executorModel = "llama3";
+    private String executorModel = "togetherai";
 //    private String executorModel = "" + executorModel + "";
 
     public TestRunVenezuelaPresidentsBatch() {
@@ -174,6 +176,54 @@ public class TestRunVenezuelaPresidentsBatch {
                 IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql(), ((tableAlias, attributes) -> new LLMScan(tableAlias, null, attributes, null)));
                 log.info("Parsed result:\n{}", result);
             });
+        }
+    }
+
+    @Test
+    public void testRunBatchTogetherAI() {
+        executeExperiments(Constants.PROVIDER_TOGETHERAI);
+    }
+
+    @Test
+    public void testRunBatchOpenAI() {
+        executeExperiments(Constants.PROVIDER_OPENAI);
+    }
+
+    private void executeExperiments(String provider) {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME + "-" + provider);
+
+        for (ExpVariant variant : variants) {
+            String configPathNl = "/presidents/presidents-" + provider + "-nl-experiment.json";
+            String configPathSql = "/presidents/presidents-" + provider + "-sql-experiment.json";
+            String configPathTable = "/presidents/presidents-" + provider + "-table-experiment.json";
+            String configPathKeyScan = "/presidents/presidents-" + provider + "-key-scan-experiment.json";
+
+            testRunner.execute(configPathNl, "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathSql, "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathTable, "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathKeyScan, "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            executeFullPipeline(configPathTable, configPathKeyScan, variant, metrics, results);
+
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+
+        log.info("Results\n{}", printMap(results));
+    }
+
+    private void executeFullPipeline(String configPathTable, String configPathKeyScan, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
+        double threshold = 0.6;
+        GaloisPipeline pipeline = new GaloisPipeline();
+        QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant);
+        IOptimizer optimizer = pipeline.selectOptimizer(planEstimation, true);
+        Double confidence = planEstimation.getConfidenceKeys();
+        if (confidence != null && confidence > threshold) {
+            // Execute KEY-SCAN
+            testRunner.executeSingle(configPathKeyScan, "Galois Full (Key-Scan)", variant, metrics, results, optimizer);
+        } else {
+            // Execute TABLE
+            testRunner.executeSingle(configPathTable, "Galois Full (Table)", variant, metrics, results, optimizer);
         }
     }
 
