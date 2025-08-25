@@ -346,7 +346,7 @@ public class TestPopularity {
 //        String tableName = "international_presidents";
 //        List<ExpVariant> variants = getUSAPresidentsVariants();
 //        List<ExpVariant> variants = getVenezuelaPresidentsVariants();
-        String expPath = "/movies/movies-llama3-table-experiment.json";
+        String expPath = "/movies/movies-togetherai-table-experiment.json";
         String tableName = "movie";
         List<ExpVariant> variants = getMoviesVariants();
         try {
@@ -403,7 +403,7 @@ public class TestPopularity {
 //        String tableName = "international_presidents";
 //        List<ExpVariant> variants = getUSAPresidentsVariants();
 //        List<ExpVariant> variants = getVenezuelaPresidentsVariants();
-        String expPath = "/movies/movies-llama3-table-experiment.json";
+        String expPath = "/movies/movies-togetherai-table-experiment.json";
         String tableName = "movie";
         List<ExpVariant> variants = getMoviesVariants();
         try {
