@@ -1,6 +1,8 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
+import galois.Constants;
+import galois.GaloisPipeline;
 import galois.llm.algebra.LLMScan;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
@@ -15,11 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static speedy.utility.SpeedyUtility.printMap;
@@ -35,7 +33,7 @@ public class TestRunFlight2Batch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
-    private String executorModel = "llama3";
+    private String executorModel = "togetherai";
 
 
     public TestRunFlight2Batch() {
@@ -66,7 +64,7 @@ public class TestRunFlight2Batch {
 
         ExpVariant q3 = ExpVariant.builder()
                 .queryNum("Q3")
-                .querySql("SELECT a.airline FROM target.usa_airline_companies a WHERE a.call_sign='UAL'")
+                .querySql("SELECT a.airline FROM target.usa_airline_companies a WHERE a.call_sign='ual'")
                 .prompt("Which airline has call sign 'ual'?")
                 .optimizers(singleConditionOptimizers)
                 .build();
@@ -87,7 +85,7 @@ public class TestRunFlight2Batch {
 
         // FIXME: Which Speedy tree can execute this query?
 
-       variants = List.of(q1, q2, q3);
+        variants = List.of(q1, q2, q3);
     }
 
     @Test
@@ -99,6 +97,54 @@ public class TestRunFlight2Batch {
                 IAlgebraOperator result = sqlQueryParser.parse(variant.getQuerySql(), ((tableAlias, attributes) -> new LLMScan(tableAlias, null, attributes, null)));
                 log.info("Parsed result:\n{}", result);
             });
+        }
+    }
+
+    @Test
+    public void testRunBatchTogetherAI() {
+        executeExperiments(Constants.PROVIDER_TOGETHERAI);
+    }
+
+    @Test
+    public void testRunBatchOpenAI() {
+        executeExperiments(Constants.PROVIDER_OPENAI);
+    }
+
+    private void executeExperiments(String provider) {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME + "-" + provider);
+
+        for (ExpVariant variant : variants) {
+            String configPathNl = "/flight_2_data/flight_2-" + provider + "-nl-experiment.json";
+            String configPathSql = "/flight_2_data/flight_2-" + provider + "-sql-experiment.json";
+            String configPathTable = "/flight_2_data/flight_2-" + provider + "-table-experiment.json";
+            String configPathKeyScan = "/flight_2_data/flight_2-" + provider + "-key-scan-experiment.json";
+
+            testRunner.execute(configPathNl, "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathSql, "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathTable, "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathKeyScan, "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            executeFullPipeline(configPathTable, configPathKeyScan, variant, metrics, results);
+
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+
+        log.info("Results\n{}", printMap(results));
+    }
+
+    private void executeFullPipeline(String configPathTable, String configPathKeyScan, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
+        double threshold = 0.6;
+        GaloisPipeline pipeline = new GaloisPipeline();
+        QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant);
+        IOptimizer optimizer = pipeline.selectOptimizer(planEstimation, true);
+        Double confidence = planEstimation.getConfidenceKeys();
+        if (confidence != null && confidence > threshold) {
+            // Execute KEY-SCAN
+            testRunner.executeSingle(configPathKeyScan, "Galois Full (Key-Scan)", variant, metrics, results, optimizer);
+        } else {
+            // Execute TABLE
+            testRunner.executeSingle(configPathTable, "Galois Full (Table)", variant, metrics, results, optimizer);
         }
     }
 
@@ -127,8 +173,10 @@ public class TestRunFlight2Batch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            if (execute) testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            if (execute) testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute)
+                testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            if (execute)
+                testRunner.execute("/flight_2_data/flight_2-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             String configPathTable = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
             String configPathKey = "/flight_2_data/flight_2-" + executorModel + "-key-scan-experiment.json";
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
@@ -154,18 +202,24 @@ public class TestRunFlight2Batch {
                 optimizer = singleConditionPushDownRemoveAlgebraTree;
             }
             if (executeAllPlans) {
-                if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
-                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                if (execute)
+                    testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                if (execute)
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-                if (execute) testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
-                if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
+                if (execute)
+                    testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
+                if (execute)
+                    testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizerAll);
             } else {
                 if (confidenceKeys != null && confidenceKeys > threshold) {
                     // Execute KEY-SCAN
-                    if (execute) testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
+                    if (execute)
+                        testRunner.executeSingle(configPathKey, "KEY-SCAN-GALOIS", variant, metrics, results, optimizer);
                 } else {
                     // Execute TABLE
-                    if (execute) testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
+                    if (execute)
+                        testRunner.executeSingle(configPathTable, "TABLE-GALOIS", variant, metrics, results, optimizer);
                 }
                 IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
             }
@@ -187,7 +241,7 @@ public class TestRunFlight2Batch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
-    
+
     @Test
     public void testLLamaLogProbsStaticResults() {
 //        List<IMetric> metrics = new ArrayList<>();
@@ -241,7 +295,7 @@ public class TestRunFlight2Batch {
         IOptimizer nullOptimizer = null; // to execute unomptimize experiments
         testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdownWithFilter, 0.8);
     }
-    
+
     @Test
     public void testIterationsImpact() {
         String configPathTable = "/flight_2_data/flight_2-" + executorModel + "-table-experiment.json";
@@ -257,7 +311,7 @@ public class TestRunFlight2Batch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
-    
+
 
     @Test
     public void testConfidenceEstimatorSchema() {
@@ -330,7 +384,7 @@ public class TestRunFlight2Batch {
                 variants.get(2)
         );
 
-        for (ExpVariant variant: iterVariants) {
+        for (ExpVariant variant : iterVariants) {
             IOptimizer optimizerAll = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer"); //remove algebra true
             QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant); // it doesn't matter
             log.info("Plan Estimated: {}", planEstimation);
