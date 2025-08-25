@@ -76,11 +76,11 @@ public class TestRunPresidentsBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results);
-            execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results);
-            execute("/presidents/presidents-llama3-table-experiment.json", "TABLE", variant, metrics, results);
-            execute("/presidents/presidents-llama3-key-experiment.json", "KEY", variant, metrics, results);
-            execute("/presidents/presidents-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results);
+            execute("/presidents/presidents-togetherai-nl-experiment.json", "NL", variant, metrics, results);
+            execute("/presidents/presidents-togetherai-sql-experiment.json", "SQL", variant, metrics, results);
+            execute("/presidents/presidents-togetherai-table-experiment.json", "TABLE", variant, metrics, results);
+            execute("/presidents/presidents-togetherai-key-experiment.json", "KEY", variant, metrics, results);
+            execute("/presidents/presidents-togetherai-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         System.out.println(SpeedyUtility.printMap(results));
@@ -91,9 +91,9 @@ public class TestRunPresidentsBatch {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         for (ExpVariant variant : variants) {
-            parse("/presidents/presidents-llama3-table-experiment.json", "TABLE", variant, metrics, results);
-            parse("/presidents/presidents-llama3-key-experiment.json", "KEY", variant, metrics, results);
-            parse("/presidents/presidents-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results);
+            parse("/presidents/presidents-togetherai-table-experiment.json", "TABLE", variant, metrics, results);
+            parse("/presidents/presidents-togetherai-key-experiment.json", "KEY", variant, metrics, results);
+            parse("/presidents/presidents-togetherai-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results);
         }
     }
 

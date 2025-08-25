@@ -342,7 +342,7 @@ public class TestPopularity {
 //        String tableName = "usa_state";
 //        List<ExpVariant> variants = getGEOVariants();
 
-//        String expPath = "/presidents/presidents-llama3-table-experiment.json";
+//        String expPath = "/presidents/presidents-togetherai-table-experiment.json";
 //        String tableName = "international_presidents";
 //        List<ExpVariant> variants = getUSAPresidentsVariants();
 //        List<ExpVariant> variants = getVenezuelaPresidentsVariants();
@@ -399,7 +399,7 @@ public class TestPopularity {
 //        String tableName = "usa_state";
 //        List<ExpVariant> variants = getGEOVariants();
 
-//        String expPath = "/presidents/presidents-llama3-table-experiment.json";
+//        String expPath = "/presidents/presidents-togetherai-table-experiment.json";
 //        String tableName = "international_presidents";
 //        List<ExpVariant> variants = getUSAPresidentsVariants();
 //        List<ExpVariant> variants = getVenezuelaPresidentsVariants();

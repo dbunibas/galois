@@ -1,6 +1,8 @@
 package galois.test.experiments.run.batch;
 
 import com.galois.sqlparser.SQLQueryParser;
+import galois.Constants;
+import galois.GaloisPipeline;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.QueryUtils;
@@ -41,7 +43,7 @@ public class TestRunUSAPresidentsBatch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
-    private String executorModel = "llama3";
+    private String executorModel = "togetherai";
 //    private String executorModel = "" + executorModel + "";
 
     public TestRunUSAPresidentsBatch() {
@@ -176,16 +178,64 @@ public class TestRunUSAPresidentsBatch {
     }
 
     @Test
+    public void testRunBatchTogetherAI() {
+        executeExperiments(Constants.PROVIDER_TOGETHERAI);
+    }
+
+    @Test
+    public void testRunBatchOpenAI() {
+        executeExperiments(Constants.PROVIDER_OPENAI);
+    }
+
+    private void executeExperiments(String provider) {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME + "-" + provider);
+
+        for (ExpVariant variant : variants) {
+            String configPathNl = "/presidents/presidents-" + provider + "-nl-experiment.json";
+            String configPathSql = "/presidents/presidents-" + provider + "-sql-experiment.json";
+            String configPathTable = "/presidents/presidents-" + provider + "-table-experiment.json";
+            String configPathKeyScan = "/presidents/presidents-" + provider + "-key-scan-experiment.json";
+
+            testRunner.execute(configPathNl, "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathSql, "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathTable, "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute(configPathKeyScan, "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            executeFullPipeline(configPathTable, configPathKeyScan, variant, metrics, results);
+
+            exportExcel.export(fileName, EXP_NAME, metrics, results);
+        }
+
+        log.info("Results\n{}", printMap(results));
+    }
+
+    private void executeFullPipeline(String configPathTable, String configPathKeyScan, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results) {
+        double threshold = 0.6;
+        GaloisPipeline pipeline = new GaloisPipeline();
+        QueryPlan planEstimation = testRunner.planEstimation(configPathTable, variant);
+        IOptimizer optimizer = pipeline.selectOptimizer(planEstimation, true);
+        Double confidence = planEstimation.getConfidenceKeys();
+        if (confidence != null && confidence > threshold) {
+            // Execute KEY-SCAN
+            testRunner.executeSingle(configPathKeyScan, "Galois Full (Key-Scan)", variant, metrics, results, optimizer);
+        } else {
+            // Execute TABLE
+            testRunner.executeSingle(configPathTable, "Galois Full (Table)", variant, metrics, results, optimizer);
+        }
+    }
+
+    @Test
     public void testRunBatch() {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-//            testRunner.execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/presidents/presidents-llama3-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/presidents/presidents-togetherai-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/presidents/presidents-togetherai-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/presidents/presidents-togetherai-table-experiment.json", "TABLE", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/presidents/presidents-" + executorModel + "-key-experiment.json", "ORIGINAL-GALOIS", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-//            testRunner.execute("/presidents/presidents-llama3-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+//            testRunner.execute("/presidents/presidents-togetherai-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
@@ -259,8 +309,8 @@ public class TestRunUSAPresidentsBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         IOptimizer optimizer = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-        String configPathTable = "/presidents/presidents-llama3-table-experiment.json";
-        String configPathKey = "/presidents/presidents-llama3-key-scan-experiment.json";
+        String configPathTable = "/presidents/presidents-togetherai-table-experiment.json";
+        String configPathKey = "/presidents/presidents-togetherai-key-scan-experiment.json";
         for (ExpVariant variant : variants) {
             testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer);
             testRunner.executeSingle(configPathKey, "KEY-SCAN-ALL-CONDITIONS", variant, metrics, results, optimizer);
@@ -297,7 +347,7 @@ public class TestRunUSAPresidentsBatch {
 //        List<IMetric> metrics = new ArrayList<>();
 //        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
-        String configPath = "/presidents/presidents-llama3-table-experiment.json";
+        String configPath = "/presidents/presidents-togetherai-table-experiment.json";
         String type = "TABLE";
         IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter");
         ExpVariant variant = variants.get(12);
@@ -351,7 +401,7 @@ public class TestRunUSAPresidentsBatch {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         ExpVariant variant = variants.get(0);
-        String configPath = "/presidents/presidents-llama3-table-experiment.json";
+        String configPath = "/presidents/presidents-togetherai-table-experiment.json";
         String type = "TABLE";
         int indexSingleCondition = 0;
         IOptimizer allConditionPushdown = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer");
@@ -368,7 +418,7 @@ public class TestRunUSAPresidentsBatch {
     public void testConfidenceEstimator() {
         for (ExpVariant variant : variants) {
 //            ExpVariant variant = variants.get(0);
-            String configPath = "/presidents/presidents-llama3-table-experiment.json";
+            String configPath = "/presidents/presidents-togetherai-table-experiment.json";
             testRunner.executeConfidenceEstimator(configPath, variant);
             break;
         }
@@ -377,7 +427,7 @@ public class TestRunUSAPresidentsBatch {
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/presidents/presidents-llama3-table-experiment.json";
+            String configPath = "/presidents/presidents-togetherai-table-experiment.json";
             testRunner.executeConfidenceEstimatorQuery(configPath, variant);
 //            break;
         }
@@ -386,7 +436,7 @@ public class TestRunUSAPresidentsBatch {
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
-            String configPath = "/presidents/presidents-llama3-table-experiment.json";
+            String configPath = "/presidents/presidents-togetherai-table-experiment.json";
             testRunner.executeCardinalityEstimatorQuery(configPath, variant);
 //            break;
         }
@@ -398,10 +448,10 @@ public class TestRunUSAPresidentsBatch {
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
         String fileName = exportExcel.getFileName(EXP_NAME);
         for (ExpVariant variant : variants) {
-            testRunner.execute("/presidents/presidents-llama3-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            testRunner.execute("/presidents/presidents-llama3-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-            String tableExp = "/presidents/presidents-llama3-table-experiment.json";
-            String keyExp = "/presidents/presidents-llama3-key-scan-experiment.json";
+            testRunner.execute("/presidents/presidents-togetherai-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.execute("/presidents/presidents-togetherai-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            String tableExp = "/presidents/presidents-togetherai-table-experiment.json";
+            String keyExp = "/presidents/presidents-togetherai-key-scan-experiment.json";
             //            Double popularity = getPopularity(tableExp, "usa_state", variant);
             Double popularity = testRunner.getPopularity(tableExp, variant);
             if (popularity >= 0.7) {
