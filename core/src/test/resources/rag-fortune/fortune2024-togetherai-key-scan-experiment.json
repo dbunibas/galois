@@ -1,5 +1,5 @@
 {
-  "name": "RAG-Fortune-{{QN}} Experiment-nl",
+  "name": "RAG-Fortune-{{QN}} Experiment-key-scan",
   "metrics": [
     "CellPrecision",
     "CellSimilarityPrecision",
@@ -11,16 +11,19 @@
     "TupleConstraint",
     "TupleSimilarityConstraint"
   ],
+  "optimizers": [
+    "AllConditionsPushdownOptimizer",
+    "SingleConditionsOptimizerFactory"
+  ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-nl",
+      "queryExecutor": "togetherai-llama3-key-scan",
       "maxIterations": 20,
-      "naturalLanguagePrompt": "{{NL-PROMPT}}",
       "contentRetriever": {
         "embeddingStoreCollectionName": "rag_fortune_400_50_UAE-Large-PROCESSED",
         "embeddingModelEngine": "togetherai",
-        "embeddingModel": "WhereIsAI/UAE-Large-V1",
+        "embeddingModel": "BAAI/bge-large-en-v1.5",
         "maxResults": 100,
         "minScore": 0.75,
         "maxSegmentSizeInTokens": 400,
