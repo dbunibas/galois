@@ -206,6 +206,9 @@ public class TestRunner {
     }
 
     private void exportResultAndConfidence(String type, ExpVariant variant, ExperimentResults experimentResults) {
+        if (!Configuration.getInstance().exportConfidence()) {
+            return;
+        }
         String modelName = getModelName();
         log.debug("Exporting Result and Confidence - Type: {} Query id: {} Model: {} \n Query: {} \n Prompt: {} \nResult: {}", type, variant.getQueryNum(), modelName, variant.getQuerySql(), variant.getPrompt(), experimentResults.toDebugString());
         String confidenceExportPath = getConfidenceResultPath(type, variant);

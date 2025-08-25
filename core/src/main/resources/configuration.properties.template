@@ -15,8 +15,9 @@ ollama.url=http://127.0.0.1:11434
 # Chroma config
 chroma.url=http://localhost:8000
 
-# LLM model configuration
-llm-model=llama3
+# LLM provider
+## togetherai or openai
+llm-provider=togetherai
 
 # Cache configuration
 cache.enabled=false

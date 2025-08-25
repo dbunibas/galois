@@ -83,6 +83,10 @@ public class Configuration {
         return path;
     }
 
+    public boolean exportConfidence() {
+        return false;
+    }
+
     public String getResultsAbsolutePath() {
         return props.getProperty("export.results-path");
     }
