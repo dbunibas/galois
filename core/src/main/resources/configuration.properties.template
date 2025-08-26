@@ -1,22 +1,29 @@
 # TogetherAI config
+## API key
 togetherai.api-key=YOUR_API_KEY
+## The model to use
 togetherai.model=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
-## Wait time ms (for tier-2 40 for tier-1 110 otherwise 1000 for unpaid tier)
+## Wait time between consecutive requests in ms (for tier-2 40 for tier-1 110 otherwise 1000 for unpaid tier)
 togetherai.wait-time-ms=1000
 
 # OpenAI config
+## API key
 openai.api-key=YOUR_API_KEY
+## The model to use
 openai.model-name=gpt-4o-mini
 
 # Ollama config
+## The model to use
 ollama.model=llama3.2:latest
+## The ollama URL
 ollama.url=http://127.0.0.1:11434
 
 # Chroma config
+## The chroma URL
 chroma.url=http://localhost:8000
 
 # LLM provider
-## togetherai or openai
+## The provider to use: togetherai or openai
 llm-provider=togetherai
 
 # Cache configuration

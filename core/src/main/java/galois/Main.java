@@ -25,6 +25,8 @@ import java.io.IOException;
 
 @Slf4j
 public class Main {
+    private static final double DEFAULT_THRESHOLD = 0.6;
+
     public static void main(String[] args) throws IOException {
         new Main().execute(args);
     }
@@ -42,12 +44,13 @@ public class Main {
         }
 
         Query query = new ObjectMapper().readValue(file, Query.class);
+        double confidenceThreshold = query.confidenceThreshold == null ? DEFAULT_THRESHOLD : query.confidenceThreshold;
         IDatabase database = readDatabase(query);
 
         GaloisPipeline pipeline = new GaloisPipeline();
         QueryPlan plan = pipeline.estimateBestPlan(database, query.sql);
         IOptimizer optimizer = pipeline.selectOptimizer(plan);
-        IQueryExecutor executor = selectExecutor(plan, query.confidenceThreshold, Configuration.getInstance().getLLMProvider());
+        IQueryExecutor executor = selectExecutor(plan, confidenceThreshold, Configuration.getInstance().getLLMProvider());
         log.info("Executor: {}", executor.getClass().getSimpleName());
 
         SQLQueryParser sqlQueryParser = new SQLQueryParser();
@@ -74,14 +77,10 @@ public class Main {
 
     @NotNull
     private static IDatabase readDatabase(Query query) {
-        String uri = "jdbc:postgresql:" + query.databaseName;
-        String driver = "org.postgresql.Driver";
-        String schemaName = "public";
-
         var accessConfiguration = new AccessConfiguration();
-        accessConfiguration.setDriver(driver);
-        accessConfiguration.setUri(uri);
-        accessConfiguration.setSchemaName(schemaName);
+        accessConfiguration.setDriver(query.databaseDriver);
+        accessConfiguration.setUri(query.databaseURI);
+        accessConfiguration.setSchemaName(query.databaseSchema);
         accessConfiguration.setLogin(query.databaseUser);
         accessConfiguration.setPassword(query.databasePassword);
         return new LLMDB(accessConfiguration);
@@ -100,9 +99,11 @@ public class Main {
     }
 
     private record Query(
+            String databaseDriver,
+            String databaseURI,
+            String databaseSchema,
             String databaseUser,
             String databasePassword,
-            String databaseName,
             String sql,
             Double confidenceThreshold
     ) {
