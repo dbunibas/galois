@@ -46,10 +46,10 @@ gradle.properties
 core/src/main/resources/configuration.properties
 
 ## movies dataset ##
-core/src/test/resources/movies/movies-data
+#core/src/test/resources/movies/movies-data
 
 ## palimpzest dataset ##
-core/src/test/resources/palimpzest-exp-results
+#core/src/test/resources/palimpzest-exp-results
 
 ## query results ##
 core/src/test/resources/results/
