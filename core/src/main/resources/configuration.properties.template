@@ -2,7 +2,7 @@
 togetherai.api-key=YOUR_API_KEY
 togetherai.model=meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
 ## Wait time ms (for tier-2 40 for tier-1 110 otherwise 1000 for unpaid tier)
-togetherai.wait-time-ms=40
+togetherai.wait-time-ms=1000
 
 # OpenAI config
 openai.api-key=YOUR_API_KEY
@@ -20,7 +20,7 @@ chroma.url=http://localhost:8000
 llm-provider=togetherai
 
 # Cache configuration
-cache.enabled=false
+cache.enabled=true
 ## Cache files absolute path
 cache.path=/XXX/YYY/ZZZ/cache
 

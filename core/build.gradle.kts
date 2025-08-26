@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("io.freefair.lombok") version "8.6"
+    id("application")
 }
 
 version = "0.0.1"
@@ -9,13 +10,17 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = "galois.Main"
+}
+
 dependencies {
     implementation(project(":speedy-core"))
     implementation(project(":sql-parser"))
 
     implementation("org.slf4j:slf4j-api:2.0.12")
     implementation("ch.qos.logback:logback-core:1.5.1")
-    testImplementation("ch.qos.logback:logback-classic:1.5.1")
+    implementation("ch.qos.logback:logback-classic:1.5.1")
 
     implementation("org.jdom:jdom2:2.0.6.1")
     implementation("jaxen:jaxen:2.0.0")

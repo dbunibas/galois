@@ -18,6 +18,7 @@
         <appender-ref ref="stdout"/>
     </root>
 
+    <logger name="galois.Main" level="INFO"/>
     <logger name="galois.llm" level="ERROR"/>
     <!--<logger name="galois.optimizer" level="DEBUG"/>-->
     <logger name="galois.parser" level="DEBUG"/>

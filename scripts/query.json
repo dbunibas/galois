@@ -1,0 +1,7 @@
+{
+  "databaseUser": "pguser",
+  "databasePassword": "pguser",
+  "databaseName": "llm_directors_movies",
+  "sql": "SELECT m.originaltitle FROM movie m WHERE m.director='Steven Spielberg'",
+  "confidenceThreshold": 0.6
+}
