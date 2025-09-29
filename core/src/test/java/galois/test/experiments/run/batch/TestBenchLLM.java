@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +35,20 @@ public class TestBenchLLM {
     private static final String RESULT_FILE_DIR = "src/test/resources/results/";
     private static final String RESULT_FILE = "bird-results.txt";
     private static final String QUERIES_PATH = "src/test/resources/llm-bench/dataset.xlsx";
+//    private static final String QUERIES_PATH = "src/test/resources/llm-bench/limitQuery.xlsx";
     private static final TestRunner testRunner = new TestRunner();
     private static final ExcelExporter exportExcel = new ExcelExporter();
-//    private String executorModel = "llama3";
-//    private String name = Constants.TOGETHERAI_MODEL;
-    private String executorModel = "gpt";
-    private String name = Constants.OPEN_AI_CHAT_MODEL_NAME;
+    private String executorModel = "llama3";
+    private String name = Constants.TOGETHERAI_MODEL;
+//    private String executorModel = "gpt";
+//    private String name = Constants.OPEN_AI_CHAT_MODEL_NAME;
 
     private List<ExpVariant> variants;
     private Map<String, VariantConfig> variantConfigs;
+    
+    private List<String> queryExecute = List.of(
+                "qatch_333", "qatch_334", "qatch_335", "qatch_336", "qatch_337", "qatch_338", "qatch_339", "qatch_340", "qatch_341", "qatch_342", "qatch_343", "qatch_344", "qatch_345", "qatch_346", "qatch_347", "qatch_348", "qatch_349", "qatch_350", "qatch_351", "qatch_352", "qatch_353", "qatch_354", "qatch_355", "qatch_356", "qatch_357", "qatch_358"
+        );
 
     public TestBenchLLM() {
         initVariants();
@@ -58,6 +64,11 @@ public class TestBenchLLM {
             VariantConfig vc = this.variantConfigs.get(variant.getQueryNum());
             String dbID = vc.db_id;
             String dataset = vc.dataset;
+//            if (!queryExecute.contains(variant.getQueryNum())) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_88")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_30")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("bird_68")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("galois_72")) continue;
             testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
@@ -129,6 +140,41 @@ public class TestBenchLLM {
         StringSelection selection = new StringSelection(result.toString());
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, selection);
+    }
+    
+    @Test
+    public void testGTInformationPresidents() {
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(name);
+        String queryUSA = "SELECT name, start_year, end_year, cardinal_number, party, country FROM target.world_presidents p WHERE p.country='United States'";
+        String queryVenezuela = "SELECT name, start_year, end_year, cardinal_number, party, country FROM target.world_presidents p WHERE p.country='Venezuela'";
+        String queryNobelPrize = "SELECT nobel_prize_laureate, nobel_prize, nobel_prize_year, nationality, birth_year FROM nobel_prize WHERE nationality='United States'";
+//        String queryChecmicalElements = "SELECT atomic_number, symbol, element, period, block, atomic_weight, phase FROM chemical_element";
+        String queryChecmicalElements = "SELECT atomic_number, symbol, element FROM chemical_element";
+        List<String> singleConditionOptimizers = List.of(
+                "AllConditionsPushdownOptimizer-WithFilter"
+        );
+        ExpVariant variantUSA = new ExpVariant("Q-Usa", queryUSA, "", singleConditionOptimizers);
+        ExpVariant variantVenezuela = new ExpVariant("Q-Venezuela", queryVenezuela, "", singleConditionOptimizers);
+        ExpVariant variantNobelPrize = new ExpVariant("Q-NobelPrize", queryNobelPrize, "", singleConditionOptimizers);
+        ExpVariant variantChemicalElements = new ExpVariant("Q-ChemicalElements", queryChecmicalElements, "", singleConditionOptimizers);
+//        String dataset = "galois";
+//        String dbID = "presidents";
+        String dataset = "qatch";
+        String dbID = "nobel_prize";
+//        String dbID = "chemical_element";
+        List<ExpVariant> variants = new ArrayList<>();
+//        variants.add(variantUSA);
+//        variants.add(variantVenezuela);
+        variants.add(variantNobelPrize);
+        for (ExpVariant variant : variants) {
+            testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-key-experiment.json", "KEY", variant, metrics, results, allConditionPushdownWithFilter);
+            exportExcel.export(fileName, dataset, metrics, results);
+        }
+        log.info("Results\n{}", printMap(results));
+
     }
 
     private class VariantConfig {

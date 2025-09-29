@@ -69,11 +69,19 @@ public class ConversationalRetrievalChainFactory {
                 .contentRetriever(contentRetriever)
                 .build();
     }
+    
+    public static Chain<String, String> buildGeminiConversationalRetrievalChain(String apiKey, String modelName, ContentRetriever contentRetriever) {
+        ChatLanguageModel model = ConversationalChainFactory.buildGeminiChatLanguageModel(apiKey, modelName);
+        return ConversationalRetrievalChain.builder()
+                .chatLanguageModel(model)
+                .contentRetriever(contentRetriever)
+                .build();
+    }
 
     public static ChatLanguageModel buildTogetherAiChatLanguageModel(String apiKey, String modelName, ContentRetriever contentRetriever) {
         return new TogetherAIModel(apiKey, modelName, TogetherAIConstants.STREAM_MODE);
     }
-
+    
     private static ChatLanguageModel buildOllamaChatLangageModel(String modelName) {
         OllamaChatModel chatModel = OllamaChatModel.builder()
                 .baseUrl("http://127.0.0.1:11434")
