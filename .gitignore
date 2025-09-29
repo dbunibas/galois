@@ -49,3 +49,5 @@ core/src/test/resources/movies/movies-data
 ## query results ##
 core/src/test/resources/results/
 docker/data/db/data
+core/src/test/resources/llm-bench/cache-soccer-exp-neurips
+core/src/test/resources/llm-bench/cache
