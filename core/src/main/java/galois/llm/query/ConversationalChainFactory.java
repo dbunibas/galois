@@ -3,6 +3,7 @@ package galois.llm.query;
 import dev.langchain4j.chain.Chain;
 import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModelName;
@@ -52,9 +53,21 @@ public class ConversationalChainFactory {
         ChatLanguageModel model = buildOpenAIChatLanguageModel(apiKey, modelName);
         return ConversationalChain.builder().chatLanguageModel(model).build();
     }
+    
+    public static ConversationalChain buildGeminiConversationalChain(String apiKey, String modelName) {
+        ChatLanguageModel model = buildGeminiChatLanguageModel(apiKey, modelName);
+        return ConversationalChain.builder().chatLanguageModel(model).build();
+    }
 
     public static ChatLanguageModel buildOpenAIChatLanguageModel(String apiKey, String modelName) {
         return OpenAiChatModel.builder()
+                .apiKey(apiKey)
+                .modelName(modelName)
+                .build();
+    }
+    
+    public static ChatLanguageModel buildGeminiChatLanguageModel(String apiKey, String modelName) {
+        return GoogleAiGeminiChatModel.builder()
                 .apiKey(apiKey)
                 .modelName(modelName)
                 .build();

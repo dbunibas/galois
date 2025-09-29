@@ -1,0 +1,70 @@
+{
+    "name": "airport-{{QN}} gemini-nl Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "gemini-nl",
+            "maxIterations": 10,
+            "naturalLanguagePrompt": "{{PROMPT}}"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "airport",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "airport",
+                    "attributes": [
+                        {
+                            "name": "iata_code",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "icao_code",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "airport_name",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "standard_timezone",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "nation",
+                            "type": "STRING",
+                            "nullable": false
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/airport"
+    }
+}
