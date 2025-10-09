@@ -2,12 +2,13 @@ package galois.llm.query;
 
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.prompt.EPrompts;
+import galois.utils.attributes.AttributesOverride;
+import speedy.model.database.AttributeRef;
 import speedy.model.database.IDatabase;
 import speedy.model.database.TableAlias;
 import speedy.model.database.Tuple;
 
 import java.util.List;
-import speedy.model.database.AttributeRef;
 
 // TODO: Delete class (and restore inheriting children)
 public class UnsupportedQueryExecutor implements IQueryExecutor {
@@ -20,7 +21,12 @@ public class UnsupportedQueryExecutor implements IQueryExecutor {
     public void setAttributes(List<AttributeRef> attributes) {
         throw new UnsupportedOperationException("The query executor is currently unsupported");
     }
-    
+
+    @Override
+    public void setAttributesOverride(AttributesOverride attributesOverride) {
+        throw new UnsupportedOperationException("The query executor is currently unsupported");
+    }
+
     @Override
     public EPrompts getFirstPrompt() {
         throw new UnsupportedOperationException("The query executor is currently unsupported");

@@ -14,4 +14,9 @@ public class ExperimentJSON {
     private List<String> optimizers;
     private QueryJSON query;
     private String queryExecutor;
+
+    // Attributes related properties
+    private List<AttributeJSON> extraAttributes;
+    private List<String> pinnedAttributes;
+    private Integer maxPinPosition;
 }

@@ -11,41 +11,33 @@ import galois.llm.models.togetherai.TupleProb;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.ISQLExecutor;
 import galois.llm.query.utils.QueryUtils;
-import java.io.File;
-import java.nio.charset.Charset;
+import galois.utils.attributes.AttributesOverride;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import speedy.model.algebra.Scan;
 import speedy.model.algebra.operators.IAlgebraTreeVisitor;
 import speedy.model.algebra.operators.ITupleIterator;
-import speedy.model.database.AttributeRef;
-import speedy.model.database.IDatabase;
-import speedy.model.database.TableAlias;
-import speedy.model.database.Tuple;
+import speedy.model.database.*;
+import speedy.persistence.Types;
+import speedy.utility.AlgebraUtility;
 
+import java.io.File;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import speedy.model.database.Attribute;
-import speedy.model.database.Cell;
-import speedy.model.database.ConstantValue;
-import speedy.model.database.ITable;
-import speedy.model.database.IValue;
-import speedy.model.database.NullValue;
-import speedy.model.database.TupleOID;
-import speedy.persistence.Types;
-import speedy.utility.AlgebraUtility;
 
 @Getter
 @Slf4j
 public class LLMScan extends Scan {
 
     private static final Logger logger = LoggerFactory.getLogger(LLMScan.class);
-    
+
     private final TableAlias tableAlias;
     private final IQueryExecutor queryExecutor;
     private List<AttributeRef> attributesSelect = null;
@@ -54,13 +46,16 @@ public class LLMScan extends Scan {
     private final boolean checkTypes = true;
     private final boolean removeDuplicates = true;
 
+    @Setter
+    private AttributesOverride attributesOverride = null;
+
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, String normalizationStrategy) {
         super(tableAlias);
         this.tableAlias = tableAlias;
         this.queryExecutor = queryExecutor;
         this.normalizationStrategy = normalizationStrategy;
     }
-    
+
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect, String normalizationStrategy) {
         super(tableAlias);
         this.tableAlias = tableAlias;
@@ -68,7 +63,7 @@ public class LLMScan extends Scan {
         this.attributesSelect = attributesSelect;
         this.normalizationStrategy = normalizationStrategy;
     }
-    
+
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect, String normalizationStrategy, Double llmProbThreshold) {
         super(tableAlias);
         this.tableAlias = tableAlias;
@@ -77,7 +72,7 @@ public class LLMScan extends Scan {
         this.normalizationStrategy = normalizationStrategy;
         this.llmProbThreshold = llmProbThreshold;
     }
-    
+
     public LLMScan(TableAlias tableAlias, IQueryExecutor queryExecutor, String normalizationStrategy, Double llmProbThreshold) {
         super(tableAlias);
         this.tableAlias = tableAlias;
@@ -100,9 +95,9 @@ public class LLMScan extends Scan {
     public ITupleIterator execute(IDatabase source, IDatabase target) {
         checkSourceTarget(source, target);
         if (this.attributesSelect != null) {
-            return new LLMScanTupleIterator(source, queryExecutor, attributesSelect);
+            return new LLMScanTupleIterator(source, queryExecutor, attributesSelect, attributesOverride);
         }
-        return new LLMScanTupleIterator(source, queryExecutor);
+        return new  LLMScanTupleIterator(source, queryExecutor, attributesOverride);
     }
 
     @Override
@@ -144,15 +139,17 @@ public class LLMScan extends Scan {
         private final IDatabase database;
         private final IQueryExecutor queryExecutor;
 
-        public LLMScanTupleIterator(IDatabase database, IQueryExecutor queryExecutor) {
+        public LLMScanTupleIterator(IDatabase database, IQueryExecutor queryExecutor, AttributesOverride attributesOverride) {
             this.database = database;
             this.queryExecutor = queryExecutor;
+            if (attributesOverride != null) this.queryExecutor.setAttributesOverride(attributesOverride);
         }
 
-        public LLMScanTupleIterator(IDatabase database, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect) {
+        public LLMScanTupleIterator(IDatabase database, IQueryExecutor queryExecutor, List<AttributeRef> attributesSelect, AttributesOverride attributesOverride) {
             this.database = database;
             this.queryExecutor = queryExecutor;
             this.queryExecutor.setAttributes(attributesSelect);
+            if (attributesOverride != null) this.queryExecutor.setAttributesOverride(attributesOverride);
         }
 
         private static final int MAX_TRIES = 1;
@@ -186,7 +183,7 @@ public class LLMScan extends Scan {
                 }
                 if (checkTypes) {
                     boolean check = checkTupleTypes(result, database);
-                    if (!check && hasNext())  {
+                    if (!check && hasNext()) {
                         logger.warn("Ignoring tuple because has different types: " + result);
                         return next();
                     }
@@ -197,7 +194,8 @@ public class LLMScan extends Scan {
 //            currentResult = loadStoredTuples();
 //            saveTuplesWithProb(currentResult);
             if (llmProbThreshold != null && !(queryExecutor instanceof ISQLExecutor)) filterTuplesWithProb();
-            if (removeDuplicates && !(queryExecutor instanceof ISQLExecutor)) AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
+            if (removeDuplicates && !(queryExecutor instanceof ISQLExecutor))
+                AlgebraUtility.removeTupleDuplicatesIgnoreOID(currentResult);
 
             currentTry++;
 
@@ -209,7 +207,7 @@ public class LLMScan extends Scan {
                 }
                 if (checkTypes) {
                     boolean check = checkTupleTypes(result, database);
-                    if (!check && hasNext())  {
+                    if (!check && hasNext()) {
                         logger.warn("Ignoring tuple because has different types: " + result);
                         return next();
                     }
@@ -224,9 +222,12 @@ public class LLMScan extends Scan {
             for (Cell cell : tuple.getCells()) {
                 try {
                     Attribute attribute = table.getAttribute(cell.getAttribute());
-                    if (logger.isDebugEnabled()) logger.debug("Attribute " + attribute.getName() + " with type " + attribute.getType() + " - value: " + cell.getValue().getPrimitiveValue().toString());
-                    if (logger.isDebugEnabled()) logger.debug("Numerical Attribute? " + Types.isNumerical(attribute.getType()));
-                    if (logger.isDebugEnabled()) logger.debug("Type check: " + Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()));
+                    if (logger.isDebugEnabled())
+                        logger.debug("Attribute " + attribute.getName() + " with type " + attribute.getType() + " - value: " + cell.getValue().getPrimitiveValue().toString());
+                    if (logger.isDebugEnabled())
+                        logger.debug("Numerical Attribute? " + Types.isNumerical(attribute.getType()));
+                    if (logger.isDebugEnabled())
+                        logger.debug("Type check: " + Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()));
                     if (Types.isNumerical(attribute.getType()) && (cell.getValue().getPrimitiveValue().toString().isBlank() || !Types.checkType(attribute.getType(), cell.getValue().getPrimitiveValue().toString()))) {
                         if (attribute.getNullable()) {
                             if (logger.isDebugEnabled()) logger.debug("Attribute is nullable - Set cell to 'null'");
@@ -253,7 +254,7 @@ public class LLMScan extends Scan {
             }
             currentResult = filtered;
         }
-        
+
         private boolean canAddWithProb(Tuple tuple, String strategy, boolean normalize) {
             List<CellWithProb> cellsWithProb = new ArrayList<>();
             for (Cell cell : tuple.getCells()) {
@@ -348,7 +349,7 @@ public class LLMScan extends Scan {
                 log.error("Exception in saving the JSON: {}", e);
             }
         }
-        
+
         private TupleProb toTupleProb(Tuple tuple) {
             TupleProb tp = new TupleProb();
             for (Cell cell : tuple.getCells()) {
@@ -359,7 +360,7 @@ public class LLMScan extends Scan {
             }
             return tp;
         }
-        
+
         private Tuple toTuple(TupleProb tp, long oidValue) {
             String tableName = tableAlias.getTableName();
 //            ITable table = database.getTable(tableName);
@@ -371,7 +372,7 @@ public class LLMScan extends Scan {
 //                Attribute attribute = table.getAttribute(attributeName);
 //                Cell speedyCell = new Cell(oid, new AttributeRef(tableName, attributeName), new ConstantValue(value));
                 IValue ivalue;
-                if (value == null){
+                if (value == null) {
                     ivalue = new NullValue("null");
                 } else {
                     ivalue = new ConstantValue(value);
@@ -388,7 +389,8 @@ public class LLMScan extends Scan {
             String queryN = "Q8";
             String fileName = "TMP_PATH" + dbName + "-" + queryN + ".json";
             ObjectMapper mapper = new ObjectMapper();
-            TypeReference<List<TupleProb>> listTuple = new TypeReference<>() {};
+            TypeReference<List<TupleProb>> listTuple = new TypeReference<>() {
+            };
             List<Tuple> tuples = new ArrayList<>();
             try {
                 List<TupleProb> tuplesProb = mapper.readValue(new File(fileName), listTuple);

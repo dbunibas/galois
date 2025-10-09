@@ -9,10 +9,10 @@ import galois.llm.query.IQueryExecutor;
 import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.LogicalPlanOptimizer;
-import galois.parser.ParserWhere;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.utils.TestUtils;
 import galois.utils.GaloisDebug;
+import galois.utils.attributes.AttributesOverride;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -22,10 +22,7 @@ import speedy.exceptions.DAOException;
 import speedy.exceptions.DBMSException;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.operators.ITupleIterator;
-import speedy.model.database.Attribute;
-import speedy.model.database.IDatabase;
-import speedy.model.database.ITable;
-import speedy.model.database.Tuple;
+import speedy.model.database.*;
 import speedy.model.database.dbms.DBMSDB;
 import speedy.model.database.dbms.DBMSTupleIterator;
 import speedy.persistence.DAODBMSDatabase;
@@ -40,8 +37,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.util.*;
-import net.sf.jsqlparser.expression.Expression;
-import speedy.model.database.TableAlias;
 
 @AllArgsConstructor
 @Data
@@ -58,6 +53,8 @@ public final class Experiment {
     private final OperatorsConfiguration operatorsConfiguration;
     private final Query query;
     private final String queryExecutor;
+
+    private final List<AttributesOverride> overrides;
 
     @SuppressWarnings("unchecked")
     public Map<String, ExperimentResults> execute() {
@@ -77,6 +74,18 @@ public final class Experiment {
         GaloisDebug.log(unoptimizedResult.toDebugString());
         results.put("Unoptimized", unoptimizedResult);
 
+        // Execute unoptimized overrides
+        if (overrides != null && !overrides.isEmpty()) {
+            for (AttributesOverride override : overrides) {
+                GaloisDebug.log("Unoptimized - " + override);
+                var unoptimizedResultWithOverride = executeUnoptimizedExperiment(operator, expectedResults, override);
+                GaloisDebug.log("Speedy Results:");
+                GaloisDebug.log(unoptimizedResultWithOverride.toDebugString());
+                results.put("Unoptimized - " + override, unoptimizedResultWithOverride);
+            }
+        }
+
+
         List<IOptimizer> optimizersList = optimizers == null ? List.of() : optimizers;
         for (IOptimizer optimizer : optimizersList) {
             GaloisDebug.log(optimizer.getName());
@@ -85,6 +94,20 @@ public final class Experiment {
             GaloisDebug.log(result.toDebugString());
             results.put(optimizer.getName(), result);
         }
+
+        // Execute optimized overrides
+        if (overrides != null && !overrides.isEmpty()) {
+            for (AttributesOverride override : overrides) {
+                for (IOptimizer optimizer : optimizersList) {
+                    GaloisDebug.log(optimizer.getName() + " - " + override);
+                    var result = executeOptimizedExperiment(operator, optimizer, expectedResults, override);
+                    GaloisDebug.log("Speedy Results:");
+                    GaloisDebug.log(result.toDebugString());
+                    results.put(optimizer.getName() + " - " + override, result);
+                }
+            }
+        }
+
         return results;
     }
 
@@ -105,7 +128,7 @@ public final class Experiment {
 //        log.info("-----------------------------");
         return expectedResults;
     }
-    
+
     @SuppressWarnings("unchecked")
     public Map<String, ExperimentResults> executeGalois(Map<ITable, Map<Attribute, Double>> dbConfidence, double threshold, boolean removeFromAlgebraTree) {
         Map<String, ExperimentResults> results = new HashMap<>();
@@ -147,22 +170,45 @@ public final class Experiment {
         List<Tuple> expectedResults = TestUtils.toTupleList(expectedITerator);
         expectedITerator.close();
         log.info("Expected size: " + expectedResults.size());
+
         if (optimizer == null) {
             GaloisDebug.log("Unoptimized");
             var unoptimizedResult = executeUnoptimizedExperiment(operator, expectedResults);
             GaloisDebug.log("Speedy Results:");
             GaloisDebug.log(unoptimizedResult.toDebugString());
             results.put("Unoptimized", unoptimizedResult);
+
+            // Execute unoptimized overrides
+            if (overrides != null && !overrides.isEmpty()) {
+                for (AttributesOverride override : overrides) {
+                    GaloisDebug.log("Unoptimized - " + override);
+                    var unoptimizedResultWithOverride = executeUnoptimizedExperiment(operator, expectedResults, override);
+                    GaloisDebug.log("Speedy Results:");
+                    GaloisDebug.log(unoptimizedResultWithOverride.toDebugString());
+                    results.put("Unoptimized - " + override, unoptimizedResultWithOverride);
+                }
+            }
         } else {
             GaloisDebug.log(optimizer.getName());
             var result = executeOptimizedExperiment(operator, optimizer, expectedResults);
             GaloisDebug.log("Speedy Results:");
             GaloisDebug.log(result.toDebugString());
             results.put(optimizer.getName(), result);
+
+            // Execute optimized overrides
+            if (overrides != null && !overrides.isEmpty()) {
+                for (AttributesOverride override : overrides) {
+                    GaloisDebug.log(optimizer.getName() + " - " + override);
+                    var resultWithOverride = executeOptimizedExperiment(operator, optimizer, expectedResults, override);
+                    GaloisDebug.log("Speedy Results:");
+                    GaloisDebug.log(result.toDebugString());
+                    results.put(optimizer.getName() + " - " + override, resultWithOverride);
+                }
+            }
         }
         return results;
     }
-    
+
     @SuppressWarnings("unchecked")
     public Map<String, ExperimentResults> executeWithExpected(List<Tuple> expectedResults, IQueryExecutor queryExecutor, IDatabase database, TableAlias tableAlias) {
         Map<String, ExperimentResults> results = new HashMap<>();
@@ -202,7 +248,7 @@ public final class Experiment {
         IDatabase database = query.getDatabase();
         List<String> tableNames = database.getTableNames();
         URL resource = Experiment.class.getResource(query.getResultPath());
-        if(resource == null){
+        if (resource == null) {
             throw new RuntimeException("Unable to load expected " + query.getResultPath());
         }
         File[] files = new File(resource.getPath()).listFiles(new FilenameFilter() {
@@ -232,7 +278,7 @@ public final class Experiment {
             if (table.getSize() == 0) {
                 // import table
                 File file = tableCSVFiles.get(tableName);
-                if(file == null){
+                if (file == null) {
                     throw new IllegalArgumentException("Unknown csv for table " + tableName + " - Existing files: " + tableCSVFiles);
                 }
                 log.debug("Search for table: " + table + " found file: " + file);
@@ -270,20 +316,45 @@ public final class Experiment {
     }
 
     private ExperimentResults executeUnoptimizedExperiment(IAlgebraOperator operator, List<Tuple> expectedResults) {
+        return executeUnoptimizedExperiment(operator, expectedResults, null);
+    }
+
+    private ExperimentResults executeUnoptimizedExperiment(IAlgebraOperator operator, List<Tuple> expectedResults, AttributesOverride attributesOverride) {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
         log.info("Unoptimized operator - {}", operator.getClass());
+        if (attributesOverride != null) injectExtraAttributes(operator, attributesOverride);
         ITupleIterator iterator = operator.execute(query.getDatabase(), query.getDatabase());
         return toExperimentResults(iterator, expectedResults, null);
     }
 
     private ExperimentResults executeOptimizedExperiment(IAlgebraOperator operator, IOptimizer optimizer, List<Tuple> expectedResults) {
+        return executeOptimizedExperiment(operator, optimizer, expectedResults, null);
+    }
+
+    private ExperimentResults executeOptimizedExperiment(IAlgebraOperator operator, IOptimizer optimizer, List<Tuple> expectedResults, AttributesOverride attributesOverride) {
         // TODO [Stats]: Reset stats
         LLMQueryStatManager.getInstance().resetStats();
         IAlgebraOperator optimizedOperator = optimizer.optimize(query.getDatabase(), query.getSql(), operator);
         log.info("Optimized operator: {}", optimizedOperator);
+        if (attributesOverride != null) injectExtraAttributes(optimizedOperator, attributesOverride);
         ITupleIterator iterator = optimizedOperator.execute(query.getDatabase(), query.getDatabase());
         return toExperimentResults(iterator, expectedResults, optimizer.getName());
+    }
+
+    private void injectExtraAttributes(IAlgebraOperator node, AttributesOverride attributesOverride) {
+        if (attributesOverride == null) {
+            return;
+        }
+
+        if (node instanceof LLMScan scan) {
+            scan.setAttributesOverride(attributesOverride);
+            return;
+        }
+
+        for (IAlgebraOperator child : node.getChildren()) {
+            injectExtraAttributes(child, attributesOverride);
+        }
     }
 
     public ExperimentResults toExperimentResults(ITupleIterator actual, List<Tuple> expectedResults, String optmizerName) {
@@ -300,7 +371,7 @@ public final class Experiment {
 //        return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
         return new ExperimentResults(name, metrics, expectedResults, results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql(), optmizerName);
     }
-    
+
     public ExperimentResults toExperimentResults(List<Tuple> results, List<Tuple> expectedResults, String optmizerName) {
         log.info("Results size: " + results.size());
         log.info("Results: " + results);

@@ -5,6 +5,7 @@ import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.QueryUtils;
+import galois.optimizer.AllConditionsPushdownOptimizer;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.IndexedConditionPushdownOptimizer;
 import galois.optimizer.QueryPlan;
@@ -131,7 +132,7 @@ public class TestRunUSAPresidentsBatch {
                 .prompt("List the name of the last USA president where party is Whig")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        
+
         ExpVariant q10 = ExpVariant.builder()
                 .queryNum("Q10")
                 .querySql("SELECT p.name, p.party, start_year, end_year, p.cardinal_number FROM target.world_presidents p WHERE p.country ='United States' AND start_year > 1850 AND end_year < 1900 AND party ='Democratic'")
@@ -139,7 +140,7 @@ public class TestRunUSAPresidentsBatch {
                 .prompt("List the name, the party, the start and end year and the cardinal number of Democratic USA president who served between 1850 and 1900")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        
+
         ExpVariant q11 = ExpVariant.builder()
                 .queryNum("Q11")
                 .querySql("SELECT p.name, p.party, start_year, end_year, p.cardinal_number FROM target.world_presidents p WHERE p.country ='United States' AND start_year > 1900 AND end_year < 2000 AND party ='Democratic'")
@@ -147,7 +148,7 @@ public class TestRunUSAPresidentsBatch {
                 .prompt("List the name, the party, the start and end year and the cardinal number of Democratic USA president who served between 1850 and 1900")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        
+
         ExpVariant q12 = ExpVariant.builder()
                 .queryNum("Q12")
                 .querySql("SELECT party, count(*) num FROM target.world_presidents p WHERE p.country ='United States' AND start_year > 1800 AND end_year < 1900 group by p.party order by num desc")
@@ -155,7 +156,7 @@ public class TestRunUSAPresidentsBatch {
                 .prompt("List the party name and the number of times that the party have elected a USA president between the 1800 and 1900.")
                 .optimizers(multipleConditionsOptimizers)
                 .build();
-        
+
         ExpVariant q13 = ExpVariant.builder()
                 .queryNum("Q13")
                 .querySql("SELECT party, count(*) num FROM target.world_presidents p WHERE p.country ='United States' AND start_year > 1900 AND end_year < 2000 group by p.party order by num desc")
@@ -180,6 +181,28 @@ public class TestRunUSAPresidentsBatch {
     }
 
     @Test
+    public void testRunOverride() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(EXP_NAME);
+
+        ExpVariant variant = ExpVariant.builder()
+                .queryNum("Q8")
+                .querySql("SELECT p.name FROM target.world_presidents p WHERE p.country='United States' AND p.start_year = 2009 AND p.end_year = 2017")
+                .prompt("Select the name of the U.S. president who began his terms in 2009 and finish it in 2017.")
+                .optimizers(List.of("AllConditionsPushdownOptimizer", "AllConditionsPushdownOptimizer-WithFilter"))
+                .build();
+
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        testRunner.execute("/presidents/presidents-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+        testRunner.execute("/presidents/presidents-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+        testRunner.executeSingle("/presidents/presidents-" + executorModel + "-key-scan-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
+
+        exportExcel.export(fileName, EXP_NAME, metrics, results);
+        log.info("Test Run Override Results: {}", printMap(results));
+    }
+
+    @Test
     public void testRunBatch() {
         List<IMetric> metrics = new ArrayList<>();
         Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
@@ -194,7 +217,7 @@ public class TestRunUSAPresidentsBatch {
         }
         log.info("Results\n{}", printMap(results));
     }
-    
+
     @Test
     public void testPlanSelection() {
         double threshold = 0.9;
@@ -248,7 +271,7 @@ public class TestRunUSAPresidentsBatch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
-    
+
     @Test
     public void testAllConditionPushDown() {
         List<IMetric> metrics = new ArrayList<>();
@@ -263,7 +286,7 @@ public class TestRunUSAPresidentsBatch {
             exportExcel.export(fileName, EXP_NAME, metrics, results);
         }
     }
-    
+
     @Test
     public void testLlamaLogProbs() {
         List<IMetric> metrics = new ArrayList<>();
@@ -287,7 +310,7 @@ public class TestRunUSAPresidentsBatch {
         //testRunner.executeSingle(configPathTable, "TABLE-ALL-CONDITIONS", variant, metrics, results, optimizer, threshold);
         //exportExcel.export(fileName, EXP_NAME, metrics, results);
     }
-    
+
     @Test
     public void testLLamaLogProbsStaticResults() {
 //        List<IMetric> metrics = new ArrayList<>();
@@ -324,7 +347,7 @@ public class TestRunUSAPresidentsBatch {
             System.out.println(recall.toString().replace(".", ","));
         }
     }
-    
+
     @Test
     public void testIterationsImpact() {
         String configPathTable = "/presidents/presidents-" + executorModel + "-table-experiment.json";
@@ -359,7 +382,7 @@ public class TestRunUSAPresidentsBatch {
         testRunner.executeSingle(configPath, type, variant, metrics, results, allConditionPushdownWithFilter, 0.8);
 
     }
-    
+
     @Test
     public void testConfidenceEstimator() {
         for (ExpVariant variant : variants) {
@@ -369,7 +392,7 @@ public class TestRunUSAPresidentsBatch {
             break;
         }
     }
-    
+
     @Test
     public void testConfidenceEstimatorQuery() {
         for (ExpVariant variant : variants) {
@@ -378,7 +401,7 @@ public class TestRunUSAPresidentsBatch {
 //            break;
         }
     }
-    
+
     @Test
     public void testCardinalityEstimatorQuery() {
         for (ExpVariant variant : variants) {
@@ -417,7 +440,7 @@ public class TestRunUSAPresidentsBatch {
         }
         log.info("Results\n{}", printMap(results));
     }
-    
+
     private Double getPopularity(String expPath, String tableName, ExpVariant variant) {
         Experiment experiment = null;
         try {
@@ -450,7 +473,7 @@ public class TestRunUSAPresidentsBatch {
         Double popularity = (Double) parsedResponse.getOrDefault("popularity", -1.0);
         return popularity;
     }
-    
+
     @Test
     public void testCardinalityRun() {
         List<IMetric> metrics = new ArrayList<>();

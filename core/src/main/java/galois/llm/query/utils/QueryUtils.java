@@ -10,10 +10,7 @@ import speedy.model.database.mainmemory.datasource.IntegerOIDGenerator;
 import speedy.model.expressions.Expression;
 import speedy.persistence.Types;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static galois.utils.Mapper.asString;
@@ -60,7 +57,7 @@ public class QueryUtils {
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
         return mapToTuple(tuple, map, tableAlias, attributes);
     }
-    
+
     public static Tuple mapToTuple(Tuple tuple, Map<String, Object> map, TableAlias tableAlias, List<Attribute> attributes) {
         for (Attribute attribute : attributes) {
             /*IValue cellValue = null;
@@ -93,8 +90,8 @@ public class QueryUtils {
 
         Object value = map.get(attribute.getName());
         if (BOOLEAN.equalsIgnoreCase(attribute.getType())) {
-            if(value.toString().equalsIgnoreCase("YES")) return new ConstantValue(Boolean.TRUE);
-            if(value.toString().equalsIgnoreCase("NO")) return new ConstantValue(Boolean.FALSE);
+            if (value.toString().equalsIgnoreCase("YES")) return new ConstantValue(Boolean.TRUE);
+            if (value.toString().equalsIgnoreCase("NO")) return new ConstantValue(Boolean.FALSE);
             return new ConstantValue(Boolean.parseBoolean(value.toString()));
         }
         if (!Types.isNumerical(attribute.getType())) {
@@ -171,6 +168,23 @@ public class QueryUtils {
 
     public static String generateJsonSchemaFromAttribute(ITable table, Attribute attribute) {
         return generateJsonSchemaFromAttributes(table, List.of(attribute));
+    }
+
+    public static String generateJsonSchemaFromAttributesUsingLinkedHashMap(ITable table, List<Attribute> attributes) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("title", table.getName());
+        map.put("type", "object");
+
+        Map<String, Object> properties = new LinkedHashMap<>();
+        for (Attribute attribute : attributes) {
+            Map<String, Object> description = new LinkedHashMap<>();
+            description.put("title", attribute.getName());
+            description.put("type", getJsonSchemaTypeFromDBType(attribute.getType()));
+            properties.put(attribute.getName(), description);
+        }
+        map.put("properties", properties);
+
+        return asString(map);
     }
 
     public static String generateJsonSchemaFromAttributes(ITable table, List<Attribute> attributes) {
@@ -257,7 +271,7 @@ public class QueryUtils {
     public static boolean isAlreadyContained(Tuple tuple, List<Tuple> tuples) {
         return tuples.stream().map(Tuple::toStringNoOID).collect(Collectors.toSet()).contains(tuple.toStringNoOID());
     }
-    
+
     public static Tuple mapToTupleWithProb(Tuple originalTuple, List<CellProb> cellProbs) {
         List<Cell> originalCells = originalTuple.getCells();
         Tuple newTuple = new Tuple(originalTuple.getOid());
