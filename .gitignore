@@ -53,3 +53,6 @@ core/src/test/resources/results/
 docker/data/db/data
 core/src/test/resources/llm-bench/cache-soccer-exp-neurips
 core/src/test/resources/llm-bench/cache
+core/src/test/resources/recipes
+core/src/test/resources/vigili
+TestRunVigili.java

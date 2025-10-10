@@ -40,6 +40,7 @@ public class Constants {
     public static final String MODEL_QWEN = "qwen";
     public static final String MODEL_MISTRAL = "mistral";
     public static final String MODEL_GEMMA = "gemma";
+    public static final String MODEL_KIMI = "kimi";
 
     public static final String LLM_MODEL = Constants.MODEL_LLAMA3;
 

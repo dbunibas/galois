@@ -20,17 +20,25 @@ import galois.llm.query.utils.QueryUtils;
 import java.util.*;
 
 import static galois.llm.query.utils.QueryUtils.*;
+import galois.utils.attributes.AttributesOverride;
+import galois.utils.attributes.AttributesOverrider;
 
 @Slf4j
 public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
     
     protected List<AttributeRef> attributes = null;
+    private AttributesOverride attributesOverride = null;
 
     abstract protected Chain<String, String> getConversationalChain();
 
     @Override
     public void setAttributes(List<AttributeRef> attributes) {
         this.attributes = attributes;
+    }
+    
+    @Override
+    public void setAttributesOverride(AttributesOverride attributesOverride) {
+        this.attributesOverride = attributesOverride;
     }
 
     @Override
@@ -67,8 +75,11 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 getCleanAttributes(table) :
                 new ArrayList<>(attributesExecution);
         log.trace("attributesExecutionList: {}", attributesExecution);
-
-        String jsonSchema = generateJsonSchemaListFromAttributes(table, attributesExecutionList);
+         List<Attribute> attributeList = attributesOverride == null ?
+                new ArrayList<>(attributesExecutionList) :
+                AttributesOverrider.overrideAttributes(attributesOverride, new HashSet<>(attributesExecutionList));
+        log.trace("attributeList: {}", attributeList);
+        String jsonSchema = generateJsonSchemaListFromAttributes(table, attributeList);
         Expression expression = getExpression();
         log.debug("Expression: {}", expression);
         log.debug("Max Iteration Allowed: {}", getMaxIterations());
@@ -76,11 +87,11 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
         int i;
         for (i = 0; i < getMaxIterations(); i++) {
             String userMessage = i == 0
-                    ? generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema)
-                    : generateIterativePrompt(table, attributesExecutionList, jsonSchema);
+                    ? generateFirstPrompt(table, attributeList, getExpression(), jsonSchema)
+                    : generateIterativePrompt(table, attributeList, jsonSchema);
             log.debug("Iteration {} - Prompt is: {}", i, userMessage);
             try {
-                String response = getResponse(chain, userMessage, i, false, generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema));
+                String response = getResponse(chain, userMessage, i, false, generateFirstPrompt(table, attributeList, getExpression(), jsonSchema));
                 log.debug("Response is: {}", response);
                 if (response == null || response.trim().isBlank()) {
                     log.warn("Error during LLM request.");
@@ -104,7 +115,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 List<CellProb> cellsProbForTuple = null;
                 int initialTuples = tuples.size();
                 for (Map<String, Object> map : parsedResponse) {
-                    Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
+                    Tuple tuple = mapToTuple(map, tableAlias, attributeList);
                     if (llmProbThreshold != null && iterator.hasNext()) cellsProbForTuple = iterator.next();
                     if (tuple != null && !isAlreadyContained(tuple, tuples)) {
                         if (llmProbThreshold != null && cellsProbForTuple != null && !cellsProbForTuple.isEmpty()) {
@@ -129,7 +140,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
             } catch (Exception e) {
                 try {
                     log.debug("Error with the response, try again with attention on JSON format");
-                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), i, true, generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema));
+                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), i, true, generateFirstPrompt(table, attributeList, getExpression(), jsonSchema));
                     log.debug("Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);
@@ -142,7 +153,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     List<CellProb> cellsProbForTuple = null;
                     Iterator<List<CellProb>> iterator = Iterables.partition(cellProbs, attributesExecution.size()).iterator();
                     for (Map<String, Object> map : parsedResponse) {
-                        Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
+                        Tuple tuple = mapToTuple(map, tableAlias, attributeList);
                         if (cellProbs != null && iterator.hasNext()) cellsProbForTuple = iterator.next();
                         if (tuple != null && !isAlreadyContained(tuple, tuples)) {
                             if (llmProbThreshold != null && cellsProbForTuple != null && !cellsProbForTuple.isEmpty()) {

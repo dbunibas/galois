@@ -1,0 +1,86 @@
+{
+    "name": "video_game_publisher-{{QN}} llama3-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-table",
+            "maxIterations": 10
+        }
+    },
+    "extraAttributes": [
+  { "name": "founder", "type": "STRING", "nullable": false },
+  { "name": "ceo", "type": "STRING", "nullable": false },
+  { "name": "headquarters_city", "type": "STRING", "nullable": false },
+  { "name": "headquarters_country", "type": "STRING", "nullable": false },
+  { "name": "num_employees", "type": "INTEGER", "nullable": false },
+  { "name": "revenue_billion_usd", "type": "REAL", "nullable": false },
+  { "name": "net_income_billion_usd", "type": "REAL", "nullable": false },
+  { "name": "subsidiaries", "type": "STRING", "nullable": false },
+  { "name": "parent_company", "type": "STRING", "nullable": false },
+  { "name": "publicly_traded", "type": "STRING", "nullable": false },
+  { "name": "stock_symbol", "type": "STRING", "nullable": false },
+  { "name": "main_platforms", "type": "STRING", "nullable": false },
+  { "name": "famous_titles", "type": "STRING", "nullable": false },
+  { "name": "genres_published", "type": "STRING", "nullable": false },
+  { "name": "num_published_games", "type": "INTEGER", "nullable": false },
+  { "name": "annual_releases_avg", "type": "REAL", "nullable": false },
+  { "name": "website_url", "type": "STRING", "nullable": false },
+  { "name": "contact_email", "type": "STRING", "nullable": false },
+  { "name": "linkedin_url", "type": "STRING", "nullable": false },
+  { "name": "twitter_handle", "type": "STRING", "nullable": false },
+  { "name": "instagram_handle", "type": "STRING", "nullable": false },
+  { "name": "youtube_channel", "type": "STRING", "nullable": false },
+  { "name": "founded_by_merger", "type": "STRING", "nullable": false },
+  { "name": "notable_acquisitions", "type": "STRING", "nullable": false },
+  { "name": "employee_count_year", "type": "INTEGER", "nullable": false },
+  { "name": "awards_won", "type": "INTEGER", "nullable": false },
+  { "name": "avg_review_score", "type": "REAL", "nullable": false },
+  { "name": "main_office_latitude", "type": "REAL", "nullable": false },
+  { "name": "main_office_longitude", "type": "REAL", "nullable": false },
+  { "name": "created_at", "type": "STRING", "nullable": false }
+],
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "video_game_publisher",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "video_game_publisher",
+                    "attributes": [
+                        {
+                            "name": "publisher_name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "established_in_year",
+                            "type": "INTEGER",
+                            "nullable": false
+                        },
+                        {
+                            "name": "nation",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/video_game_publisher"
+    }
+}

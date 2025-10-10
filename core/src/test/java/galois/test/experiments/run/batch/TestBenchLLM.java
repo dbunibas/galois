@@ -45,10 +45,14 @@ public class TestBenchLLM {
 
     private List<ExpVariant> variants;
     private Map<String, VariantConfig> variantConfigs;
-    
+
     private List<String> queryExecute = List.of(
-                "qatch_333", "qatch_334", "qatch_335", "qatch_336", "qatch_337", "qatch_338", "qatch_339", "qatch_340", "qatch_341", "qatch_342", "qatch_343", "qatch_344", "qatch_345", "qatch_346", "qatch_347", "qatch_348", "qatch_349", "qatch_350", "qatch_351", "qatch_352", "qatch_353", "qatch_354", "qatch_355", "qatch_356", "qatch_357", "qatch_358"
-        );
+            "qatch_333", "qatch_334", "qatch_335", "qatch_336", "qatch_337", "qatch_338", "qatch_339", "qatch_340", "qatch_341", "qatch_342", "qatch_343", "qatch_344", "qatch_345", "qatch_346", "qatch_347", "qatch_348", "qatch_349", "qatch_350", "qatch_351", "qatch_352", "qatch_353", "qatch_354", "qatch_355", "qatch_356", "qatch_357", "qatch_358"
+    );
+    
+    private List<String> queryExecuteExtraAttrs = List.of(
+           "qatch_86", "qatch_89", "qatch_191", "qatch_170", "qatch_92", "qatch_194", "qatch_173", "qatch_95", "qatch_197", "qatch_176", "qatch_159", "qatch_207", "qatch_313", "qatch_277", "qatch_116", "qatch_295", "qatch_292", "qatch_275", "qatch_296", "qatch_301", "qatch_108", "spider1_28", "spider1_6", "qatch_50", "qatch_33", "qatch_29", "galois_46", "galois_47", "galois_44", "galois_53", "galois_22", "galois_15"
+    );
 
     public TestBenchLLM() {
         initVariants();
@@ -128,7 +132,7 @@ public class TestBenchLLM {
     }
 
     @Test
-    public void exportConfidences(){
+    public void exportConfidences() {
         StringBuilder result = new StringBuilder("Query ID\tTABLE Conf\tSQL Conf\tNL Conf\n");
         for (ExpVariant variant : this.variants) {
             result.append(variant.getQueryNum()).append("\t");
@@ -141,7 +145,7 @@ public class TestBenchLLM {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, selection);
     }
-    
+
     @Test
     public void testGTInformationPresidents() {
         IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
@@ -175,6 +179,30 @@ public class TestBenchLLM {
         }
         log.info("Results\n{}", printMap(results));
 
+    }
+
+    @Test
+    public void testExtraAttrs() {
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(name);
+        for (ExpVariant variant : this.variants) {
+            VariantConfig vc = this.variantConfigs.get(variant.getQueryNum());
+            String dbID = vc.db_id;
+            String dataset = vc.dataset;
+            if (!queryExecuteExtraAttrs.contains(variant.getQueryNum())) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("spider1_28")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("galois_44")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_50")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_391")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_100")) continue;
+            //testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            //testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment-extra.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
+            exportExcel.export(fileName, dataset, metrics, results);
+        }
+        log.info("Results\n{}", printMap(results));
     }
 
     private class VariantConfig {

@@ -1,0 +1,166 @@
+{
+    "name": "disney-{{QN}} llama3-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-table",
+            "maxIterations": 10
+        }
+    },
+    "extraAttributes": [
+  { "name": "hero_actor", "type": "STRING", "nullable": false },
+  { "name": "villain_actor", "type": "STRING", "nullable": false },
+  { "name": "supporting_characters", "type": "STRING", "nullable": false },
+  { "name": "comic_relief_character", "type": "STRING", "nullable": false },
+  { "name": "love_interest", "type": "STRING", "nullable": false },
+  { "name": "mentor_character", "type": "STRING", "nullable": false },
+  { "name": "rival_character", "type": "STRING", "nullable": false },
+  { "name": "sidekick", "type": "STRING", "nullable": false },
+  { "name": "antagonist_group", "type": "STRING", "nullable": false },
+  { "name": "protagonist_group", "type": "STRING", "nullable": false },
+  { "name": "main_conflict", "type": "STRING", "nullable": false },
+  { "name": "setting_location", "type": "STRING", "nullable": false },
+  { "name": "fictional_universe", "type": "STRING", "nullable": false },
+  { "name": "character_development_summary", "type": "STRING", "nullable": false },
+  { "name": "notable_quote", "type": "STRING", "nullable": false },
+  { "name": "hero_traits", "type": "STRING", "nullable": false },
+  { "name": "villain_motivation", "type": "STRING", "nullable": false },
+  { "name": "hero_goal", "type": "STRING", "nullable": false },
+  { "name": "hero_weakness", "type": "STRING", "nullable": false },
+  { "name": "villain_weakness", "type": "STRING", "nullable": false },
+  { "name": "hero_arc_type", "type": "STRING", "nullable": false },
+  { "name": "villain_arc_type", "type": "STRING", "nullable": false },
+  { "name": "num_songs", "type": "INTEGER", "nullable": false },
+  { "name": "composer", "type": "STRING", "nullable": false },
+  { "name": "main_theme", "type": "STRING", "nullable": false },
+  { "name": "climactic_scene_description", "type": "STRING", "nullable": false },
+  { "name": "genre", "type": "STRING", "nullable": false },
+  { "name": "movie_runtime_minutes", "type": "INTEGER", "nullable": false },
+  { "name": "box_office_millions_usd", "type": "REAL", "nullable": false },
+  { "name": "created_at", "type": "STRING", "nullable": false }
+],
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "disney",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "director",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "director",
+                            "type": "STRING",
+                            "key": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "characters",
+                    "attributes": [
+                        {
+                            "name": "movie_title",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "release_date",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "hero",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "villian",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "song",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "voice_actors",
+                    "attributes": [
+                        {
+                            "name": "character",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "voice_actor",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "movie",
+                            "type": "STRING",
+                            "key": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movies_total_gross",
+                    "attributes": [
+                        {
+                            "name": "movie_title",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "release_date",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "genre",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "MPAA_rating",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "total_gross",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "inflation_adjusted_gross",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/disney"
+    }
+}

@@ -15,13 +15,14 @@ public class TogetherAIConstants {
     public static final String MODEL_QWEN3_235B = "Qwen/Qwen3-235B-A22B-fp8-tput";
     public static final String MODEL_MISTRAL_0_3_7B = "mistralai/Mistral-7B-Instruct-v0.3";
     public static final String MODEL_GEMMA_2_9B = "google/gemma-2-9b-it";
+    public static final String MODEL_KIMI_K2 = "moonshotai/Kimi-K2-Instruct-0905";
     public static final Integer MAX_TOKENS = 8194; // for other, for gemma 8194
 
     public static final String USER = "user";
     public static final String ASSISTANT = "assistant";
     public static final String BASE_ENDPOINT = "https://api.together.xyz/v1/";
 
-    public static final boolean STREAM_MODE = true; // Set to false for Probabilities, otherwise se it to true
+    public static final boolean STREAM_MODE = true; // Set to false for Probabilities, otherwise set it to true
 
 //    public static final int CONNECTION_TIMEOUT = 5 * 60 * 1000;
 //    public static final int CONNECTION_TIMEOUT = 1 * 10 * 1000;
