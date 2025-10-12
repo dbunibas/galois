@@ -51,7 +51,16 @@ public class TestBenchLLM {
     );
     
     private List<String> queryExecuteExtraAttrs = List.of(
-           "qatch_86", "qatch_89", "qatch_191", "qatch_170", "qatch_92", "qatch_194", "qatch_173", "qatch_95", "qatch_197", "qatch_176", "qatch_159", "qatch_207", "qatch_313", "qatch_277", "qatch_116", "qatch_295", "qatch_292", "qatch_275", "qatch_296", "qatch_301", "qatch_108", "spider1_28", "spider1_6", "qatch_50", "qatch_33", "qatch_29", "galois_46", "galois_47", "galois_44", "galois_53", "galois_22", "galois_15"
+           // KIMI 2-IT 
+           //"qatch_86", "qatch_89", "qatch_191", "qatch_170", "qatch_92", "qatch_194", "qatch_173", "qatch_95", "qatch_197", "qatch_176", "qatch_159", "qatch_207", "qatch_313", "qatch_277", "qatch_116", "qatch_295", "qatch_292", "qatch_275", "qatch_296", "qatch_301", "qatch_108", "spider1_28", "spider1_6", "qatch_50", "qatch_33", "qatch_29", "galois_46", "galois_47", "galois_44", "galois_53", "galois_22", "galois_15"
+           // QWEN 235B
+           // "qatch_197", "galois_53", "galois_55", "qatch_167", "qatch_277", "qatch_275", "qatch_176", "qatch_173", "qatch_292", "qatch_116", "qatch_108", "qatch_111", "qatch_331", "qatch_301", "spider1_6", "spider1_28", "galois_46", "galois_47", "galois_44", "qatch_33", "spider1_11", "qatch_30", "galois_20", "galois_22", "qatch_56", "qatch_50", "galois_15"
+           // GPT 4.1
+           // "qatch_194", "galois_53", "galois_55", "qatch_289", "qatch_271", "qatch_298", "qatch_176", "qatch_296", "qatch_295", "qatch_173", "qatch_126", "qatch_269", "qatch_132", "qatch_303", "galois_46", "galois_47", "galois_44", "qatch_33", "qatch_50", "galois_15"
+           // LLAMA 3 70B
+           //"galois_53", "qatch_298", "qatch_296", "spider1_6", "spider1_28", "qatch_33", "galois_22", "galois_15"
+           // DEEPSEEK 70B
+           "galois_55", "qatch_167", "qatch_286", "qatch_298", "qatch_176", "qatch_296", "qatch_173", "qatch_170", "qatch_126", "qatch_111", "qatch_129", "qatch_132", "qatch_313", "spider1_6", "qatch_29", "spider1_28", "galois_47", "qatch_33", "qatch_30", "galois_22", "qatch_50", "galois_15"
     );
 
     public TestBenchLLM() {
