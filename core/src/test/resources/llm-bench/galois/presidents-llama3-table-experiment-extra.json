@@ -1,0 +1,103 @@
+{
+  "name": "Presidents-{{QN}} llama3-table Experiment",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-table",
+      "maxIterations": 100
+    }
+  },
+  "extraAttributes": [
+  { "name": "birth_date", "type": "STRING", "nullable": false },
+  { "name": "birth_city", "type": "STRING", "nullable": false },
+  { "name": "birth_country", "type": "STRING", "nullable": false },
+  { "name": "death_date", "type": "STRING", "nullable": false },
+  { "name": "age_at_inauguration", "type": "INTEGER", "nullable": false },
+  { "name": "education", "type": "STRING", "nullable": false },
+  { "name": "alma_mater", "type": "STRING", "nullable": false },
+  { "name": "previous_positions", "type": "STRING", "nullable": false },
+  { "name": "profession_before_presidency", "type": "STRING", "nullable": false },
+  { "name": "spouse_name", "type": "STRING", "nullable": false },
+  { "name": "num_children", "type": "INTEGER", "nullable": false },
+  { "name": "religion", "type": "STRING", "nullable": false },
+  { "name": "ideology", "type": "STRING", "nullable": false },
+  { "name": "campaign_slogan", "type": "STRING", "nullable": false },
+  { "name": "election_year", "type": "INTEGER", "nullable": false },
+  { "name": "votes_percent", "type": "REAL", "nullable": false },
+  { "name": "vice_president", "type": "STRING", "nullable": false },
+  { "name": "predecessor", "type": "STRING", "nullable": false },
+  { "name": "successor", "type": "STRING", "nullable": false },
+  { "name": "major_reforms", "type": "STRING", "nullable": false },
+  { "name": "notable_events", "type": "STRING", "nullable": false },
+  { "name": "foreign_policy_focus", "type": "STRING", "nullable": false },
+  { "name": "domestic_policy_focus", "type": "STRING", "nullable": false },
+  { "name": "approval_rating_avg", "type": "REAL", "nullable": false },
+  { "name": "assassinated", "type": "STRING", "nullable": false },
+  { "name": "term_length_years", "type": "INTEGER", "nullable": false },
+  { "name": "num_terms_served", "type": "INTEGER", "nullable": false },
+  { "name": "awards_and_honors", "type": "STRING", "nullable": false },
+  { "name": "official_residence", "type": "STRING", "nullable": false },
+  { "name": "created_at", "type": "STRING", "nullable": false }
+],
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "all_president",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "world_presidents",
+          "attributes": [
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "start_year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "end_year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "cardinal_number",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "party",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "country",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/llm-bench/galois/presidents"
+  }
+}

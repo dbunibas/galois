@@ -1,0 +1,117 @@
+{
+    "name": "chemical_elements-{{QN}} llama3-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-table",
+            "maxIterations": 10
+        }
+    },
+    "extraAttributes": [
+  { "name": "density_g_per_cm3", "type": "REAL", "nullable": false },
+  { "name": "melting_point_k", "type": "REAL", "nullable": false },
+  { "name": "boiling_point_k", "type": "REAL", "nullable": false },
+  { "name": "appearance", "type": "STRING", "nullable": false },
+  { "name": "color", "type": "STRING", "nullable": false },
+  { "name": "discovery_year", "type": "INTEGER", "nullable": false },
+  { "name": "discoverer", "type": "STRING", "nullable": false },
+  { "name": "crystal_structure", "type": "STRING", "nullable": false },
+  { "name": "oxidation_states", "type": "STRING", "nullable": false },
+  { "name": "electronegativity_pauling", "type": "REAL", "nullable": false },
+  { "name": "atomic_radius_pm", "type": "REAL", "nullable": false },
+  { "name": "covalent_radius_pm", "type": "REAL", "nullable": false },
+  { "name": "van_der_waals_radius_pm", "type": "REAL", "nullable": false },
+  { "name": "ionization_energy_kj_per_mol", "type": "REAL", "nullable": false },
+  { "name": "electron_affinity_kj_per_mol", "type": "REAL", "nullable": false },
+  { "name": "thermal_conductivity_w_per_mk", "type": "REAL", "nullable": false },
+  { "name": "specific_heat_capacity_j_per_gk", "type": "REAL", "nullable": false },
+  { "name": "electrical_conductivity_s_per_m", "type": "REAL", "nullable": false },
+  { "name": "magnetic_ordering", "type": "STRING", "nullable": false },
+  { "name": "radioactive", "type": "STRING", "nullable": false },
+  { "name": "half_life_years", "type": "REAL", "nullable": false },
+  { "name": "most_stable_isotope", "type": "STRING", "nullable": false },
+  { "name": "isotopes_count", "type": "INTEGER", "nullable": false },
+  { "name": "natural_abundance_percent", "type": "REAL", "nullable": false },
+  { "name": "uses", "type": "STRING", "nullable": false },
+  { "name": "hazards", "type": "STRING", "nullable": false },
+  { "name": "biological_role", "type": "STRING", "nullable": false },
+  { "name": "cosmic_abundance_ppm", "type": "REAL", "nullable": false },
+  { "name": "discovery_location", "type": "STRING", "nullable": false },
+  { "name": "created_at", "type": "STRING", "nullable": false }
+],
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "chemical_element",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "chemical_element",
+                    "attributes": [
+                        {
+                            "name": "atomic_number",
+                            "type": "INTEGER",
+                            "key": true
+                        },
+                        {
+                            "name": "symbol",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "element",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "periodic_table_group",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "period",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "block",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "atomic_weight",
+                            "type": "REAL",
+                            "nullable": true
+                        },
+                        {
+                            "name": "origin",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "phase",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/chemical_element"
+    }
+}

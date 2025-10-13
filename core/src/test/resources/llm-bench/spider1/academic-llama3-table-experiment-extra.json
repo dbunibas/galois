@@ -1,0 +1,87 @@
+{
+  "name": "academic-{{QN}} llama3-table Experiment",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-table",
+      "maxIterations": 100
+    }
+  },
+  "extraAttributes":[
+  { "name": "issn_print", "type": "STRING", "nullable": false },
+  { "name": "issn_online", "type": "STRING", "nullable": false },
+  { "name": "publisher", "type": "STRING", "nullable": false },
+  { "name": "country", "type": "STRING", "nullable": false },
+  { "name": "language", "type": "STRING", "nullable": false },
+  { "name": "discipline", "type": "STRING", "nullable": false },
+  { "name": "subdiscipline", "type": "STRING", "nullable": false },
+  { "name": "founded_year", "type": "INTEGER", "nullable": false },
+  { "name": "publication_frequency", "type": "STRING", "nullable": false },
+  { "name": "open_access", "type": "STRING", "nullable": false },
+  { "name": "impact_factor", "type": "REAL", "nullable": false },
+  { "name": "5_year_impact_factor", "type": "REAL", "nullable": false },
+  { "name": "h_index", "type": "INTEGER", "nullable": false },
+  { "name": "scimago_quartile", "type": "STRING", "nullable": false },
+  { "name": "editor_in_chief", "type": "STRING", "nullable": false },
+  { "name": "editorial_board", "type": "STRING", "nullable": false },
+  { "name": "publisher_address", "type": "STRING", "nullable": false },
+  { "name": "contact_email", "type": "STRING", "nullable": false },
+  { "name": "submission_url", "type": "STRING", "nullable": false },
+  { "name": "acceptance_rate", "type": "REAL", "nullable": false },
+  { "name": "average_review_time_weeks", "type": "REAL", "nullable": false },
+  { "name": "format", "type": "STRING", "nullable": false },
+  { "name": "indexing_databases", "type": "STRING", "nullable": false },
+  { "name": "license_type", "type": "STRING", "nullable": false },
+  { "name": "apc_usd", "type": "REAL", "nullable": false },
+  { "name": "print_available", "type": "STRING", "nullable": false },
+  { "name": "online_available", "type": "STRING", "nullable": false },
+  { "name": "citation_style", "type": "STRING", "nullable": false },
+  { "name": "topics", "type": "STRING", "nullable": false },
+  { "name": "created_at", "type": "STRING", "nullable": false }
+],
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "academic_journal",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "academic_journal",
+          "attributes": [
+            {
+              "name": "homepage",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "jid",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }    
+      ]
+    },
+    "results": "/llm-bench/spider1/academic"
+  }
+}

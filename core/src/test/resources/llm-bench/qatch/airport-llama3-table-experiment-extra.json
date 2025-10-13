@@ -1,0 +1,101 @@
+{
+    "name": "airport-{{QN}} llama3-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-table",
+            "maxIterations": 10
+        }
+    },
+    "extraAttributes": [
+  { "name": "continent", "type": "STRING", "nullable": false },
+  { "name": "region", "type": "STRING", "nullable": false },
+  { "name": "latitude_deg", "type": "REAL", "nullable": false },
+  { "name": "longitude_deg", "type": "REAL", "nullable": false },
+  { "name": "elevation_ft", "type": "INTEGER", "nullable": false },
+  { "name": "airport_type", "type": "STRING", "nullable": false },
+  { "name": "num_runways", "type": "INTEGER", "nullable": false },
+  { "name": "longest_runway_length_m", "type": "INTEGER", "nullable": false },
+  { "name": "surface_type", "type": "STRING", "nullable": false },
+  { "name": "passenger_traffic_millions", "type": "REAL", "nullable": false },
+  { "name": "cargo_traffic_tons", "type": "REAL", "nullable": false },
+  { "name": "num_airlines", "type": "INTEGER", "nullable": false },
+  { "name": "num_destinations", "type": "INTEGER", "nullable": false },
+  { "name": "year_opened", "type": "INTEGER", "nullable": false },
+  { "name": "owner", "type": "STRING", "nullable": false },
+  { "name": "operator", "type": "STRING", "nullable": false },
+  { "name": "website_url", "type": "STRING", "nullable": false },
+  { "name": "phone_contact", "type": "STRING", "nullable": false },
+  { "name": "email_contact", "type": "STRING", "nullable": false },
+  { "name": "hub_for_airlines", "type": "STRING", "nullable": false },
+  { "name": "annual_movements", "type": "INTEGER", "nullable": false },
+  { "name": "terminal_count", "type": "INTEGER", "nullable": false },
+  { "name": "parking_capacity", "type": "INTEGER", "nullable": false },
+  { "name": "public_transport_access", "type": "STRING", "nullable": false },
+  { "name": "nearest_city_center_distance_km", "type": "REAL", "nullable": false },
+  { "name": "has_vip_lounge", "type": "STRING", "nullable": false },
+  { "name": "has_customs", "type": "STRING", "nullable": false },
+  { "name": "runway_lights", "type": "STRING", "nullable": false },
+  { "name": "icao_region_code", "type": "STRING", "nullable": false },
+  { "name": "created_at", "type": "STRING", "nullable": false }
+],
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "airport",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "airport",
+                    "attributes": [
+                        {
+                            "name": "iata_code",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "icao_code",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "airport_name",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "standard_timezone",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "city",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "nation",
+                            "type": "STRING",
+                            "nullable": false
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/airport"
+    }
+}
