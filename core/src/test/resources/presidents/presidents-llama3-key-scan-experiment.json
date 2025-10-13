@@ -17,9 +17,26 @@
   "operatorsConfig": {
     "scan": {
       "queryExecutor": "togetherai-llama3-key-scan",
-      "maxIterations": 100
+      "maxIterations": 1
     }
   },
+  "extraAttributes": [
+    {
+      "name": "first_lady_name",
+      "type": "STRING",
+      "nullable": false
+    },
+    {
+      "name": "first_lady_birth_year",
+      "type": "INTEGER",
+      "nullable": false
+    },
+    {
+      "name": "first_lady_nationality",
+      "type": "STRING",
+      "nullable": false
+    }
+  ],
   "query": {
     "sql": "{{QUERY-SQL}}",
     "schema": {

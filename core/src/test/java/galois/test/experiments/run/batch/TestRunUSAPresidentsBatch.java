@@ -194,9 +194,11 @@ public class TestRunUSAPresidentsBatch {
                 .build();
 
         IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
-        testRunner.execute("/presidents/presidents-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-        testRunner.execute("/presidents/presidents-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
-        testRunner.executeSingle("/presidents/presidents-" + executorModel + "-key-scan-experiment.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
+
+        ExperimentParser.setUsePinStrategy(true);
+        // To optionally override the max pin position
+//         ExperimentParser.setOverrideMaxPinPosition(1);
+        testRunner.executeSingle("/presidents/presidents-" + executorModel + "-key-scan-experiment.json", "KEY-SCAN", variant, metrics, results, allConditionPushdownWithFilter);
 
         exportExcel.export(fileName, EXP_NAME, metrics, results);
         log.info("Test Run Override Results: {}", printMap(results));

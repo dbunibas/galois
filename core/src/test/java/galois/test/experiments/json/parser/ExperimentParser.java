@@ -12,7 +12,7 @@ import galois.test.experiments.json.ExperimentJSON;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.experiments.metrics.MetricFactory;
 import galois.utils.attributes.AttributesOverride;
-import galois.utils.attributes.PinnedAttribute;
+import lombok.Setter;
 import speedy.model.database.Attribute;
 
 import java.io.IOException;
@@ -21,6 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExperimentParser {
+    @Setter
+    private static boolean usePinStrategy = false;
+    @Setter
+    private static Integer overrideMaxPinPosition = null;
+
     public static Experiment loadAndParseJSON(String fileName) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         URL jsonResource = ExperimentParser.class.getResource(fileName);
@@ -63,20 +68,20 @@ public class ExperimentParser {
         }
 
         if (extraAttributesJSON != null && !extraAttributesJSON.isEmpty()) {
-            // Add all the attributes one by one
-            for (int i = 0; i < extraAttributes.size(); i++) {
-                overrides.add(new AttributesOverride(extraAttributes.subList(0, i + 1)));
-            }
-        }
-
-        if (pinnedAttributeNames != null && !pinnedAttributeNames.isEmpty()) {
-            // Mangle the position of the pinned attributes
-            int maxPin = maxPinPosition != null ? maxPinPosition : 30;
-            for (String name : pinnedAttributeNames) {
-                for (int i = 0; i < maxPin; i++) {
-                    overrides.add(new AttributesOverride(extraAttributes, List.of(new PinnedAttribute(name, i))));
+            if (!usePinStrategy) {
+                // Add all the attributes one by one
+                for (int i = 0; i < extraAttributes.size(); i++) {
+                    overrides.add(new AttributesOverride(extraAttributes.subList(0, i + 1)));
+                }
+            } else {
+                // Add the "pin" experiments configuration from [1, N]
+                Integer maxPinOverride = overrideMaxPinPosition != null ? overrideMaxPinPosition : maxPinPosition;
+                int maxPin = maxPinOverride != null ? maxPinOverride : extraAttributes.size();
+                for (int i = 1; i <= maxPin; i++) {
+                    overrides.add(new AttributesOverride(extraAttributes, i));
                 }
             }
+
         }
 
         return overrides.isEmpty() ? null : overrides;
