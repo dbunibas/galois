@@ -74,10 +74,10 @@ public class ExperimentParser {
                     overrides.add(new AttributesOverride(extraAttributes.subList(0, i + 1)));
                 }
             } else {
-                // Add the "pin" experiments configuration from [1, N]
+                // Add the "pin" experiments configuration from [0, N]
                 Integer maxPinOverride = overrideMaxPinPosition != null ? overrideMaxPinPosition : maxPinPosition;
                 int maxPin = maxPinOverride != null ? maxPinOverride : extraAttributes.size();
-                for (int i = 1; i <= maxPin; i++) {
+                for (int i = 0; i <= maxPin; i++) {
                     overrides.add(new AttributesOverride(extraAttributes, i));
                 }
             }
