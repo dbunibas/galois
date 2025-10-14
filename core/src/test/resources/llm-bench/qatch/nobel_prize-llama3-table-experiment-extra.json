@@ -1,0 +1,96 @@
+{
+    "name": "nobel_prize-{{QN}} llama3-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-table",
+            "maxIterations": 10
+        }
+    },
+    "extraAttributes": [
+  { "name": "birth_city", "type": "STRING", "nullable": false },
+  { "name": "birth_country", "type": "STRING", "nullable": false },
+  { "name": "death_year", "type": "INTEGER", "nullable": false },
+  { "name": "death_city", "type": "STRING", "nullable": false },
+  { "name": "death_country", "type": "STRING", "nullable": false },
+  { "name": "gender", "type": "STRING", "nullable": false },
+  { "name": "field_of_study", "type": "STRING", "nullable": false },
+  { "name": "affiliation", "type": "STRING", "nullable": false },
+  { "name": "institution_country", "type": "STRING", "nullable": false },
+  { "name": "motivation", "type": "STRING", "nullable": false },
+  { "name": "shared_with", "type": "STRING", "nullable": false },
+  { "name": "award_money_usd", "type": "REAL", "nullable": false },
+  { "name": "award_ceremony_location", "type": "STRING", "nullable": false },
+  { "name": "award_presented_by", "type": "STRING", "nullable": false },
+  { "name": "is_posthumous", "type": "STRING", "nullable": false },
+  { "name": "award_category", "type": "STRING", "nullable": false },
+  { "name": "laureate_type", "type": "STRING", "nullable": false },
+  { "name": "num_laureates_that_year", "type": "INTEGER", "nullable": false },
+  { "name": "notable_work", "type": "STRING", "nullable": false },
+  { "name": "career_highlights", "type": "STRING", "nullable": false },
+  { "name": "education", "type": "STRING", "nullable": false },
+  { "name": "alma_mater", "type": "STRING", "nullable": false },
+  { "name": "previous_awards", "type": "STRING", "nullable": false },
+  { "name": "publication_count", "type": "INTEGER", "nullable": false },
+  { "name": "citations_count", "type": "INTEGER", "nullable": false },
+  { "name": "known_for", "type": "STRING", "nullable": false },
+  { "name": "portrait_url", "type": "STRING", "nullable": false },
+  { "name": "biography_url", "type": "STRING", "nullable": false },
+  { "name": "wikipedia_url", "type": "STRING", "nullable": false },
+  { "name": "created_at", "type": "STRING", "nullable": false }
+],
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "nobel_prize",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "nobel_prize",
+                    "attributes": [
+                        {
+                            "name": "nobel_prize_laureate",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "nobel_prize",
+                            "type": "STRING",
+                            "nullable": false
+                        },
+                        {
+                            "name": "nobel_prize_year",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "nationality",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "birth_year",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/nobel_prize"
+    }
+}

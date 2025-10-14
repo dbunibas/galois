@@ -4,6 +4,11 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.gemini.GeminiKeyQueryExecutor;
+import galois.llm.query.gemini.GeminiKeyScanQueryExecutor;
+import galois.llm.query.gemini.GeminiNLQueryExecutor;
+import galois.llm.query.gemini.GeminiSQLQueryExecutor;
+import galois.llm.query.gemini.GeminiTableQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
 import galois.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
 import galois.llm.query.openai.*;
@@ -40,7 +45,12 @@ public class ScanConfigurationParser {
             Map.entry("open-ai-sql", ScanConfigurationParser::generateOpenAISQLQueryExecutor),
             Map.entry("open-ai-table", ScanConfigurationParser::generateOpenAITableQueryExecutor),
             Map.entry("open-ai-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor),
-            Map.entry("open-ai-key", ScanConfigurationParser::generateOpenAIKeyQueryExecutor)
+            Map.entry("open-ai-key", ScanConfigurationParser::generateOpenAIKeyQueryExecutor),
+            Map.entry("gemini-ai-nl", ScanConfigurationParser::generateGeminiNLQueryExecutor),
+            Map.entry("gemini-ai-sql", ScanConfigurationParser::generateGeminiSQLQueryExecutor),
+            Map.entry("gemini-ai-table", ScanConfigurationParser::generateGeminiTableQueryExecutor),
+            Map.entry("gemini-ai-key-scan", ScanConfigurationParser::generateGeminiKeyScanQueryExecutor),
+            Map.entry("gemini-ai-key", ScanConfigurationParser::generateGeminiKeyQueryExecutor)
     );
 
     public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
@@ -91,6 +101,11 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAINLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt, contentRetriever);
     }
+    
+    private static IQueryExecutor generateGeminiNLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new GeminiNLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt, contentRetriever);
+    }
 
     private static IQueryExecutor generateOllamaLlama3SQLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
@@ -105,6 +120,11 @@ public class ScanConfigurationParser {
     private static IQueryExecutor generateOpenAISQLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAISQLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, sql, contentRetriever);
+    }
+    
+    private static IQueryExecutor generateGeminiSQLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new GeminiSQLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, sql, contentRetriever);
     }
 
     private static IQueryExecutor generateOllamaLlama3TableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
@@ -121,6 +141,11 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAITableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
+    
+    private static IQueryExecutor generateGeminiTableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new GeminiTableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
 
     private static IQueryExecutor generateOllamaLlama3KeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
@@ -130,6 +155,11 @@ public class ScanConfigurationParser {
     private static IQueryExecutor generateTogetheraiLlama3KeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new TogetheraiLLama3KeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+    
+    private static IQueryExecutor generateGeminiKeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new GeminiKeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
 
     private static IQueryExecutor generateOllamaLlama3KeyScanQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
@@ -146,12 +176,17 @@ public class ScanConfigurationParser {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAIKeyScanQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
+    
+    private static IQueryExecutor generateGeminiKeyScanQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new GeminiKeyScanQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
 
     private static IQueryExecutor generateOpenAIKeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAIKeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
-
+    
     private static IQueryExecutor generateOllamaMistralNLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaMistralNLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt); //TODO: Handle content retriever

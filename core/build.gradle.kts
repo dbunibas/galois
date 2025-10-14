@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("io.freefair.lombok") version "8.6"
+    id("io.freefair.lombok") version "8.14.1"
 }
 
 version = "0.0.1"
@@ -25,6 +25,7 @@ dependencies {
     implementation("dev.langchain4j:langchain4j-easy-rag:0.35.0")
     implementation("dev.langchain4j:langchain4j-chroma:0.35.0")
     implementation("dev.langchain4j:langchain4j-open-ai:0.35.0")
+    implementation("dev.langchain4j:langchain4j-google-ai-gemini:0.35.0")
 
     implementation("com.fasterxml.jackson.core:jackson-core:2.17.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")

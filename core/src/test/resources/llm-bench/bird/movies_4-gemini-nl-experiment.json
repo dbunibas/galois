@@ -1,0 +1,385 @@
+{
+    "name": "movies_4-{{QN}} gemini-nl Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "gemini-nl",
+            "maxIterations": 10,
+            "naturalLanguagePrompt": "{{PROMPT}}"
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "movies_4",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "genre",
+                    "attributes": [
+                        {
+                            "name": "genre_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "genre_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "country",
+                    "attributes": [
+                        {
+                            "name": "country_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country_iso_code",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "language_role",
+                    "attributes": [
+                        {
+                            "name": "role_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "language_role",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "department",
+                    "attributes": [
+                        {
+                            "name": "department_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "department_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movie_keywords",
+                    "attributes": [
+                        {
+                            "name": "movie_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "keyword_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "keyword",
+                    "attributes": [
+                        {
+                            "name": "keyword_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "keyword_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "gender",
+                    "attributes": [
+                        {
+                            "name": "gender_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gender",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movie_company",
+                    "attributes": [
+                        {
+                            "name": "movie_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "company_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movie_crew",
+                    "attributes": [
+                        {
+                            "name": "movie_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "person_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "department_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "job",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "language",
+                    "attributes": [
+                        {
+                            "name": "language_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "language_code",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "language_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "person",
+                    "attributes": [
+                        {
+                            "name": "person_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "person_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movie_cast",
+                    "attributes": [
+                        {
+                            "name": "movie_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "person_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "character_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "gender_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "cast_order",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movie_genres",
+                    "attributes": [
+                        {
+                            "name": "movie_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "genre_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "production_country",
+                    "attributes": [
+                        {
+                            "name": "movie_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "country_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movie_languages",
+                    "attributes": [
+                        {
+                            "name": "movie_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "language_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "language_role_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "production_company",
+                    "attributes": [
+                        {
+                            "name": "company_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "company_name",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "movie",
+                    "attributes": [
+                        {
+                            "name": "movie_id",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "title",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "budget",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "homepage",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "overview",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "popularity",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "release_date",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "revenue",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "runtime",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "movie_status",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "tagline",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vote_average",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "vote_count",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/bird/movies_4"
+    }
+}

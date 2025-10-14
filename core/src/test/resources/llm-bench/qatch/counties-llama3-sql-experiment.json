@@ -1,0 +1,69 @@
+{
+    "name": "counties-{{QN}} llama3-sql Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-sql",
+            "maxIterations": 100
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "counties",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "us_counties",
+                    "attributes": [
+                        {
+                            "name": "county",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "usps_abbreviation",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "state_name",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "county_area_squared_miles",
+                            "type": "REAL",
+                            "nullable": true
+                        },
+                        {
+                            "name": "founded",
+                            "type": "INTEGER",
+                            "nullable": true
+                        },
+                        {
+                            "name": "population_2020",
+                            "type": "INTEGER",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/counties"
+    }
+}

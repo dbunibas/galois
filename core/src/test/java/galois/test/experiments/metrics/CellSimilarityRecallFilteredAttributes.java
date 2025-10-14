@@ -41,8 +41,7 @@ public class CellSimilarityRecallFilteredAttributes implements IMetric {
 
         for (String expectedCell : expectedCells) {
             for (String resultCell : resultCells) {
-                threshold = expectedCell.length() * 0.1;
-                if (editDist.getScoreForCells(expectedCell, resultCell, threshold)) {
+                if (editDist.getScoreForCells(expectedCell, resultCell, 0.1)) {
                     count++;
                     break;
                 }

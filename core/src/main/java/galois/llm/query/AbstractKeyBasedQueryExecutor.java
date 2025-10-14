@@ -8,6 +8,8 @@ import galois.llm.query.utils.cache.LLMCache;
 import galois.prompt.EPrompts;
 import galois.utils.GaloisDebug;
 import galois.utils.Mapper;
+import galois.utils.attributes.AttributesOverrider;
+import galois.utils.attributes.AttributesOverride;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 
@@ -24,6 +26,8 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     private boolean skipKeyRequest = false; // for DEBUG put it to true
     private boolean skipTupleRequest = false; // for DEBUG put it to true
 
+    private AttributesOverride attributesOverride = null;
+
     abstract protected Chain<String, String> getConversationalChain();
 
     abstract protected ChatLanguageModel getChatLanguageModel();
@@ -33,6 +37,11 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     @Override
     public void setAttributes(List<AttributeRef> attributes) {
         this.attributes = attributes;
+    }
+
+    @Override
+    public void setAttributesOverride(AttributesOverride attributesOverride) {
+        this.attributesOverride = attributesOverride;
     }
 
     @Override
@@ -46,13 +55,13 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         GaloisDebug.log("Parsed keys are:");
         GaloisDebug.log(keyValues);
         if (skipTupleRequest) return new ArrayList<>();
-        
+
         List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).filter(Objects::nonNull).toList();
         GaloisDebug.log("LLMScan results:");
         GaloisDebug.log(tuples);
         return tuples;
     }
-    
+
     private List<Map<String, Object>> getStaticKeys(ITable table, Key primaryKey) {
         String cleanedResponse = "[]"; // insert here the keys
         List<Map<String, Object>> currentKeys = parseKeyResponse(cleanedResponse, table, primaryKey);
@@ -129,7 +138,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     private Tuple generateTupleFromKey(ITable table, TableAlias tableAlias, Map<String, Object> keyValue, Key primaryKey, Chain<String, String> chain) {
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream().map(AttributeRef::getName).toList();
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
-        if(hasNullInKeys(tuple, tableAlias, keyValue, primaryKeyAttributes)){
+        if (hasNullInKeys(tuple, tableAlias, keyValue, primaryKeyAttributes)) {
             return null;
         }
         addCellForPrimaryKey(tuple, tableAlias, keyValue, primaryKeyAttributes);
@@ -157,15 +166,18 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         }
 
         String keyAsString = getKeyAsString(keyValue, primaryKeyAttributes);
-        return addValueFromAttributes(table, tableAlias, new ArrayList<>(attributesQuery), tuple, keyAsString, chain);
+        List<Attribute> attributeList = attributesOverride == null ?
+                new ArrayList<>(attributesQuery) :
+                AttributesOverrider.overrideAttributes(attributesOverride, attributesQuery);
+        return addValueFromAttributes(table, tableAlias, attributeList, tuple, keyAsString, chain);
     }
 
     private boolean hasNullInKeys(Tuple tuple, TableAlias tableAlias, Map<String, Object> key, List<String> primaryKeyAttributes) {
         for (String attribute : primaryKeyAttributes) {
             Object value = key.get(attribute);
-            if(value == null || (value.toString().isBlank())){
-               return true;
-           }
+            if (value == null || (value.toString().isBlank())) {
+                return true;
+            }
         }
         return false;
     }
@@ -199,7 +211,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     }
 
     protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributesPrompt, String key, Chain<String, String> chain) {
-        String jsonSchema = generateJsonSchemaFromAttributes(table, attributesPrompt);
+        String jsonSchema = attributesOverride == null ?
+                generateJsonSchemaFromAttributes(table, attributesPrompt) :
+                generateJsonSchemaFromAttributesUsingLinkedHashMap(table, attributesPrompt);
         String prompt = getAttributesPrompt().generate(table, key, attributesPrompt, jsonSchema);
         log.debug("Attribute prompt is: {}", prompt);
         String response = "";

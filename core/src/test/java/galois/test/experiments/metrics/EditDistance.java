@@ -1,6 +1,7 @@
 package galois.test.experiments.metrics;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import speedy.model.database.Tuple;
 
 // This class provides a way to calculate the Edit Distance metric
 public class EditDistance {
@@ -32,9 +33,22 @@ public class EditDistance {
         }
         // Calculate the edit distance between the expected and result cells
         LevenshteinDistance levenshteinDistance = new LevenshteinDistance();
-        double distance = levenshteinDistance.apply(expected, result);
+        int distance = levenshteinDistance.apply(expected, result);
+        int expectedLength = expected.length();
+        double maxSize = Math.ceil(expectedLength * (1.0 + threshold));
+        double minsize = Math.floor(expectedLength * (1.0 - threshold));
+        return (minsize <= distance) && (distance <= maxSize);
         // Return true if the distance is less than or equal to the threshold, otherwise return false
-        return distance <= threshold;
+//        return distance <= threshold;
+    }
+    
+    public Double getScoreForTuple(Tuple expected, Tuple actual) {
+       if (expected == null || actual == null) return null;
+       String s1 = expected.toStringNoOID();
+       String s2 = actual.toStringNoOID();
+       LevenshteinDistance levenshteinDistance = new LevenshteinDistance();
+       double distance = levenshteinDistance.apply(s1, s2);
+       return distance;
     }
 
 }

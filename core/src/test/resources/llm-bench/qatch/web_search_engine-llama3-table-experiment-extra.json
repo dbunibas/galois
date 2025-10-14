@@ -1,0 +1,86 @@
+{
+    "name": "web_search_engine-{{QN}} llama3-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-table",
+            "maxIterations": 10
+        }
+    },
+    "extraAttributes": [
+  { "name": "developer_company", "type": "STRING", "nullable": false },
+  { "name": "headquarters_country", "type": "STRING", "nullable": false },
+  { "name": "founder", "type": "STRING", "nullable": false },
+  { "name": "parent_company", "type": "STRING", "nullable": false },
+  { "name": "programming_language", "type": "STRING", "nullable": false },
+  { "name": "search_algorithm_name", "type": "STRING", "nullable": false },
+  { "name": "index_size_estimate", "type": "INTEGER", "nullable": false },
+  { "name": "daily_queries_millions", "type": "REAL", "nullable": false },
+  { "name": "market_share_percent", "type": "REAL", "nullable": false },
+  { "name": "supports_images", "type": "STRING", "nullable": false },
+  { "name": "supports_videos", "type": "STRING", "nullable": false },
+  { "name": "supports_news", "type": "STRING", "nullable": false },
+  { "name": "supports_shopping", "type": "STRING", "nullable": false },
+  { "name": "supports_maps", "type": "STRING", "nullable": false },
+  { "name": "supports_ai_answers", "type": "STRING", "nullable": false },
+  { "name": "supports_voice_search", "type": "STRING", "nullable": false },
+  { "name": "default_language", "type": "STRING", "nullable": false },
+  { "name": "available_languages_count", "type": "INTEGER", "nullable": false },
+  { "name": "homepage_url", "type": "STRING", "nullable": false },
+  { "name": "api_available", "type": "STRING", "nullable": false },
+  { "name": "api_documentation_url", "type": "STRING", "nullable": false },
+  { "name": "mobile_app_available", "type": "STRING", "nullable": false },
+  { "name": "monetization_model", "type": "STRING", "nullable": false },
+  { "name": "ad_network_name", "type": "STRING", "nullable": false },
+  { "name": "privacy_policy_url", "type": "STRING", "nullable": false },
+  { "name": "uses_tracking_cookies", "type": "STRING", "nullable": false },
+  { "name": "ranking_factors_count", "type": "INTEGER", "nullable": false },
+  { "name": "popular_regions", "type": "STRING", "nullable": false },
+  { "name": "last_major_update_year", "type": "INTEGER", "nullable": false },
+  { "name": "created_at", "type": "STRING", "nullable": false }
+],
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "web_search_engine",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "web_search_engine",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "released_year",
+                            "type": "INTEGER",
+                            "nullable": false
+                        },
+                        {
+                            "name": "is_active",
+                            "type": "BOOLEAN",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/web_search_engine"
+    }
+}

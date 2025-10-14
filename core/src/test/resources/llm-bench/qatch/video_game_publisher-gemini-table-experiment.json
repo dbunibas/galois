@@ -1,0 +1,54 @@
+{
+    "name": "video_game_publisher-{{QN}} gemini-table Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "gemini-table",
+            "maxIterations": 10
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "video_game_publisher",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "video_game_publisher",
+                    "attributes": [
+                        {
+                            "name": "publisher_name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "established_in_year",
+                            "type": "INTEGER",
+                            "nullable": false
+                        },
+                        {
+                            "name": "nation",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/qatch/video_game_publisher"
+    }
+}

@@ -1,0 +1,134 @@
+{
+  "name": "movie_1-{{QN}} llama3-table Experiment",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-table",
+      "maxIterations": 10
+    }
+  },
+  "extraAttributes": [
+    { "name": "genre", "type": "STRING", "nullable": false },
+    { "name": "duration_minutes", "type": "INTEGER", "nullable": false },
+    { "name": "language", "type": "STRING", "nullable": false },
+    { "name": "country", "type": "STRING", "nullable": false },
+    { "name": "budget", "type": "REAL", "nullable": false },
+    { "name": "box_office", "type": "REAL", "nullable": false },
+    { "name": "rating", "type": "REAL", "nullable": false },
+    { "name": "num_reviews", "type": "INTEGER", "nullable": false },
+    { "name": "release_date", "type": "STRING", "nullable": false },
+    { "name": "production_company", "type": "STRING", "nullable": false },
+    { "name": "distributor", "type": "STRING", "nullable": false },
+    { "name": "writer", "type": "STRING", "nullable": false },
+    { "name": "cast", "type": "STRING", "nullable": false },
+    { "name": "synopsis", "type": "STRING", "nullable": false },
+    { "name": "poster_url", "type": "STRING", "nullable": false },
+    { "name": "trailer_url", "type": "STRING", "nullable": false },
+    { "name": "imdb_id", "type": "STRING", "nullable": false },
+    { "name": "awards_won", "type": "INTEGER", "nullable": false },
+    { "name": "award_nominations", "type": "INTEGER", "nullable": false },
+    { "name": "age_rating", "type": "STRING", "nullable": false },
+    { "name": "format", "type": "STRING", "nullable": false },
+    { "name": "color", "type": "STRING", "nullable": false },
+    { "name": "sound_mix", "type": "STRING", "nullable": false },
+    { "name": "aspect_ratio", "type": "STRING", "nullable": false },
+    { "name": "filming_locations", "type": "STRING", "nullable": false },
+    { "name": "metascore", "type": "REAL", "nullable": false },
+    { "name": "rotten_tomatoes_score", "type": "REAL", "nullable": false },
+    { "name": "streaming_platforms", "type": "STRING", "nullable": false },
+    { "name": "is_series", "type": "STRING", "nullable": false },
+    { "name": "created_at", "type": "STRING", "nullable": false }
+  ],
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "movie_1",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "movie",
+          "attributes": [
+            {
+              "name": "mID",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "title",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "director",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "rating",
+          "attributes": [
+            {
+              "name": "rID",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "mID",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "stars",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "ratingDate",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "reviewer",
+          "attributes": [
+            {
+              "name": "rID",
+              "type": "INTEGER",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/llm-bench/spider1/movie_1"
+  }
+}

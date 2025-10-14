@@ -41,12 +41,18 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+## Properties ##
 gradle.properties
+core/src/main/resources/configuration.properties
 
 ## movies dataset ##
 core/src/test/resources/movies/movies-data
 
 ## query results ##
 core/src/test/resources/results/
-core/src/test/resources/llm-bench/cache
 docker/data/db/data
+core/src/test/resources/llm-bench/cache-soccer-exp-neurips
+core/src/test/resources/llm-bench/cache
+core/src/test/resources/recipes
+core/src/test/resources/vigili
+TestRunVigili.java
