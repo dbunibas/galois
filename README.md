@@ -1,9 +1,9 @@
-# RelationalFactQA
-### A Benchmark for Evaluating Tabular Fact Retrieval from Large Language Models
+# Beyond Single Facts
+### A Benchmark for Evaluating Relational Fact Retrieval from Large Language Models
 
 
 ### Requirements
-RelationalFactQA is part of Galois.
+Beyond Single Facts is part of Galois.
 Galois is written in Java, and require a working JDK (>=21).
 
 In addition, the following tools/subscriptions are needed:
@@ -27,7 +27,7 @@ All 696 queries in the benchmark can be automatically executed using the [`TestB
 By default, the test runs all queries listed in the [`Excel file`](core/src/test/resources/llm-bench/dataset-soccer.xlsx) specified by the `TestBenchLLM.QUERIES_PATH` property.  
 You can also create a custom Excel file with a subset of queries if you want to run a smaller experiment.
 
-The language model used for the experiments is defined by the `Constants.SELECTED_MODEL` property. You can change this to select a different model (e.g., GPT, LLaMA).
+The language model used for the experiments is defined by the `Constants.LLM_MODEL` property. You can change this to select a different model (e.g., GPT, LLaMA).
 
 Once the project is properly configured, you can launch the benchmark with the following command:
 

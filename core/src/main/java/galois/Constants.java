@@ -15,6 +15,7 @@ public class Constants {
     public static final String OPEN_AI_CHAT_MODEL_NAME = "gpt-4.1";
 
     // ----- GEMINI CONFIG --------
+    public static final String GEMINI_API_KEY = "<YOUR_API_KEY>";
     public static final String GEMINI_CHAT_MODEL_NAME = "gemini-2.5-flash-lite";
 
     // ----- OTHER CONFIG --------
