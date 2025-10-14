@@ -21,14 +21,17 @@ public class Constants {
     // ----- OTHER CONFIG --------
     public static final String OLLAMA_MODEL = "llama3.1:70b";
 
+    // Open-AI hosted model
+    public static final String MODEL_GPT = "gpt";
+    // Together-AI hosted model
+    public static final String MODEL_TOGETHERAI = "togetherai";
+
     public static final String MODEL_LLAMA3 = "llama3";
     public static final String MODEL_LLAMA4 = "llama4";
-    public static final String MODEL_GPT = "gpt";
     public static final String MODEL_DEEPSEEK = "deepseek";
     public static final String MODEL_QWEN = "qwen";
     public static final String MODEL_MISTRAL = "mistral";
     public static final String MODEL_GEMMA = "gemma";
-
     public static final String MODEL_KIMI = "kimi";
 
     public static final boolean CACHE_ENABLED = false;

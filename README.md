@@ -8,8 +8,8 @@ Galois is written in Java, and require a working JDK (>=21).
 
 In addition, the following tools/subscriptions are needed:
 - **PostgreSQL** - required for all projects
-- **OpenAI API Key** - optional - A valid subscription on OpenAI is needed to run proprietary models (as `gpt-4.1`). In order to use OpenAI, the `Constants.EXECUTOR` should be set to `TOGETHERAI_EXECUTOR`, and the `TOGETHERAI_API` need to be specified.
-- **TogetherAI API Key** - optional - A valid subscription on TogetherAI is needed to run larger models (as `llama3.1:70b`), or to run RAG experiments. In order to use TogetherAI, the `Constants.EXECUTOR` should be set to `TOGETHERAI_EXECUTOR`, and the `TOGETHERAI_API` need to be specified.
+- **OpenAI API Key** - optional - A valid subscription on OpenAI is needed to run proprietary models (as `gpt-4.1`). In order to use OpenAI, the `Constants.LLM_MODEL` should be set to `Constants.MODEL_GPT`, and the `Constants.OPEN_AI_API_KEY` need to be specified.
+- **TogetherAI API Key** - optional - A valid subscription on TogetherAI is needed to run larger models (as `llama3.1:70b`), or to run RAG experiments. In order to use TogetherAI, the `Constants.LLM_MODEL` should be set to `Constants.MODEL_TOGETHERAI`, and the `Constants.TOGETHERAI_API` need to be specified.
 
 To simplify project startup, a `docker-compose.yml` file containing a postgres DBMS is available in the repository.
 

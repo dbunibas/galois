@@ -35,13 +35,12 @@ public class TestBenchLLM {
     private static final String RESULT_FILE_DIR = "src/test/resources/results/";
     private static final String RESULT_FILE = "bird-results.txt";
     private static final String QUERIES_PATH = "src/test/resources/llm-bench/dataset.xlsx";
-//    private static final String QUERIES_PATH = "src/test/resources/llm-bench/limitQuery.xlsx";
+
     private static final TestRunner testRunner = new TestRunner();
     private static final ExcelExporter exportExcel = new ExcelExporter();
-    private String executorModel = "llama3";
+
+    private String executorModel = Constants.MODEL_LLAMA3;
     private String name = Constants.TOGETHERAI_MODEL;
-//    private String executorModel = "gpt";
-//    private String name = Constants.OPEN_AI_CHAT_MODEL_NAME;
 
     private List<ExpVariant> variants;
     private Map<String, VariantConfig> variantConfigs;
