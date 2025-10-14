@@ -3,6 +3,7 @@ package galois.test.experiments.run.batch;
 import galois.Constants;
 import galois.optimizer.IOptimizer;
 import galois.test.experiments.ExperimentResults;
+import galois.test.experiments.json.parser.ExperimentParser;
 import galois.test.experiments.json.parser.OptimizersFactory;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.model.ExpVariant;
@@ -208,6 +209,31 @@ public class TestBenchLLM {
 //            if (!variant.getQueryNum().equalsIgnoreCase("qatch_100")) continue;
             //testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
             //testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment-extra.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
+            exportExcel.export(fileName, dataset, metrics, results);
+        }
+        log.info("Results\n{}", printMap(results));
+    }
+    
+        @Test
+    public void testRunOverride() {
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        String fileName = exportExcel.getFileName(name);
+        for (ExpVariant variant : this.variants) {
+            VariantConfig vc = this.variantConfigs.get(variant.getQueryNum());
+            String dbID = vc.db_id;
+            String dataset = vc.dataset;
+            if (!queryExecuteExtraAttrs.contains(variant.getQueryNum())) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("spider1_28")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("galois_44")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_50")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_391")) continue;
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_100")) continue;
+            //testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-nl-experiment.json", "NL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            //testRunner.execute("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-sql-experiment.json", "SQL", variant, metrics, results, RESULT_FILE_DIR, RESULT_FILE);
+            ExperimentParser.setUsePinStrategy(true);
             testRunner.executeSingle("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment-extra.json", "TABLE", variant, metrics, results, allConditionPushdownWithFilter);
             exportExcel.export(fileName, dataset, metrics, results);
         }
