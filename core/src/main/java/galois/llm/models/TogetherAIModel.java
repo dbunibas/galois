@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Data
 public class TogetherAIModel implements IModel, ChatLanguageModel {
-    
+
     public static final String LOG_PROBS = "logprobs";
 
     private String toghetherAiAPI;
@@ -56,7 +56,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private boolean checkJSONResponseContent = false;
     private Map<String, String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
     private boolean useCache = false;
-    
+
 //    public TogetherAIModel(String toghetherAiAPI, String modelName) {
 //        this(toghetherAiAPI, modelName, false);
 //    }
@@ -140,7 +140,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         log.trace("Return null because there was an exception.");
         return null;
     }
-    
+
     public String getModelResponse(String prompt) {
         String jsonRequest = getJsonForRequest(prompt.replace("\n", "\\n"));
         //log.info("JSON REQUEST:\n" + jsonRequest);
@@ -191,14 +191,14 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             if (responseAPI != null) {
                 Choice choice = responseAPI.getChoices().get(0);
                 Message message = choice.getMessage();
-                Map<String,Object> otherInfo = new HashMap<>();
+                Map<String, Object> otherInfo = new HashMap<>();
                 if (choice.getLogprobs() != null) {
                     Logprobs logprobs = choice.getLogprobs();
                     otherInfo.put(LOG_PROBS, logprobs);
                 }
                 if (message != null) {
 //                    return Response.from(AiMessage.from(message.getContent()), new TokenUsage(responseAPI.getUsage().getPromptTokens(), responseAPI.getUsage().getCompletionTokens()));
-                    return Response.from(AiMessage.from(message.getContent()), new TokenUsage(responseAPI.getUsage().getPromptTokens(), responseAPI.getUsage().getCompletionTokens()),FinishReason.OTHER, otherInfo);
+                    return Response.from(AiMessage.from(message.getContent()), new TokenUsage(responseAPI.getUsage().getPromptTokens(), responseAPI.getUsage().getCompletionTokens()), FinishReason.OTHER, otherInfo);
                 }
             }
             log.trace("Return null because responseAPI is null");
@@ -223,9 +223,9 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 connection.setRequestProperty("Authorization", authorizationValue);
                 connection.setDoOutput(true);
                 String responseText;
-                if(streamMode) {
+                if (streamMode) {
                     responseText = getStringStreamMode(jsonRequest, connection);
-                }else{
+                } else {
                     responseText = getStringStandardMode(jsonRequest, connection);
                 }
                 if (checkJSON && !Mapper.isJSON(responseText)) {
@@ -266,7 +266,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         connection.connect();
         if (connection.getResponseCode() != 200) {
             String error = IOUtils.toString(new InputStreamReader(connection.getErrorStream()));
-            log.error("Error response: {}", error);
+            log.error("Error response (stream mode): {}\nRequest: \n{}", error, jsonRequest);
             if (error.contains("invalid_request_error") && error.contains("max_tokens")) {
                 throw new MaxTokensException(error);
             } else {
@@ -285,7 +285,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
             }
             StreamResponse streamResponse = objectMapper.readValue(dataChunk, StreamResponse.class);
             finalResponse.setUsage(streamResponse.getUsage());
-            if(!streamResponse.choices.isEmpty()){
+            if (!streamResponse.choices.isEmpty()) {
                 messageContent.append(streamResponse.choices.get(0).delta.content);
             }
         }
@@ -308,7 +308,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         os.flush();
         connection.connect();
         if (connection.getResponseCode() != 200) {
-            log.error("Error response: {}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())));
+            log.error("Error response (standard mode): {}\nRequest: \n{}", IOUtils.toString(new InputStreamReader(connection.getErrorStream())), jsonRequest);
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
         StringBuilder response = new StringBuilder();
@@ -320,7 +320,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         log.debug("# API Response {}: \n{}", connection.getResponseCode(), responseText);
         return responseText;
     }
-    
+
     public String getJsonForRequest(String message) {
         String jsonReturn = "{\n"
                 + "    \"model\": \"{$MODEL_NAME$}\",\n"
