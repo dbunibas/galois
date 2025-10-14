@@ -11,6 +11,7 @@ import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 import static galois.Constants.OLLAMA_MODEL;
 
@@ -63,6 +64,7 @@ public class ConversationalChainFactory {
         return OpenAiChatModel.builder()
                 .apiKey(apiKey)
                 .modelName(modelName)
+                .timeout(Duration.ofMinutes(5))
                 .build();
     }
     
