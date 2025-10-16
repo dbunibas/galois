@@ -1,9 +1,9 @@
-# Beyond Single Facts
+# RelationalFactQA
 ### A Benchmark for Evaluating Relational Fact Retrieval from Large Language Models
 
 
 ### Requirements
-Beyond Single Facts is part of Galois.
+RelationalFactQA is part of Galois.
 Galois is written in Java, and require a working JDK (>=21).
 
 In addition, the following tools/subscriptions are needed:
