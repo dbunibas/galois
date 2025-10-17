@@ -23,9 +23,6 @@ This command will start PostgreSQL in the background.
 
 All 696 queries in the benchmark can be automatically executed using the [`TestBenchLLM`](core/src/test/java/bsf/test/experiments/run/batch/TestBenchLLM.java) class.
 
-By default, the test runs all queries listed in the [`Excel file`](core/src/test/resources/llm-bench/dataset-soccer.xlsx) specified by the `TestBenchLLM.QUERIES_PATH` property.  
-You can also create a custom Excel file with a subset of queries if you want to run a smaller experiment.
-
 The language model used for the experiments is defined by the `Constants.LLM_MODEL` property. You can change this to select a different model (e.g., GPT, LLaMA).
 
 Once the project is properly configured, you can launch the benchmark with the following command:
