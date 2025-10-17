@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":speedy-core"))
+    implementation(project(":query-executor-core"))
     implementation(project(":sql-parser"))
 
     implementation("org.slf4j:slf4j-api:2.0.12")

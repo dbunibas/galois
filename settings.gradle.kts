@@ -1,10 +1,10 @@
-rootProject.name = "galois"
+rootProject.name = "bsf"
 
-val speedyRoot = settings.extra.properties["speedyRoot"]
+val queryExecutorRoot = "./query-executor"
 
-include(":speedy-core", ":jep")
-project(":speedy-core").projectDir = File("${speedyRoot}/core")
-project(":jep").projectDir = File("${speedyRoot}/jep")
+include(":query-executor-core", ":jep")
+project(":query-executor-core").projectDir = File("${queryExecutorRoot}/core")
+project(":jep").projectDir = File("${queryExecutorRoot}/jep")
 
 include(":core")
 include(":sql-parser")

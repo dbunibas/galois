@@ -11,29 +11,29 @@
         <appender-ref ref="stdout"/>
     </root>
 
-    <logger name="galois.test" level="INFO"/>
-<!--    <logger name="galois.llm" level="ERROR"/>-->
-<!--    &lt;!&ndash;<logger name="galois.optimizer" level="DEBUG"/>&ndash;&gt;-->
-<!--    <logger name="galois.parser" level="DEBUG"/>-->
-<!--    <logger name="galois.parser.ParserProvenance" level="INFO"/>-->
-<!--    <logger name="galois.parser.ParserWhere" level="INFO"/>-->
-<!--    <logger name="galois.optimizer.optimizations" level="DEBUG"/>-->
-<!--    &lt;!&ndash;<logger name="speedy.model.algebra.operators.EvaluateExpression" level="DEBUG"/>&ndash;&gt;-->
-<!--    &lt;!&ndash;<logger name="speedy.model.database.operators.mainmemory.ImportCSVFileMainMemory" level="DEBUG"/>&ndash;&gt;-->
-<!--    &lt;!&ndash;<logger name="speedy.persistence.DAOMainMemoryDatabase" level="DEBUG"/>&ndash;&gt;-->
-<!--    &lt;!&ndash;<logger name="speedy.model.algebra.operators.sql.SQLCreateTable" level="DEBUG"/>&ndash;&gt;-->
-<!--    <logger name="galois.llm.algebra.LLMScan" level="ERROR"/>-->
-<!--    <logger name="galois.optimizer.estimators.ConfidenceEstimator" level="INFO"/>-->
-<!--    &lt;!&ndash;<logger name="galois.llm.models.TogetherAIModel" level="TRACE"/>&ndash;&gt;-->
-<!--    &lt;!&ndash;<logger name="galois.llm.models.DataProb" level="DEBUG"/>&ndash;&gt;-->
-<!--    <logger name="galois.llm.query.AbstractKeyBasedQueryExecutor" level="TRACE"/>-->
-<!--    <logger name="galois.llm.query.AbstractEntityQueryExecutor" level="TRACE"/>-->
-<!--&lt;!&ndash;    <logger name="galois.llm.query.togetherai.llama3" level="DEBUG"/>&ndash;&gt;-->
-<!--    <logger name="galois.llm.query.togetherai.llama3.TogetheraiLLama3KeyQueryExecutor" level="DEBUG"/>-->
-<!--    <logger name="galois.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor" level="DEBUG"/>-->
-<!--&lt;!&ndash;    <logger name="galois.llm.models.TogetherAIEmbeddingModel" level="TRACE"/>&ndash;&gt;-->
-<!--    <logger name="galois.test" level="DEBUG"/>-->
-<!--    <logger name="galois.llm.query" level="DEBUG"/>-->
+    <logger name="bsf.test" level="INFO"/>
+<!--    <logger name="bsf.llm" level="ERROR"/>-->
+<!--    &lt;!&ndash;<logger name="bsf.optimizer" level="DEBUG"/>&ndash;&gt;-->
+<!--    <logger name="bsf.parser" level="DEBUG"/>-->
+<!--    <logger name="bsf.parser.ParserProvenance" level="INFO"/>-->
+<!--    <logger name="bsf.parser.ParserWhere" level="INFO"/>-->
+<!--    <logger name="bsf.optimizer.optimizations" level="DEBUG"/>-->
+<!--    &lt;!&ndash;<logger name="queryexecutor.model.algebra.operators.EvaluateExpression" level="DEBUG"/>&ndash;&gt;-->
+<!--    &lt;!&ndash;<logger name="queryexecutor.model.database.operators.mainmemory.ImportCSVFileMainMemory" level="DEBUG"/>&ndash;&gt;-->
+<!--    &lt;!&ndash;<logger name="queryexecutor.persistence.DAOMainMemoryDatabase" level="DEBUG"/>&ndash;&gt;-->
+<!--    &lt;!&ndash;<logger name="queryexecutor.model.algebra.operators.sql.SQLCreateTable" level="DEBUG"/>&ndash;&gt;-->
+<!--    <logger name="bsf.llm.algebra.LLMScan" level="ERROR"/>-->
+<!--    <logger name="bsf.optimizer.estimators.ConfidenceEstimator" level="INFO"/>-->
+<!--    &lt;!&ndash;<logger name="bsf.llm.models.TogetherAIModel" level="TRACE"/>&ndash;&gt;-->
+<!--    &lt;!&ndash;<logger name="bsf.llm.models.DataProb" level="DEBUG"/>&ndash;&gt;-->
+<!--    <logger name="bsf.llm.query.AbstractKeyBasedQueryExecutor" level="TRACE"/>-->
+<!--    <logger name="bsf.llm.query.AbstractEntityQueryExecutor" level="TRACE"/>-->
+<!--&lt;!&ndash;    <logger name="bsf.llm.query.togetherai.llama3" level="DEBUG"/>&ndash;&gt;-->
+<!--    <logger name="bsf.llm.query.togetherai.llama3.TogetheraiLLama3KeyQueryExecutor" level="DEBUG"/>-->
+<!--    <logger name="bsf.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor" level="DEBUG"/>-->
+<!--&lt;!&ndash;    <logger name="bsf.llm.models.TogetherAIEmbeddingModel" level="TRACE"/>&ndash;&gt;-->
+<!--    <logger name="bsf.test" level="DEBUG"/>-->
+<!--    <logger name="bsf.llm.query" level="DEBUG"/>-->
 
 
 </configuration>

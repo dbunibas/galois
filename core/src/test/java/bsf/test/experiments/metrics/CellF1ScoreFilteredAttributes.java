@@ -1,0 +1,28 @@
+package bsf.test.experiments.metrics;
+
+import queryexecutor.model.database.IDatabase;
+import queryexecutor.model.database.Tuple;
+
+import java.util.List;
+
+public class CellF1ScoreFilteredAttributes implements IMetric {
+    @Override
+    public String getName() {
+        return "CellF1ScoreFilteredAttributes";
+    }
+
+    @Override
+    public Double getScore(IDatabase database, List<Tuple> expected, List<Tuple> result) {
+
+        CellPrecisionFilteredAttributes precisionMetric = new CellPrecisionFilteredAttributes();
+        Double precision =  precisionMetric.getScore(database, expected, result);
+
+        CellRecallFilteredAttributes recallMetric = new CellRecallFilteredAttributes();
+        Double recall = recallMetric.getScore(database, expected, result);
+
+        if(precision == null || recall == null || precision + recall == 0) return 0.0;
+
+        return 2 * (precision * recall) / (precision + recall);
+    }
+
+}

@@ -1,0 +1,251 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE tox-template
+  SYSTEM 'http://www.cs.toronto.edu/tox/toxgene/ToXgene2.dtd'>
+<tox-template>
+	<!-- Base types *********************************************************** -->
+	<simpleType name="spicy_string">
+		<restriction base="string">
+			<pattern value="[A-Z]{1}[a-z]{1}[0-9]{4}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="deptName">
+		<restriction base="string">
+			<pattern value="[D]{1}[A-Z]{1}[0-9]{6}"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="specialnameE">
+		<restriction base="string">
+			<pattern value="[A-Z]{11}[E]"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="specialnameM">
+		<restriction base="string">
+			<pattern value="[A-Z]{11}[M]"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="salaryStaff">
+		<restriction base="integer">
+			<tox-value>1000</tox-value>
+		</restriction>
+	</simpleType>
+	<simpleType name="deptStaff">
+		<restriction base="string">
+			<tox-value>Staff</tox-value>
+		</restriction>
+	</simpleType>
+	<simpleType name="deptSales">
+		<restriction base="string">
+			<tox-value>Sales</tox-value>
+		</restriction>
+	</simpleType>
+	<simpleType name="salaryEmp">
+		<restriction base="positiveInteger">
+			<minInclusive value="1"/>
+			<maxInclusive value="1000000"/>
+		</restriction>
+	</simpleType>
+	<simpleType name="salaryMan">
+		<restriction base="positiveInteger">
+			<minInclusive value="1000010"/>
+			<maxInclusive value="2000000"/>
+		</restriction>
+	</simpleType>
+	<!-- Lists **************************************************************** -->
+	<tox-list name="man_temp" unique="manT/name">
+		<element maxOccurs="5000" minOccurs="5000" name="manT">
+			<complexType>
+				<element name="name" type="specialnameM"/>
+				<element name="dept" type="deptName"/>
+				<element name="salary" type="salaryMan"/>
+			</complexType>
+		</element>
+	</tox-list>
+	<tox-list name="emp_temp" unique="empT/name">
+		<element maxOccurs="150000" minOccurs="150000" name="empT">
+			<complexType>
+				<element name="name" type="specialnameE"/>
+				<element name="dept" type="deptName"/>
+					<element maxOccurs="1" name="manager" type="string">
+						<complexType>
+							<tox-sample path="[man_temp/manT]">
+								<tox-expr value="[name]"/>
+							</tox-sample>
+						</complexType>
+					</element>				
+			</complexType>
+		</element>
+	</tox-list>
+	<tox-list name="emp_listSales" unique="emp4/name">
+		<element maxOccurs="5000" minOccurs="5000" name="emp4">
+			<complexType>
+				<element name="name" type="specialnameE"/>
+				<element name="dept" type="deptSales"/>
+				<element name="salary" type="salaryEmp"/>
+					<element maxOccurs="1" name="manager" type="string">
+						<complexType>
+							<tox-sample path="[man_temp/manT]">
+								<tox-expr value="[name]"/>
+							</tox-sample>
+						</complexType>
+					</element>
+			</complexType>
+		</element>
+	</tox-list>
+	<tox-list name="emp_listStaff" unique="emp3/name">
+		<element maxOccurs="5000" minOccurs="5000" name="emp3">
+			<complexType>
+				<element name="name" type="specialnameE"/>
+				<element name="dept" type="deptStaff"/>
+				<element name="salary" type="salaryStaff"/>
+					<element maxOccurs="1" name="manager" type="string">
+						<complexType>
+							<tox-sample path="[man_temp/manT]">
+								<tox-expr value="[name]"/>
+							</tox-sample>
+						</complexType>
+					</element>
+			</complexType>
+		</element>
+	</tox-list>
+	<tox-list name="emp_list1" unique="emp1/salary">
+		<element maxOccurs="35000" minOccurs="35000" name="emp1">
+			<complexType>
+				<tox-sample duplicates="yes" name="empx" path="[emp_temp/empT]">
+					<element name="name">
+						<tox-expr value="[name]"/>
+					</element>
+					<element name="dept">
+						<tox-expr value="[dept]"/>
+					</element>
+					<element name="salary" type="salaryEmp"/>
+					<element name="manager">
+						<tox-expr value="[manager]"/>
+					</element>
+				</tox-sample>
+			</complexType>
+		</element>
+	</tox-list>
+	<tox-list name="emp_list2" unique="emp2/name">
+		<element maxOccurs="5000" minOccurs="5000" name="emp2">
+			<complexType>
+				<tox-sample duplicates="no" name="empx" path="[man_temp/manT]">
+					<element name="name">
+						<tox-expr value="[name]"/>
+					</element>
+					<element name="dept">
+						<tox-expr value="[dept]"/>
+					</element>
+					<element name="salary">
+						<tox-expr value="[salary]"/>
+					</element>
+					<element name="manager">
+						<tox-expr value="[name]"/>
+					</element>
+				</tox-sample>
+			</complexType>
+		</element>
+	</tox-list>
+	<!-- Main document ****************************************** -->
+	<tox-document name="output/50ktuples_emp">
+		<element maxOccurs="1" minOccurs="1" name="emp">
+			<complexType>
+				<!-- Regular Emps ******************** -->
+				<element maxOccurs="35000" minOccurs="35000" name="emp">
+					<complexType>
+						<tox-sample duplicates="no" name="empx" path="[emp_list1/emp1]">
+							<element name="name">
+								<tox-expr value="[name]"/>
+							</element>
+							<element name="dept">
+								<tox-expr value="[dept]"/>
+							</element>
+							<element name="salary">
+								<complexType>
+									<attribute name="type">
+										<tox-expr value="'double'"/>
+									</attribute>
+									<tox-expr value="[salary]"/>
+								</complexType>
+							</element>
+							<element name="manager">
+								<tox-expr value="[manager]"/>
+							</element>
+						</tox-sample>
+					</complexType>
+				</element>
+				<!-- StaffEmp ******************** -->
+				<element maxOccurs="5000" minOccurs="5000" name="emp">
+					<complexType>
+						<tox-sample duplicates="no" name="empx" path="[emp_listStaff/emp3]">
+							<element name="name">
+								<tox-expr value="[name]"/>
+							</element>
+							<element name="dept">
+								<tox-expr value="[dept]"/>
+							</element>
+							<element name="salary">
+								<complexType>
+									<attribute name="type">
+										<tox-expr value="'double'"/>
+									</attribute>
+									<tox-expr value="[salary]"/>
+								</complexType>
+							</element>
+							<element name="manager">
+								<tox-expr value="[manager]"/>
+							</element>
+						</tox-sample>
+					</complexType>
+				</element>
+				<!-- Regular Managers ******************** -->
+				<element maxOccurs="5000" minOccurs="5000" name="emp">
+					<complexType>
+						<tox-sample duplicates="no" name="empx" path="[emp_list2/emp2]">
+							<element name="name">
+								<tox-expr value="[name]"/>
+							</element>
+							<element name="dept">
+								<tox-expr value="[dept]"/>
+							</element>
+							<element name="salary">
+								<complexType>
+									<attribute name="type">
+										<tox-expr value="'double'"/>
+									</attribute>
+									<tox-expr value="[salary]"/>
+								</complexType>
+							</element>
+							<element name="manager">
+								<tox-expr value="[manager]"/>
+							</element>
+						</tox-sample>
+					</complexType>
+				</element>
+				<!-- SalesEmp ******************** -->
+				<element maxOccurs="5000" minOccurs="5000" name="emp">
+					<complexType>
+						<tox-sample duplicates="no" name="empx" path="[emp_listSales/emp4]">
+							<element name="name">
+								<tox-expr value="[name]"/>
+							</element>
+							<element name="dept">
+								<tox-expr value="[dept]"/>
+							</element>
+							<element name="salary">
+								<complexType>
+									<attribute name="type">
+										<tox-expr value="'double'"/>
+									</attribute>
+									<tox-expr value="[salary]"/>
+								</complexType>
+							</element>
+							<element name="manager">
+								<tox-expr value="[manager]"/>
+							</element>
+						</tox-sample>
+					</complexType>
+				</element>
+			</complexType>
+		</element>
+	</tox-document>
+</tox-template>

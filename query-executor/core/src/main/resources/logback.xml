@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--<pattern>%d %-5p %c %n%m%n</pattern>-->
+            <pattern>%gray(%highlight(%-5level %logger{15})) - %msg %n</pattern>
+        </encoder>
+    </appender>
+    <!--    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <Append>false</Append>
+        <File>${user.home}/Temp/logQueryExecutor.txt</File>
+        <encoder>
+            <pattern>%m%n</pattern>
+            <pattern>%d %-5p %c %n%m%n</pattern>
+        </encoder>
+    </appender>  -->
+    <root level="WARN">
+        <appender-ref ref="stdout"/>
+        <!--<appender-ref ref="file"/>-->
+    </root>
+    <!--<logger name="queryexecutor.model.algebra.operators.sql.AlgebraTreeToSQL" level="DEBUG"/>-->
+    <!--     COMPARISON     -->
+    <!--<logger name="queryexecutor.comparison" level="INFO"/>-->
+    <!--<logger name="queryexecutor.comparison.ComparisonStats" level="DEBUG"/>-->
+    <!--<logger name="queryexecutor.comparison.operators.CompareInstancesHashing" level="DEBUG"/>-->
+    <!--<logger name="queryexecutor.comparison.operators.CompareInstancesCompatibility" level="DEBUG"/>-->
+    <!--<logger name="queryexecutor.comparison.operators.ComputeInstanceSimilarityBruteForce" level="DEBUG"/>-->
+    <!--<logger name="queryexecutor.comparison.operators.FindBestTupleMapping" level="INFO"/>-->
+    <!--<logger name="queryexecutor.comparison.operators.CheckTupleMatchCompatibility" level="DEBUG"/>-->
+    <!--<logger name="queryexecutor.comparison.operators.CheckTupleMatch" level="DEBUG"/>-->
+    <!--<logger name="queryexecutor.comparison.operators.ComputeScore" level="TRACE"/>-->
+    <!--<logger name="queryexecutor.comparison.operators.SignatureMapCollectionGenerator" level="INFO"/>-->
+    <!--<logger name="queryexecutor.utility.combinatorics.GenericPowersetGeneratorBinary" level="DEBUG"/>-->
+    <!--     TEST     -->
+    <logger name="queryexecutor.test" level="DEBUG"/>
+    <!--STATS-->     
+    <!--<logger name="queryexecutor.persistence.relational.QueryStatManager" level="DEBUG"/>-->
+    <!--<logger name="queryexecutor.persistence.relational.QueryManager" level="TRACE"/>-->
+    <!--<logger name="queryexecutor.model.database.operators.dbms.ExecuteInitDB" level="DEBUG"/>-->
+  
+    <logger name="com.mchange" level="WARN"/>
+    <logger name="com.sun" level="WARN"/>
+  
+</configuration>
