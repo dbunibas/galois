@@ -4,7 +4,7 @@
 
 ### Dataset
 
-The dataset is available as a zip archive in the [dataset](dataset) folder.
+The dataset is available as a zip archive in the dataset folder: [dataset](dataset/dataset.zip).
 
 ### Requirements
 
