@@ -11,17 +11,25 @@ import speedy.model.algebra.Scan;
 @Slf4j
 public class SQLQueryParser {
     public IAlgebraOperator parse(String sql) {
-        return parse(sql, (table, ignored) -> new Scan(table));
+        return parse(sql, (table, ignored) -> new Scan(table), null);
     }
 
     public IAlgebraOperator parse(String sql, ScanNodeFactory scanNodeFactory) {
+        return parse(sql, scanNodeFactory, null);
+    }
+
+    public IAlgebraOperator parse(String sql, IUserDefinedFunctionFactory userDefinedFunctionFactory) {
+        return parse(sql, (table, ignored) -> new Scan(table), userDefinedFunctionFactory);
+    }
+
+    public IAlgebraOperator parse(String sql, ScanNodeFactory scanNodeFactory, IUserDefinedFunctionFactory userDefinedFunctionFactory) {
         try {
             log.debug("Parsing sql query {}", sql);
             Statement statement = CCJSqlParserUtil.parse(sql);
             if (!(statement instanceof Select)) {
                 throw new IllegalArgumentException("The only allowed root statement is select!");
             }
-            SelectParser selectParser = new SelectParser(scanNodeFactory);
+            SelectParser selectParser = new SelectParser(scanNodeFactory, userDefinedFunctionFactory);
             return ((Select) statement).accept(selectParser, null);
         } catch (JSQLParserException ex) {
             throw new ParserException("Cannot parse sql statement!", ex);

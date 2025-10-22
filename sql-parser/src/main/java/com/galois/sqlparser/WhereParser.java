@@ -2,27 +2,33 @@ package com.galois.sqlparser;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
+import net.sf.jsqlparser.expression.Function;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
+import speedy.model.algebra.IAlgebraOperator;
+import speedy.model.algebra.Intersection;
+import speedy.model.algebra.Select;
+import speedy.model.algebra.Union;
+import speedy.model.algebra.udf.IUserDefinedFunction;
+import speedy.model.algebra.udf.UserDefinedFunction;
 import speedy.model.database.AttributeRef;
-import speedy.model.database.TableAlias;
 import speedy.model.expressions.Expression;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static com.galois.sqlparser.ParseUtils.contextToParseContext;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParseResult> {
-    
+
     private boolean changeStringEqualsToLike = false;
-    
+
     @Override
     public <S> WhereParseResult visit(EqualsTo exp, S context) {
         return parseBinaryExpression(exp.getLeftExpression(), exp.getStringExpression(), exp.getRightExpression(), contextToParseContext(context));
@@ -90,6 +96,20 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
     }
 
     @Override
+    public <S> WhereParseResult visit(Function function, S context) {
+        ParseContext parseContext = contextToParseContext(context);
+
+        IUserDefinedFunction udf = parseContext.getUserDefinedFunction(function.getName(), function.getParameters());
+        UserDefinedFunction node = new UserDefinedFunction(udf);
+        List<VariableDescription> variableDescriptions = function.getParameters().stream()
+                .map(exp -> setVariableDescription(exp, null, parseContext))
+                .filter(Objects::nonNull)
+                .toList();
+
+        return new WhereParseResult(node, variableDescriptions);
+    }
+
+    @Override
     public <S> WhereParseResult visit(ExpressionList<? extends net.sf.jsqlparser.expression.Expression> expressionList, S context) {
         List<WhereParseResult> whereParseResults = expressionList.stream()
                 .map(e -> e.accept(this, context))
@@ -98,6 +118,41 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
     }
 
     private WhereParseResult parseComplexExpression(
+            WhereParseResult leftResult,
+            String stringExpression,
+            WhereParseResult rightResult
+    ) {
+        if (leftResult.useExpression() && rightResult.useExpression()) {
+            return parseComplexExpressionUsingExpressions(leftResult, stringExpression, rightResult);
+        }
+
+        IAlgebraOperator leftOperator = leftResult.useExpression() ?
+                new Select(leftResult.expression()) :
+                leftResult.operator();
+        IAlgebraOperator rightOperator = rightResult.useExpression() ?
+                new Select(rightResult.expression()) :
+                rightResult.operator();
+
+        List<VariableDescription> variableDescriptions = Stream.concat(
+                leftResult.variableDescriptions().stream(),
+                rightResult.variableDescriptions().stream()
+        ).toList();
+
+        if (stringExpression.equals("&&")) {
+            // TODO: add an optimized select intersection?
+            Intersection intersection = new Intersection();
+            intersection.addChild(leftOperator);
+            intersection.addChild(rightOperator);
+            return new WhereParseResult(intersection, variableDescriptions);
+        }
+
+        Union union = new Union();
+        union.addChild(leftOperator);
+        union.addChild(rightOperator);
+        return new WhereParseResult(union, variableDescriptions);
+    }
+
+    private WhereParseResult parseComplexExpressionUsingExpressions(
             WhereParseResult leftResult,
             String stringExpression,
             WhereParseResult rightResult
@@ -164,10 +219,10 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
         }
         String name = column.getColumnName();
         AttributeRef attributeRef = new AttributeRef(parseContext.getTableAliasFromColumn(column), name);
-        speedyExpression.setVariableDescription(name, attributeRef);
+        if (speedyExpression != null) speedyExpression.setVariableDescription(name, attributeRef);
         return new VariableDescription(name, attributeRef);
     }
-    
+
     private String convertEqualsToLikeString(String expression) {
         Pattern pattern = Pattern.compile("(.*) == (\".*\")", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(expression);
@@ -176,12 +231,27 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
             if (log.isDebugEnabled()) log.debug("No Equals found: {}", expression);
             return expression;
         }
-        String likeExpression ="contains(" + matcher.group(1) +", " + matcher.group(2) +")";
+        String likeExpression = "contains(" + matcher.group(1) + ", " + matcher.group(2) + ")";
         if (log.isDebugEnabled()) log.debug("Like Expression: {}", likeExpression);
         return likeExpression;
     }
 
-    public record WhereParseResult(Expression expression, List<VariableDescription> variableDescriptions) {
+    public record WhereParseResult(
+            Expression expression,
+            IAlgebraOperator operator,
+            List<VariableDescription> variableDescriptions
+    ) {
+        public WhereParseResult(Expression expression, List<VariableDescription> variableDescriptions) {
+            this(expression, null, variableDescriptions);
+        }
+
+        public WhereParseResult(IAlgebraOperator operator, List<VariableDescription> variableDescriptions) {
+            this(null, operator, variableDescriptions);
+        }
+
+        public boolean useExpression() {
+            return expression != null;
+        }
     }
 
     public record VariableDescription(String name, AttributeRef attributeRef) {

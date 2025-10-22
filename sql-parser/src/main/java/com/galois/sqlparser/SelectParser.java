@@ -1,17 +1,16 @@
 package com.galois.sqlparser;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.*;
 import speedy.SpeedyConstants;
+import speedy.model.algebra.*;
 import speedy.model.algebra.Distinct;
 import speedy.model.algebra.Join;
 import speedy.model.algebra.Limit;
 import speedy.model.algebra.Select;
-import speedy.model.algebra.*;
 import speedy.model.algebra.aggregatefunctions.CountAggregateFunction;
 import speedy.model.algebra.aggregatefunctions.IAggregateFunction;
 import speedy.model.algebra.aggregatefunctions.ValueAggregateFunction;
@@ -27,13 +26,18 @@ import java.util.stream.Stream;
 import static com.galois.sqlparser.ParseUtils.contextToParseContext;
 
 @Slf4j
-@RequiredArgsConstructor
 public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
     private final ScanNodeFactory scanNodeFactory;
+    private final IUserDefinedFunctionFactory userDefinedFunctionFactory;
+
+    public SelectParser(ScanNodeFactory scanNodeFactory, IUserDefinedFunctionFactory userDefinedFunctionFactory) {
+        this.scanNodeFactory = scanNodeFactory;
+        this.userDefinedFunctionFactory = userDefinedFunctionFactory;
+    }
 
     @Override
     public <S> IAlgebraOperator visit(PlainSelect plainSelect, S context) {
-        ParseContext parseContext = new ParseContext();
+        ParseContext parseContext = new ParseContext(userDefinedFunctionFactory);
 
         // From
         FromParser fromParser = new FromParser();
@@ -59,14 +63,17 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
 
         // Where
         WhereParser.WhereParseResult whereParseResult = null;
-        Select select = null;
+        IAlgebraOperator select = null;
         if (plainSelect.getWhere() != null) {
             WhereParser whereParser = new WhereParser();
             whereParseResult = plainSelect.getWhere().accept(whereParser, parseContext);
             if (whereParseResult == null) {
                 throw new UnsupportedOperationException(String.format("Expression %s is unsupported!", plainSelect.getWhere().getClass()));
             }
-            select = new Select(whereParseResult.expression());
+
+            select = whereParseResult.useExpression() ?
+                    new Select(whereParseResult.expression()) :
+                    whereParseResult.operator();
         }
 
         // Group by
@@ -227,7 +234,8 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
         // TODO: Refactor
         currentRoot = scanNodeFactory.createScanNode(parseContext.getFromItemTableAlias(), attributeRef);
         if (select != null) {
-            select.addChild(currentRoot);
+            // select can be a tree of nodes, so the scan node needs to be added to each leaf
+            addNodeToAllLeafs(select, currentRoot);
             currentRoot = select;
         }
         if (join != null) {
@@ -300,6 +308,17 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
     private boolean hasSelectItems(PlainSelect plainSelect) {
         List<SelectItem<?>> selectItems = plainSelect.getSelectItems();
         return selectItems.size() > 1 || !Objects.equals(selectItems.getFirst().toString(), "*");
+    }
+
+    private void addNodeToAllLeafs(IAlgebraOperator root, IAlgebraOperator node) {
+        if (root.getChildren().isEmpty()) {
+            root.addChild(node);
+            return;
+        }
+
+        for (IAlgebraOperator child : root.getChildren()) {
+            addNodeToAllLeafs(child, node);
+        }
     }
 
     private static class SelectItemParser extends SelectItemVisitorAdapter<ProjectionAttribute> {
