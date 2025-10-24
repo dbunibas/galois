@@ -40,7 +40,8 @@
     <logger name="galois.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor" level="DEBUG"/>
 <!--    <logger name="galois.llm.models.TogetherAIEmbeddingModel" level="TRACE"/>-->
     <logger name="galois.test" level="DEBUG"/>
-    
+    <logger name="galois.udf" level="DEBUG"/>
+
     
     <logger name="galois.utils.GaloisDebug" level="TRACE" additivity="false">
         <appender-ref ref="EXP-FILE"/>

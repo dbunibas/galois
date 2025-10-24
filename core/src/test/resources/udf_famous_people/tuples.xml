@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<db>
+    <FamousPeopleTable>
+        <people>
+            <name>Jannik</name>
+            <surname>Sinner</surname>
+            <birth_year>2001</birth_year>
+        </people>
+
+        <people>
+            <name>Jairo</name>
+            <surname>Varela</surname>
+            <birth_year>1949</birth_year>
+        </people>
+
+        <people>
+            <name>Carlos</name>
+            <surname>Alcaraz</surname>
+            <birth_year>2003</birth_year>
+        </people>
+
+        <people>
+            <name>Alessia</name>
+            <surname>Orro</surname>
+            <birth_year>1998</birth_year>
+        </people>
+    </FamousPeopleTable>
+</db>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="db">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="FamousPeopleTable" minOccurs="0" nillable="false">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="people" maxOccurs="unbounded" minOccurs="0" nillable="false">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="name" nillable="false" type="xs:string"/>
+                                        <xs:element name="surname" nillable="false" type="xs:string"/>
+                                        <xs:element name="birth_year" nillable="false" type="xs:integer"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
