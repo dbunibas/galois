@@ -1,0 +1,66 @@
+{
+  "dbName": "sem_bench_movies",
+  "tables": [
+    {
+      "name": "reviews",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "reviewId",
+          "type": "INTEGER",
+          "nullable": false,
+          "key": true
+        },
+        {
+          "name": "creationDate",
+          "type": "DATE",
+          "nullable": false
+        },
+        {
+          "name": "criticName",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "isTopCritic",
+          "type": "BOOLEAN",
+          "nullable": false
+        },
+        {
+          "name": "originalScore",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "reviewState",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "publicatioName",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "reviewText",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "scoreSentiment",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "reviewUrl",
+          "type": "STRING",
+          "nullable": false
+        }
+      ]
+    }
+  ]
+}
