@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.operators.ITupleIterator;
+import speedy.model.database.IDatabase;
 import speedy.model.database.Tuple;
 import speedy.model.database.mainmemory.MainMemoryDB;
 import speedy.persistence.DAOMainMemoryDatabase;

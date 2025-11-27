@@ -1,9 +1,9 @@
 {
   "databaseDriver": "org.postgresql.Driver",
-  "databaseURI": "jdbc:postgresql:llm_directors_movies",
+  "databaseURI": "jdbc:postgresql://localhost:5432/galois",
   "databaseSchema": "target",
   "databaseUser": "pguser",
   "databasePassword": "pguser",
-  "sql": "SELECT m.originaltitle FROM movie m WHERE m.director='Steven Spielberg'",
+  "sql": "SELECT m.title FROM target.scientific_papers m WHERE m.university='Stanford University' and m.pubblication_year=2018",
   "confidenceThreshold": 0.6
 }
