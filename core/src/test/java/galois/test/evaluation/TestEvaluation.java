@@ -53,8 +53,8 @@ public class TestEvaluation {
     public static void beforeAll() throws IOException {
         // Load, initialize and populate the database
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
-//        database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
-        database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
+        database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
+//        database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
         initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
 
         // Define the variants
