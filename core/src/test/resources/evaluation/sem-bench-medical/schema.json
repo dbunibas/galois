@@ -25,6 +25,11 @@
           "nullable": true
         },
         {
+          "name": "is_sick",
+          "type": "BOOLEAN",
+          "nullable": false
+        },
+        {
           "name": "text_symptoms",
           "type": "STRING",
           "nullable": false

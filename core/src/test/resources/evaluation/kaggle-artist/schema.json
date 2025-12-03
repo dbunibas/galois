@@ -1,0 +1,41 @@
+{
+    "dbName": "kaggle_artist",
+    "tables": [
+      {
+        "name": "artists",
+        "attributes": [
+          {
+            "name": "artistId",
+            "type": "Integer",
+            "nullable": false,
+            "key": true
+          },
+          {
+            "name": "name",
+            "type": "STRING",
+            "nullable": false
+          },
+          {
+            "name": "nationality",
+            "type": "STRING",
+            "nullable": true
+          },
+          {
+            "name": "gender",
+            "type": "STRING",
+            "nullable": true
+          },
+          {
+            "name": "birthYear",
+            "type": "INTEGER",
+            "nullable": false
+          },
+          {
+            "name": "deathYear",
+            "type": "INTEGER",
+            "nullable": true
+          }
+        ]
+      }
+    ]
+  }

@@ -24,13 +24,13 @@ import static galois.test.evaluation.SchemaLoader.loadSchemaInExperimentFolder;
 import static galois.test.utils.TestUtils.toTupleList;
 
 @Slf4j
-public class TestEvaluationMedical {
+public class TestEvaluationArtists {
     private static final IUserDefinedFunctionFactory GALOIS_UDF_FACTORY = new GaloisUDFFactory();
 
     // Experiment name
     private static final String EXPERIMENT_NAME = "SemBenchMovies";
     // Experiment folder path starting from resources
-    private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/sem-bench-medical";
+    private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/kaggle-artist";
 
     private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
     private static final String RESULT_FILE = "movie-reviews-results.txt";
@@ -60,15 +60,10 @@ public class TestEvaluationMedical {
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT m.patient_id FROM medical m WHERE m.text_diagnosis = 'allergy'")
-                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms has an allergy?', m.text_symptoms)")
+                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.birthYear = 1941")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} born in 1941', a.name)")
                 .build();
-        ExperimentVariant q1 = ExperimentVariant.builder()
-                .queryId("Q1")
-                .querySQL("SELECT m.patient_id FROM medical m WHERE m.is_sick = 'True'")
-                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms is sick?', m.text_symptoms)")
-                .build();
-        variants = List.of(q0,q1);
+        variants = List.of(q0);
     }
 
     @Test
@@ -88,7 +83,7 @@ public class TestEvaluationMedical {
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
             List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
             log.info("**** Result: {}", results);
-
+            
             for (IMetric metric : DEFAULT_METRICS) {
                 Double score = metric.getScore(database, expected, results);
                 log.info("**** {}: {} has score {}", variant.getQueryId(), metric.getName(), score);
