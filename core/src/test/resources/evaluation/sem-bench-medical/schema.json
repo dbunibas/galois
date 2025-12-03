@@ -1,0 +1,35 @@
+{"dbName": "sem_bench_medical",
+  "tables": [
+    {
+      "name": "medical",
+      "attributes": [
+        {
+          "name": "age",
+          "type": "INTEGER",
+          "nullable": false
+        },
+        {
+          "name": "gender",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "patient_id",
+          "type": "Integer",
+          "nullable": false,
+          "key": true
+        },
+        {
+          "name": "text_diagnosis",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "text_syntoms",
+          "type": "STRING",
+          "nullable": false
+        }
+      ]
+    }
+  ]
+}
