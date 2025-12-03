@@ -1,4 +1,4 @@
-age,gender,patient_id,text_diagnosis,text_syntoms
+age,gender,patient_id,text_diagnosis,text_symptoms
 76,Male,2727,allergy,"I've been losing my appetite, and I also have trouble swallowing. My nose has been running, and I have a sore throat."
 73,Male,5460,drug reaction,"I have put on a lot of weight and am now very obese. I have different urges and different appetites."
 76,Female,4381,allergy,"I have nasal congestion and a blocked nose. On occasion, during the night, I have stiffness and chest pain. Additionally, I've lost my senses of taste and smell."

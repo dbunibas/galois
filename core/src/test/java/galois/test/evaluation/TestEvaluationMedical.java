@@ -61,7 +61,7 @@ public class TestEvaluationMedical {
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
                 .querySQL("SELECT m.patient_id FROM medical m WHERE m.text_diagnosis = 'allergy'")
-                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms has an allergy?', m.text_syntoms)")
+                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms has an allergy?', m.text_symptoms)")
                 .build();
         variants = List.of(q0);
     }
