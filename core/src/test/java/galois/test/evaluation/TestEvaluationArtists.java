@@ -61,9 +61,14 @@ public class TestEvaluationArtists {
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
                 .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.birthYear = 1941")
-                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} born in 1941', a.name)")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} born in 1941?', a.name)")
                 .build();
-        variants = List.of(q0);
+        ExperimentVariant q1 = ExperimentVariant.builder()
+                .queryId("Q1")
+                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.nationality = 'American'")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} American?', a.name)")
+                .build();
+        variants = List.of(q0,q1);
     }
 
     @Test
