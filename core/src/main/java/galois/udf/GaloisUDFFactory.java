@@ -19,6 +19,7 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
     @Override
     public IUserDefinedFunction getUserDefinedFunction(String name, ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
         if (name.equals("udfilter")) return parseUDFilter(expressions, parseContext);
+        if (name.equals("udfilterattr")) return parseUDFilterAttribute(expressions, parseContext);
         throw new UnsupportedOperationException("Unimplemented UDF: " + name + "!");
     }
 
@@ -39,6 +40,15 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
         }
 
         return new GaloisUDFilter(userMessage, attributeRefs);
+    }
+
+    private IUserDefinedFunction parseUDFilterAttribute(ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
+        // Parse attribute name
+        Expression attributeNameExpression = expressions.getFirst();
+        checkExpressionType(attributeNameExpression, StringValue.class, "UDFilterAttribute parse error: first argument is not a string!");
+        String attributeName = ((StringValue) attributeNameExpression).getValue();
+
+        return new GaloisUDFilterAttribute(attributeName);
     }
 
     private void checkExpressionType(Expression expression, Class<? extends Expression> clazz, String error) {
