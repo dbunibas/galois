@@ -1,0 +1,51 @@
+{
+    "dbName": "kaggle_dog",
+    "tables": [
+      {
+        "name": "dog_breeds",
+        "attributes": [
+          {
+            "name": "breed",
+            "type": "STRING",
+            "nullable": false,
+            "key": true
+          },
+          {
+            "name": "country_of_origin",
+            "type": "STRING",
+            "nullable": false
+          },
+          {
+            "name": "fur_color",
+            "type": "STRING",
+            "nullable": true
+          },
+          {
+            "name": "height_range",
+            "type": "STRING",
+            "nullable": true
+          },
+          {
+            "name": "color_of_eyes",
+            "type": "STRING",
+            "nullable": false
+          },
+          {
+            "name": "longevity",
+            "type": "STRING",
+            "nullable": true
+          },
+          {
+            "name": "character_traits",
+            "type": "STRING",
+            "nullable": true
+          },
+          {
+            "name": "common_health_issues",
+            "type": "STRING",
+            "nullable": true
+          }
+        ]
+      }
+    ]
+  }

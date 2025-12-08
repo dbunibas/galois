@@ -1,0 +1,6 @@
+age,gender,patient_id,text_diagnosis,is_sick,text_symptoms
+76,Male,2727,allergy,True,"I've been losing my appetite, and I also have trouble swallowing. My nose has been running, and I have a sore throat."
+73,Male,5460,drug reaction,True,"I have put on a lot of weight and am now very obese. I have different urges and different appetites."
+76,Female,4381,allergy,True,"I have nasal congestion and a blocked nose. On occasion, during the night, I have stiffness and chest pain. Additionally, I've lost my senses of taste and smell."
+47,Male,1164,cervical spondylosis,True,"I have been suffering from back pain, a chronic cough, and weakness in my arms and legs. My neck hurts and I have been feeling dizzy and off balance"
+48,Female,8175,psoriasis,True,"I'm having joint discomfort in my fingers, wrists, and knees. The pain is frequently aching and throbbing, and it worsens when I move my joints."

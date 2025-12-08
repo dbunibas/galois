@@ -24,13 +24,13 @@ import static galois.test.evaluation.SchemaLoader.loadSchemaInExperimentFolder;
 import static galois.test.utils.TestUtils.toTupleList;
 
 @Slf4j
-public class TestEvaluation {
+public class TestEvaluationArtists {
     private static final IUserDefinedFunctionFactory GALOIS_UDF_FACTORY = new GaloisUDFFactory();
 
     // Experiment name
     private static final String EXPERIMENT_NAME = "SemBenchMovies";
     // Experiment folder path starting from resources
-    private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/sem-bench-movies";
+    private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/kaggle-artist";
 
     private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
     private static final String RESULT_FILE = "movie-reviews-results.txt";
@@ -55,21 +55,21 @@ public class TestEvaluation {
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
     //    database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
 
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT r.id FROM reviews r WHERE r.scoresentiment = 'POSITIVE'")
-                .queryUDF("SELECT r.id FROM reviews r WHERE udfilter('Is the sentiment of the review {1} positive?', r.reviewtext)")
+                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.birthYear = 1941")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} born in 1941?', a.name)")
                 .build();
-        ExperimentVariant q1 = ExperimentVariant.builder() //DOES NOT WORK YET
+        ExperimentVariant q1 = ExperimentVariant.builder()
                 .queryId("Q1")
-                .querySQL("SELECT  r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON r1.scoresentiment = r2.scoresentiment")
-                .queryUDF("SELECT r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON udfilter('This movie review: {1} express the same sentiment as this move review: {2}?', r1.reviewtext, r2.reviewtext)")
+                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.nationality = 'American'")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} American?', a.name)")
                 .build();
-        
-        variants = List.of(q0);
+
+        variants = List.of(q0,q1);
     }
 
     @Test
@@ -89,12 +89,13 @@ public class TestEvaluation {
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
             List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
             log.info("**** Result: {}", results);
-
-            /*for (IMetric metric : DEFAULT_METRICS) {
+            
+            for (IMetric metric : DEFAULT_METRICS) {
                 Double score = metric.getScore(database, expected, results);
                 log.info("**** {}: {} has score {}", variant.getQueryId(), metric.getName(), score);
-            }*/
+            }
         }
     }
 }
+
 
