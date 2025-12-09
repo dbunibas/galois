@@ -1,0 +1,24 @@
+{"dbName": "kaggle_hate_speech",
+  "tables": [
+    {
+      "name": "hate_speech",
+      "attributes": [
+        {
+          "name": "sentence",
+          "type": "STRING",
+          "nullable": false,
+          "key": true
+        },
+        {
+          "name": "hate",
+          "type": "INTEGER",
+          "nullable": false
+        },
+        {
+          "name": "category",
+          "type": "STRING"
+        }
+      ]
+    }
+  ]
+}

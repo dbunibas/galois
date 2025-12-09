@@ -24,16 +24,16 @@ import static galois.test.evaluation.SchemaLoader.loadSchemaInExperimentFolder;
 import static galois.test.utils.TestUtils.toTupleList;
 
 @Slf4j
-public class TestEvaluation {
+public class TestEvaluationBasketball {
     private static final IUserDefinedFunctionFactory GALOIS_UDF_FACTORY = new GaloisUDFFactory();
 
     // Experiment name
-    private static final String EXPERIMENT_NAME = "SemBenchMovies";
+    private static final String EXPERIMENT_NAME = "basketball";
     // Experiment folder path starting from resources
-    private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/sem-bench-movies";
+    private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/basketball_teams";
 
     private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
-    private static final String RESULT_FILE = "movie-reviews-results.txt";
+    private static final String RESULT_FILE = "basketball-results.txt";
 
     private static final TestRunner testRunner = new TestRunner();
     private static final ExcelExporter exportExcel = new ExcelExporter();
@@ -60,16 +60,11 @@ public class TestEvaluation {
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT r.id FROM reviews r WHERE r.scoresentiment = 'POSITIVE'")
-                .queryUDF("SELECT r.id FROM reviews r WHERE udfilter('Is the sentiment of the review {1} positive?', r.reviewtext)")
-                .build();
-        ExperimentVariant q1 = ExperimentVariant.builder() //DOES NOT WORK YET
-                .queryId("Q1")
-                .querySQL("SELECT  r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON r1.scoresentiment = r2.scoresentiment")
-                .queryUDF("SELECT r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON udfilter('This movie review: {1} express the same sentiment as this move review: {2}?', r1.reviewtext, r2.reviewtext)")
+                .querySQL("SELECT t.teamName, t.teamCity FROM teams_history t WHERE t.league ='NBA'")
+                .queryUDF("SELECT t.teamName, t.teamCity FROM teams_history t WHERE udfilter('Was the team {1} {2} in the NBA and was active until the year 2000 or later', )")
                 .build();
         
-        variants = List.of(q0, q1);
+        variants = List.of(q0);
     }
 
     @Test
@@ -89,12 +84,13 @@ public class TestEvaluation {
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
             List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
             log.info("**** Result: {}", results);
-
-            /*for (IMetric metric : DEFAULT_METRICS) {
+            
+            for (IMetric metric : DEFAULT_METRICS) {
                 Double score = metric.getScore(database, expected, results);
                 log.info("**** {}: {} has score {}", variant.getQueryId(), metric.getName(), score);
-            }*/
+            }
         }
     }
 }
+
 

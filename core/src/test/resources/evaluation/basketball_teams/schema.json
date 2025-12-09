@@ -1,0 +1,46 @@
+{
+    "dbName": "basketball_teams",
+    "tables": [
+      {
+        "name": "teams_history",
+        "attributes": [
+          {
+            "name": "teamId",
+            "type": "Integer",
+            "nullable": false,
+            "key": true
+          },
+          {
+            "name": "teamCity",
+            "type": "STRING",
+            "nullable": false
+          },
+          {
+            "name": "teamName",
+            "type": "STRING",
+            "nullable": false
+          },
+          {
+            "name": "teamAbbrev",
+            "type": "STRING",
+            "nullable": true
+          },
+          {
+            "name": "seasonFounded",
+            "type": "INTEGER",
+            "nullable": false
+          },
+          {
+            "name": "seasonActiveTill",
+            "type": "INTEGER",
+            "nullable": true
+          },
+          {
+            "name": "league",
+            "type": "STRING",
+            "nullable": true
+          }
+        ]
+      }
+    ]
+  }

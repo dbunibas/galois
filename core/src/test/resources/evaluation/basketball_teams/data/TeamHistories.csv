@@ -1,0 +1,141 @@
+teamId,teamCity,teamName,teamAbbrev,seasonFounded,seasonActiveTill,league
+1610612737,Tri-Cities,Blackhawks,TRI  ,1946,1948,BAA
+1610612737,Milwaukee,Hawks,MIL  ,1951,1954,NBA
+1610612737,St. Louis,Hawks,STL  ,1955,1967,NBA
+1610612737,Atlanta,Hawks,ATL  ,1968,2100,NBA
+1610612738,Boston,Celtics,BOS  ,1946,1948,BAA
+1610612739,Cleveland,Cavaliers,CLE  ,1970,2100,NBA
+1610612740,New Orleans,Hornets,NOH  ,2002,2004,NBA
+1610612740,Oklahoma City,Hornets,NOK  ,2005,2006,NBA
+1610612740,New Orleans,Hornets,NOH  ,2007,2012,NBA
+1610612740,New Orleans,Pelicans,NOP  ,2013,2100,NBA
+1610612741,Chicago,Bulls,CHI  ,1966,2100,NBA
+1610612742,Dallas,Mavericks,DAL  ,1980,2100,NBA
+1610612743,Denver,Nuggets,DEN  ,1976,2100,NBA
+1610612744,Philadelphia,Warriors,PHI  ,1946,1948,BAA
+1610612744,San Francisco,Warriors,SF   ,1962,1970,NBA
+1610612744,Golden State,Warriors,GSW  ,1971,2100,NBA
+1610612745,San Diego,Rockets,SD   ,1967,1970,NBA
+1610612745,Houston,Rockets,HOU  ,1971,2100,NBA
+1610612746,Buffalo,Braves,BUF  ,1970,1977,NBA
+1610612746,San Diego,Clippers,SDC  ,1978,1983,NBA
+1610612746,Los Angeles,Clippers,LAC  ,1984,2100,NBA
+1610612747,Minneapolis,Lakers,MIN  ,1948,1948,BAA
+1610612747,Los Angeles,Lakers,LAL  ,1960,2100,NBA
+1610612748,Miami,Heat,MIA  ,1988,2100,NBA
+1610612749,Milwaukee,Bucks,MIL  ,1968,2100,NBA
+1610612750,Minnesota,Timberwolves,MIN  ,1989,2100,NBA
+1610612751,New York,Nets,NYK  ,1976,1976,NBA
+1610612751,New Jersey,Nets,NJ   ,1977,2011,NBA
+1610612751,Brooklyn,Nets,BKN  ,2012,2100,NBA
+1610612752,New York,Knicks,NYK  ,1946,1948,BAA
+1610612753,Orlando,Magic,ORL  ,1989,2100,NBA
+1610612754,Indiana,Pacers,IND  ,1976,2100,NBA
+1610612755,Syracuse,Nationals,SYR  ,1949,1962,BAA
+1610612755,Philadelphia,76ers,PHI  ,1963,2100,NBA
+1610612756,Phoenix,Suns,PHX  ,1968,2100,NBA
+1610612757,Portland,Trail Blazers,POR  ,1970,2100,NBA
+1610612758,Rochester,Royals,ROC  ,1948,1948,BAA
+1610612758,Cincinnati,Royals,CIN  ,1957,1971,NBA
+1610612758,Kansas City-Omaha,Kings,KCO  ,1972,1974,NBA
+1610612758,Kansas City,Kings,KC   ,1975,1984,NBA
+1610612758,Sacramento,Kings,SAC  ,1985,2100,NBA
+1610612759,San Antonio,Spurs,SAN  ,1976,2100,NBA
+1610612760,Seattle,SuperSonics,SEA  ,1967,2007,NBA
+1610612760,Oklahoma City,Thunder,OKC  ,2008,2100,NBA
+1610612761,Toronto,Raptors,TOR  ,1995,2100,NBA
+1610612762,New Orleans,Jazz,NEO  ,1974,1978,NBA
+1610612762,Utah,Jazz,UTA  ,1979,2100,NBA
+1610612763,Vancouver,Grizzlies,VAN  ,1995,2000,NBA
+1610612763,Memphis,Grizzlies,MEM  ,2001,2100,NBA
+1610612764,Chicago,Packers,CHI  ,1961,1961,NBA
+1610612764,Chicago,Zephyrs,CHI  ,1962,1962,NBA
+1610612764,Baltimore,Bullets,BAL  ,1963,1972,NBA
+1610612764,Capital,Bullets,CAP  ,1973,1973,NBA
+1610612764,Washington,Bullets,WAS  ,1974,1996,NBA
+1610612764,Washington,Wizards,WAS  ,1997,2100,NBA
+1610612765,Ft. Wayne Zollner,Pistons,FWZ  ,1948,1948,BAA
+1610612765,Detroit,Pistons,DET  ,1957,2100,NBA
+1610612766,Charlotte,Hornets,CHA  ,1988,2001,NBA
+1610612766,Charlotte,Bobcats,CHA  ,2004,2013,NBA
+1610612766,Charlotte,Hornets,CHA  ,2014,2100,NBA
+9001,Pittsburgh,Ironmen,PIT  ,1946,1948,BAA
+1610612738,Boston,Celtics,BOS  ,1949,2100,NBA
+9003,Siena,Montepaschi Siena,MPS  ,1934,2100,LBA
+9005,Rome,Lottomatica Roma,LRO  ,1960,2020,LBA
+1610612747,Minneapolis,Lakers,LAL  ,1949,1959,NBA
+9007,Beijing,Ducks,BJD  ,1995,2100,CBA
+9009,Athens,Olympiacos,OLP  ,1931,2100,EuroLeague
+1610612758,Rochester,Royals,ROC  ,1949,1956,NBA
+9011,Istanbul,Efes Pilsen,EPT  ,1976,2100,EuroLeague
+1610612765,Ft. Wayne Zollner,Pistons,FWZ  ,1949,1956,NBA
+9013,All-Star,Team Durant,DRT  ,2021,2022,NBA
+9015,Washington,Capitols,WAS  ,1949,1949,NBA
+9015,Washington,Capitols,WAS  ,1946,1948,BAA
+9059,Chicago,Stags,CHS  ,1949,1950,NBA
+9017,Cleveland,Rebels,CLR  ,1946,1948,BAA
+9063,Sheboygan,Redskins,SHE  ,1949,1950,NBA
+9019,Shanghai,Sharks,SDS  ,1996,2100,CBA
+9012,St. Louis,Bombers,BOM  ,1949,1950,NBA
+9021,Rome,Virtus Lottomatica,ROM  ,1960,2020,LBA
+9028,Anderson,Packers,AND  ,1949,1950,NBA
+9023,Istanbul,Fenerbahce,FEN  ,1913,2100,EuroLeague
+1610612752,New York,Knicks,NYK  ,1949,2100,NBA
+9025,All-Star,Team Giannis,GNS  ,2019,2023,NBA
+1610612744,Philadelphia,Warriors,PHI  ,1949,1961,NBA
+9027,Adelaide,36ers,ADL  ,1982,2100,NBL
+9029,Auckland,Breakers,NZB  ,2003,2100,NBL
+9031,Istanbul,Fenerbahce Ulker,FBU  ,2006,2015,EuroLeague
+9033,East,NBA All-Stars,EST  ,1951,2100,NBA
+9035,Athens,Panathinaikos,PAN  ,1919,2100,EuroLeague
+9037,Cairns,Taipans,CNS  ,1999,2100,NBL
+9039,All-Star,Team LeBron,LBN  ,2018,2100,NBA
+9041,Barcelona,Regal FC Barcelona,BAR  ,2011,2013,EuroLeague
+9043,All-Star,Team Giannis,GNS  ,2019,2100,NBA
+9045,Bilbao,Bilbao Basket,UBB  ,2000,2100,EuroCup
+9047,Madrid,Real Madrid,RMA  ,1931,2100,EuroLeague
+9049,Buenos Aires,San Lorenzo,SLA  ,1936,2100,Liga Nacional
+1610612755,Syracuse,Nationals,SYR  ,1946,1948,NBL
+9051,Haifa,Maccabi Haifa,MAC  ,1953,2100,Israeli Premier League
+1610612737,Tri-Cities,Blackhawks,TRI  ,1948,1950,NBA
+9053,Madrid,Baloncesto (Real Madrid),RMD  ,1931,2100,EuroLeague
+9055,Milan,EA7 Emporio Armani Milano,EAM  ,2011,2019,EuroLeague
+9057,Shanghai,Shanghai Sharks,SDS  ,1996,2100,CBA
+9059,Chicago,Stags,CHS  ,1946,1948,BAA
+9061,Moscow,CSKA,MOS  ,1923,2100,EuroLeague
+9063,Sheboygan,Redskins,SHE  ,1938,1948,BAA
+9065,Madrid,Real Madrid,RMD  ,1931,2100,EuroLeague
+9067,West,NBA All-Stars,WST  ,1951,2100,NBA
+9002,Waterloo,Hawks,WAT  ,1949,1948,NBL
+9004,Barcelona,FC Barcelona Regal,FCB  ,1926,2100,EuroLeague
+9006,Belgrade,Partizan,PAR  ,1945,2100,EuroLeague
+9008,Indianapolis,Jets,JET  ,1948,1948,BAA
+9010,Khimki,BC Khimki,KHI  ,1997,2100,VTB United League
+9012,St. Louis,Bombers,BOM  ,1946,1948,BAA
+9014,Franca (Brazil),SESI/Franca,FRA  ,1959,2100,NBB
+9016,Brisbane,Bullets,BNE  ,1979,2100,NBL
+9018,Vilnius,Lietuvos Rytas,LRY  ,1997,2100,EuroCup
+9020,Detroit,Falcons,DEF  ,1946,1948,BAA
+9022,Barcelona,Winterthur FC Barcelona,BAR  ,2005,2007,EuroLeague
+9024,Vitoria-Gasteiz,Caja Laboral (Baskonia),LAB  ,2009,2013,Liga ACB
+9026,Lyon-Villeurbanne,Adecco ASVEL,LYV  ,1948,2100,EuroLeague
+9028,Anderson,Packers,AND  ,1946,1948,NBL
+9030,Milan,Armani Jeans Milano,MLN  ,2008,2011,EuroLeague
+9032,Perth,Wildcats,PER  ,1982,2100,NBL
+9034,Sydney,Kings,SYD  ,1988,2100,NBL
+9036,China,Team China,CHN  ,1936,2100,CBA
+9038,Malaga,Unicaja,MAL  ,1977,2100,EuroCup
+9040,All-Star,All-Star LeBron,LBN  ,2018,2100,NBA
+9042,Toronto,Huskies,HUS  ,1946,1948,BAA
+9044,Berlin,ALBA Berlin,ALB  ,1991,2100,EuroLeague
+9046,Madrid,MMT Estudiantes,MMT  ,2007,2011,EuroLeague
+9048,Guangzhou,Long-Lions,GUA  ,2010,2100,CBA
+9050,Melbourne,United,MEL  ,2014,2100,NBL
+9052,Tel Aviv,Maccabi Elite,MTA  ,1969,2008,EuroLeague
+9054,Tel Aviv,Maccabi Electra,MTA  ,2008,2015,EuroLeague
+9056,Providence,Steamrollers,PRO  ,1946,1948,BAA
+9058,Indianapolis,Olympians,INO  ,1949,1948,BAA
+9060,Rio de Janeiro,Flamengo,FLA  ,1919,2100,Liga Nacional
+9062,All-Star,Team Stephen,STP  ,2018,2018,NBA
+9064,Kaunas,Zalgiris,ZAK  ,1944,2100,EuroLeague
+9066,Raanana,Maccabi Ra anana,MRA  ,1980,2100,Israeli Premier League

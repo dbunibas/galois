@@ -55,7 +55,7 @@ public class TestEvaluationArtists {
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
     //    database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
 
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
@@ -68,8 +68,17 @@ public class TestEvaluationArtists {
                 .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.nationality = 'American'")
                 .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} American?', a.name)")
                 .build();
-
-        variants = List.of(q0,q1);
+        ExperimentVariant q2 = ExperimentVariant.builder()
+                .queryId("Q2")
+                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.deathYear IS NOT NULL")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} death?', a.name)")
+                .build();
+        ExperimentVariant q3 = ExperimentVariant.builder()
+                .queryId("Q3")
+                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.gender = 'Male'")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} a male?', a.name)")
+                .build();
+        variants = List.of(q0,q1,q2,q3);
     }
 
     @Test
