@@ -18,6 +18,12 @@ import java.util.stream.Collectors;
 
 import static galois.llm.query.utils.QueryUtils.*;
 import static galois.utils.Mapper.toCleanJsonList;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 @Slf4j
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
@@ -52,6 +58,8 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
         Key primaryKey = database.getPrimaryKey(table.getName());
         List<Map<String, Object>> keyValues = getKeyValues(table, primaryKey, chain);
+//        List<Map<String, Object>> keyValues = loadKeysFromFile();
+//        System.out.println("*** KEY VALUES: "+ keyValues.toString());
         GaloisDebug.log("Parsed keys are:");
         GaloisDebug.log(keyValues);
         if (skipTupleRequest) return new ArrayList<>();
@@ -320,5 +328,28 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         queryStatManager.updateBaseLLMTokensOutput(outputTokens);
         queryStatManager.updateBaseTimeMs(timeMillis);
         queryStatManager.updateBaseLLMRequest(1);
+    }
+
+    private List<Map<String, Object>> loadKeysFromFile() {
+        String filePath = "/Users/enzoveltri/git/galois/core/src/test/resources/llm-bench/qatch/nobel_prize/nobel_prize.csv";
+        List<Map<String, Object>> keys = new ArrayList<>();
+        try (FileReader reader = new FileReader(Paths.get(filePath).toFile());
+             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+            for (CSVRecord record : csvParser) {
+                String k1 = record.get("nobel_prize_laureate");
+                String k2 = record.get("nationality");
+                String country = record.get("nationality");
+                if (!country.equals("United States")) continue;
+//                if (!country.equals("Venezuela")) continue;
+                Map<String, Object> key = new HashMap<>();
+                key.put("nobel_prize_laureate", k1);
+                key.put("nationality", k2);
+                System.out.println("Add: " + key.toString());
+                keys.add(key);
+            }
+        } catch (IOException e) {
+            
+        }
+        return keys;
     }
 }
