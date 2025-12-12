@@ -6,6 +6,7 @@ import galois.llm.query.*;
 import galois.llm.query.utils.QueryUtils;
 import galois.prompt.EPrompts;
 import galois.utils.Configuration;
+import galois.utils.ExternalKnowledgeGenerator;
 import galois.utils.GaloisDebug;
 import lombok.Getter;
 import lombok.Setter;
@@ -139,6 +140,10 @@ public class TogetheraiLlama3NLQueryExecutor extends AbstractEntityQueryExecutor
 
     @Override
     protected String generateFirstPrompt(ITable table, List<Attribute> attributes, Expression expression, String jsonSchema) {
+        if (ExternalKnowledgeGenerator.getInstance().isGenerate()) {
+            ExternalKnowledgeGenerator.getInstance().setTable(table);
+        }
+
         return firstPrompt.generateUsingNL(naturalLanguagePrompt, jsonSchema);
     }
 

@@ -6,6 +6,7 @@ import galois.llm.TokensEstimator;
 import galois.llm.query.utils.cache.CacheEntry;
 import galois.llm.query.utils.cache.LLMCache;
 import galois.prompt.EPrompts;
+import galois.utils.ExternalKnowledgeGenerator;
 import galois.utils.GaloisDebug;
 import galois.utils.Mapper;
 import lombok.extern.slf4j.Slf4j;
@@ -46,13 +47,13 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         GaloisDebug.log("Parsed keys are:");
         GaloisDebug.log(keyValues);
         if (skipTupleRequest) return new ArrayList<>();
-        
+
         List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).filter(Objects::nonNull).toList();
         GaloisDebug.log("LLMScan results:");
         GaloisDebug.log(tuples);
         return tuples;
     }
-    
+
     private List<Map<String, Object>> getStaticKeys(ITable table, Key primaryKey) {
         String cleanedResponse = "[]"; // insert here the keys
         List<Map<String, Object>> currentKeys = parseKeyResponse(cleanedResponse, table, primaryKey);
@@ -66,6 +67,10 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         String schema = primaryKey.isCompositeKey() ?
                 generateJsonSchemaForCompositePrimaryKey(table, primaryKey) :
                 generateJsonSchemaForPrimaryKey(table);
+
+        if (ExternalKnowledgeGenerator.getInstance().isGenerate()) {
+            ExternalKnowledgeGenerator.getInstance().setTable(table);
+        }
 
         log.debug("Max Iteration Allowed: {}", getMaxIterations());
         for (int i = 0; i < getMaxIterations(); i++) {
@@ -129,7 +134,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     private Tuple generateTupleFromKey(ITable table, TableAlias tableAlias, Map<String, Object> keyValue, Key primaryKey, Chain<String, String> chain) {
         List<String> primaryKeyAttributes = primaryKey.getAttributes().stream().map(AttributeRef::getName).toList();
         Tuple tuple = createNewTupleWithMockOID(tableAlias);
-        if(hasNullInKeys(tuple, tableAlias, keyValue, primaryKeyAttributes)){
+        if (hasNullInKeys(tuple, tableAlias, keyValue, primaryKeyAttributes)) {
             return null;
         }
         addCellForPrimaryKey(tuple, tableAlias, keyValue, primaryKeyAttributes);
@@ -163,9 +168,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     private boolean hasNullInKeys(Tuple tuple, TableAlias tableAlias, Map<String, Object> key, List<String> primaryKeyAttributes) {
         for (String attribute : primaryKeyAttributes) {
             Object value = key.get(attribute);
-            if(value == null || (value.toString().isBlank())){
-               return true;
-           }
+            if (value == null || (value.toString().isBlank())) {
+                return true;
+            }
         }
         return false;
     }
@@ -200,6 +205,11 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
 
     protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributesPrompt, String key, Chain<String, String> chain) {
         String jsonSchema = generateJsonSchemaFromAttributes(table, attributesPrompt);
+
+        if (ExternalKnowledgeGenerator.getInstance().isGenerate()) {
+            ExternalKnowledgeGenerator.getInstance().setTable(table);
+        }
+
         String prompt = getAttributesPrompt().generate(table, key, attributesPrompt, jsonSchema);
         log.debug("Attribute prompt is: {}", prompt);
         String response = "";

@@ -1,21 +1,22 @@
 package galois.llm.query;
 
+import com.google.common.collect.Iterables;
 import dev.langchain4j.chain.Chain;
 import galois.llm.TokensEstimator;
-import galois.llm.query.utils.cache.CacheEntry;
-import galois.llm.query.utils.cache.LLMCache;
+import galois.llm.database.CellWithProb;
 import galois.llm.models.DataProb;
+import galois.llm.models.togetherai.CellProb;
 import galois.llm.models.togetherai.Logprobs;
 import galois.llm.models.togetherai.StoredProbsSingleton;
-import galois.llm.models.togetherai.CellProb;
+import galois.llm.query.utils.QueryUtils;
+import galois.llm.query.utils.cache.CacheEntry;
+import galois.llm.query.utils.cache.LLMCache;
 import galois.prompt.EPrompts;
+import galois.utils.ExternalKnowledgeGenerator;
 import galois.utils.GaloisDebug;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.*;
 import speedy.model.expressions.Expression;
-import com.google.common.collect.Iterables;
-import galois.llm.database.CellWithProb;
-import galois.llm.query.utils.QueryUtils;
 
 import java.util.*;
 
@@ -23,7 +24,7 @@ import static galois.llm.query.utils.QueryUtils.*;
 
 @Slf4j
 public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
-    
+
     protected List<AttributeRef> attributes = null;
 
     abstract protected Chain<String, String> getConversationalChain();
@@ -111,7 +112,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                             log.debug("Tuple {}", tuple.toStringNoOID());
                             log.debug("CellProbs: {}", cellsProbForTuple);
                             tuple = QueryUtils.mapToTupleWithProb(tuple, cellsProbForTuple);
-                            CellWithProb cwp = (CellWithProb)tuple.getCells().getLast();
+                            CellWithProb cwp = (CellWithProb) tuple.getCells().getLast();
                             log.debug("Last cell with prob: {}", cwp.getValueProb());
                         }
                         tuples.add(tuple);
@@ -239,10 +240,18 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
     }
 
     protected String generateFirstPrompt(ITable table, List<Attribute> attributes, Expression expression, String jsonSchema) {
+        if (ExternalKnowledgeGenerator.getInstance().isGenerate()) {
+            ExternalKnowledgeGenerator.getInstance().setTable(table);
+        }
+
         return getFirstPrompt().generate(table, attributes, expression, jsonSchema);
     }
 
     protected String generateIterativePrompt(ITable table, List<Attribute> attributes, String jsonSchema) {
+        if (ExternalKnowledgeGenerator.getInstance().isGenerate()) {
+            ExternalKnowledgeGenerator.getInstance().setTable(table);
+        }
+
         return getIterativePrompt().generate(table, attributes, jsonSchema);
     }
 }
