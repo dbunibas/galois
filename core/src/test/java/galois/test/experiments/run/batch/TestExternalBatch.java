@@ -31,7 +31,6 @@ public class TestExternalBatch {
     private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private final List<ExpVariant> variants;
-    private String executorModel = "togetherai";
 
     public TestExternalBatch() {
         ExpVariant q0 = ExpVariant.builder()

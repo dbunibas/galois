@@ -1,5 +1,6 @@
 package galois.test.experiments;
 
+import com.galois.sqlparser.ParseContext;
 import com.galois.sqlparser.SQLQueryParser;
 import com.galois.sqlparser.ScanNodeFactory;
 import com.galois.sqlparser.TableAliasQueryParser;
@@ -9,9 +10,9 @@ import galois.llm.query.IQueryExecutor;
 import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.LogicalPlanOptimizer;
-import galois.parser.ParserWhere;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.utils.TestUtils;
+import galois.utils.ExternalKnowledgeGenerator;
 import galois.utils.GaloisDebug;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,10 +23,7 @@ import speedy.exceptions.DAOException;
 import speedy.exceptions.DBMSException;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.operators.ITupleIterator;
-import speedy.model.database.Attribute;
-import speedy.model.database.IDatabase;
-import speedy.model.database.ITable;
-import speedy.model.database.Tuple;
+import speedy.model.database.*;
 import speedy.model.database.dbms.DBMSDB;
 import speedy.model.database.dbms.DBMSTupleIterator;
 import speedy.persistence.DAODBMSDatabase;
@@ -40,8 +38,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.util.*;
-import net.sf.jsqlparser.expression.Expression;
-import speedy.model.database.TableAlias;
 
 @AllArgsConstructor
 @Data
@@ -105,7 +101,7 @@ public final class Experiment {
 //        log.info("-----------------------------");
         return expectedResults;
     }
-    
+
     @SuppressWarnings("unchecked")
     public Map<String, ExperimentResults> executeGalois(Map<ITable, Map<Attribute, Double>> dbConfidence, double threshold, boolean removeFromAlgebraTree) {
         Map<String, ExperimentResults> results = new HashMap<>();
@@ -162,7 +158,7 @@ public final class Experiment {
         }
         return results;
     }
-    
+
     @SuppressWarnings("unchecked")
     public Map<String, ExperimentResults> executeWithExpected(List<Tuple> expectedResults, IQueryExecutor queryExecutor, IDatabase database, TableAlias tableAlias) {
         Map<String, ExperimentResults> results = new HashMap<>();
@@ -190,11 +186,24 @@ public final class Experiment {
         Double llmProbThreshold = operatorsConfiguration.getScan().getLlmProbThreshold();
         ScanNodeFactory scanNodeFactory = (tableAlias, attributes) -> new LLMScan(tableAlias, operatorsConfiguration.getScan().createQueryExecutor(scanQueryExecutor), attributes, normalizationStrategy, llmProbThreshold);
 
+        ExternalKnowledgeGenerator.getInstance().setTables(null);
         // If ignoreTree() returns true, only execute the LLMScan operation
         if (scanQueryExecutor.ignoreTree()) {
             TableAliasQueryParser tableAliasQueryParser = new TableAliasQueryParser();
-            return scanNodeFactory.createScanNode(tableAliasQueryParser.parse(query.getSql()), null);
+            TableAlias tableAlias = tableAliasQueryParser.parse(query.getSql());
+
+            // Handle knowledge spanning multiple attributes
+            ParseContext context = tableAliasQueryParser.getContext();
+            List<ITable> tables = context.getTableAliases()
+                    .stream()
+                    .map(ta -> query.getDatabase().getTable(ta.getTableName()))
+                    .distinct()
+                    .toList();
+            ExternalKnowledgeGenerator.getInstance().setTables(tables);
+
+            return scanNodeFactory.createScanNode(tableAlias, null);
         }
+
         return sqlQueryParser.parse(query.getSql(), scanNodeFactory);
     }
 
@@ -202,7 +211,7 @@ public final class Experiment {
         IDatabase database = query.getDatabase();
         List<String> tableNames = database.getTableNames();
         URL resource = Experiment.class.getResource(query.getResultPath());
-        if(resource == null){
+        if (resource == null) {
             throw new RuntimeException("Unable to load expected " + query.getResultPath());
         }
         File[] files = new File(resource.getPath()).listFiles(new FilenameFilter() {
@@ -232,7 +241,7 @@ public final class Experiment {
             if (table.getSize() == 0) {
                 // import table
                 File file = tableCSVFiles.get(tableName);
-                if(file == null){
+                if (file == null) {
                     throw new IllegalArgumentException("Unknown csv for table " + tableName + " - Existing files: " + tableCSVFiles);
                 }
                 log.debug("Search for table: " + table + " found file: " + file);
@@ -300,7 +309,7 @@ public final class Experiment {
 //        return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
         return new ExperimentResults(name, metrics, expectedResults, results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql(), optmizerName);
     }
-    
+
     public ExperimentResults toExperimentResults(List<Tuple> results, List<Tuple> expectedResults, String optmizerName) {
         log.info("Results size: " + results.size());
         log.info("Results: " + results);
