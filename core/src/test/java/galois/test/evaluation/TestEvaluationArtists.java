@@ -63,22 +63,27 @@ public class TestEvaluationArtists {
                 .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.birthYear = 1941")
                 .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} born in 1941?', a.name)")
                 .build();
-        ExperimentVariant q1 = ExperimentVariant.builder()
-                .queryId("Q1")
-                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.nationality = 'American'")
-                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} American?', a.name)")
-                .build();
+        // ExperimentVariant q1 = ExperimentVariant.builder()
+        //         .queryId("Q1")
+        //         .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.nationality = 'American'")
+        //         .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} American?', a.name)")
+        //         .build();
         ExperimentVariant q2 = ExperimentVariant.builder()
                 .queryId("Q2")
                 .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.deathYear IS NOT NULL")
-                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} death?', a.name)")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} dead?', a.name)")
                 .build();
-        ExperimentVariant q3 = ExperimentVariant.builder()
-                .queryId("Q3")
-                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.gender = 'Male'")
-                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} a male?', a.name)")
+        ExperimentVariant q2bis = ExperimentVariant.builder()
+                .queryId("Q2bis")
+                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.deathYear IS NOT NULL")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udffilterattribute('is_dead')")
                 .build();
-        variants = List.of(q0,q1,q2,q3);
+        // ExperimentVariant q3 = ExperimentVariant.builder()
+        //         .queryId("Q3")
+        //         .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.gender = 'Male'")
+        //         .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} a male?', a.name)")
+        //         .build();
+        variants = List.of(q0,q2, q2bis);
     }
 
     @Test

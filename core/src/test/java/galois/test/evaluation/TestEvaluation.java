@@ -63,13 +63,14 @@ public class TestEvaluation {
                 .querySQL("SELECT r.id FROM reviews r WHERE r.scoresentiment = 'POSITIVE'")
                 .queryUDF("SELECT r.id FROM reviews r WHERE udfilter('Is the sentiment of the review {1} positive?', r.reviewtext)")
                 .build();
-        ExperimentVariant q1 = ExperimentVariant.builder() //DOES NOT WORK YET
-                .queryId("Q1")
-                .querySQL("SELECT  r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON r1.scoresentiment = r2.scoresentiment")
-                .queryUDF("SELECT r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON udfilter('This movie review: {1} express the same sentiment as this move review: {2}?', r1.reviewtext, r2.reviewtext)")
-                .build();
+        // ExperimentVariant q1 = ExperimentVariant.builder() DOES NOT WORK YET
+        //         .queryId("Q1")
+        //         .querySQL("SELECT  r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON r1.scoresentiment = r2.scoresentiment")
+        //         .queryUDF("SELECT r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON udfilter('This movie review: {1} express the same sentiment as this move review: {2}?', r1.reviewtext, r2.reviewtext)")
+        //         .build();
         
-        variants = List.of(q0, q1);
+
+        variants = List.of(q0);
     }
 
     @Test
