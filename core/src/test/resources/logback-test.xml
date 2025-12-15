@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Timestamp for filenames -->
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+
+    <!-- Cross-platform log directory -->
+    <property name="LOG_DIR" value="${user.home}/galois/logs"/>
+
+    <!-- Console appender -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%gray(%highlight(%-5level %logger{15})) - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File appender (portable) -->
+    <appender name="EXP-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/debug-exp.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_DIR}/debug-exp-%d{yyyyMMdd'T'HHmmss}.log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+    </root>
+
+    <!-- Package-specific log levels -->
+    <logger name="galois.Main" level="INFO"/>
+    <logger name="galois.llm" level="ERROR"/>
+    <logger name="galois.parser" level="DEBUG"/>
+    <logger name="galois.parser.ParserProvenance" level="INFO"/>
+    <logger name="galois.parser.ParserWhere" level="INFO"/>
+    <logger name="galois.optimizer.optimizations" level="DEBUG"/>
+    <logger name="galois.llm.algebra.LLMScan" level="ERROR"/>
+    <logger name="galois.optimizer.estimators.ConfidenceEstimator" level="INFO"/>
+    <logger name="galois.llm.query.AbstractKeyBasedQueryExecutor" level="TRACE"/>
+    <logger name="galois.llm.query.AbstractEntityQueryExecutor" level="TRACE"/>
+    <logger name="galois.llm.query.togetherai.llama3.TogetheraiLLama3KeyQueryExecutor" level="DEBUG"/>
+    <logger name="galois.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor" level="DEBUG"/>
+    <logger name="galois.test" level="DEBUG"/>
+    <logger name="galois.udf" level="DEBUG"/>
+
+    <!-- Dedicated experiment file logger -->
+    <logger name="galois.utils.GaloisDebug"
+            level="TRACE"
+            additivity="false">
+        <appender-ref ref="EXP-FILE"/>
+    </logger>
+
+</configuration>
