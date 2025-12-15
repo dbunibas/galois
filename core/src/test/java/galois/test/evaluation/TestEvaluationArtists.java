@@ -83,7 +83,7 @@ public class TestEvaluationArtists {
         //         .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.gender = 'Male'")
         //         .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} a male?', a.name)")
         //         .build();
-        variants = List.of(q0,q2);
+        variants = List.of(q2bis);
     }
 
     @Test
