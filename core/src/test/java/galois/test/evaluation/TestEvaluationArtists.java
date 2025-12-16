@@ -76,14 +76,14 @@ public class TestEvaluationArtists {
         ExperimentVariant q2bis = ExperimentVariant.builder()
                 .queryId("Q2bis")
                 .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.deathYear IS NOT NULL")
-                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udffilterattribute('is_dead')")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilterattr('a.is_dead')")
                 .build();
         // ExperimentVariant q3 = ExperimentVariant.builder()
         //         .queryId("Q3")
         //         .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.gender = 'Male'")
         //         .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} a male?', a.name)")
         //         .build();
-        variants = List.of(q2bis);
+        variants = List.of(q2,q2bis);
     }
 
     @Test
@@ -100,6 +100,7 @@ public class TestEvaluationArtists {
             List<Tuple> expected = toTupleList(gtOperator.execute(database, database));
             log.info("**** Expected: {}", expected);
 
+            
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
             List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
             log.info("**** Result: {}", results);
