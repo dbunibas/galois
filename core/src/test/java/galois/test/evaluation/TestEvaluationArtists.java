@@ -83,7 +83,12 @@ public class TestEvaluationArtists {
         //         .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.gender = 'Male'")
         //         .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} a male?', a.name)")
         //         .build();
-        variants = List.of(q2,q2bis);
+        ExperimentVariant q3 = ExperimentVariant.builder()
+                .queryId("Q3")
+                .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.gender = 'Male'")
+                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilterattr('a.is_male')")
+                .build();
+        variants = List.of(q2,q2bis, q3);
     }
 
     @Test
