@@ -25,6 +25,16 @@ The repository can be cloned with all the dependencies using the command:
 git clone -b reproducibility https://github.com/dbunibas/galois.git --recurse-submodules
 ```
 
+---
+
+Note: cloning the repository without the `--recurse-submodules` flag will not download the [Speedy](https://github.com/dbunibas/Speedy/tree/gradle) dependency and will incur in a missing dependency error - `Could not resolve project :speedy-core.`.
+
+In this case the missing dependency can be initialized using the command:
+
+```shell
+git submodule update -init
+```
+
 ## Execute the Experiments
 
 ### System Setup
@@ -36,6 +46,20 @@ To run the containers, from the root folder:
 ```shell
 cd docker
 docker compose up -d
+```
+
+This command will create a new container named "galois" running two services: PostgreSQL and ChromaDB.
+
+**PostgreSQL**: a Postgres 11.10 instance, exposing port 5432.
+
+**ChromaDB**: a Chroma 0.6.4.dev226 instance, exposing port 8000.
+
+The database can be accessed using external tools (e.g. DBeaver) using the following configuration (specified in the docker compose file):
+
+```text
+Database name: galois
+Database user: pguser
+Database pass: pguser
 ```
 
 ---
@@ -51,6 +75,14 @@ Note: the snapshot is not required in order to successfully run the experiments,
 All the configuration is handled through a `configuration.properties` file in the [resources](core/src/main/resources).
 
 A [template](core/src/main/resources/configuration.properties.template) is provided as a starting point and contains the description of all the keys.
+
+The default keys are valid for the majority of properties except for the absolute paths of files, in particular:
+
+```text
+cache.path
+export.results-path
+export.excel-path
+```
 
 ### Datasets
 
@@ -80,6 +112,10 @@ Note: the [scripts](scripts) folder contains three scripts to execute all the ex
 - execute-all-experiments - execute both variants of all the experiments;
 - execute-experiments-openai - execute the OpenAI variant of all the experiments;
 - execute-experiments-togetherai - execute the TogetherAI variant of all the experiments;
+
+---
+
+Additional note: an executor is a straightforward way of executing one (or more) test(s) from the codebase. Each executor is a wrapper that run its relative test using the Gradle wrapper.
 
 ## Execute a User-Defined Query
 
