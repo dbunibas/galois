@@ -88,7 +88,7 @@ public class TestEvaluationArtists {
                 .querySQL("SELECT a.artistId, a.name FROM artists a WHERE a.gender = 'Male'")
                 .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilterattr('a.is_male')")
                 .build();
-        variants = List.of(q2,q2bis, q3);
+        variants = List.of(q2, q2bis, q3);
     }
 
     @Test
@@ -99,20 +99,35 @@ public class TestEvaluationArtists {
     @Test
     public void testEvaluation() {
         SQLQueryParser sqlQueryParser = new SQLQueryParser();
+        galois.optimizer.LLMHistogramOptimizer optimizer = new galois.optimizer.LLMHistogramOptimizer();
+
         for (ExperimentVariant variant : variants) {
             log.info("Parsing query {}", variant.getQueryId());
             IAlgebraOperator gtOperator = sqlQueryParser.parse(variant.getQuerySQL());
+            log.info("-- SQL plan --\n{}", new speedy.model.algebra.operators.AlgebraTreeToString().treeToString(gtOperator, ""));
             List<Tuple> expected = toTupleList(gtOperator.execute(database, database));
-            log.info("**** Expected: {}", expected);
+            log.info("Expected tuples ({}): {}", expected.size(), expected);
 
-            
+            // UDF plan
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
-            List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
-            log.info("**** Result: {}", results);
-            
+            log.info("-- UDF plan --\n{}", new speedy.model.algebra.operators.AlgebraTreeToString().treeToString(operator, ""));
+
+            // Optimize (apply pushdown)
+            IAlgebraOperator optimized = optimizer.optimize(database, operator);
+            log.info("-- Optimized plan --\n{}", new speedy.model.algebra.operators.AlgebraTreeToString().treeToString(optimized, ""));
+
+            // Execute raw and optimized plans
+            List<Tuple> resultsRaw = TestUtils.toTupleList(operator.execute(database, database));
+            log.info("UDF raw results ({}): {}", resultsRaw.size(), resultsRaw);
+
+            List<Tuple> resultsOptimized = TestUtils.toTupleList(optimized.execute(database, database));
+            log.info("Optimized results ({}): {}", resultsOptimized.size(), resultsOptimized);
+
+            // Metrics
             for (IMetric metric : DEFAULT_METRICS) {
-                Double score = metric.getScore(database, expected, results);
-                log.info("**** {}: {} has score {}", variant.getQueryId(), metric.getName(), score);
+                Double scoreRaw = metric.getScore(database, expected, resultsRaw);
+                Double scoreOptimized = metric.getScore(database, expected, resultsOptimized);
+                log.info("Metric {} - raw: {}, optimized: {}", metric.getName(), scoreRaw, scoreOptimized);
             }
         }
     }

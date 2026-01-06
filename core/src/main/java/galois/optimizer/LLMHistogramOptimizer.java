@@ -3,6 +3,7 @@ package galois.optimizer;
 import galois.llm.algebra.LLMScan;
 import galois.optimizer.estimators.LLMCardinalityEstimator;
 import galois.optimizer.optimizations.AllConditionsPushdown;
+import galois.optimizer.optimizations.UDFilterAttributePushdown;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Select;
@@ -26,6 +27,17 @@ public class LLMHistogramOptimizer implements IOptimization {
                     return optimizedNode;
                 }
                 // TODO: Add replace children?
+                father.getChildren().clear();
+                father.addChild(optimizedNode);
+                currentNode = optimizedNode;
+            } // Added condition for udf filter attribute case
+            else if (currentNode instanceof speedy.model.algebra.udf.UserDefinedFunction) {
+                // Try UDF attribute pushdown
+                IAlgebraOperator optimizedNode = new UDFilterAttributePushdown().optimize(database, currentNode);
+                IAlgebraOperator father = currentNode.getFather();
+                if (father == null) {
+                    return optimizedNode;
+                }
                 father.getChildren().clear();
                 father.addChild(optimizedNode);
                 currentNode = optimizedNode;

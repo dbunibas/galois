@@ -10,6 +10,7 @@ import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.utils.Configuration;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.algebra.operators.ITupleIterator;
@@ -39,6 +40,11 @@ public class GaloisUDFilterAttribute implements IUserDefinedFunction {
             """);
 
     private final String attributeName;
+
+
+    public String getAttributeName(){
+        return attributeName;
+    }
 
     @Override
     public ITupleIterator execute(ITupleIterator iterator) {
