@@ -41,7 +41,6 @@ public class UDFilterAttributePushdown implements IOptimization {
 
         TableAlias tableAlias = scan.getTableAlias();
         String raw = gfa.getAttributeName();
-        // attribute may be 'a.is_dead' or 'is_dead'
         String attributeName = raw.contains(".") ? raw.substring(raw.indexOf('.') + 1) : raw;
 
         // If we have a database, check the table for the attribute and skip pushdown if missing.
