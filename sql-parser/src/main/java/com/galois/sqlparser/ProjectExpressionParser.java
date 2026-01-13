@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.ExpressionVisitorAdapter;
 import net.sf.jsqlparser.expression.Function;
+import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.arithmetic.Subtraction;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.schema.Column;
@@ -11,8 +12,11 @@ import net.sf.jsqlparser.statement.select.AllTableColumns;
 import speedy.SpeedyConstants;
 import speedy.model.algebra.ProjectionAttribute;
 import speedy.model.algebra.aggregatefunctions.*;
+import speedy.model.algebra.udf.IUserDefinedFunction;
+import speedy.model.algebra.udf.UserDefinedAttributeRef;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.TableAlias;
+import speedy.model.database.Tuple;
 import speedy.model.database.VirtualAttributeRef;
 import speedy.model.expressions.ExpressionAttributeRef;
 import speedy.persistence.Types;
@@ -45,10 +49,7 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
             case "max" -> parseAggregateFunction(MaxAggregateFunction::new, function, parseContext);
             case "stddev" -> parseAggregateFunction(StdDevAggregateFunction::new, function, parseContext);
             case "sum" -> parseAggregateFunction(SumAggregateFunction::new, function, parseContext);
-            default -> throw new UnsupportedOperationException(String.format(
-                    "Function %s is currently unsupported...",
-                    function.getName()
-            ));
+            default -> parseUserDefinedProjectionAttribute(function, parseContext);
         };
     }
 
@@ -139,6 +140,18 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
                 Types.REAL
         );
         return new ProjectionAttribute(supplier.get(attributeRef));
+    }
+
+    private ProjectionAttribute parseUserDefinedProjectionAttribute(Function function, ParseContext parseContext) {
+        IUserDefinedFunction udf = parseContext.getUserDefinedFunction(function.getName(), function.getParameters());
+        UserDefinedAttributeRef udfRef = new UserDefinedAttributeRef(
+                udf,
+                parseContext.getFromItemTableAlias(),
+                function.getName(),
+                Types.ANY
+        );
+
+        return new ProjectionAttribute(udfRef);
     }
 
     @FunctionalInterface

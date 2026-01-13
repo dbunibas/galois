@@ -30,7 +30,7 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-public class TestParseUDF {
+public class TestParseUDFFilter {
     private static final String TABLE_NAME = "EmpTable";
     private static final IUserDefinedFunctionFactory UDF_FACTORY = new MockUDFilterFactory();
 
