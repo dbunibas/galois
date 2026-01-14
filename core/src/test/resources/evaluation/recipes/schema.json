@@ -1,0 +1,27 @@
+{
+
+  "dbName": "recipes",
+  "tables": [
+    {
+      "name": "recipes",
+      "attributes": [
+        {
+          "name": "name",
+          "type": "STRING",
+          "nullable": false,
+          "key": true
+        },
+        {
+          "name": "steps",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "ingredients",
+          "type": "STRING",
+          "nullable": true
+        }
+      ]
+    }
+  ]
+}

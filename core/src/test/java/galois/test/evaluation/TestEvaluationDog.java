@@ -63,11 +63,7 @@ public class TestEvaluationDog {
                 .querySQL("SELECT d.breed FROM dog_breeds d WHERE d.country_of_origin = 'England'")
                 .queryUDF("SELECT d.breed FROM dog_breeds d WHERE udfilter('Is the dog breed called {1} originated from England?', d.breed)")
                 .build();
-        ExperimentVariant q1 = ExperimentVariant.builder()
-                .queryId("Q1")
-                .querySQL("SELECT d.breed FROM dog_breeds d WHERE POSITION('Black' IN d.fur_color) > 0")
-                .queryUDF("SELECT a.artistId, a.name FROM artists a WHERE udfilter('Is the artist called {1} American?', a.name)")
-                .build();
+
 
         variants = List.of(q0);
     }
