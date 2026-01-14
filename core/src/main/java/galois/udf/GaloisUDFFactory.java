@@ -18,9 +18,12 @@ import java.util.List;
 public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
     @Override
     public IUserDefinedFunction getUserDefinedFunction(String name, ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
-        if (name.equals("udfilter")) return parseUDFilter(expressions, parseContext);
-        if (name.equals("udfilterattr")) return parseUDFilterAttribute(expressions, parseContext);
-        throw new UnsupportedOperationException("Unimplemented UDF: " + name + "!");
+        return switch (name) {
+            case "udfilter" -> parseUDFilter(expressions, parseContext);
+            case "udfilterattr" -> parseUDFilterAttribute(expressions, parseContext);
+            case "udmap" -> parseUDMap(expressions, parseContext);
+            default -> throw new UnsupportedOperationException("Unimplemented UDF: " + name + "!");
+        };
     }
 
     private IUserDefinedFunction parseUDFilter(ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
@@ -49,6 +52,10 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
         String attributeName = ((StringValue) attributeNameExpression).getValue();
 
         return new GaloisUDFilterAttribute(attributeName);
+    }
+
+    private IUserDefinedFunction parseUDMap(ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
+        return new GaloisUDMap();
     }
 
     private void checkExpressionType(Expression expression, Class<? extends Expression> clazz, String error) {

@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.IAlgebraOperator;
 import speedy.model.algebra.Project;
@@ -81,7 +80,7 @@ public class TestParseUDFMap {
 
     @Test
     public void testParseUserDefinedSelectMapWithWhere() {
-        String sql = String.format("select udmap() from %s e where e.name = 'RafaelNadal'", TABLE_NAME);
+        String sql = String.format("select e.name, udmap() from %s e where e.name = 'RafaelNadal'", TABLE_NAME);
 
         IAlgebraOperator root = new SQLQueryParser().parse(sql, UDF_FACTORY);
         assertNotNull(root);
@@ -98,8 +97,9 @@ public class TestParseUDFMap {
 
         List<Tuple> result = toTupleList(root.execute(db, db));
         assertEquals(1, result.size());
-        assertEquals(2, result.getFirst().getCells().size());
-        assertEquals("udmap", result.getFirst().getCells().get(1).getAttribute());
+        assertEquals(3, result.getFirst().getCells().size());
+        assertEquals("name", result.getFirst().getCells().get(1).getAttribute());
+        assertEquals("udmap", result.getFirst().getCells().get(2).getAttribute());
     }
 
     @Test
@@ -117,7 +117,6 @@ public class TestParseUDFMap {
         assertEquals(1, result.size());
         assertEquals(1, result.getFirst().getCells().size());
         assertEquals("avg", result.getFirst().getCells().getFirst().getAttribute());
-        log.info("{}", result);
     }
 
     private static final class ExtraAttributeUDMap implements IUserDefinedFunction {
