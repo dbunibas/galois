@@ -1,20 +1,90 @@
 package galois.udf;
 
+import java.util.List;
+import java.util.Map;
+
+import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.input.Prompt;
+import dev.langchain4j.model.input.PromptTemplate;
+import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.output.Response;
+import galois.Constants;
+import galois.llm.models.TogetherAIModel;
+import galois.llm.models.togetherai.TogetherAIConstants;
+import galois.utils.Configuration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.algebra.udf.IUserDefinedFunction;
+import speedy.model.database.AttributeRef;
+import speedy.model.database.Cell;
 import speedy.model.database.Tuple;
 
 @RequiredArgsConstructor
 @Slf4j
 public class GaloisUDMap implements IUserDefinedFunction {
-    @Override
-    public Object execute(Tuple tuple) {
+    private static final PromptTemplate PROMPT_TEMPLATE = PromptTemplate.from("""
+            You're a feature generator, capable of answer the user question based on the given tuple.
+            
+            Answer the user question:
+            {{userQuestion}}
+            
+            Respond only with the result, don't add any explanation or additional comment.
+            
+            Answer:
+            """);
+
+    private final String userQuestion;
+    private final List<AttributeRef> attributeRefs;
+
         // TODO: implementare funzione con più parametri opzionali
         // udmap("Sentimento dal testo {1}", r.text)
         // udmap("'Vero' se il volo {1} con destinazioni {2} atterra in Germania", r.company_name, r.destinations)
         // udmap("Uno score da 1 a 5")
         // udmap("Dal procedimento {1} estra la lista degli ingredienti come array JSON") -> "[\"acqua\", \"farina\", \"uova\"]"
-        return "TODO: implement";
+    @Override
+    public Object execute(Tuple tuple) {
+        ChatLanguageModel model = getModel();
+        String tupleString = tuple.toStringNoOID();
+        String formattedUserQuestion = formatUserQuestion(tuple);
+
+        Map<String, Object> vars = Map.of("tuple", tupleString, "userQuestion", formattedUserQuestion);
+        Prompt prompt = PROMPT_TEMPLATE.apply(vars);
+        log.debug("UDMap prompt is: {}", prompt);
+
+        Response<AiMessage> response = model.generate(prompt.toUserMessage());
+        String text = response.content().text();
+        log.info("UDMap model response is: {}", text);
+        if (text != null && !text.isBlank()) {
+            return text;
+        }
+        return "Some error occurred";
     }
+    private String formatUserQuestion(Tuple tuple) {
+        System.out.println("Formatting user question: " + userQuestion);
+        System.out.println("With attribute refs: " + attributeRefs);
+        System.out.println("And tuple: " + tuple);
+        String result = userQuestion;
+        // replace {i} placeholder with attribute value
+        for (int i = 0; i < attributeRefs.size(); i++) {
+            AttributeRef attributeRef = attributeRefs.get(i);
+            Cell cell = tuple.getCell(attributeRef);
+            result = result.replace(String.format("{%d}", i + 1), cell.getValue().getPrimitiveValue().toString());
+        }
+        return result;
+    }
+        private ChatLanguageModel getModel() {
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI)) {
+            return OpenAiChatModel.builder()
+                    .apiKey(Configuration.getInstance().getOpenaiApiKey())
+                    .modelName(Configuration.getInstance().getOpenaiModelName())
+                    .build();
+        }
+        return new TogetherAIModel(
+                Configuration.getInstance().getTogetheraiApiKey(),
+                Configuration.getInstance().getTogetheraiModel(),
+                TogetherAIConstants.STREAM_MODE
+        );
+    }
+
 }

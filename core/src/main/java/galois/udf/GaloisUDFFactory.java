@@ -55,7 +55,22 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
     }
 
     private IUserDefinedFunction parseUDMap(ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
-        return new GaloisUDMap();
+        // Parse user message
+        Expression userMessageExpression = expressions.getFirst();
+        checkExpressionType(userMessageExpression, StringValue.class, "UDFilter parse error: first argument is not a string!");
+        String userMessage = ((StringValue) userMessageExpression).getValue();
+
+        // Parse attribute refs
+        List<AttributeRef> attributeRefs = new ArrayList<>();
+        for (int i = 1; i < expressions.size(); i++) {
+            Expression columnExpression = expressions.get(i);
+            checkExpressionType(columnExpression, Column.class, "UDFilter parse error: " + i + 1 + "th argument is not a column!");
+            TableAlias tableAlias = parseContext.getTableAliasFromColumn((Column) columnExpression);
+            AttributeRef attributeRef = new AttributeRef(tableAlias, ((Column) columnExpression).getColumnName());
+            attributeRefs.add(attributeRef);
+        }
+
+        return new GaloisUDMap(userMessage, attributeRefs);
     }
 
     private void checkExpressionType(Expression expression, Class<? extends Expression> clazz, String error) {
