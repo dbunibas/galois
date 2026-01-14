@@ -130,16 +130,25 @@ public class ProjectExpressionParser extends ExpressionVisitorAdapter<Projection
     }
 
     private ProjectionAttribute parseAggregateFunction(AggregateFunctionSupplier supplier, Function function, ParseContext parseContext) {
-        if (function.getParameters() == null || function.getParameters().size() != 1 || !(function.getParameters().getFirst() instanceof Column column)) {
+        if (function.getParameters() == null || function.getParameters().size() != 1) {
             throw new UnsupportedOperationException("Cannot parse aggregate function without a single parameter!");
         }
 
-        AttributeRef attributeRef = new VirtualAttributeRef(
-                parseContext.getTableAliasFromColumn(column),
-                column.getColumnName(),
-                Types.REAL
-        );
-        return new ProjectionAttribute(supplier.get(attributeRef));
+        if (function.getParameters().getFirst() instanceof Column column) {
+            AttributeRef attributeRef = new VirtualAttributeRef(
+                    parseContext.getTableAliasFromColumn(column),
+                    column.getColumnName(),
+                    Types.REAL
+            );
+            return new ProjectionAttribute(supplier.get(attributeRef));
+        }
+
+        if (function.getParameters().getFirst() instanceof Function custom) {
+            ProjectionAttribute projectionAttribute = parseUserDefinedProjectionAttribute(custom, parseContext);
+            return new ProjectionAttribute(supplier.get(projectionAttribute.getAttributeRef()));
+        }
+
+        throw new UnsupportedOperationException("Cannot parse aggregate function with parameter " + function.getParameters().getFirst().getClass().getSimpleName());
     }
 
     private ProjectionAttribute parseUserDefinedProjectionAttribute(Function function, ParseContext parseContext) {
