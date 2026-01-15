@@ -5,13 +5,8 @@
       "name": "reviews",
       "attributes": [
         {
-          "name": "id",
+          "name": "title",
           "type": "STRING",
-          "nullable": false
-        },
-        {
-          "name": "reviewId",
-          "type": "INTEGER",
           "nullable": false,
           "key": true
         },
@@ -52,11 +47,6 @@
         },
         {
           "name": "scoreSentiment",
-          "type": "STRING",
-          "nullable": false
-        },
-        {
-          "name": "reviewUrl",
           "type": "STRING",
           "nullable": false
         }
