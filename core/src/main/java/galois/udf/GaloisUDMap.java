@@ -1,8 +1,5 @@
 package galois.udf;
 
-import java.util.List;
-import java.util.Map;
-
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.input.Prompt;
@@ -20,11 +17,14 @@ import speedy.model.database.AttributeRef;
 import speedy.model.database.Cell;
 import speedy.model.database.Tuple;
 
+import java.util.List;
+import java.util.Map;
+
 @RequiredArgsConstructor
 @Slf4j
 public class GaloisUDMap implements IUserDefinedFunction {
     private static final PromptTemplate PROMPT_TEMPLATE = PromptTemplate.from("""
-            You're a feature generator, capable of answer the user question based on the given tuple.
+            You're a feature generator, capable of truthfully and precisely answer a user question.
             
             Answer the user question:
             {{userQuestion}}
@@ -37,11 +37,6 @@ public class GaloisUDMap implements IUserDefinedFunction {
     private final String userQuestion;
     private final List<AttributeRef> attributeRefs;
 
-        // TODO: implementare funzione con più parametri opzionali
-        // udmap("Sentimento dal testo {1}", r.text)
-        // udmap("'Vero' se il volo {1} con destinazioni {2} atterra in Germania", r.company_name, r.destinations)
-        // udmap("Uno score da 1 a 5")
-        // udmap("Dal procedimento {1} estra la lista degli ingredienti come array JSON") -> "[\"acqua\", \"farina\", \"uova\"]"
     @Override
     public Object execute(Tuple tuple) {
         ChatLanguageModel model = getModel();
@@ -56,14 +51,14 @@ public class GaloisUDMap implements IUserDefinedFunction {
         String text = response.content().text();
         log.info("UDMap model response is: {}", text);
         if (text != null && !text.isBlank()) {
-            return text;
+            return text.trim();
         }
-        return "Some error occurred";
+
+        return "unknown";
     }
+
     private String formatUserQuestion(Tuple tuple) {
-        System.out.println("Formatting user question: " + userQuestion);
-        System.out.println("With attribute refs: " + attributeRefs);
-        System.out.println("And tuple: " + tuple);
+        log.trace("Formatting user question {} with attribute refs {} and tuple {}", userQuestion, attributeRefs, tuple);
         String result = userQuestion;
         // replace {i} placeholder with attribute value
         for (int i = 0; i < attributeRefs.size(); i++) {
@@ -73,7 +68,8 @@ public class GaloisUDMap implements IUserDefinedFunction {
         }
         return result;
     }
-        private ChatLanguageModel getModel() {
+
+    private ChatLanguageModel getModel() {
         if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI)) {
             return OpenAiChatModel.builder()
                     .apiKey(Configuration.getInstance().getOpenaiApiKey())
