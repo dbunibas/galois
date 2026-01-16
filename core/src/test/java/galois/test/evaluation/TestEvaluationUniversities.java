@@ -61,12 +61,12 @@ public class TestEvaluationUniversities {
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
                 .querySQL("SELECT u.university_name, u.city FROM universities u")
-                .queryUDF("SELECT u.university_name, udmap('In which city the university {1} is located?', u.university_name) FROM universities u")
+                .queryUDF("SELECT u.university_name, udmap('In which city the university {1} is located?', u.university_name) as city FROM universities u")
                 .build();
         ExperimentVariant q1 = ExperimentVariant.builder()
                 .queryId("Q1")
                 .querySQL("SELECT u.university_name, u.country FROM universities u")
-                .queryUDF("SELECT u.university_name, udmap('In which country the university {1} is located?', u.university_name) FROM universities u")
+                .queryUDF("SELECT u.university_name, udmap('In which country the university {1} is located?', u.university_name) as country FROM universities u")
                 .build();
 
         

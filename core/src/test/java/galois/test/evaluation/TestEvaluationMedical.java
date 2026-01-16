@@ -72,7 +72,7 @@ public class TestEvaluationMedical {
         ExperimentVariant q2 = ExperimentVariant.builder()
                 .queryId("Q2")
                 .querySQL("SELECT m.patient_id, m.text_diagnosis FROM medical m")
-                .queryUDF("SELECT m.patient_id, udmap('Classify {1} to one of given diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) FROM medical m ")
+                .queryUDF("SELECT m.patient_id, udmap('Classify {1} to one of given diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
                 .build();
         variants = List.of(q2);
     }
