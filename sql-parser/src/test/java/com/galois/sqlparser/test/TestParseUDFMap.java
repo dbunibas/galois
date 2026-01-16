@@ -8,11 +8,12 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import speedy.model.algebra.IAlgebraOperator;
-import speedy.model.algebra.Project;
-import speedy.model.algebra.Scan;
-import speedy.model.algebra.Select;
+import speedy.model.algebra.*;
+import speedy.model.algebra.aggregatefunctions.AvgAggregateFunction;
+import speedy.model.algebra.aggregatefunctions.CountAggregateFunction;
+import speedy.model.algebra.aggregatefunctions.ValueAggregateFunction;
 import speedy.model.algebra.udf.IUserDefinedFunction;
+import speedy.model.database.AttributeRef;
 import speedy.model.database.Tuple;
 import speedy.model.database.mainmemory.MainMemoryDB;
 import speedy.persistence.DAOMainMemoryDatabase;
@@ -117,6 +118,34 @@ public class TestParseUDFMap {
         assertEquals(1, result.size());
         assertEquals(1, result.getFirst().getCells().size());
         assertEquals("avg", result.getFirst().getCells().getFirst().getAttribute());
+    }
+
+    @Test
+    public void testParseUserDefinedMapWithAggregativeGroupBy() {
+        String sql = String.format("select count(*), avg(udrank()) as avg from %s e group by e.dept", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql, UDF_FACTORY);
+        assertNotNull(root);
+        assertInstanceOf(Project.class, root);
+
+        Project project = (Project) root;
+        assertFalse(project.isAggregative());
+        assertEquals(2, project.getNewAttributes().size());
+        assertInstanceOf(AttributeRef.class, project.getNewAttributes().getFirst());
+        assertEquals("count", project.getNewAttributes().getFirst().getName());
+        assertInstanceOf(AttributeRef.class, project.getNewAttributes().getLast());
+        assertEquals("avg", project.getNewAttributes().getLast().getName());
+
+        assertEquals(1, project.getChildren().size());
+        assertInstanceOf(GroupBy.class, project.getChildren().getFirst());
+        GroupBy groupBy = (GroupBy) project.getChildren().getFirst();
+        assertEquals(1, groupBy.getGroupingAttributes().size());
+        assertEquals(3, groupBy.getAggregateFunctions().size());
+        assertInstanceOf(ValueAggregateFunction.class, groupBy.getAggregateFunctions().getFirst());
+        assertInstanceOf(CountAggregateFunction.class, groupBy.getAggregateFunctions().get(1));
+        assertInstanceOf(AvgAggregateFunction.class, groupBy.getAggregateFunctions().getLast());
+
+        log.info("{}", toTupleList(root.execute(db, db)));
     }
 
     private static final class ExtraAttributeUDMap implements IUserDefinedFunction {

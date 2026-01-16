@@ -6,7 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import speedy.model.algebra.*;
+import speedy.model.algebra.aggregatefunctions.AvgAggregateFunction;
+import speedy.model.algebra.aggregatefunctions.CountAggregateFunction;
+import speedy.model.algebra.aggregatefunctions.ValueAggregateFunction;
 import speedy.model.algebra.operators.ITupleIterator;
+import speedy.model.database.AttributeRef;
 import speedy.model.database.ITable;
 import speedy.model.database.Tuple;
 import speedy.model.database.mainmemory.MainMemoryDB;
@@ -149,6 +153,59 @@ public class TestParseGroupBy {
         assertEquals(limitSize, tuples.size());
 
         logTuples(tuples);
+    }
+
+    @Test
+    public void testGroupByWithAverage() {
+        String sql = String.format("select avg(t.salary) from %s t group by t.dept", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+        assertInstanceOf(Project.class, root);
+
+        Project project = (Project) root;
+        assertFalse(project.isAggregative());
+        assertEquals(1, project.getNewAttributes().size());
+        assertInstanceOf(AttributeRef.class, project.getNewAttributes().getFirst());
+        assertEquals("salary", project.getNewAttributes().getFirst().getName());
+
+        assertEquals(1, project.getChildren().size());
+        assertInstanceOf(GroupBy.class, project.getChildren().getFirst());
+        GroupBy groupBy = (GroupBy) project.getChildren().getFirst();
+        assertEquals(1, groupBy.getGroupingAttributes().size());
+        assertEquals(2, groupBy.getAggregateFunctions().size());
+        assertInstanceOf(ValueAggregateFunction.class, groupBy.getAggregateFunctions().getFirst());
+        assertInstanceOf(AvgAggregateFunction.class, groupBy.getAggregateFunctions().getLast());
+
+        logTuples(toTupleList(root.execute(db, db)));
+    }
+
+    @Test
+    public void testGroupByWithAverageAndCount() {
+        String sql = String.format("select count(*) as num, avg(t.salary) as avg from %s t group by t.dept", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+        assertInstanceOf(Project.class, root);
+
+        Project project = (Project) root;
+        assertFalse(project.isAggregative());
+        assertEquals(2, project.getNewAttributes().size());
+        assertInstanceOf(AttributeRef.class, project.getNewAttributes().getFirst());
+        assertEquals("num", project.getNewAttributes().getFirst().getName());
+        assertInstanceOf(AttributeRef.class, project.getNewAttributes().getLast());
+        assertEquals("avg", project.getNewAttributes().getLast().getName());
+
+        assertEquals(1, project.getChildren().size());
+        assertInstanceOf(GroupBy.class, project.getChildren().getFirst());
+        GroupBy groupBy = (GroupBy) project.getChildren().getFirst();
+        assertEquals(1, groupBy.getGroupingAttributes().size());
+        assertEquals(3, groupBy.getAggregateFunctions().size());
+        assertInstanceOf(ValueAggregateFunction.class, groupBy.getAggregateFunctions().getFirst());
+        assertInstanceOf(CountAggregateFunction.class, groupBy.getAggregateFunctions().get(1));
+        assertInstanceOf(AvgAggregateFunction.class, groupBy.getAggregateFunctions().getLast());
+
+        logTuples(toTupleList(root.execute(db, db)));
     }
 
     @Test

@@ -92,20 +92,29 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                     .toList();
 
             // TODO: Refactor this (handles the compatibility with group by)
-            if (groupBy != null && projectionAttributes.stream().anyMatch(p -> p.isAggregative() && p.getAggregateFunction() instanceof CountAggregateFunction)) {
-                ProjectionAttribute groupByProjectionAttribute = projectionAttributes.stream()
-                        .filter(p -> p.isAggregative() && p.getAggregateFunction() instanceof CountAggregateFunction)
-                        .findFirst()
-                        .orElseThrow();
-                AttributeRef countRef = new VirtualAttributeRef(parseContext.getFromItemTableAlias(), SpeedyConstants.COUNT, Types.INTEGER);
-                List<IAggregateFunction> aggregateFunctions = Stream.concat(
-                        groupBy.getAggregateFunctions().stream(),
-                        Stream.of(new CountAggregateFunction(countRef))
-                ).toList();
-                groupBy = new GroupBy(groupBy.getGroupingAttributes(), aggregateFunctions);
-                projectionAttributes = projectionAttributes.stream()
-                        .map(p -> p == groupByProjectionAttribute ? new ProjectionAttribute(countRef) : p)
-                        .toList();
+            if (groupBy != null) {
+                List<IAggregateFunction> newGroupByAggregateFunctions = new ArrayList<>(groupBy.getAggregateFunctions());
+                List<ProjectionAttribute> newProjectionAttributes = new ArrayList<>();
+
+                for (ProjectionAttribute projectionAttribute : projectionAttributes) {
+                    if (!projectionAttribute.isAggregative()) {
+                        newProjectionAttributes.add(projectionAttribute);
+                        continue;
+                    }
+
+                    IAggregateFunction projectionAggregateFunction = projectionAttribute.getAggregateFunction();
+                    AttributeRef ref = projectionAggregateFunction instanceof CountAggregateFunction ?
+                            new VirtualAttributeRef(parseContext.getFromItemTableAlias(), SpeedyConstants.COUNT, Types.INTEGER) :
+                            projectionAggregateFunction.getAttributeRef();
+                    IAggregateFunction aggregateFunction = projectionAggregateFunction instanceof CountAggregateFunction ?
+                            new CountAggregateFunction(ref) :
+                            projectionAggregateFunction;
+
+                    newGroupByAggregateFunctions.add(aggregateFunction);
+                    newProjectionAttributes.add(new ProjectionAttribute(ref));
+                }
+                groupBy = new GroupBy(groupBy.getGroupingAttributes(), newGroupByAggregateFunctions);
+                projectionAttributes = newProjectionAttributes;
             }
 
             // TODO: Refactor this (this makes pure attributes and aggregative functions compatible)
