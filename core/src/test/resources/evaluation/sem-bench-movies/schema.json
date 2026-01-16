@@ -5,10 +5,15 @@
       "name": "reviews",
       "attributes": [
         {
-          "name": "title",
-          "type": "STRING",
+          "name": "reviewId",
+          "type": "INTEGER",
           "nullable": false,
           "key": true
+        },
+        {
+          "name": "title",
+          "type": "STRING",
+          "nullable": false
         },
         {
           "name": "creationDate",

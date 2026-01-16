@@ -55,19 +55,19 @@ public class TestUDMapMovies {
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
     //    database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
 
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT r.title, r.reviewtext FROM reviews r")
+                .querySQL("SELECT r.title FROM reviews r")
                 // .queryUDF("SELECT r.id, udmap('Extract the sentiment of the review {1}, the sentiment can be either POSITIVE or NEGATIVE', r.reviewtext) as mapscoresentiment  FROM reviews r")
                 // .queryUDF("SELECT r.id, udmap('Extract the main genre of the film called {1}, for example, comedy. The genre must be only one and written in CapsLock', r.id) as mapgenre FROM reviews r")
                 .queryUDF("SELECT r.title, udmap('Extract the main genres of the film called {1}, for example, comedy. The answer must ba a single string containing all the generes separated by a comma without any space.', r.title) as mapgenre FROM reviews r")
                 .build();
             ExperimentVariant q1 = ExperimentVariant.builder()
                 .queryId("Q1")
-                .querySQL("SELECT r.title, r.reviewtext FROM reviews r")
+                .querySQL("SELECT r.title FROM reviews r")
                 // .queryUDF("SELECT r.id, udmap('Extract the sentiment of the review {1}, the sentiment can be either POSITIVE or NEGATIVE', r.reviewtext) as mapscoresentiment  FROM reviews r")
                 .queryUDF("SELECT r.title, udmap('Extract the main genre of the film called {1}, for example, comedy. The genre must be only one and written in CapsLock', r.title) as mapgenre FROM reviews r")
                 .build();
@@ -78,7 +78,7 @@ public class TestUDMapMovies {
         //         .build();
         
 
-        variants = List.of(q0, q1);
+        variants = List.of(q1);
     }
 
     @Test
