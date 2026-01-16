@@ -1,5 +1,4 @@
 {
-
   "dbName": "top_universities",
   "tables": [
     {
@@ -18,7 +17,7 @@
         },
         {
           "name": "overall_score",
-          "type": "DOUBLE",
+          "type": "STRING",
           "nullable": true
         },
         {
@@ -30,61 +29,6 @@
           "name": "country",
           "type": "STRING",
           "nullable": false
-        },
-        {
-          "name": "citations_per_paper",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "papers_per_faculty",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "academic_reputation",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "faculty_student_ratio",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "staff_with_phd",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "international_research_center",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "international_students",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "outbound_exchange",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "inbound_exchange",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "international_faculty",
-          "type": "DOUBLE",
-          "nullable": true
-        },
-        {
-          "name": "employer_reputation",
-          "type": "DOUBLE",
-          "nullable": true
         }
       ]
     }

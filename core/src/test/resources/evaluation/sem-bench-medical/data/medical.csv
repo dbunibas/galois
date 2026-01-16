@@ -4,3 +4,14 @@ age,gender,patient_id,text_diagnosis,is_sick,text_symptoms
 76,Female,4381,allergy,True,"I have nasal congestion and a blocked nose. On occasion, during the night, I have stiffness and chest pain. Additionally, I've lost my senses of taste and smell."
 47,Male,1164,cervical spondylosis,True,"I have been suffering from back pain, a chronic cough, and weakness in my arms and legs. My neck hurts and I have been feeling dizzy and off balance"
 48,Female,8175,psoriasis,True,"I'm having joint discomfort in my fingers, wrists, and knees. The pain is frequently aching and throbbing, and it worsens when I move my joints."
+76,Female,4142,typhoid,True,"I have constipation and belly pain, and it's been really uncomfortable. The belly pain has been getting worse and is starting to affect my daily life. Moreover, I get chills every night, followed by a mild fever."
+52,Male,5115,common cold,True,"I've been quite exhausted and ill. My throat has been quite painful, and I've had a fairly nasty cough. I've got a lot of chills and a pretty high temperature. Simply put, I feel really run down and feeble."
+64,Male,104,typhoid,True,"I've had a persistent headache for the past week, and it's been getting worse. It's been accompanied by belly aches, constipation and diarrhea."
+67,Male,994,hypertension,True,"When I first experienced a headache, chest pain, and lightheadedness, I was out shopping. Since then, it has been difficult for me to concentrate on my work."
+85,Female,8440,diabetes,True,I have a feeling of tremors and muscle twitching. I have decreased sense of smell or taste and I feel fatigued. Sometimes I have a feeling of rapid hearbeat or palipatations
+81,Female,9124,dengue,True,The muscle pain I have been experiencing is severe and feels like a constant ache. There are red spots all over my body and the itching is causing me a lot of discomfort.
+34,Female,2960,chicken pox,True,"There are red swollen spots all over my body. It itches if I touch them. Moreover, I also have a high fever and headache and always feel exhausted."
+36,Male,9496,cervical spondylosis,True,"I have been dealing with back pain, a persistent cough, and weakness in my limbs. My neck is sore and I have had issues with dizziness and loss of balance."
+35,Male,9347,cervical spondylosis,True,"I've been struggling with back pain, a chronic cough, and limb weakness. I've been feeling disoriented and weak on my feet, and my neck hurts."
+83,Female,3649,hypertension,True,"I have been experiencing a headache that feels like a sharp pain in my temples, along with chest pain and dizziness."
+60,Male,2660,common cold,True,"My nose is extremely runny, and I can't seem to stop sneezing. In addition, I constantly feel cold, exhausted, and I've been coughing a lot. My fever is also really high far above normal."
