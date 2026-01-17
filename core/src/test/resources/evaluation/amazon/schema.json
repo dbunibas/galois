@@ -1,0 +1,36 @@
+{
+  "dbName": "amazon",
+  "tables": [
+    {
+      "name": "amazon",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "INTEGER",
+          "nullable": false,
+          "key": true
+        },
+        {
+          "name": "reviewerId",
+          "type": "INTEGER",
+          "nullable": false
+        },
+        {
+          "name": "reviewText",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "overall",
+          "type": "INTEGER",
+          "nullable": false
+        },
+        {
+          "name": "summary",
+          "type": "STRING",
+          "nullable": false
+        }
+      ]
+    }
+  ]
+}
