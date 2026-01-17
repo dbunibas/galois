@@ -22,6 +22,7 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
             case "udfilter" -> parseUDFilter(expressions, parseContext);
             case "udfilterattr" -> parseUDFilterAttribute(expressions, parseContext);
             case "udmap" -> parseUDMap(expressions, parseContext);
+            case "udrank" -> parseUDRank(expressions, parseContext);
             default -> throw new UnsupportedOperationException("Unimplemented UDF: " + name + "!");
         };
     }
@@ -71,6 +72,25 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
         }
 
         return new GaloisUDMap(userMessage, attributeRefs);
+    }
+
+    private IUserDefinedFunction parseUDRank(ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
+        // Parse user message
+        Expression userMessageExpression = expressions.getFirst();
+        checkExpressionType(userMessageExpression, StringValue.class, "UDMap parse error: first argument is not a string!");
+        String userMessage = ((StringValue) userMessageExpression).getValue();
+
+        // Parse attribute refs
+        List<AttributeRef> attributeRefs = new ArrayList<>();
+        for (int i = 1; i < expressions.size(); i++) {
+            Expression columnExpression = expressions.get(i);
+            checkExpressionType(columnExpression, Column.class, "UDMap parse error: " + i + 1 + "th argument is not a column!");
+            TableAlias tableAlias = parseContext.getTableAliasFromColumn((Column) columnExpression);
+            AttributeRef attributeRef = new AttributeRef(tableAlias, ((Column) columnExpression).getColumnName());
+            attributeRefs.add(attributeRef);
+        }
+
+        return new GaloisUDRank(userMessage, attributeRefs);
     }
 
     private void checkExpressionType(Expression expression, Class<? extends Expression> clazz, String error) {

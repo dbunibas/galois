@@ -64,15 +64,15 @@ public class TestEvaluationMovies {
                 .queryUDF("SELECT r.reviewId FROM reviews r WHERE udfilter('Is the sentiment of the review {1} overall positive?', r.reviewText)")
                 .build();
 
-        // TODO: create udrank and check if it possible to achieve a ground truth
-        // ExperimentVariant q1 = ExperimentVariant.builder()
-        //         .queryId("Q1")
-        //         .querySQL("SELECT r.reviewId, r.title as score FROM reviews r")
-        //         .queryUDF("SELECT r.reviewId, udmap('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: Very positive: Strong positive sentiment, indicating high satisfaction. Positive: Noticeably positive sentiment, indicating general satisfaction. Neutral: Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. Negative: Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. Very negative: Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText) as score FROM reviews r ")
-        //         .build();
+
+        ExperimentVariant q1 = ExperimentVariant.builder()
+                .queryId("Q1")
+                .querySQL("SELECT r.reviewId, r.originalScore as score FROM reviews r")
+                .queryUDF("SELECT r.reviewId, udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText) as score FROM reviews r ")
+                .build();
         
 
-        variants = List.of(q0);
+        variants = List.of(q1);
     }
 
     @Test
