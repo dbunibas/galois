@@ -24,7 +24,7 @@ import static galois.test.evaluation.SchemaLoader.loadSchemaInExperimentFolder;
 import static galois.test.utils.TestUtils.toTupleList;
 
 @Slf4j
-public class TestEvaluation {
+public class TestEvaluationMovies {
     private static final IUserDefinedFunctionFactory GALOIS_UDF_FACTORY = new GaloisUDFFactory();
 
     // Experiment name
@@ -60,13 +60,15 @@ public class TestEvaluation {
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT r.id FROM reviews r WHERE r.scoresentiment = 'POSITIVE'")
-                .queryUDF("SELECT r.id FROM reviews r WHERE udfilter('Is the sentiment of the review {1} positive?', r.reviewtext)")
+                .querySQL("SELECT r.reviewId FROM reviews r WHERE r.scoresentiment = 'POSITIVE'")
+                .queryUDF("SELECT r.reviewId FROM reviews r WHERE udfilter('Is the sentiment of the review {1} overall positive?', r.reviewText)")
                 .build();
-        // ExperimentVariant q1 = ExperimentVariant.builder() DOES NOT WORK YET
+
+        // TODO: create udrank and check if it possible to achieve a ground truth
+        // ExperimentVariant q1 = ExperimentVariant.builder()
         //         .queryId("Q1")
-        //         .querySQL("SELECT  r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON r1.scoresentiment = r2.scoresentiment")
-        //         .queryUDF("SELECT r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON udfilter('This movie review: {1} express the same sentiment as this move review: {2}?', r1.reviewtext, r2.reviewtext)")
+        //         .querySQL("SELECT r.reviewId, r.title as score FROM reviews r")
+        //         .queryUDF("SELECT r.reviewId, udmap('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: Very positive: Strong positive sentiment, indicating high satisfaction. Positive: Noticeably positive sentiment, indicating general satisfaction. Neutral: Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. Negative: Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. Very negative: Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText) as score FROM reviews r ")
         //         .build();
         
 
@@ -91,10 +93,10 @@ public class TestEvaluation {
             List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
             log.info("**** Result: {}", results);
 
-            /*for (IMetric metric : DEFAULT_METRICS) {
+            for (IMetric metric : DEFAULT_METRICS) {
                 Double score = metric.getScore(database, expected, results);
                 log.info("**** {}: {} has score {}", variant.getQueryId(), metric.getName(), score);
-            }*/
+            }
         }
     }
 }
