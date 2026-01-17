@@ -11,8 +11,8 @@
           "key": true
         },
         {
-          "name": "reviewerId",
-          "type": "INTEGER",
+          "name": "reviewerID",
+          "type": "STRING",
           "nullable": false
         },
         {
