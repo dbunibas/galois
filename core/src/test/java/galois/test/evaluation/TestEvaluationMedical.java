@@ -28,12 +28,12 @@ public class TestEvaluationMedical {
     private static final IUserDefinedFunctionFactory GALOIS_UDF_FACTORY = new GaloisUDFFactory();
 
     // Experiment name
-    private static final String EXPERIMENT_NAME = "SemBenchMovies";
+    private static final String EXPERIMENT_NAME = "Medical";
     // Experiment folder path starting from resources
     private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/sem-bench-medical";
 
     private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
-    private static final String RESULT_FILE = "movie-reviews-results.txt";
+    private static final String RESULT_FILE = "medical-results.txt";
 
     private static final TestRunner testRunner = new TestRunner();
     private static final ExcelExporter exportExcel = new ExcelExporter();

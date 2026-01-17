@@ -6,10 +6,15 @@
       "name": "recipes",
       "attributes": [
         {
-          "name": "name",
-          "type": "STRING",
+          "name": "id",
+          "type": "INTEGER",
           "nullable": false,
           "key": true
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "nullable": false
         },
         {
           "name": "steps",

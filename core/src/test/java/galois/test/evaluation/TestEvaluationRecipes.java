@@ -24,16 +24,16 @@ import static galois.test.evaluation.SchemaLoader.loadSchemaInExperimentFolder;
 import static galois.test.utils.TestUtils.toTupleList;
 
 @Slf4j
-public class TestUDMapMovies {
+public class TestEvaluationRecipes {
     private static final IUserDefinedFunctionFactory GALOIS_UDF_FACTORY = new GaloisUDFFactory();
 
     // Experiment name
-    private static final String EXPERIMENT_NAME = "NewSemBenchMovies";
+    private static final String EXPERIMENT_NAME = "recipes";
     // Experiment folder path starting from resources
-    private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/sem-bench-movies";
+    private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/recipes";
 
     private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
-    private static final String RESULT_FILE = "new-movie-reviews-results.txt";
+    private static final String RESULT_FILE = "recipes-results.txt";
 
     private static final TestRunner testRunner = new TestRunner();
     private static final ExcelExporter exportExcel = new ExcelExporter();
@@ -43,8 +43,9 @@ public class TestUDMapMovies {
     // Default metrics to evaluate
     private static final List<IMetric> DEFAULT_METRICS = List.of(
             new TupleCardinalityMetric(),
-            new TupleConstraintFilteredAttributes()
-    );
+            new TupleConstraintFilteredAttributes(),
+            new CellSimilarityPrecision()
+            );
 
     private static IDatabase database;
     private static List<ExperimentVariant> variants;
@@ -60,25 +61,13 @@ public class TestUDMapMovies {
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT r.title FROM reviews r")
-                // .queryUDF("SELECT r.id, udmap('Extract the sentiment of the review {1}, the sentiment can be either POSITIVE or NEGATIVE', r.reviewtext) as mapscoresentiment  FROM reviews r")
-                // .queryUDF("SELECT r.id, udmap('Extract the main genre of the film called {1}, for example, comedy. The genre must be only one and written in CapsLock', r.id) as mapgenre FROM reviews r")
-                .queryUDF("SELECT r.title, udmap('Extract the main genres of the film called {1}, for example, comedy. The answer must ba a single string containing all the generes separated by a comma without any space.', r.title) as mapgenre FROM reviews r")
+                .querySQL("SELECT r.name, r.ingredients FROM recipes r")
+                .queryUDF("SELECT r.name, udmap('From {1}, return in json array format the list of all the edible ingredients used in alphabetical order and in lower case. Write the whole array on a single line.', r.steps) as ingredients FROM recipes r")
                 .build();
-            ExperimentVariant q1 = ExperimentVariant.builder()
-                .queryId("Q1")
-                .querySQL("SELECT r.title FROM reviews r")
-                // .queryUDF("SELECT r.id, udmap('Extract the sentiment of the review {1}, the sentiment can be either POSITIVE or NEGATIVE', r.reviewtext) as mapscoresentiment  FROM reviews r")
-                .queryUDF("SELECT r.title, udmap('Extract the main genre of the film called {1}, for example, comedy. The genre must be only one and written in CapsLock', r.title) as mapgenre FROM reviews r")
-                .build();
-        // ExperimentVariant q1 = ExperimentVariant.builder() DOES NOT WORK YET
-        //         .queryId("Q1")
-        //         .querySQL("SELECT  r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON r1.scoresentiment = r2.scoresentiment")
-        //         .queryUDF("SELECT r1.reviewId, r2.reviewId FROM reviews r1 JOIN reviews r2 ON udfilter('This movie review: {1} express the same sentiment as this move review: {2}?', r1.reviewtext, r2.reviewtext)")
-        //         .build();
+
         
 
-        variants = List.of(q1);
+        variants = List.of(q0);
     }
 
     @Test
