@@ -1,0 +1,32 @@
+{
+  "dbName": "mmqa_airlines",
+  "tables": [
+    {
+      "name": "airlines",
+      "attributes": [
+         {
+          "name": "id",
+          "type": "INTEGER",
+          "nullable": false,
+          "key": true
+        },
+        {
+          "name": "airlines",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "destinations",
+          "type": "STRING",
+          "nullable": true
+        },
+       
+        {
+          "name": "seasonalDestinations",
+          "type": "STRING",
+          "nullable": true
+        }
+      ]
+    }
+  ]
+}

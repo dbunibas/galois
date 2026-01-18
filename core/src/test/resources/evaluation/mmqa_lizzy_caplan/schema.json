@@ -1,0 +1,32 @@
+{
+  "dbName": "mmqa_lizzy_caplan",
+  "tables": [
+    {
+      "name": "lizzy_caplan",
+      "attributes": [
+         {
+          "name": "id",
+          "type": "INTEGER",
+          "nullable": false,
+          "key": true
+        },
+        {
+          "name": "title",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "url",
+          "type": "STRING",
+          "nullable": true
+        },
+       
+        {
+          "name": "text",
+          "type": "STRING",
+          "nullable": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "dbName": "mmqa_ben_piazza",
+  "tables": [
+    {
+      "name": "ben_piazza",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "url",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "id",
+          "type": "STRING",
+          "nullable": false,
+          "key": true
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "nullable": false
+        }
+      ]
+    }
+  ]
+}

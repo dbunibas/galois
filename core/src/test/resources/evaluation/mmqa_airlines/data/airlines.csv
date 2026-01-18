@@ -1,0 +1,25 @@
+id,airlines,destinations,seasonalDestinations
+0,Aeroméxico,Mexico City,
+1,Air Canada,"Montréal Trudeau, Toronto Pearson",Vancouver
+2,Air Canada Rouge,"Toronto Pearson","Halifax, Ottawa"
+3,Alaska Airlines,"San Diego, Seattle/Tacoma","Los Angeles, Portland (OR), San Francisco"
+4,American Airlines,"Charlotte, Chicago O'Hare, Dallas/Fort Worth, Miami, New York LaGuardia, Philadelphia, Phoenix Sky Harbor, Washington National",
+5,American Eagle,"Miami, Nashville",
+6,Avelo Airlines,"New Haven, Wilmington (DE), Wilmington (NC)",
+7,Avianca,Bogotá,
+8,Breeze Airways,"Akron/Canton, Bangor, Charleston (SC), Charleston (WV) (resumes October 3, 2025), Fayetteville/Bentonville, Greenville/Spartanburg, Gulfport/Biloxi, Hartford, Huntsville, Key West, Lansing (begins October 1, 2025), Madison, Memphis, Myrtle Beach, New Orleans, Norfolk, Pensacola, Portland (ME), Providence, Raleigh/Durham, Richmond, Rochester (NY) (begins October 1, 2025), Syracuse, Wilkes-Barre/Scranton Wilmington (NC) (begins October 2, 2025)","Burlington (VT), Erie, Orange County, Pittsburgh"
+9,British Airways,London Gatwick,
+10,Cayman Airways,Grand Cayman,
+11,Copa Airlines,Panama City Tocumen,
+12,Delta Air Lines,"Amsterdam, Atlanta, Austin, Boston, Cincinnati, Detroit, Los Angeles, Minneapolis/St. Paul, New York JFK, New York LaGuardia, Raleigh/Durham, Salt Lake City, Seattle/Tacoma",
+13,Discover Airlines,Frankfurt,
+14,Edelweiss Air,Zürich,
+15,Frontier Airlines,"Atlanta, Boston, Buffalo, Burlington (VT), Charlotte, Chicago Midway, Chicago O'Hare, Cincinnati, Cleveland, Dallas/Fort Worth, Denver, Hartford, Kansas City (begins October 11, 2025), Long Island/Islip, New York JFK, Philadelphia, Portland (ME), Raleigh/Durham, San Juan, St. Louis (resumes October 11, 2025), Trenton, Washington Dulles","Baltimore, Grand Rapids, Houston Intercontinental, Indianapolis, Milwaukee, Phoenix Sky Harbor, Punta Cana, Santo Domingo Las Américas"
+16,JetBlue,"Boston, Cancún, Fort Lauderdale (begins December 4, 2025), Hartford, New York JFK, New York LaGuardia, Newark, Providence, San Juan, White Plains",
+17,Porter Airlines,,"Seasonal: Halifax, Ottawa, Toronto Pearson"
+18,Southwest Airlines,"Albany, Atlanta, Austin, Baltimore, Birmingham (AL), Buffalo, Chicago Midway, Columbus Glenn, Dallas Love, Denver, Fort Lauderdale, Hartford, Havana, Houston Hobby, Indianapolis, Kansas City, Las Vegas, Long Island/Islip, Louisville, Milwaukee, Nashville, New Orleans, Philadelphia, Phoenix Sky Harbor, Pittsburgh, Providence, Raleigh/Durham, Rochester (NY), San Antonio, San Juan, St. Louis, Washington National","Cincinnati, Cleveland, Detroit, Grand Rapids, Manchester (NH), Memphis, Minneapolis/St. Paul, Omaha, Salt Lake City, San Diego"
+19,Spirit Airlines,"Atlanta, Atlantic City, Charlotte, Chicago O'Hare, Detroit, Fort Lauderdale, Houston Intercontinental, Indianapolis, Kansas City, Las Vegas, Memphis, Milwaukee, Minneapolis/St. Paul, New Orleans, Pittsburgh","Boston, Dallas/Fort Worth, Louisville, Norfolk, Philadelphia, Richmond, San Antonio, San Juan"
+20,Sun Country Airlines,Minneapolis/St. Paul,
+21,United Airlines,"Chicago O'Hare, Denver, Houston Intercontinental, Los Angeles, Newark, San Francisco, Washington Dulles",Cleveland
+22,Virgin Atlantic,London Heathrow,
+23,WestJet,"Calgary, Toronto Pearson","St. John's, Vancouver"
