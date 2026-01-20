@@ -5,7 +5,7 @@
       "name": "reviews",
       "attributes": [
         {
-          "name": "FilmTitle",
+          "name": "filmTitle",
           "type": "STRING",
           "nullable": false
         },
@@ -41,7 +41,7 @@
           "nullable": true
         },
         {
-          "name": "publicatioName",
+          "name": "publicationName",
           "type": "STRING",
           "nullable": true
         },
