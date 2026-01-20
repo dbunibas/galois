@@ -5,15 +5,15 @@
       "name": "reviews",
       "attributes": [
         {
+          "name": "FilmTitle",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
           "name": "reviewId",
           "type": "INTEGER",
           "nullable": false,
           "key": true
-        },
-        {
-          "name": "title",
-          "type": "STRING",
-          "nullable": false
         },
         {
           "name": "creationDate",
