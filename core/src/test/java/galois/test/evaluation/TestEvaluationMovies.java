@@ -52,8 +52,8 @@ public class TestEvaluationMovies {
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT r.reviewId FROM reviews r WHERE r.title='Taken 3' AND r.scoresentiment = 'POSITIVE' LIMIT 5")
-                .queryUDF("SELECT r.reviewId FROM reviews r WHERE r.title='Taken 3' AND udfilter('Is the sentiment of the review {1} overall positive?', r.reviewText) LIMIT 5")
+                .querySQL("SELECT r.reviewid FROM reviews r WHERE r.filmTitle='taken_3' AND r.scoresentiment = 'POSITIVE' LIMIT 5")
+                .queryUDF("SELECT r.reviewid FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText) LIMIT 5")
                 .build();
 
         ExperimentVariant q1 = ExperimentVariant.builder()

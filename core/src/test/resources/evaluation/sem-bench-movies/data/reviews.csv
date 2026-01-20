@@ -1,4 +1,4 @@
-filmTitle, reviewId,creationDate,criticName,isTopCritic,originalScore,reviewState,publicationName,reviewText,scoreSentiment
+filmTitle,reviewId,creationDate,criticName,isTopCritic,originalScore,reviewState,publicationName,reviewText,scoreSentiment
 get_out,2655994,2019-12-23,Randall King,False,,fresh,Winnipeg Free Press,"Come for the scares. Stay for the humour, which is scalpel-sharp.",POSITIVE
 taken_3,2249445,2015-03-03,John Beifuss,False,2,rotten,"Commercial Appeal (Memphis, TN)","He never discovers the real killers are returning director Olivier Megaton and producer-auteur Luc Besson, who callously dispose of the sympathetic Lenore to create new motivation for their hero's lethal kinesthesia and for their own chaotic set pieces.",NEGATIVE
 spider_man_far_from_home,2610735,2019-08-01,Sean Keane,False,,fresh,CNET,"Holland is spectacular, proving hilarious and warm throughout his European adventure -- he gets a pretty rad set of costumes too.",POSITIVE
