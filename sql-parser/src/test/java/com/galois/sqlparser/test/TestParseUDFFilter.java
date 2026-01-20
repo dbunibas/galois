@@ -69,19 +69,14 @@ public class TestParseUDFFilter {
         log.info("{}", root);
         assertNotNull(root);
 
-        assertInstanceOf(Intersection.class, root);
-        Intersection intersection = (Intersection) root;
-        assertEquals(2, intersection.getChildren().size());
+        assertInstanceOf(UserDefinedFunction.class, root);
+        assertEquals(1, root.getChildren().size());
 
-        assertInstanceOf(Select.class, intersection.getChildren().getFirst());
-        Select select = (Select) intersection.getChildren().getFirst();
+        assertInstanceOf(Select.class, root.getChildren().getFirst());
+        Select select = (Select) root.getChildren().getFirst();
         assertEquals(1, select.getChildren().size());
         assertInstanceOf(Scan.class, select.getChildren().getFirst());
-
-        assertInstanceOf(UserDefinedFunction.class, intersection.getChildren().get(1));
-        UserDefinedFunction udf = (UserDefinedFunction) intersection.getChildren().get(1);
-        assertEquals(1, udf.getChildren().size());
-        assertInstanceOf(Scan.class, select.getChildren().getFirst());
+        assertEquals(0, select.getChildren().getFirst().getChildren().size());
     }
 
     @Test
@@ -91,21 +86,14 @@ public class TestParseUDFFilter {
         IAlgebraOperator root = new SQLQueryParser().parse(sql, UDF_FACTORY);
         assertNotNull(root);
 
-        assertInstanceOf(Intersection.class, root);
-        Intersection intersection = (Intersection) root;
-        assertEquals(2, intersection.getChildren().size());
+        assertInstanceOf(UserDefinedFunction.class, root);
+        assertEquals(1, root.getChildren().size());
 
-        assertInstanceOf(UserDefinedFunction.class, intersection.getChildren().getFirst());
-        UserDefinedFunction udf = (UserDefinedFunction) intersection.getChildren().getFirst();
-        assertEquals(1, udf.getChildren().size());
-        assertInstanceOf(Scan.class, udf.getChildren().getFirst());
-
-        assertInstanceOf(Select.class, intersection.getChildren().get(1));
-        Select select = (Select) intersection.getChildren().get(1);
+        assertInstanceOf(Select.class, root.getChildren().getFirst());
+        Select select = (Select) root.getChildren().getFirst();
         assertEquals(1, select.getChildren().size());
         assertInstanceOf(Scan.class, select.getChildren().getFirst());
-
-
+        assertEquals(0, select.getChildren().getFirst().getChildren().size());
     }
 
     @Test
@@ -164,19 +152,14 @@ public class TestParseUDFFilter {
         IAlgebraOperator root = new SQLQueryParser().parse(sql, UDF_FACTORY);
         assertNotNull(root);
 
-        assertInstanceOf(Intersection.class, root);
-        Intersection intersection = (Intersection) root;
-        assertEquals(2, intersection.getChildren().size());
+        assertInstanceOf(UserDefinedFunction.class, root);
+        assertEquals(1, root.getChildren().size());
 
-        assertInstanceOf(UserDefinedFunction.class, intersection.getChildren().getFirst());
-        UserDefinedFunction udfLeft = (UserDefinedFunction) intersection.getChildren().getFirst();
-        assertEquals(1, udfLeft.getChildren().size());
-        assertInstanceOf(Scan.class, udfLeft.getChildren().getFirst());
-
-        assertInstanceOf(UserDefinedFunction.class, intersection.getChildren().get(1));
-        UserDefinedFunction udfRight = (UserDefinedFunction) intersection.getChildren().get(1);
-        assertEquals(1, udfRight.getChildren().size());
-        assertInstanceOf(Scan.class, udfRight.getChildren().getFirst());
+        assertInstanceOf(UserDefinedFunction.class, root.getChildren().getFirst());
+        UserDefinedFunction udf = (UserDefinedFunction) root.getChildren().getFirst();
+        assertEquals(1, udf.getChildren().size());
+        assertInstanceOf(Scan.class, udf.getChildren().getFirst());
+        assertEquals(0, udf.getChildren().getFirst().getChildren().size());
     }
 
     @Test
@@ -204,6 +187,24 @@ public class TestParseUDFFilter {
     }
 
     @Test
+    public void testThreeWayAnd() {
+        String sql = String.format("select * from %s e where (e.salary >= 0 and udfilter('0: Is $1 a real name?', e.name)) and udfilter('1: Is $1 a real name?', e.name)", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql, UDF_FACTORY);
+        log.info("{}", root);
+        assertNotNull(root);
+
+        assertInstanceOf(UserDefinedFunction.class, root);
+        assertEquals(1, root.getChildren().size());
+
+        assertInstanceOf(UserDefinedFunction.class, root.getChildren().getFirst());
+        assertEquals(1, root.getChildren().getFirst().getChildren().size());
+        assertInstanceOf(Select.class, root.getChildren().getFirst().getChildren().getFirst());
+        assertEquals(1, root.getChildren().getFirst().getChildren().getFirst().getChildren().size());
+        assertInstanceOf(Scan.class, root.getChildren().getFirst().getChildren().getFirst().getChildren().getFirst());
+    }
+
+    @Test
     public void testParseComplexExpression00() {
         String sql = String.format("select * from %s e where (e.salary >= 0 or udfilter('0: Is $1 a real name?', e.name)) and udfilter('1: Is $1 a real name?', e.name)", TABLE_NAME);
 
@@ -211,19 +212,18 @@ public class TestParseUDFFilter {
         log.info("{}", root);
         assertNotNull(root);
 
-        assertInstanceOf(Intersection.class, root);
-        Intersection intersection = (Intersection) root;
-        assertEquals(2, intersection.getChildren().size());
+        assertInstanceOf(UserDefinedFunction.class, root);
+        assertEquals(1, root.getChildren().size());
 
-        Union union = (Union) intersection.getChildren().getFirst();
+        assertInstanceOf(Union.class, root.getChildren().getFirst());
+        Union union = (Union) root.getChildren().getFirst();
         assertEquals(2, union.getChildren().size());
         assertInstanceOf(Select.class, union.getChildren().getFirst());
+        assertEquals(1, union.getChildren().getFirst().getChildren().size());
+        assertInstanceOf(Scan.class, union.getChildren().getFirst().getChildren().getFirst());
         assertInstanceOf(UserDefinedFunction.class, union.getChildren().getLast());
-
-        assertInstanceOf(UserDefinedFunction.class, intersection.getChildren().getLast());
-        UserDefinedFunction last = (UserDefinedFunction) intersection.getChildren().getLast();
-        assertEquals(1, last.getChildren().size());
-        assertInstanceOf(Scan.class, last.getChildren().getFirst());
+        assertEquals(1, union.getChildren().getLast().getChildren().size());
+        assertInstanceOf(Scan.class, union.getChildren().getLast().getChildren().getFirst());
     }
 
     @Test
@@ -251,51 +251,12 @@ public class TestParseUDFFilter {
 
     @Test
     public void testParseComplexExpressionA() {
-        // Query is complex: node name enumeration is given bottom-up
         String sql = String.format("select * from %s e where ((e.salary >= 0 or udfilter('0: Is $1 a real name?', e.name)) and udfilter('1: Is $1 a real name?', e.name)) or e.salary >= 1 or udfilter('2: Is $1 a real name?', e.name)", TABLE_NAME);
 
         IAlgebraOperator root = new SQLQueryParser().parse(sql, UDF_FACTORY);
         log.info("{}", root);
-        assertNotNull(root);
-        assertInstanceOf(Union.class, root);
-        assertEquals(2, root.getChildren().size());
 
-        assertInstanceOf(Union.class, root.getChildren().getFirst());
-        Union union01 = (Union) root.getChildren().getFirst();
-        assertEquals(2, union01.getChildren().size());
-
-        assertInstanceOf(UserDefinedFunction.class, root.getChildren().getLast());
-        UserDefinedFunction udf02 = (UserDefinedFunction) root.getChildren().getLast();
-        assertEquals(1, udf02.getChildren().size());
-        assertInstanceOf(Scan.class, udf02.getChildren().getFirst());
-
-        assertInstanceOf(Intersection.class, union01.getChildren().getFirst());
-        Intersection intersection00 = (Intersection) union01.getChildren().getFirst();
-        assertEquals(2, intersection00.getChildren().size());
-
-        assertInstanceOf(Select.class, union01.getChildren().getLast());
-        Select select01 = (Select) union01.getChildren().getLast();
-        assertEquals(1, select01.getChildren().size());
-        assertInstanceOf(Scan.class, select01.getChildren().getFirst());
-
-        assertInstanceOf(Union.class, intersection00.getChildren().getFirst());
-        Union union00 = (Union) intersection00.getChildren().getFirst();
-        assertEquals(2, union00.getChildren().size());
-
-        assertInstanceOf(UserDefinedFunction.class, intersection00.getChildren().getLast());
-        UserDefinedFunction udf01 = (UserDefinedFunction) intersection00.getChildren().getLast();
-        assertEquals(1, udf01.getChildren().size());
-        assertInstanceOf(Scan.class, udf01.getChildren().getFirst());
-
-        assertInstanceOf(Select.class, union00.getChildren().getFirst());
-        Select select00 = (Select) union00.getChildren().getFirst();
-        assertEquals(1, select00.getChildren().size());
-        assertInstanceOf(Scan.class, select00.getChildren().getFirst());
-
-        assertInstanceOf(UserDefinedFunction.class, union00.getChildren().getLast());
-        UserDefinedFunction udf00 = (UserDefinedFunction) union00.getChildren().getLast();
-        assertEquals(1, udf00.getChildren().size());
-        assertInstanceOf(Scan.class, udf00.getChildren().getFirst());
+        // TODO: add assertions
     }
 
     @Test

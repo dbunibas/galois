@@ -8,7 +8,6 @@ import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import speedy.model.algebra.IAlgebraOperator;
-import speedy.model.algebra.Intersection;
 import speedy.model.algebra.Select;
 import speedy.model.algebra.Union;
 import speedy.model.algebra.udf.IUserDefinedFunction;
@@ -139,11 +138,13 @@ public class WhereParser extends ExpressionVisitorAdapter<WhereParser.WhereParse
         ).toList();
 
         if (stringExpression.equals("&&")) {
-            // TODO: add an optimized select intersection?
-            Intersection intersection = new Intersection();
-            intersection.addChild(leftOperator);
-            intersection.addChild(rightOperator);
-            return new WhereParseResult(intersection, variableDescriptions);
+            if (!rightResult.useExpression() && rightResult.operator() instanceof UserDefinedFunction) {
+                rightOperator.addChild(leftOperator);
+                return new WhereParseResult(rightOperator, variableDescriptions);
+            }
+
+            leftOperator.addChild(rightOperator);
+            return new WhereParseResult(leftOperator, variableDescriptions);
         }
 
         Union union = new Union();
