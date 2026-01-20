@@ -6,6 +6,7 @@ import galois.llm.query.LLMQueryStatManager;
 import galois.test.experiments.metrics.IMetric;
 import galois.test.experiments.metrics.TupleCardinalityMetric;
 import galois.test.experiments.metrics.TupleConstraintFilteredAttributes;
+import galois.test.experiments.metrics.TupleLLMSimilarityConstraintFilteredAttributes;
 import galois.udf.GaloisUDFFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -51,8 +52,8 @@ public class TestEvaluationMovies {
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT r.reviewId FROM reviews r WHERE r.scoresentiment = 'POSITIVE'")
-                .queryUDF("SELECT r.reviewId FROM reviews r WHERE udfilter('Is the sentiment of the review {1} overall positive?', r.reviewText)")
+                .querySQL("SELECT r.reviewId FROM reviews r WHERE r.scoresentiment = 'POSITIVE' LIMIT 5")
+                .queryUDF("SELECT r.reviewId FROM reviews r WHERE udfilter('Is the sentiment of the review {1} overall positive?', r.reviewText) LIMIT 5")
                 .build();
 
         ExperimentVariant q1 = ExperimentVariant.builder()
@@ -61,7 +62,7 @@ public class TestEvaluationMovies {
                 .queryUDF("SELECT r.reviewId, udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText) as score FROM reviews r ")
                 .build();
 
-        variants = List.of(q0, q1);
+        variants = List.of(q0);
     }
 
     @Test

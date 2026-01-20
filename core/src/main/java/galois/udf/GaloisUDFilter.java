@@ -12,6 +12,7 @@ import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.utils.Configuration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import speedy.model.algebra.Limit;
 import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.algebra.operators.ListTupleIterator;
 import speedy.model.algebra.udf.IUserDefinedFunction;
@@ -40,13 +41,14 @@ public class GaloisUDFilter implements IUserDefinedFunction {
 
     private final String userQuestion;
     private final List<AttributeRef> attributeRefs;
+    private final Limit limit;
 
     @Override
     public ITupleIterator execute(ITupleIterator iterator) {
         ChatLanguageModel model = getModel();
         ArrayList<Tuple> result = new ArrayList<>();
 
-        while (iterator.hasNext()) {
+        while (iterator.hasNext() && (limit == null || result.size() < limit.getSize())) {
             Tuple tuple = iterator.next();
             String tupleString = tuple.toStringNoOID();
             String formattedUserQuestion = formatUserQuestion(tuple);

@@ -5,6 +5,7 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
+import speedy.model.algebra.Limit;
 import speedy.model.algebra.udf.IUserDefinedFunction;
 import speedy.model.database.TableAlias;
 
@@ -16,6 +17,8 @@ public class ParseContext {
     // List of table aliases: the first one is the base table alias
     private final List<TableAlias> tableAliases = new ArrayList<>();
     private final IUserDefinedFunctionFactory userDefinedFunctionFactory;
+
+    private Limit limit;
 
     public ParseContext() {
         this.userDefinedFunctionFactory = null;

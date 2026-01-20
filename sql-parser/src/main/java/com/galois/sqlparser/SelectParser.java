@@ -45,6 +45,19 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
         TableAlias tableAlias = fromItem.accept(fromParser, null);
         parseContext.addTableAlias(tableAlias);
 
+        // Limit
+        Limit limit = null;
+        if (plainSelect.getLimit() != null) {
+            limit = new Limit(plainSelect.getLimit().getRowCount(LongValue.class).getValue());
+            parseContext.setLimit(limit);
+        }
+
+        // Distinct
+        Distinct distinct = null;
+        if (plainSelect.getDistinct() != null) {
+            distinct = new Distinct();
+        }
+
         // Join
         Join join = null;
         TableAlias joinRightTableAlias;
@@ -158,18 +171,6 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
             if (!plainSelect.getOrderByElements().getFirst().isAsc()) {
                 orderBy.setOrder(OrderBy.ORDER_DESC);
             }
-        }
-
-        // Limit
-        Limit limit = null;
-        if (plainSelect.getLimit() != null) {
-            limit = new Limit(plainSelect.getLimit().getRowCount(LongValue.class).getValue());
-        }
-
-        // Distinct
-        Distinct distinct = null;
-        if (plainSelect.getDistinct() != null) {
-            distinct = new Distinct();
         }
 
         IAlgebraOperator currentRoot;

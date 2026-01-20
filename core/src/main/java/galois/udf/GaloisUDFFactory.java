@@ -43,7 +43,7 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
             attributeRefs.add(attributeRef);
         }
 
-        return new GaloisUDFilter(userMessage, attributeRefs);
+        return new GaloisUDFilter(userMessage, attributeRefs, parseContext.getLimit());
     }
 
     private IUserDefinedFunction parseUDFilterAttribute(ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
@@ -52,7 +52,7 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
         checkExpressionType(attributeNameExpression, StringValue.class, "UDFilterAttribute parse error: first argument is not a string!");
         String attributeName = ((StringValue) attributeNameExpression).getValue();
 
-        return new GaloisUDFilterAttribute(attributeName);
+        return new GaloisUDFilterAttribute(attributeName, parseContext.getLimit());
     }
 
     private IUserDefinedFunction parseUDMap(ExpressionList<? extends Expression> expressions, ParseContext parseContext) {

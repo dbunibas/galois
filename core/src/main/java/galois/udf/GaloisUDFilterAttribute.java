@@ -13,6 +13,7 @@ import galois.utils.Configuration;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import speedy.model.algebra.Limit;
 import speedy.model.algebra.operators.ITupleIterator;
 import speedy.model.algebra.operators.ListTupleIterator;
 import speedy.model.algebra.udf.IUserDefinedFunction;
@@ -40,6 +41,7 @@ public class GaloisUDFilterAttribute implements IUserDefinedFunction {
             """);
 
     private final String attributeName;
+    private final Limit limit;
 
 
     public String getAttributeName(){
@@ -51,7 +53,7 @@ public class GaloisUDFilterAttribute implements IUserDefinedFunction {
         ChatLanguageModel model = getModel();
         ArrayList<Tuple> result = new ArrayList<>();
 
-        while (iterator.hasNext()) {
+        while (iterator.hasNext() && (limit == null || result.size() < limit.getSize())) {
             Tuple tuple = iterator.next();
             String tupleString = tuple.toStringNoOID();
 
