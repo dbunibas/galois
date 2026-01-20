@@ -1,4 +1,4 @@
-age,gender,patient_id,text_diagnosis,is_sick,symptoms
+age,gender,patient_id,text_diagnosis,is_sick,text_symptoms
 83,Female,8426,malaria,True,"I've had a high temperature, vomiting, chills, and intense itching. I also have a headache and am perspiring a lot. I'm queasy, and my muscles hurt a lot."
 64,Male,7531,malaria,True,"I have a high fever, chills, and severe itching. I have a headache and am also perspiring a lot. I've been bothered by nausea as well as muscle ache."
 43,Male,4934,gastroesophageal reflux disease,True,"My throat frequently feels like it is burning, especially after eating. Additionally, I occasionally get a sour or bitter aftertaste, which causes me to feel queasy."

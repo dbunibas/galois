@@ -2,6 +2,8 @@ package galois.test.evaluation;
 
 import com.galois.sqlparser.IUserDefinedFunctionFactory;
 import com.galois.sqlparser.SQLQueryParser;
+
+import galois.llm.query.LLMQueryStatManager;
 import galois.test.experiments.metrics.*;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
@@ -22,9 +24,11 @@ import static galois.test.evaluation.DatabaseFactory.connectToPostgres;
 import static galois.test.evaluation.DatabaseInitializer.initializeDatabaseFromExperimentFolder;
 import static galois.test.evaluation.SchemaLoader.loadSchemaInExperimentFolder;
 import static galois.test.utils.TestUtils.toTupleList;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Slf4j
 public class TestEvaluationMedical {
+    
     private static final IUserDefinedFunctionFactory GALOIS_UDF_FACTORY = new GaloisUDFFactory();
 
     // Experiment name
@@ -32,11 +36,11 @@ public class TestEvaluationMedical {
     // Experiment folder path starting from resources
     private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/sem-bench-medical";
 
-    private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
-    private static final String RESULT_FILE = "medical-results.txt";
+    //private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
+    //private static final String RESULT_FILE = "medical-results.txt";
 
-    private static final TestRunner testRunner = new TestRunner();
-    private static final ExcelExporter exportExcel = new ExcelExporter();
+    //private static final TestRunner testRunner = new TestRunner();
+    //private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private String executorModel = "togetherai";
 
@@ -74,32 +78,48 @@ public class TestEvaluationMedical {
                 .querySQL("SELECT m.patient_id, m.text_diagnosis FROM medical m")
                 .queryUDF("SELECT m.patient_id, udmap('Classify {1} to one of given diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
                 .build();
-        variants = List.of(q2);
+        variants = List.of(q0);
     }
 
     @Test
     public void testCanParseQueries() {
+                SQLQueryParser sqlQueryParser = new SQLQueryParser();
 
+        for (ExperimentVariant variant : variants) {
+            assertNotNull(sqlQueryParser.parse(variant.getQuerySQL()));
+            assertNotNull(sqlQueryParser.parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY));
+        }
     }
 
     @Test
     public void testEvaluation() {
+        EvaluationResults evaluationResults = new EvaluationResults();
         SQLQueryParser sqlQueryParser = new SQLQueryParser();
+
         for (ExperimentVariant variant : variants) {
-            log.info("Parsing query {}", variant.getQueryId());
+            LLMQueryStatManager.getInstance().resetStats();
+
+            long startTime = System.currentTimeMillis();
             IAlgebraOperator gtOperator = sqlQueryParser.parse(variant.getQuerySQL());
             List<Tuple> expected = toTupleList(gtOperator.execute(database, database));
-            log.info("**** Expected: {}", expected);
-
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
-            List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
-            log.info("**** Result: {}", results);
+            List<Tuple> results = toTupleList(operator.execute(database, database));
 
-            for (IMetric metric : DEFAULT_METRICS) {
-                Double score = metric.getScore(database, expected, results);
-                log.info("**** {}: {} has score {}", variant.getQueryId(), metric.getName(), score);
-            }
+            EvaluationResult evaluationResult = new EvaluationResult(
+                    EXPERIMENT_NAME,
+                    variant,
+                    startTime,
+                    expected,
+                    results,
+                    DEFAULT_METRICS
+            );
+            evaluationResult.computeScores(database);
+            evaluationResults.appendResult(evaluationResult);
+            log.info("**** {}", evaluationResult);
         }
+
+        evaluationResults.exportAsText(EXPERIMENT_NAME);
+        evaluationResults.exportAsExcel(EXPERIMENT_NAME);
     }
 }
 

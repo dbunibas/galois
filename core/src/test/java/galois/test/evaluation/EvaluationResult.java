@@ -88,6 +88,7 @@ public class EvaluationResult {
         sb.append("- # requests: ").append(llmRequest).append("\n");
         sb.append("- # input tokens: ").append(llmTokensInput).append("\n");
         sb.append("- # output tokens: ").append(llmTokensOutput).append("\n");
+        sb.append("- # Cost Gemini 2.5o Flash: ").append(llmTokensInput*0.30/1000000 + llmTokensOutput*2.5/100000).append("\n");
         sb.append("- time (ms): ").append(timeMs).append("\n");
         return sb.toString();
     }
