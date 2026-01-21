@@ -34,8 +34,8 @@ public class EvaluationResults {
     public void exportAsText(String experimentName) {
         createFolderIfNotExists(Paths.get(Configuration.getInstance().getResultsAbsolutePath()));
         String fileName = experimentName + "-" + DATE_FORMAT.format(new Date()) + ".txt";
-        Path path = Paths.get(Configuration.getInstance().getResultsAbsolutePath(), fileName);
-
+        String fileNameCleaned = fileName.replace(' ', '_').replace(':', '-');
+        Path path = Paths.get(Configuration.getInstance().getResultsAbsolutePath(), fileNameCleaned);
         try (FileOutputStream output = new FileOutputStream(path.toFile())) {
             for (EvaluationResult result : results) {
                 output.write(result.toString().getBytes(StandardCharsets.UTF_8));
@@ -49,7 +49,8 @@ public class EvaluationResults {
     public void exportAsExcel(String experimentName) {
         createFolderIfNotExists(Paths.get(Configuration.getInstance().getExportExcelAbsolutePath()));
         String fileName = experimentName + "-" + DATE_FORMAT.format(new Date()) + ".xlsx";
-        Path path = Paths.get(Configuration.getInstance().getExportExcelAbsolutePath(), fileName);
+        String fileNameCleaned = fileName.replace(' ', '_').replace(':', '-');
+        Path path = Paths.get(Configuration.getInstance().getExportExcelAbsolutePath(), fileNameCleaned);
 
         DAOReportExcel daoReportExcel = new DAOReportExcel();
         ReportExcel reportExcel = new ReportExcel(experimentName);

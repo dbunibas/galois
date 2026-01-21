@@ -77,6 +77,7 @@ public class EvaluationResult {
         sb.append("Total execution time (ms): ").append(executionTime).append("\n");
         sb.append("\n");
         sb.append("Expected:").append(expected).append("\n");
+        sb.append("\n");
         sb.append("Results:").append(results).append("\n");
         sb.append("\n");
         sb.append("Metrics").append("\n");
