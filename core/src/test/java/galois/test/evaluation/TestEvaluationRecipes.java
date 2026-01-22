@@ -34,11 +34,11 @@ public class TestEvaluationRecipes {
     // Experiment folder path starting from resources
     private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/recipes";
 
-    private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
-    private static final String RESULT_FILE = "recipes-results.txt";
+    // private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
+    // private static final String RESULT_FILE = "recipes-results.txt";
 
-    private static final TestRunner testRunner = new TestRunner();
-    private static final ExcelExporter exportExcel = new ExcelExporter();
+    // private static final TestRunner testRunner = new TestRunner();
+    // private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private String executorModel = "togetherai";
 
