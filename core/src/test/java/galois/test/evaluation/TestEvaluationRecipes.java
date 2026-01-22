@@ -45,7 +45,7 @@ public class TestEvaluationRecipes {
     // Default metrics to evaluate
     private static final List<IMetric> DEFAULT_METRICS = List.of(
             new TupleCardinalityMetric(),
-            new CellLLMSimilarityPrecisionUnfoldedAttributes()
+            new CellLLMSimilarityPrecisionArrayAttributes()
             );
 
     private static IDatabase database;

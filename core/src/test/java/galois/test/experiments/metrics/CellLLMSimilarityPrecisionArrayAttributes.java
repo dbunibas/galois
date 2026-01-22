@@ -15,7 +15,7 @@ import speedy.model.database.Tuple;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CellLLMSimilarityPrecisionUnfoldedAttributes implements IMetric {
+public class CellLLMSimilarityPrecisionArrayAttributes implements IMetric {
 
     // Regex to extract content inside quotes: "value"
     private static final Pattern LIST_ITEM_PATTERN = Pattern.compile("\"([^\"]*)\"");
