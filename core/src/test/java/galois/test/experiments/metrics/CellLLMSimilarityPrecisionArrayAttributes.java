@@ -22,7 +22,7 @@ public class CellLLMSimilarityPrecisionArrayAttributes implements IMetric {
 
     @Override
     public String getName() {
-        return "CellLLMSimilarityPrecisionUnfoldedAttributes";
+        return "CellLLMSimilarityPrecisionArrayAttributes";
     }
 
     @Override
@@ -52,6 +52,7 @@ public class CellLLMSimilarityPrecisionArrayAttributes implements IMetric {
 
         double globalMatches = 0.0;
         double globalTotCells = 0.0;
+        double LLMCalls = 0.0;
 
         // 2. Iterate over Result Tuples
         for (Tuple resultTuple : result) {
@@ -67,33 +68,34 @@ public class CellLLMSimilarityPrecisionArrayAttributes implements IMetric {
             
             // Find the corresponding Expected Tuple
             Tuple expectedTuple = expectedMap.get(oid);
-            
+           
             if (expectedTuple != null) {
                 // Unfold the cells for the corresponding expected tuple
                 Set<String> expectedTupleCells = new HashSet<>();
                 extractUnfoldedCells(expectedTuple, expectedAttributes, expectedTupleCells, cellNormalizer);
-                
-                // Compare ONLY these two sets
-                globalMatches += countMatchesForTuple(resultTupleCells, expectedTupleCells, llmDistance);
+                MatchResult matchesResult = countMatchesForTuple(resultTupleCells, expectedTupleCells, llmDistance);
+                globalMatches += matchesResult.matches;
+                LLMCalls += matchesResult.LLMCalls;
+
+                //globalMatches += countMatchesForTuple(resultTupleCells, expectedTupleCells, llmDistance);
             } else {
                 log.debug("OID " + oid + " in result but not in expected. 0 matches for this tuple.");
             }
         }
 
-        log.debug("Total Matches: " + globalMatches + " --- Total Result Cells: " + globalTotCells);
+        log.debug("Total Matches: " + globalMatches + " --- Total Result Cells: " + globalTotCells + " --- Total LLM calls: " + LLMCalls);
         
         if (globalTotCells == 0) return 0.0;
         return globalMatches / globalTotCells;
     }
 
-    private double countMatchesForTuple(Set<String> resultCells, Set<String> expectedCells, LLMDistance llmDistance) {
+    private MatchResult countMatchesForTuple(Set<String> resultCells, Set<String> expectedCells, LLMDistance llmDistance) {
         double matches = 0;
         
         Map<String, Set<String>> resultPartitions = partitionByAttr(resultCells);
         Map<String, Set<String>> expectedPartitions = partitionByAttr(expectedCells);
 
         double LLMCalls = 0;
-        double calls = 0;
 
         for (String attribute : resultPartitions.keySet()) {
             Set<String> rCells = resultPartitions.get(attribute);
@@ -140,6 +142,7 @@ public class CellLLMSimilarityPrecisionArrayAttributes implements IMetric {
                 if (match != null && !match.isEmpty()) {
                     log.debug("Match found: " + rCell + " -> " + match);
                     matches++;
+                    LLMCalls++;
                 }
                 else{
                     log.debug("Match NOT found: " + rCell + " -> " + eCells);
@@ -147,8 +150,7 @@ public class CellLLMSimilarityPrecisionArrayAttributes implements IMetric {
 
             }
         }
-        //log.debug("Number of checks: " + calls + " , Number of LLM calls: " + LLMCalls);
-        return matches;
+        return new MatchResult(matches, LLMCalls);
     }
 
     private void extractUnfoldedCells(Tuple tuple, Set<String> validAttributes, Set<String> targetSet, CellNormalizer cellNormalizer) {
@@ -205,5 +207,12 @@ public class CellLLMSimilarityPrecisionArrayAttributes implements IMetric {
     public static String getAttribute(String text) {
         StringTokenizer tokenizer = new StringTokenizer(text, ",");
         return tokenizer.nextToken().trim();
+    }
+
+    @lombok.Data
+    @lombok.AllArgsConstructor
+    public static class MatchResult {
+        private double matches;
+        private double LLMCalls;
     }
 }
