@@ -62,8 +62,8 @@ public class TestEvaluationRecipes {
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT r.name, r.ingredients FROM recipes r")
-                .queryUDF("SELECT r.name, udmap('From {1}, return in json array format the list of all the edible ingredients used in alphabetical order and in lower case. Write the whole array on a single line.', r.steps) as ingredients FROM recipes r")
+                .querySQL("SELECT r.ingredients FROM recipes r")
+                .queryUDF("SELECT udmap('From {1}, return in json array format the list of all the edible ingredients used in alphabetical order and in lower case. Write the whole array on a single line.', r.steps) as ingredients FROM recipes r")
                 .build();
 
         

@@ -92,23 +92,62 @@ public class CellLLMSimilarityPrecisionArrayAttributes implements IMetric {
         Map<String, Set<String>> resultPartitions = partitionByAttr(resultCells);
         Map<String, Set<String>> expectedPartitions = partitionByAttr(expectedCells);
 
+        double LLMCalls = 0;
+        double calls = 0;
+
         for (String attribute : resultPartitions.keySet()) {
             Set<String> rCells = resultPartitions.get(attribute);
             Set<String> eCells = expectedPartitions.get(attribute);
 
             if (eCells == null) continue; // Attribute exists in result tuple but not in expected tuple for this OID
 
-            for (String rCell : rCells) {
-                for (String eCell : eCells) {
-                    // Check similarity restricted to this attribute
-                    if (llmDistance.areCellSimilar(eCell, rCell, attribute + ", value=")) {
-                        log.debug("Match found: " + rCell + " -vs- " + eCell);
+            for (String eCell: eCells){
+                String matchFound = "";
+                for (String rCell: rCells){
+                    if (eCell.equals(rCell)){
+                        matchFound = rCell;
+                        //log.debug("Match found: " + rCell + " -> " + matchFound);
                         matches++;
-                        break; // Move to next result cell after finding a match
                     }
                 }
+                rCells.remove(matchFound);
+            }
+
+            for (String rCell : rCells) {
+                //String matchFound = "";
+                // for (String eCell : eCells) {
+                //     // Check similarity restricted to this attribute
+                //     if (eCell.equals(rCell)){
+                //         matches++;
+                //         log.debug("Match found: " + rCell + " -vs- " + eCell);
+                //         matchFound = eCell;
+                //         calls++;
+                //         break;
+                //     }
+                //     LLMCalls++;
+                //     calls++;
+                //     if (llmDistance.areCellSimilar(eCell, rCell, attribute + ", value=")) {
+                //         log.debug("Match found: " + rCell + " -vs- " + eCell);
+                //         matches++;
+                //         matchFound = eCell;
+                //         break; // Move to next result cell after finding a match
+                //     }
+                // }
+                // if (!matchFound.equals("")){
+                //     eCells.remove(matchFound);
+                // }
+                String match = llmDistance.findSimilar(attribute, rCell, eCells);
+                if (match != null && !match.isEmpty()) {
+                    log.debug("Match found: " + rCell + " -> " + match);
+                    matches++;
+                }
+                else{
+                    log.debug("Match NOT found: " + rCell + " -> " + eCells);
+                }   
+
             }
         }
+        //log.debug("Number of checks: " + calls + " , Number of LLM calls: " + LLMCalls);
         return matches;
     }
 
