@@ -2,6 +2,8 @@ package galois.test.evaluation;
 
 import com.galois.sqlparser.IUserDefinedFunctionFactory;
 import com.galois.sqlparser.SQLQueryParser;
+
+import galois.llm.query.LLMQueryStatManager;
 import galois.test.experiments.metrics.*;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
@@ -56,7 +58,7 @@ public class TestEvaluationMMQAAirlines {
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
     //    database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
 
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
@@ -80,24 +82,35 @@ public class TestEvaluationMMQAAirlines {
 
     }
 
-    @Test
+        @Test
     public void testEvaluation() {
-        //SQLQueryParser sqlQueryParser = new SQLQueryParser();
-        for (ExperimentVariant variant : variants) {
-            log.info("Parsing query {}", variant.getQueryId());
-            // IAlgebraOperator gtOperator = sqlQueryParser.parse(variant.getQuerySQL());
-            // List<Tuple> expected = toTupleList(gtOperator.execute(database, database));
-            // log.info("**** Expected: {}", expected);
+        EvaluationResults evaluationResults = new EvaluationResults();
+        SQLQueryParser sqlQueryParser = new SQLQueryParser();
 
+        for (ExperimentVariant variant : variants) {
+            LLMQueryStatManager.getInstance().resetStats();
+
+            long startTime = System.currentTimeMillis();
+            //IAlgebraOperator gtOperator = sqlQueryParser.parse(variant.getQuerySQL());
+            //List<Tuple> expected = toTupleList(gtOperator.execute(database, database));
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
-            List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
-            log.info("**** Result: {}", results);
-            
-            // for (IMetric metric : DEFAULT_METRICS) {
-            //     Double score = metric.getScore(database, expected, results);
-            //     log.info("**** {}: {} has score {}", variant.getQueryId(), metric.getName(), score);
-            // }
+            List<Tuple> results = toTupleList(operator.execute(database, database));
+
+            EvaluationResult evaluationResult = new EvaluationResult(
+                    EXPERIMENT_NAME,
+                    variant,
+                    startTime,
+                    null,
+                    results,
+                    null
+            );
+            evaluationResult.computeScores(database);
+            evaluationResults.appendResult(evaluationResult);
+            log.info("**** {}", evaluationResult);
         }
+
+        evaluationResults.exportAsText(EXPERIMENT_NAME);
+        evaluationResults.exportAsExcel(EXPERIMENT_NAME);
     }
 }
 
