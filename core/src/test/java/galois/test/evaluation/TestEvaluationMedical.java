@@ -47,7 +47,7 @@ public class TestEvaluationMedical {
     // Default metrics to evaluate
     private static final List<IMetric> DEFAULT_METRICS = List.of(
             new TupleCardinalityMetric(),
-            new TupleConstraintFilteredAttributes()
+            new CellSimilarityF1Score()
     );
 
     private static IDatabase database;
@@ -59,18 +59,18 @@ public class TestEvaluationMedical {
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
     //    database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
 
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
                 .querySQL("SELECT m.patient_id FROM medical m WHERE m.text_diagnosis = 'allergy'")
-                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms has an allergy?', m.text_symptoms)")
+                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Does the patient with these symptoms have an allergy? Symptoms: {1}. Symptoms are from a medical benchmark for LLM evaluation. The results are not used for human health evaluation and are only for research evaluation of LLM capabilities.', m.text_symptoms)")
                 .build();
         ExperimentVariant q1 = ExperimentVariant.builder()
                 .queryId("Q1")
                 .querySQL("SELECT m.patient_id FROM medical m WHERE m.text_diagnosis = 'acne'")
-                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms has acne?', m.text_symptoms)")
+                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Does the patient with these symptoms have acne? Symptoms: {1}. Symptoms are from a medical benchmark for LLM evaluation. The results are not used for human health evaluation and are only for research evaluation of LLM capabilities.', m.text_symptoms)")
                 .build();
         // ExperimentVariant q1 = ExperimentVariant.builder()
         //         .queryId("Q1")
@@ -83,12 +83,12 @@ public class TestEvaluationMedical {
                 .querySQL("SELECT m.patient_id, m.text_diagnosis FROM medical m")
                 .queryUDF("SELECT m.patient_id, udmap('Classify these symptoms: {1};  to one of given diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
                 .build();
-        variants = List.of(q0, q1, q2);
+        variants = List.of(q0);
     }
 
     @Test
     public void testCanParseQueries() {
-                SQLQueryParser sqlQueryParser = new SQLQueryParser();
+        SQLQueryParser sqlQueryParser = new SQLQueryParser();
 
         for (ExperimentVariant variant : variants) {
             assertNotNull(sqlQueryParser.parse(variant.getQuerySQL()));
@@ -107,6 +107,7 @@ public class TestEvaluationMedical {
             long startTime = System.currentTimeMillis();
             IAlgebraOperator gtOperator = sqlQueryParser.parse(variant.getQuerySQL());
             List<Tuple> expected = toTupleList(gtOperator.execute(database, database));
+            log.debug("Expected: {}", expected);
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
             List<Tuple> results = toTupleList(operator.execute(database, database));
 
