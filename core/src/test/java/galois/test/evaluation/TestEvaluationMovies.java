@@ -17,6 +17,7 @@ import speedy.model.database.Tuple;
 
 import java.io.IOException;
 import java.util.List;
+import galois.test.experiments.metrics.CellF1Score;
 
 import static galois.test.evaluation.DatabaseFactory.connectToPostgres;
 import static galois.test.evaluation.DatabaseInitializer.initializeDatabaseFromExperimentFolder;
@@ -36,7 +37,8 @@ public class TestEvaluationMovies {
     // Default metrics to evaluate
     private static final List<IMetric> DEFAULT_METRICS = List.of(
             new TupleCardinalityMetric(),
-            new TupleConstraintFilteredAttributes()
+            new TupleConstraintFilteredAttributes(),
+            new CellF1Score()
     );
 
     private static IDatabase database;
@@ -47,22 +49,41 @@ public class TestEvaluationMovies {
         // Load, initialize and populate the database
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
 
         // Define the variants
-        ExperimentVariant q0 = ExperimentVariant.builder()
-                .queryId("Q0")
+        ExperimentVariant q1 = ExperimentVariant.builder()
+                .queryId("Q1")
+                .querySQL("SELECT r.reviewid FROM reviews r WHERE r.scoresentiment = 'POSITIVE' LIMIT 5")
+                .queryUDF("SELECT r.reviewid FROM reviews r WHERE udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText) LIMIT 5")
+                .build();
+        ExperimentVariant q2 = ExperimentVariant.builder()
+                .queryId("Q2")
                 .querySQL("SELECT r.reviewid FROM reviews r WHERE r.filmTitle='taken_3' AND r.scoresentiment = 'POSITIVE' LIMIT 5")
                 .queryUDF("SELECT r.reviewid FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText) LIMIT 5")
                 .build();
-
-        ExperimentVariant q1 = ExperimentVariant.builder()
-                .queryId("Q1")
-                .querySQL("SELECT r.reviewId, r.originalScore as score FROM reviews r")
-                .queryUDF("SELECT r.reviewId, udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText) as score FROM reviews r ")
+        ExperimentVariant q3 = ExperimentVariant.builder()
+                .queryId("Q3")
+                .querySQL("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND r.scoresentiment = 'POSITIVE'")
+                .queryUDF("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText)")
                 .build();
+        ExperimentVariant q8 = ExperimentVariant.builder()
+                .queryId("Q8")
+                .querySQL("SELECT r.scoresentiment, COUNT(*) as review_cnt FROM reviews r WHERE r.filmTitle='taken_3' GROUP BY r.scoresentiment")
+                .queryUDF("SELECT t.scoresentiment2 as scoresentiment, COUNT(*) FROM (SELECT udmap('Answer POSITIVE if the sentiment expressed by this review: {1} is clearly positive. Otherwise answer NEGATIVE. The answer must be in capslock and without spaces', r.reviewText) as scoresentiment2 from reviews r WHERE r.filmTitle='taken_3') t GROUP BY t.scoresentiment2")
+                .build();
+        ExperimentVariant q9 = ExperimentVariant.builder()
+                .queryId("Q9")
+                .querySQL("SELECT r.reviewId, r.originalScore as score FROM reviews r WHERE r.filmTitle='ant_man_and_the_wasp_quantumania'")
+                .queryUDF("SELECT r.reviewId, udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText) as score FROM reviews r WHERE r.filmTitle='ant_man_and_the_wasp_quantumania'")
+                .build();
+        ExperimentVariant q10 = ExperimentVariant.builder()
+                .queryId("Q10")
+                .querySQL("SELECT r.filmTitle, AVG(r.originalScore) as movieScore FROM reviews r GROUP BY r.filmTitle")
+                .queryUDF("SELECT r.filmTitle, AVG(udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText)) as movieScore FROM reviews r GROUP BY r.filmTitle")
+                .build();   
 
-        variants = List.of(q0);
+        variants = List.of(q1, q2, q3, q9);
     }
 
     @Test
