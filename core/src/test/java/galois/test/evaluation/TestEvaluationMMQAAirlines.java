@@ -67,11 +67,11 @@ public class TestEvaluationMMQAAirlines {
                 .build();
         ExperimentVariant q1 = ExperimentVariant.builder()
                 .queryId("Q1")
-                .queryUDF("SELECT a.airlines FROM airlines a WHERE udfilter('Does ths airline has destinations in Germany between the following destinations: [{1}] ?', a.destinations) ")
+                .queryUDF("SELECT a.airlines FROM airlines a WHERE udfilter('Does ths airline has destinations in Germany between the following destinations? Destinations: {1} ?', a.destinations) ")
                 .build();
         ExperimentVariant q2 = ExperimentVariant.builder()
                 .queryId("Q2")
-                .queryUDF("SELECT a.airlines FROM airlines a WHERE udfilter('Does ths airline has destinations in Europe between the following destinations: [{1}] ?', a.destinations) ")
+                .queryUDF("SELECT a.airlines FROM airlines a WHERE udfilter('Does ths airline has destinations in Europe between the following destinations? Destinations: {1} ?', a.destinations) ")
                 .build();
         
         variants = List.of(q0, q1, q2);
