@@ -55,11 +55,11 @@ public class GaloisUDFilter implements IUserDefinedFunction {
 
             Map<String, Object> vars = Map.of("tuple", tupleString, "userQuestion", formattedUserQuestion);
             Prompt prompt = PROMPT_TEMPLATE.apply(vars);
-            //log.debug("UDFilter prompt is: {}", prompt);
+            log.debug("UDFilter prompt is: {}", prompt);
 
             Response<AiMessage> response = model.generate(prompt.toUserMessage());
             String text = response.content().text();
-            //log.info("UDFilter model response is: {}", text);
+            log.info("UDFilter model response is: {}", text);
 
             if (text.equalsIgnoreCase(Boolean.TRUE.toString())) {
                 result.add(tuple);

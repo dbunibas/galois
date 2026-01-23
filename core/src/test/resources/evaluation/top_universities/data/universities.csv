@@ -12,3 +12,290 @@ rank,university_name,overall_score,city,country
 294,Amrita Vishwa Vidyapeetham,29.8,Amritapuri,India
 178,Anna University,42.5,Chennai,India
 192,Asia Pacific University of Technology and Innovation (APU) Malaysia,41.0,Kuala Lumpur,Malaysia
+249,Asia University Taiwan,33.7,Taichung City,Taiwan
+142,Ateneo de Manila University,49.0,Quezon City,Philippines
+137,Auezov South Kazakhstan University (SKU),49.5,Shymkent,Kazakhstan
+254,BRAC University,33.6,Dhaka,Bangladesh
+204,Banaras Hindu University,39.5,Varanasi,India
+59,Bandung Institute of Technology (ITB),69.1,Bandung,Indonesia
+159,Bangladesh University of Engineering and Technology,45.1,Dhaka,Bangladesh
+125,Beihang University (former BUAA),51.6,Beijing,China
+64,Beijing Institute of Technology,68.0,Beijing,China
+246,Beijing Jiaotong University,34.2,Beijing,China
+61,Beijing Normal University,68.7,Beijing,China
+284,Beijing University of Chemical Technology,30.3,Beijing,China
+231,Beijing University of Technology,35.3,Beijing,China
+222,Bharathiar University,36.1,Coimbatore,India
+205,Bina Nusantara University (BINUS),39.2,Jakarta,Indonesia
+172,Birla Institute of Technology and Science,43.2,Pilani,India
+128,COMSATS University Islamabad,50.6,Islamabad,Pakistan
+169,Central South University,43.5,Changsha,China
+119,Chandigarh University,52.5,Mohali,India
+241,Chang Gung University,34.6,Taoyuan City,Taiwan
+108,Chiang Mai University,55.3,Chiang Mai,Thailand
+176,Chiba University,42.6,Chiba City,Japan
+193,China Agricultural University,41.0,Beijing,China
+152,China Medical University,45.4,Taichung,Taiwan
+227,China University of Geosciences,35.6,Wuhan,China
+263,China University of Mining and Technology,32.4,Xuzhou,China
+269,China University of Political Science and Law,31.6,Beijing,China
+188,Chongqing University,41.4,Chongqing,China
+201,Chonnam National University,40.0,Gwangju,South Korea
+47,Chulalongkorn University,73.7,Bangkok,Thailand
+73,Chung-Ang University (CAU),64.4,Seoul,South Korea
+195,Chungnam National University,40.8,Daejeon,South Korea
+10,City University of Hong Kong (CityUHK),95.3,Kowloon,Hong Kong
+290,D. Serikbayev East Kazakhstan Technical University,30.0,Ust-Kamenogorsk,Kazakhstan
+95,Daegu Gyeongbuk Institute of Science and Technology (DGIST),57.9,Daegu,South Korea
+282,Daffodil International University,30.6,Dhaka,Bangladesh
+153,Dalian University of Technology,45.5,Dalian,China
+164,De La Salle University,44.4,Manila,Philippines
+133,Diponegoro University,49.8,Semarang,Indonesia
+117,Dongguk University,52.7,Seoul,South Korea
+288,Donghua University,30.1,Shanghai,China
+126,Duy Tan University,50.9,Da Nang,Vietnam
+111,East China Normal University,54.6,Shanghai,China
+216,East China University of Science and Technology,36.8,Shanghai,China
+70,Ewha Womans University,66.1,Seoul,South Korea
+219,Ferdowsi University of Mashhad,36.3,Mashhad,Iran
+5,Fudan University,97.2,Shanghai,China
+53,Gadjah Mada University,70.2,Yogyakarta,Indonesia
+289,Guru Nanak Dev University,30.1,Amritsar,India
+105,Gwangju Institute of Science and Technology (GIST),55.9,Gwangju,South Korea
+124,HUFS - Hankuk (Korea) University of Foreign Studies,52.0,Seoul,South Korea
+19,Hanyang University,89.1,Seoul,South Korea
+58,Harbin Institute of Technology,69.3,Harbin,China
+96,Hiroshima University,57.7,Higashihiroshima City,Japan
+143,Hitotsubashi University,48.8,Kunitachi City,Japan
+35,Hokkaido University,81.8,Sapporo,Japan
+71,Hong Kong Baptist University,65.3,Kowloon,Hong Kong
+300,Huazhong Agricultural University,29.0,Wuhan,China
+69,Huazhong University of Science and Technology,66.3,Wuhan,China
+163,Hunan University,44.5,Changsha,China
+171,INTI International University,43.4,Nilai,Malaysia
+92,IPB University (aka Bogor Agricultural University),58.6,Bogor,Indonesia
+62,Indian Institute of Science,68.4,Bangalore,India
+275,Indian Institute of Technology BHU Varanasi (IIT BHU Varanasi),30.9,Varanasi,India
+48,Indian Institute of Technology Bombay (IITB),73.1,Mumbai,India
+44,Indian Institute of Technology Delhi (IITD),75.4,New Delhi,India
+104,Indian Institute of Technology Guwahati (IITG),56.2,Guwahati,India
+255,Indian Institute of Technology Indore,33.5,Indore,India
+67,Indian Institute of Technology Kanpur (IITK),66.7,Kanpur,India
+60,Indian Institute of Technology Kharagpur (IIT-KGP),68.8,Kharagpur,India
+56,Indian Institute of Technology Madras (IITM),69.6,Chennai,India
+109,Indian Institute of Technology Roorkee (IITR),55.3,Roorkee,India
+116,Inha University,52.9,Incheon,South Korea
+114,Institut Teknologi Sepuluh Nopember (ITS Surabaya),53.2,Surabaya,Indonesia
+293,Institute of Business Administration (IBA),29.9,Karachi,Pakistan
+244,International Islamic University,34.3,Islamabad,Pakistan
+132,International Islamic University Malaysia (IIUM),50.0,Kuala Lumpur,Malaysia
+151,Iran University of Science and Technology,46.1,Tehran,Iran
+198,Isfahan University of Technology,40.4,Isfahan,Iran
+212,Jadavpur University,37.1,Kolkata,India
+295,Jahangirnagar University,29.8,Dhaka,Bangladesh
+189,Jamia Millia Islamia,41.3,New Delhi,India
+110,Jawaharlal Nehru University,55.2,New Delhi,India
+118,Jeonbuk National University,52.7,Jeonju,South Korea
+278,Jiangnan University,30.8,Wuxi,China
+220,Jiangsu University,36.3,Zhenjiang,China
+90,Jilin University,59.6,Changchun,China
+202,Jinan University (China),40.0,Guangzhou,China
+15,KAIST - Korea Advanced Institute of Science & Technology,92.4,Daejeon,South Korea
+258,Kalinga Institute of Industrial Technology (KIIT) University,33.4,Bhubaneswar,India
+211,Kanazawa University,37.6,Kanazawa,Japan
+168,Karaganda Buketov University,43.8,Karaganda,Kazakhstan
+266,Karaganda State Technical University,32.1,Karaganda,Kazakhstan
+156,Kasetsart University,45.3,Bangkok,Thailand
+149,Kazakh National Agrarian Research University (KazNARU),47.4,Almaty,Kazakhstan
+232,Kazakh-British Technical University,35.3,Almaty,Kazakhstan
+49,Keio University,73.1,Tokyo,Japan
+196,Khoja Akhmet Yassawi International Kazakh-Turkish University,40.8,Turkestan,Kazakhstan
+187,Khon Kaen University,41.5,Khon Kaen,Thailand
+225,King Mongkut's University of Technology Thonburi,35.9,Bangkok,Thailand
+76,Kobe University,62.7,Kobe City,Japan
+139,Konkuk University,49.1,Seoul,South Korea
+13,Korea University,94.5,Seoul,South Korea
+141,Krirk University,48.9,Bangkok,Thailand
+256,Kumamoto University,33.5,Kumamoto City,Japan
+23,Kyoto University,88.0,Kyoto,Japan
+233,Kyrgyz-Turkish Manas University,35.3,Bishkek,Kyrgystan
+40,Kyung Hee University,77.5,Seoul,South Korea
+101,Kyungpook National University,56.6,Daegu,South Korea
+34,Kyushu University,82.0,Fukuoka City,Japan
+65,L.N. Gumilyov Eurasian National University (ENU),67.5,Astana,Kazakhstan
+115,Lahore University of Management Sciences (LUMS),53.1,Lahore,Pakistan
+215,Lanzhou University,36.9,Lanzhou,China
+186,Lincoln University College,41.6,Petaling Jaya,Malaysia
+190,Lingnan University,41.3,Tuen Mun,Hong Kong
+228,Lovely Professional University (LPU),35.6,Chaheru,India
+229,Macau University of Science and Technology,35.6,Macau,Macau SAR
+55,Mahidol University,70.1,Nakhon Pathom,Thailand
+129,Management and Science University,50.6,Shah Alam,Malaysia
+199,Manipal Academy of Higher Education,40.4,Manipal,India
+208,Multimedia University (MMU),38.4,Cyberjaya,Malaysia
+271,NJSC KIMEP University,31.3,Almaty,Kazakhstan
+237,Nagasaki University,34.8,Nagasaki City,Japan
+32,Nagoya University,82.6,Nagoya,Japan
+250,Nanjing Normal University,33.7,Nanjing,China
+24,Nanjing University,86.5,Nanjing,China
+247,Nanjing University of Aeronautics and Astronautics,34.2,Nanjing,China
+238,Nanjing University of Science and Technology,34.8,Nanjing,China
+98,Nankai University,57.2,Tianjin,China
+4,Nanyang Technological University,98.3,Singapore,Singapore
+112,National Central University,54.0,Taoyuan City,Taiwan
+41,National Cheng Kung University (NCKU),77.4,Tainan City,Taiwan
+122,National Chengchi University,52.2,Taipei City,Taiwan
+296,National Chinyi University of Technology,29.5,Taichung City,Taiwan
+191,National Chung Cheng University,41.2,Minxiong Township,Taiwan
+120,National Chung Hsing University,52.5,Taichung City,Taiwan
+83,National Sun Yat-sen University,61.7,Kaohsiung City,Taiwan
+91,National Taipei University of Technology,59.5,Taipei City,Taiwan
+79,National Taiwan Normal University,62.2,Taipei City,Taiwan
+26,National Taiwan University (NTU),85.5,Taipei,Taiwan
+66,National Taiwan University of Science and Technology (Taiwan Tech),67.3,Taipei City,Taiwan
+39,National Tsing Hua University - NTHU,78.4,Hsinchu City,Taiwan
+68,National University of Sciences & Technology (NUST) Islamabad,66.7,Islamabad,Pakistan
+3,National University of Singapore (NUS),98.9,Singapore,Singapore
+243,National University of Uzbekistan named after Mirzo Ulugbek,34.5,Tashkent,Uzbekistan
+42,National Yang Ming Chiao Tung University (NYCU),76.9,Hsinchu City,Taiwan
+157,North South University,45.3,Dhaka,Bangladesh
+260,Northwest Agriculture and Forestry University,33.2,Yangling,China
+298,Northwest University (China),29.2,Xi'an,China
+174,Northwestern Polytechnical University,42.8,Xi'an,China
+273,O.P. Jindal Global University (JGU),31.2,Sonepat,India
+299,Ocean University of China,29.1,Qingdao,China
+234,Okayama University,35.3,Okayama City,Japan
+209,Osaka Metropolitan University,38.4,Osaka,Japan
+33,Osaka University,82.6,Osaka City,Japan
+262,Osh State University,32.8,Osh,Kyrgystan
+236,Pakistan Institute of Engineering and Applied Sciences (PIEAS),34.9,Islamabad,Pakistan
+272,Panjab University,31.3,Chandigarh,India
+1,Peking University,100.0,Beijing,China
+22,Pohang University of Science And Technology (POSTECH),88.1,Pohang ,South Korea
+207,Prince of Songkla University,38.6,Hat Yai,Thailand
+81,Pusan National University,61.9,Busan,South Korea
+285,Qingdao University,30.3,Qingdao,China
+84,Quaid-i-Azam University,61.3,Islamabad,Pakistan
+103,Renmin (People's) University of China,56.5,Beijing,China
+145,Ritsumeikan University,48.2,Kyoto,Japan
+223,SRM Institute of Science and Technology,36.1,Chennai,India
+283,Saken Seifullin Kazakh Agrotechnical University,30.4,Nur-Sultan,Kazakhstan
+89,Satbayev University,59.8,Almaty,Kazakhstan
+268,Saveetha Institute of Medical And Technical Sciences (SIMATS),31.7,Tiruvallur,India
+175,Savitribai Phule Pune University,42.8,Pune,India
+100,Sejong University,56.7,Seoul,South Korea
+18,Seoul National University,91.8,Seoul,South Korea
+235,Shahid Beheshti University (SBU),35.2,Tehran,Iran
+75,Shandong University,62.8,Jinan,China
+14,Shanghai Jiao Tong University,93.2,Shanghai,China
+85,Shanghai University,61.3,Shanghai,China
+97,Sharif University of Technology,57.5,Tehran,Iran
+158,Shenzhen University,45.3,Shenzhen,China
+210,Shiraz University,37.8,Shiraz,Iran
+170,Shoolini University of Biotechnology and Management Sciences,43.5,Solan,India
+94,Sichuan University,58.5,Chengdu,China
+281,Siksha ‘O’ Anusandhan (Deemed to be University),30.7,Bhubaneswar,India
+140,Singapore Management University,49.1,Singapore,Singapore
+154,Singapore University of Technology and Design,45.4,Singapore,Singapore
+93,Sogang University,58.6,Seoul,South Korea
+221,Soochow University,36.2,Suzhou,China
+276,Sookmyung Women's University,30.9,Seoul,South Korea
+291,Soonchunhyang University,30.0,Asan,South Korea
+213,Sophia University,37.0,Tokyo,Japan
+147,South China University of Technology,47.8,Guangzhou,China
+134,Southeast University,49.8,Nanjing,China
+107,Southern University of Science and Technology (SUSTech),55.6,Shenzhen,China
+50,Sun Yat-sen University,73.1,Guangzhou,China
+16,Sungkyunkwan University (SKKU),92.1,Suwon,South Korea
+297,Sungshin Women's University,29.5,Seoul,South Korea
+74,Sunway University,62.9,Petaling Jaya,Malaysia
+217,Symbiosis International (Deemed University),36.7,Pune,India
+121,Taipei Medical University (TMU),52.3,Taipei,Taiwan
+160,Tashkent Institute of Irrigation and Agricultural Mechanization Engineers (TIIAME)-National Research University,44.9,Tashkent,Uzbekistan
+36,Taylor's University,81.3,Subang Jaya,Malaysia
+286,Telkom University,30.3,Bandung,Indonesia
+127,Thammasat University,50.8,Bangkok,Thailand
+264,Thapar Institute of Engineering & Technology,32.4,Patiala,India
+267,The Catholic University of Korea,31.8,Gyeonggi,South Korea
+6,The Chinese University of Hong Kong (CUHK),96.7,Sha Tin,Hong Kong
+214,The Education University of Hong Kong,37.0,Tai Po,Hong Kong
+17,The Hong Kong Polytechnic University,92.0,Kowloon,Hong Kong
+11,The Hong Kong University of Science and Technology,95.1,Clear Water Bay,Hong Kong
+2,The University of Hong Kong,99.7,Pokfulam,Hong Kong
+183,The University of Lahore,41.9,Lahore,Pakistan
+21,The University of Tokyo,88.6,Tokyo,Japan
+57,Tianjin University,69.5,Tianjin,China
+25,Tohoku University,86.4,Sendai City,Japan
+30,Tokyo Institute of Technology (Tokyo Tech),84.2,Tokyo,Japan
+179,Tokyo Medical and Dental University (TMDU),42.5,Tokyo,Japan
+242,Tokyo Metropolitan University,34.6,Tokyo,Japan
+194,Tokyo University of Agriculture and Technology,40.9,Tokyo,Japan
+177,Tokyo University of Science,42.6,Kagurazaka,Japan
+200,Ton Duc Thang University,40.3,Ho Chi Minh City,Vietnam
+43,Tongji University,76.2,Shanghai,China
+7,Tsinghua University,96.3,Beijing,China
+265,Tunghai University,32.4,Taichung City,Taiwan
+45,UCSI University,75.1,Kuala Lumpur,Malaysia
+148,UPES,47.5,Dehradun,India
+88,Ulsan National Institute of Science and Technology (UNIST),59.9,Ulsan,South Korea
+173,Universitas Brawijaya,43.0,Malang,Indonesia
+239,Universitas Hasanuddin,34.8,Makassar,Indonesia
+46,Universitas Indonesia,74.7,Depok,Indonesia
+135,Universitas Padjadjaran (UNPAD),49.8,Bandung,Indonesia
+224,Universitas Sebelas Maret,36.1,Surakarta,Indonesia
+78,Universiti Brunei Darussalam (UBD),62.3,Bandar Seri Begawan,Brunei
+27,Universiti Kebangsaan Malaysia (UKM),85.5,Bangi,Malaysia
+12,Universiti Malaya (UM),94.8,Kuala Lumpur,Malaysia
+161,Universiti Malaysia Pahang Al-Sultan Abdullah (UMPSA),44.9,Kuantan,Malaysia
+245,Universiti Malaysia Sabah (UMS),34.3,Kota Kinabalu,Malaysia
+230,Universiti Malaysia Sarawak (UNIMAS),35.6,Kuching,Malaysia
+197,Universiti Malaysia Terengganu (UMT),40.6,Kuala Terengganu,Malaysia
+166,Universiti Pendidikan Sultan Idris (UPSI),44.0,Tanjong Malim,Malaysia
+20,Universiti Putra Malaysia (UPM),89.0,Serdang,Malaysia
+37,Universiti Sains Malaysia (USM),80.8,Gelugor,Malaysia
+136,Universiti Teknologi Brunei,49.8,Bandar Seri Begawan,Brunei
+102,Universiti Teknologi MARA - UiTM,56.6,Shah Alam,Malaysia
+28,Universiti Teknologi Malaysia,84.8,Skudai,Malaysia
+54,Universiti Teknologi PETRONAS (UTP),70.2,Seri Iskandar,Malaysia
+146,Universiti Tenaga Nasional (UNITEN),48.0,Kajang,Malaysia
+251,Universiti Tun Hussein Onn  Malaysia (UTHM),33.7,Batu Pahat,Malaysia
+131,Universiti Tunku Abdul Rahman (UTAR),50.2,Kampar,Malaysia
+80,Universiti Utara Malaysia (UUM),62.2,Sintok,Malaysia
+203,University of Agriculture,39.6,Faisalabad,Pakistan
+180,University of Calcutta,42.4,Kolkata,India
+106,University of Chinese Academy of Sciences (UCAS),55.8,Beijing,China
+279,University of Colombo,30.8,Colombo,Sri Lanka
+82,University of Delhi,61.9,New Delhi,India
+113,University of Dhaka,54.0,Dhaka,Bangladesh
+218,University of Electronic Science and Technology of China,36.5,Chengdu,China
+165,University of Engineering & Technology (UET) Lahore,44.4,Lahore,Pakistan
+240,University of Hyderabad,34.7,Hyderabad,India
+292,University of Isfahan,30.0,Isfahan,Iran
+270,University of Karachi,31.6,Karachi,Pakistan
+99,University of Macau,56.8,Macau,Macau SAR
+248,University of Mumbai,34.2,Mumbai,India
+206,University of Peshawar,38.8,Peshawar,Pakistan
+182,University of Santo Tomas,42.0,Manila,Philippines
+155,University of Science and Technology Beijing,45.4,Beijing,China
+31,University of Science and Technology of China,84.0,Hefei,China
+167,University of Seoul,43.9,Seoul,South Korea
+226,University of Tabriz,35.7,Tabriz,Iran
+87,University of Tehran,60.5,Tehran,Iran
+63,University of Tsukuba,68.3,Tsukuba City,Japan
+252,University of Ulsan,33.7,Ulsan,South Korea
+86,University of the Philippines,60.6,Quezon City,Philippines
+138,University of the Punjab,49.5,Lahore,Pakistan
+150,Vellore Institute of Technology (VIT),46.4,Vellore,India
+185,Viet Nam National University Ho Chi Minh City (VNU-HCM),41.7,Ho Chi Minh City,Vietnam
+162,Vietnam National University,44.8,Hanoi,Vietnam
+51,Waseda University,72.8,Tokyo,Japan
+38,Wuhan University,80.5,Wuhan,China
+253,Wuhan University of Technology,33.7,Wuhan,China
+77,Xiamen University,62.7,Xiamen,China
+72,Xi’an Jiaotong University,64.5,Xi'an,China
+274,Yangzhou University,31.2,Yangzhou,China
+259,Yeungnam University,33.4,Gyeongsan,South Korea
+257,Yokohama National University,33.5,Yokohama City,Japan
+9,Yonsei University,95.4,Seoul,South Korea
+8,Zhejiang University,96.0,Hangzhou,China
+181,Zhengzhou University,42.2,Zhengzhou,China

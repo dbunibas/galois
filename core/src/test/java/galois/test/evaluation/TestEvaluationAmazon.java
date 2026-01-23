@@ -2,6 +2,8 @@ package galois.test.evaluation;
 
 import com.galois.sqlparser.IUserDefinedFunctionFactory;
 import com.galois.sqlparser.SQLQueryParser;
+
+import galois.llm.query.LLMQueryStatManager;
 import galois.test.experiments.metrics.*;
 import galois.test.utils.ExcelExporter;
 import galois.test.utils.TestRunner;
@@ -32,11 +34,11 @@ public class TestEvaluationAmazon {
     // Experiment folder path starting from resources
     private static final String EXPERIMENT_FOLDER_PATH = "/evaluation/amazon";
 
-    private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
-    private static final String RESULT_FILE = "amazon-results.txt";
+    // private static final String RESULT_FILE_DIR = "src/test/evaluation/results/";
+    // private static final String RESULT_FILE = "amazon-results.txt";
 
-    private static final TestRunner testRunner = new TestRunner();
-    private static final ExcelExporter exportExcel = new ExcelExporter();
+    // private static final TestRunner testRunner = new TestRunner();
+    // private static final ExcelExporter exportExcel = new ExcelExporter();
 
     private String executorModel = "togetherai";
 
@@ -77,22 +79,33 @@ public class TestEvaluationAmazon {
 
     @Test
     public void testEvaluation() {
+        EvaluationResults evaluationResults = new EvaluationResults();
         SQLQueryParser sqlQueryParser = new SQLQueryParser();
+
         for (ExperimentVariant variant : variants) {
-            log.info("Parsing query {}", variant.getQueryId());
+            LLMQueryStatManager.getInstance().resetStats();
+
+            long startTime = System.currentTimeMillis();
             IAlgebraOperator gtOperator = sqlQueryParser.parse(variant.getQuerySQL());
             List<Tuple> expected = toTupleList(gtOperator.execute(database, database));
-            log.info("**** Expected: {}", expected);
-
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
-            List<Tuple> results = TestUtils.toTupleList(operator.execute(database, database));
-            log.info("**** Result: {}", results);
+            List<Tuple> results = toTupleList(operator.execute(database, database));
 
-            for (IMetric metric : DEFAULT_METRICS) {
-                Double score = metric.getScore(database, expected, results);
-                log.info("**** {}: {} has score {}", variant.getQueryId(), metric.getName(), score);
-            }
+            EvaluationResult evaluationResult = new EvaluationResult(
+                    EXPERIMENT_NAME,
+                    variant,
+                    startTime,
+                    expected,
+                    results,
+                    DEFAULT_METRICS
+            );
+            evaluationResult.computeScores(database);
+            evaluationResults.appendResult(evaluationResult);
+            log.info("**** {}", evaluationResult);
         }
+
+        evaluationResults.exportAsText(EXPERIMENT_NAME);
+        evaluationResults.exportAsExcel(EXPERIMENT_NAME);
     }
 }
 

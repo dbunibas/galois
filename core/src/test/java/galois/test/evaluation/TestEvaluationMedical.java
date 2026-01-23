@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Slf4j
 public class TestEvaluationMedical {
-    
+
     private static final IUserDefinedFunctionFactory GALOIS_UDF_FACTORY = new GaloisUDFFactory();
 
     // Experiment name
@@ -69,16 +69,21 @@ public class TestEvaluationMedical {
                 .build();
         ExperimentVariant q1 = ExperimentVariant.builder()
                 .queryId("Q1")
-                .querySQL("SELECT m.patient_id FROM medical m WHERE m.is_sick = 'True'")
-                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms is sick?', m.text_symptoms)")
+                .querySQL("SELECT m.patient_id FROM medical m WHERE m.text_diagnosis = 'acne'")
+                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms has acne?', m.text_symptoms)")
                 .build();
+        // ExperimentVariant q1 = ExperimentVariant.builder()
+        //         .queryId("Q1")
+        //         .querySQL("SELECT m.patient_id FROM medical m WHERE m.is_sick = 'True'")
+        //         .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms is sick?', m.text_symptoms)")
+        //         .build();
         // Equivalent of query 10 from sembench
         ExperimentVariant q2 = ExperimentVariant.builder()
                 .queryId("Q2")
                 .querySQL("SELECT m.patient_id, m.text_diagnosis FROM medical m")
-                .queryUDF("SELECT m.patient_id, udmap('Classify {1} to one of given diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
+                .queryUDF("SELECT m.patient_id, udmap('Classify these symptoms: {1};  to one of given diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
                 .build();
-        variants = List.of(q0);
+        variants = List.of(q0, q1, q2);
     }
 
     @Test
