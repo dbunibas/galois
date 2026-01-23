@@ -58,12 +58,12 @@ public class TestEvaluationMMQAAirlines {
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
     //    database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
 
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .queryUDF("SELECT a.airlines FROM airlines a WHERE udfilter('Does this airline has Frankfurt between the following destinations: [{1}] ?', a.destinations) ")
+                .queryUDF("SELECT a.airlines FROM airlines a WHERE udfilter('Does this airline has Frankfurt between the following destinations? Destinations: {1}', a.destinations) ")
                 .build();
         ExperimentVariant q1 = ExperimentVariant.builder()
                 .queryId("Q1")
@@ -82,7 +82,7 @@ public class TestEvaluationMMQAAirlines {
 
     }
 
-        @Test
+    @Test
     public void testEvaluation() {
         EvaluationResults evaluationResults = new EvaluationResults();
         SQLQueryParser sqlQueryParser = new SQLQueryParser();

@@ -45,7 +45,8 @@ public class TestEvaluationUniversities {
     // Default metrics to evaluate
     private static final List<IMetric> DEFAULT_METRICS = List.of(
             new TupleCardinalityMetric(),
-            new TupleConstraintFilteredAttributes()
+            new CellF1Score(),
+            new CellSimilarityF1Score()
     );
 
     private static IDatabase database;
