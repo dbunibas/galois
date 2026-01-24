@@ -25,13 +25,13 @@ public class EvaluationResult {
     private Map<String, Double> scoresMap;
     // LLM stats
     @Getter
-    private final int llmRequest;
+    private int llmRequest;
     @Getter
-    private final double llmTokensInput;
+    private double llmTokensInput;
     @Getter
-    private final double llmTokensOutput;
+    private double llmTokensOutput;
     @Getter
-    private final long timeMs;
+    private long timeMs;
 
     public EvaluationResult(
             String experimentName,
@@ -49,18 +49,8 @@ public class EvaluationResult {
         this.results = results;
         this.metrics = metrics;
 
-        this.llmRequest = LLMQueryStatManager.getInstance().getBaseLLMRequest() > 0 ?
-                LLMQueryStatManager.getInstance().getBaseLLMRequest() :
-                LLMQueryStatManager.getInstance().getLLMRequest();
-        this.llmTokensInput = LLMQueryStatManager.getInstance().getBaseLLMTokensInput() > 0 ?
-                LLMQueryStatManager.getInstance().getBaseLLMTokensInput() :
-                LLMQueryStatManager.getInstance().getLLMTokensInput();
-        this.llmTokensOutput = LLMQueryStatManager.getInstance().getBaseLLMTokensOutput() > 0 ?
-                LLMQueryStatManager.getInstance().getBaseLLMTokensOutput() :
-                LLMQueryStatManager.getInstance().getLLMTokensOutput();
-        this.timeMs = LLMQueryStatManager.getInstance().getBasetimeMs() > 0 ?
-                LLMQueryStatManager.getInstance().getBasetimeMs() :
-                LLMQueryStatManager.getInstance().getTimeMs();
+        
+        updateStats();
     }
 
     public void computeScores(IDatabase database) {
@@ -70,8 +60,18 @@ public class EvaluationResult {
                 scoresMap.put(metric.getName(), metric.getScore(database, expected, results));
             }
         }
+        updateStats();
     }
 
+    private void updateStats() {
+        this.llmRequest = LLMQueryStatManager.getInstance().getLLMRequest();
+    
+        this.llmTokensInput = LLMQueryStatManager.getInstance().getLLMTokensInput();
+        
+        this.llmTokensOutput = LLMQueryStatManager.getInstance().getLLMTokensOutput();
+        
+        this.timeMs = LLMQueryStatManager.getInstance().getTimeMs();
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

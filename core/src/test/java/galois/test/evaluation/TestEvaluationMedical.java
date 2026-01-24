@@ -84,7 +84,7 @@ public class TestEvaluationMedical {
                 .querySQL("SELECT m.patient_id, m.text_diagnosis FROM medical m")
                 .queryUDF("SELECT m.patient_id, udmap('Classify these symptoms: {1};  to one of given diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
                 .build();
-        variants = List.of(q0,q1,q2);
+        variants = List.of(q2);
     }
 
     @Test

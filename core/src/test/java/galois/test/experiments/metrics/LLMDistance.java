@@ -8,6 +8,7 @@ import galois.llm.models.togetherai.Choice;
 import galois.llm.models.togetherai.Message;
 import galois.llm.models.togetherai.ResponseTogetherAI;
 import galois.llm.models.togetherai.TogetherAIConstants;
+import galois.llm.query.LLMQueryStatManager;
 import galois.llm.query.utils.cache.CacheEntry;
 import galois.llm.query.utils.cache.LLMCache;
 import galois.utils.Configuration;
@@ -139,8 +140,11 @@ public class LLMDistance {
 //                    TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
                     TimeUnit.MILLISECONDS.sleep((long) 100);
 //                    log.error("compare using LLM: \n" + editedPrompt);
+                    long start = System.currentTimeMillis();
                     response = llmModel.getModelResponse(editedPrompt);
-                    llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
+                    long end = System.currentTimeMillis();
+                    //llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
+                    registerAndCacheStats(response, editedPrompt, editedPrompt, end-start);
                 } catch (Exception e) {
                     log.error("Exception in making the request: {}", e);
                 }
@@ -186,8 +190,10 @@ public class LLMDistance {
                 try {
 //                    TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
                     TimeUnit.MILLISECONDS.sleep((long) 100);
+                    long start = System.currentTimeMillis();
                     response = llmModel.getModelResponse(editedPrompt);
-                    llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
+                    long end = System.currentTimeMillis();                    //llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
+                    registerAndCacheStats(response, editedPrompt, editedPrompt, end-start);
                 } catch (Exception e) {
                     log.error("Exception in making the request: {}", e);
                 }
@@ -232,8 +238,10 @@ public class LLMDistance {
         } else {
             try {
                 TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
+                long start = System.currentTimeMillis();
                 response = llmModel.getModelResponse(prompt);
-                llmCache.updateCache(prompt, 0, null, prompt, response, 0, 0, 0, 0);
+                long end = System.currentTimeMillis();                //llmCache.updateCache(prompt, 0, null, prompt, response, 0, 0, 0, 0);
+                registerAndCacheStats(response, prompt, prompt, end-start);
             } catch (Exception e) {
                 log.error("Exception in making the request: {}", e);
             }
@@ -270,8 +278,11 @@ public class LLMDistance {
         } else {
             try {
                 TimeUnit.MILLISECONDS.sleep((long) 100);
+                long start = System.currentTimeMillis();
                 response = llmModel.getModelResponse(editedPrompt);
-                llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
+                long end = System.currentTimeMillis();
+                //llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
+                registerAndCacheStats(response, editedPrompt, editedPrompt, end-start);
             } catch (Exception e) {
                 log.error("Exception in making the request: {}", e);
             }
@@ -313,6 +324,40 @@ public class LLMDistance {
     private String findNumericSimilar(String attribute, String value, Set<String> candidates) {
         Number nActual = getNumber(value);
         return null;
+    }
+
+    private void registerAndCacheStats(String responseJson, String prompt, String originalPrompt, long duration) {
+        try {
+            ResponseTogetherAI responseAPI = objectMapper.readValue(responseJson, ResponseTogetherAI.class);
+            
+            double promptTokens = 0;
+            double completionTokens = 0;
+
+            if (responseAPI.getUsage() != null) {
+                promptTokens = responseAPI.getUsage().getPromptTokens(); 
+                completionTokens = responseAPI.getUsage().getCompletionTokens();
+   
+                LLMQueryStatManager.getInstance().updateLLMRequest(1); 
+                LLMQueryStatManager.getInstance().updateLLMTokensInput(promptTokens);
+                LLMQueryStatManager.getInstance().updateLLMTokensOutput(completionTokens);
+                LLMQueryStatManager.getInstance().updateTimeMs(duration);
+            }
+
+            LLMCache.getInstance().updateCache(
+                prompt, 
+                0, 
+                null, 
+                originalPrompt, 
+                responseJson, 
+                promptTokens,      
+                completionTokens, 
+                duration,
+                0              
+            );
+
+        } catch (Exception e) {
+            log.error("Error updating stats/cache: {}", e);
+        }
     }
 
 }
