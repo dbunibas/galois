@@ -6,9 +6,11 @@ import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.Response;
+import dev.langchain4j.model.output.TokenUsage;
 import galois.Constants;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
+import galois.llm.query.LLMQueryStatManager;
 import galois.utils.Configuration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +49,15 @@ public class GaloisUDMap implements IUserDefinedFunction {
         Prompt prompt = PROMPT_TEMPLATE.apply(vars);
         log.debug("UDMap prompt is: {}", prompt);
 
+        long start = System.currentTimeMillis();
         Response<AiMessage> response = model.generate(prompt.toUserMessage());
+        long end = System.currentTimeMillis();
+        TokenUsage usage = response.tokenUsage();
+        LLMQueryStatManager.getInstance().updateLLMRequest(1);
+        LLMQueryStatManager.getInstance().updateLLMTokensInput((double) usage.inputTokenCount());
+        LLMQueryStatManager.getInstance().updateLLMTokensOutput((double) usage.outputTokenCount());
+        LLMQueryStatManager.getInstance().updateTimeMs(end-start);        
+        
         String text = response.content().text();
         log.info("UDMap model response is: {}", text);
         if (text != null && !text.isBlank()) {
