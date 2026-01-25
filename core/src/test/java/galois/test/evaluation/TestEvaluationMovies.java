@@ -51,7 +51,7 @@ public class TestEvaluationMovies {
         // Load, initialize and populate the database
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
 
         // Define the variants
         ExperimentVariant q1 = ExperimentVariant.builder()
@@ -72,7 +72,7 @@ public class TestEvaluationMovies {
         ExperimentVariant q8 = ExperimentVariant.builder()
                 .queryId("Q8")
                 .querySQL("SELECT r.scoresentiment, COUNT(*) as review_cnt FROM reviews r WHERE r.filmTitle='taken_3' GROUP BY r.scoresentiment")
-                .queryUDF("SELECT t.scoresentiment2 as scoresentiment, COUNT(*) FROM (SELECT udmap('Answer POSITIVE if the sentiment expressed by this review: {1} is clearly positive. Otherwise answer NEGATIVE. The answer must be in capslock and without spaces', r.reviewText) as scoresentiment2 from reviews r WHERE r.filmTitle='taken_3') t GROUP BY t.scoresentiment2")
+                .queryUDF("SELECT scoresentiment2 as scoresentiment, COUNT(*) as review_cnt FROM (SELECT udmap('Answer POSITIVE if the sentiment expressed by this review: {1} is clearly positive. Otherwise answer NEGATIVE. The answer must be in capslock and without spaces', r.reviewText) as scoresentiment2 FROM reviews r WHERE r.filmTitle='taken_3') AS t GROUP BY scoresentiment2")
                 .build();
         ExperimentVariant q9 = ExperimentVariant.builder()
                 .queryId("Q9")
@@ -85,7 +85,7 @@ public class TestEvaluationMovies {
                 .queryUDF("SELECT r.filmTitle, AVG(udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText)) as movieScore FROM reviews r GROUP BY r.filmTitle")
                 .build();   
 
-        variants = List.of(q10);
+        variants = List.of(q8);
     }
 
     @Test
@@ -109,6 +109,7 @@ public class TestEvaluationMovies {
             long startTime = System.currentTimeMillis();
             IAlgebraOperator gtOperator = sqlQueryParser.parse(variant.getQuerySQL());
             List<Tuple> expected = toTupleList(gtOperator.execute(database, database));
+            log.debug("Expected: {}", expected);
             IAlgebraOperator operator = new SQLQueryParser().parse(variant.getQueryUDF(), GALOIS_UDF_FACTORY);
             List<Tuple> results = toTupleList(operator.execute(database, database));
 
