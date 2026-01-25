@@ -69,10 +69,13 @@ public class TestEvaluationMovies {
                 .querySQL("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND r.scoresentiment = 'POSITIVE'")
                 .queryUDF("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText)")
                 .build();
+
+        // NON ESEGUIBILE        
         ExperimentVariant q8 = ExperimentVariant.builder()
                 .queryId("Q8")
                 .querySQL("SELECT r.scoresentiment, COUNT(*) as review_cnt FROM reviews r WHERE r.filmTitle='taken_3' GROUP BY r.scoresentiment")
                 .queryUDF("SELECT scoresentiment2 as scoresentiment, COUNT(*) as review_cnt FROM (SELECT udmap('Answer POSITIVE if the sentiment expressed by this review: {1} is clearly positive. Otherwise answer NEGATIVE. The answer must be in capslock and without spaces', r.reviewText) as scoresentiment2 FROM reviews r WHERE r.filmTitle='taken_3') AS t GROUP BY scoresentiment2")
+                //.queryUDF("SELECT udmap('Answer POSITIVE if the sentiment expressed by this review: {1} is clearly positive. Otherwise answer NEGATIVE. The answer must be in capslock and without spaces', r.reviewText) as scoresentiment, COUNT(*) as review_cnt FROM reviews r WHERE r.filmTitle='taken_3' GROUP BY scoresentiment")
                 .build();
         ExperimentVariant q9 = ExperimentVariant.builder()
                 .queryId("Q9")
