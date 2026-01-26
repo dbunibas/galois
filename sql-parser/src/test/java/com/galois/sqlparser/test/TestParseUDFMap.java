@@ -148,6 +148,17 @@ public class TestParseUDFMap {
         log.info("{}", toTupleList(root.execute(db, db)));
     }
 
+    @Test
+    public void testParseUserDefinedMapWithGroupByAndWhere() {
+        String sql = String.format("select udsentiment(), count(*) from %s where salary > 0 group by udsentiment", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql, UDF_FACTORY);
+        assertNotNull(root);
+        assertInstanceOf(Project.class, root);
+
+        log.info("{}", toTupleList(root.execute(db, db)));
+    }
+
     private static final class ExtraAttributeUDMap implements IUserDefinedFunction {
         @Override
         public Object execute(Tuple iterator) {
@@ -164,11 +175,21 @@ public class TestParseUDFMap {
         }
     }
 
+    private static final class ExtraAttributeUDSentiment implements IUserDefinedFunction {
+        private final Random random = new Random();
+
+        @Override
+        public Object execute(Tuple iterator) {
+            return random.nextBoolean() ? "POSITIVE" : "NEGATIVE";
+        }
+    }
+
     private static final class MockUDMapFactory implements IUserDefinedFunctionFactory {
         @Override
         public IUserDefinedFunction getUserDefinedFunction(String name, ExpressionList<? extends Expression> expressions, ParseContext parseContext) {
             if (name.equalsIgnoreCase("udmap")) return new ExtraAttributeUDMap();
             if (name.equalsIgnoreCase("udrank")) return new ExtraAttributeUDRank();
+            if (name.equalsIgnoreCase("udsentiment")) return new ExtraAttributeUDSentiment();
             throw new UnsupportedOperationException();
         }
     }

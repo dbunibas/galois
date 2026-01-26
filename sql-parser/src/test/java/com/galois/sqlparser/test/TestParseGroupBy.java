@@ -224,6 +224,22 @@ public class TestParseGroupBy {
         logTuples(tuples);
     }
 
+    @Test
+    @Disabled
+    // FIXME: add support for aliased group by
+    public void testGroupByAlias() {
+        int limitSize = 1;
+        String sql = String.format("select t.dept as dpt from %s t group by dpt", TABLE_NAME);
+
+        IAlgebraOperator root = new SQLQueryParser().parse(sql);
+        assertNotNull(root);
+
+        ITupleIterator tupleIterator = root.execute(null, db);
+        List<Tuple> tuples = toTupleList(tupleIterator);
+        assertEquals(limitSize, tuples.size());
+        logTuples(tuples);
+    }
+
     private void logTuples(List<Tuple> tuples) {
         tuples.forEach(t -> log.info("{}", t));
     }

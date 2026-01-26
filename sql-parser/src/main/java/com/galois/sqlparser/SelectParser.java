@@ -14,6 +14,7 @@ import speedy.model.algebra.Select;
 import speedy.model.algebra.aggregatefunctions.CountAggregateFunction;
 import speedy.model.algebra.aggregatefunctions.IAggregateFunction;
 import speedy.model.algebra.aggregatefunctions.ValueAggregateFunction;
+import speedy.model.algebra.udf.UserDefinedAttributeRef;
 import speedy.model.database.AttributeRef;
 import speedy.model.database.TableAlias;
 import speedy.model.database.VirtualAttributeRef;
@@ -110,6 +111,14 @@ public class SelectParser extends SelectVisitorAdapter<IAlgebraOperator> {
                 List<ProjectionAttribute> newProjectionAttributes = new ArrayList<>();
 
                 for (ProjectionAttribute projectionAttribute : projectionAttributes) {
+                    if (!projectionAttribute.isAggregative() && projectionAttribute.getAttributeRef() instanceof UserDefinedAttributeRef udfAttributeRef) {
+                        newGroupByAggregateFunctions.removeIf(function -> function.getAttributeRef().equalsModuloClass(udfAttributeRef));
+                        newGroupByAggregateFunctions.add(new ValueAggregateFunction(udfAttributeRef));
+                        ProjectionAttribute newProjectionAttribute = new ProjectionAttribute(new AttributeRef(udfAttributeRef.getTableAlias(), udfAttributeRef.getName()));
+                        newProjectionAttributes.add(newProjectionAttribute);
+                        continue;
+                    }
+
                     if (!projectionAttribute.isAggregative()) {
                         newProjectionAttributes.add(projectionAttribute);
                         continue;
