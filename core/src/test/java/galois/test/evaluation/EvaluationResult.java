@@ -6,6 +6,7 @@ import lombok.Getter;
 import speedy.model.database.IDatabase;
 import speedy.model.database.Tuple;
 
+import java.lang.module.Configuration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,15 @@ public class EvaluationResult {
         sb.append("- # requests: ").append(llmRequest).append("\n");
         sb.append("- # input tokens: ").append(llmTokensInput).append("\n");
         sb.append("- # output tokens: ").append(llmTokensOutput).append("\n");
-        sb.append("- # Cost: ").append(llmTokensInput*0.25/1000000 + llmTokensOutput*2/100000).append("\n");
+        if (galois.utils.Configuration.getInstance().getLLMProvider().equals("openai")){
+            if (galois.utils.Configuration.getInstance().getOpenaiModelName().equals("gpt-4o-mini")){
+                sb.append("- # Cost: ").append(llmTokensInput*0.15/1000000 + llmTokensOutput*0.6/1000000).append("\n");
+            } else {
+                sb.append("- # Cost: ").append(llmTokensInput*0.25/1000000 + llmTokensOutput*2/1000000).append("\n");
+            }
+        } else {
+            sb.append("- # Cost: ").append("N/A").append("\n");
+        }
         sb.append("- time (ms): ").append(timeMs).append("\n");
         return sb.toString();
     }

@@ -51,7 +51,7 @@ public class TestEvaluationMovies {
         // Load, initialize and populate the database
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
 
         // Define the variants
         ExperimentVariant q1 = ExperimentVariant.builder()
@@ -88,7 +88,7 @@ public class TestEvaluationMovies {
                 .queryUDF("SELECT r.filmTitle, AVG(udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText)) as movieScore FROM reviews r GROUP BY r.filmTitle")
                 .build();   
 
-        variants = List.of(q8);
+        variants = List.of(q9, q10);
     }
 
     @Test
