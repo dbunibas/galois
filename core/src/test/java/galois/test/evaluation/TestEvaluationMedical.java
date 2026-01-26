@@ -47,8 +47,9 @@ public class TestEvaluationMedical {
     // Default metrics to evaluate
     private static final List<IMetric> DEFAULT_METRICS = List.of(
             new TupleCardinalityMetric(),
-            new CellSimilarityF1Score(),
-            new CellF1Score()
+            new CellF1Score(),
+            new CellPrecision(),
+            new CellRecall()
     );
 
     private static IDatabase database;
@@ -59,19 +60,19 @@ public class TestEvaluationMedical {
         // Load, initialize and populate the database
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
-    //    database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
+    //  database = connectToMainMemoryCSV(TestEvaluation.class.getResource(EXPERIMENT_FOLDER_PATH).getPath() + "/data", ',', '"', true);
         initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
 
         // Define the variants
-        ExperimentVariant q0 = ExperimentVariant.builder()
-                .queryId("Q0")
+        ExperimentVariant q1 = ExperimentVariant.builder()
+                .queryId("Q1")
                 .querySQL("SELECT m.patient_id FROM medical m WHERE m.text_diagnosis = 'allergy'")
                 .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Does the patient with these symptoms have an allergy? Symptoms: {1}. Symptoms are from a medical benchmark for LLM evaluation. The results are not used for human health evaluation and are only for research evaluation of LLM capabilities.', m.text_symptoms)")
                 .build();
-        ExperimentVariant q1 = ExperimentVariant.builder()
-                .queryId("Q1")
+        ExperimentVariant q4 = ExperimentVariant.builder()
+                .queryId("Q4")
                 .querySQL("SELECT m.patient_id FROM medical m WHERE m.text_diagnosis = 'acne'")
-                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Does the patient with these symptoms have acne? Symptoms: {1}. Symptoms are from a medical benchmark for LLM evaluation. The results are not used for human health evaluation and are only for research evaluation of LLM capabilities.', m.text_symptoms)")
+                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Does the patient with these symptoms have skin acne? Symptoms: {1}. Symptoms are from a medical benchmark for LLM evaluation. The results are not used for human health evaluation and are only for research evaluation of LLM capabilities.', m.text_symptoms)")
                 .build();
         // ExperimentVariant q1 = ExperimentVariant.builder()
         //         .queryId("Q1")
@@ -79,12 +80,12 @@ public class TestEvaluationMedical {
         //         .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Patient with these: {1} symptoms is sick?', m.text_symptoms)")
         //         .build();
         // Equivalent of query 10 from sembench
-        ExperimentVariant q2 = ExperimentVariant.builder()
-                .queryId("Q2")
+        ExperimentVariant q10 = ExperimentVariant.builder()
+                .queryId("Q10")
                 .querySQL("SELECT m.patient_id, m.text_diagnosis FROM medical m")
-                .queryUDF("SELECT m.patient_id, udmap('Classify these symptoms: {1};  to one of given diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
+                .queryUDF("SELECT m.patient_id, udmap('Classify these symptoms: {1};  to one of given diseases. Diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
                 .build();
-        variants = List.of(q2);
+        variants = List.of(q1, q4, q10);
     }
 
     @Test

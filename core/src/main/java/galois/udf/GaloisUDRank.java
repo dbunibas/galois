@@ -86,10 +86,15 @@ public class GaloisUDRank implements IUserDefinedFunction {
 
     private ChatLanguageModel getModel() {
         if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI)) {
-            return OpenAiChatModel.builder()
+            
+            OpenAiChatModel.OpenAiChatModelBuilder builder = OpenAiChatModel.builder()
                     .apiKey(Configuration.getInstance().getOpenaiApiKey())
-                    .modelName(Configuration.getInstance().getOpenaiModelName())
-                    .build();
+                    .modelName(Configuration.getInstance().getOpenaiModelName());
+
+            if (Configuration.getInstance().getOpenaiModelName().startsWith("gpt-5")) {
+                builder.temperature(1.0); 
+            }
+            return builder.build();
         }
         return new TogetherAIModel(
                 Configuration.getInstance().getTogetheraiApiKey(),
