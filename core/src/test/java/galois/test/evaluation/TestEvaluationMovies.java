@@ -51,7 +51,7 @@ public class TestEvaluationMovies {
         // Load, initialize and populate the database
         SchemaDatabase schema = loadSchemaInExperimentFolder(EXPERIMENT_FOLDER_PATH);
         database = connectToPostgres(schema.getDbName(), "public", "pguser", "pguser");
-        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema, true);
+        initializeDatabaseFromExperimentFolder(EXPERIMENT_FOLDER_PATH, database, schema);
 
         // Define the variants
         ExperimentVariant q1 = ExperimentVariant.builder()
@@ -69,11 +69,11 @@ public class TestEvaluationMovies {
                 .querySQL("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND r.scoresentiment = 'POSITIVE'")
                 .queryUDF("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText)")
                 .build();
-        // ExperimentVariant q4 = ExperimentVariant.builder()
-        //         .queryId("Q4")
-        //         .querySQL("SELECT CAST(SUM(CASE WHEN scoreSentiment = 'POSITIVE' THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) AS positivity_ratio FROM reviews r  WHERE filmTitle = 'taken_3';")
-        //         .queryUDF("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText)")
-        //         .build();
+        ExperimentVariant q4 = ExperimentVariant.builder()
+                .queryId("Q4")
+                .querySQL("SELECT COUNT(*) AS positivity_ratio FROM reviews r WHERE filmTitle = 'taken_3' and r.scoreSentiment='POSITIVE'")
+                .queryUDF("SELECT SUM(udrank('Given the following review, give it a value of 1 if its sentiment is clearly positive and 0 if it is negative. Review text: {1}', r.reviewText)) as cntPositive, COUNT(*) as cntTot FROM reviews r WHERE r.filmTitle='taken_3'")
+                .build();
         ExperimentVariant q8 = ExperimentVariant.builder()
                 .queryId("Q8")
                 .querySQL("SELECT r.scoresentiment, COUNT(*) as review_cnt FROM reviews r WHERE r.filmTitle='taken_3' GROUP BY r.scoresentiment")
