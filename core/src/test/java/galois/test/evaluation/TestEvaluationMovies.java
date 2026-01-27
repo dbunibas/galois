@@ -69,6 +69,11 @@ public class TestEvaluationMovies {
                 .querySQL("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND r.scoresentiment = 'POSITIVE'")
                 .queryUDF("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText)")
                 .build();
+        // ExperimentVariant q4 = ExperimentVariant.builder()
+        //         .queryId("Q4")
+        //         .querySQL("SELECT CAST(SUM(CASE WHEN scoreSentiment = 'POSITIVE' THEN 1 ELSE 0 END) AS FLOAT) / COUNT(*) AS positivity_ratio FROM reviews r  WHERE filmTitle = 'taken_3';")
+        //         .queryUDF("SELECT COUNT(*) as positive_review_cnt FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText)")
+        //         .build();
         ExperimentVariant q8 = ExperimentVariant.builder()
                 .queryId("Q8")
                 .querySQL("SELECT r.scoresentiment, COUNT(*) as review_cnt FROM reviews r WHERE r.filmTitle='taken_3' GROUP BY r.scoresentiment")
@@ -86,7 +91,7 @@ public class TestEvaluationMovies {
                 .queryUDF("SELECT r.filmTitle, AVG(udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText)) as movieScore FROM reviews r GROUP BY r.filmTitle")
                 .build();   
 
-        variants = List.of(q8);
+        variants = List.of(q4);
     }
 
     @Test
