@@ -101,16 +101,16 @@ public class GaloisUDFFactory implements IUserDefinedFunctionFactory {
         String userMessage = ((StringValue) userMessageExpression).getValue();
 
         // Parse attribute refs
-        List<AttributeRef> attributeRefs = new ArrayList<>();
-        for (int i = 1; i < expressions.size(); i++) {
-            Expression columnExpression = expressions.get(i);
-            checkExpressionType(columnExpression, Column.class, "UDCast parse error: " + i + 1 + "th argument is not a column!");
-            TableAlias tableAlias = parseContext.getTableAliasFromColumn((Column) columnExpression);
-            AttributeRef attributeRef = new AttributeRef(tableAlias, ((Column) columnExpression).getColumnName());
-            attributeRefs.add(attributeRef);
-        }
+        // List<AttributeRef> attributeRefs = new ArrayList<>();
+        // for (int i = 1; i < expressions.size(); i++) {
+        //     Expression columnExpression = expressions.get(i);
+        //     checkExpressionType(columnExpression, Column.class, "UDCast parse error: " + i + 1 + "th argument is not a column!");
+        //     TableAlias tableAlias = parseContext.getTableAliasFromColumn((Column) columnExpression);
+        //     AttributeRef attributeRef = new AttributeRef(tableAlias, ((Column) columnExpression).getColumnName());
+        //     attributeRefs.add(attributeRef);
+        // }
 
-        return new GaloisUDCast(userMessage, attributeRefs);
+        return new GaloisUDCast(userMessage);
     }
 
     private void checkExpressionType(Expression expression, Class<? extends Expression> clazz, String error) {

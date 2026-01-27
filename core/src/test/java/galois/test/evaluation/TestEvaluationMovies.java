@@ -71,7 +71,7 @@ public class TestEvaluationMovies {
                 .build();
         ExperimentVariant q4 = ExperimentVariant.builder()
                 .queryId("Q4")
-                .querySQL("SELECT SUM(udcast('If the attribute value is POSITIVE return 1, otherwise 0. Attribute value: {1}', r.scoreSentiment)) as cntPositive, COUNT(*) AS cntTot FROM reviews r WHERE filmTitle = 'taken_3'")
+                .querySQL("SELECT SUM(udcast('scoreSentiment')) as cntPositive, COUNT(*) AS cntTot FROM reviews r WHERE filmTitle = 'taken_3'")
                 .queryUDF("SELECT SUM(udrank('Given the following review, give it a value of 1 if its sentiment is clearly positive and 0 if it is negative. Review text: {1}', r.reviewText)) as cntPositive, COUNT(*) as cntTot FROM reviews r WHERE r.filmTitle='taken_3'")
                 .build();
         ExperimentVariant q8 = ExperimentVariant.builder()
