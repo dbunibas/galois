@@ -45,7 +45,10 @@ public class TestEvaluationAmazon {
     // Default metrics to evaluate
     private static final List<IMetric> DEFAULT_METRICS = List.of(
             new TupleCardinalityMetric(),
-            new TupleConstraintFilteredAttributes()
+            new TupleConstraintFilteredAttributes(),
+            new CellF1Score(),
+            new CellPrecision(),
+            new CellRecall()
     );
 
     private static IDatabase database;
@@ -62,8 +65,8 @@ public class TestEvaluationAmazon {
         // Define the variants
         ExperimentVariant q0 = ExperimentVariant.builder()
                 .queryId("Q0")
-                .querySQL("SELECT a.summary, a.overall as score FROM amazon a")
-                .queryUDF("SELECT a.summary, udrank('From the review named {2} with text {1}, give it a grade from 1 to 5 based on how much the reviewer liked the product. The scale is this: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', a.reviewText, a.summary) as score FROM amazon a")
+                .querySQL("SELECT a.overall as score FROM amazon a")
+                .queryUDF("SELECT udrank('From the review named {2} with text {1}, give it a grade from 1 to 5 based on how much the reviewer liked the product. The scale is this: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', a.reviewText, a.summary) as score FROM amazon a")
                 .build();
         
 
