@@ -31,7 +31,7 @@ public class GaloisUDRank implements IUserDefinedFunction {
             Answer the user question:
             {{userQuestion}}
             
-            Respond only with the result, don't add any explanation or additional comment. The result MUST be a number. If you don't know respond with NULL.
+            Respond only with the result, don't add any explanation or additional comment. The result MUST be a number
             
             Answer:
             """);

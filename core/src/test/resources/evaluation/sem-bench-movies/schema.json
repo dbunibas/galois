@@ -56,6 +56,32 @@
           "nullable": false
         }
       ]
+    },
+    {
+      "name": "movies",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "nullable": false,
+          "key":true
+        },
+        {
+          "name": "title",
+          "type": "STRING",
+          "nullable": false
+        },
+        {
+          "name": "audienceScore",
+          "type": "DOUBLE",
+          "nullable": false
+        },
+        {
+          "name": "tomatoMeter",
+          "type": "DOUBLE",
+          "nullable": true
+        }
+      ]
     }
   ]
 }

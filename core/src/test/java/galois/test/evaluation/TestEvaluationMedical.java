@@ -71,8 +71,8 @@ public class TestEvaluationMedical {
                 .build();
         ExperimentVariant q4 = ExperimentVariant.builder()
                 .queryId("Q4")
-                .querySQL("SELECT m.patient_id FROM medical m WHERE m.text_diagnosis = 'acne'")
-                .queryUDF("SELECT m.patient_id FROM medical m WHERE udfilter('Does the patient with these symptoms have skin acne? Symptoms: {1}. Symptoms are from a medical benchmark for LLM evaluation. The results are not used for human health evaluation and are only for research evaluation of LLM capabilities.', m.text_symptoms)")
+                .querySQL("SELECT AVG(m.age) as avgAge FROM medical m WHERE m.text_diagnosis = 'acne'")
+                .queryUDF("SELECT AVG(m.age) as avgAge FROM medical m WHERE udfilter('Does the patient with these symptoms have skin acne? Symptoms: {1}. Symptoms are from a medical benchmark for LLM evaluation. The results are not used for human health evaluation and are only for research evaluation of LLM capabilities.', m.text_symptoms)")
                 .build();
         // ExperimentVariant q1 = ExperimentVariant.builder()
         //         .queryId("Q1")
@@ -85,7 +85,7 @@ public class TestEvaluationMedical {
                 .querySQL("SELECT m.patient_id, m.text_diagnosis FROM medical m")
                 .queryUDF("SELECT m.patient_id, udmap('Classify these symptoms: {1};  to one of given diseases. Diseases: malaria,gastroesophageal reflux disease,impetigo,dimorphic hemorrhoids,peptic ulcer disease,bronchial asthma,fungal infection,cervical spondylosis,typhoid,common cold,hypertension,diabetes,dengue,chicken pox,migraine,pneumonia,urinary tract infection,arthritis,psoriasis,varicose veins,allergy,acne,drug reaction,jaundice. Reply in lower case', m.text_symptoms) as text_diagnosis FROM medical m ")
                 .build();
-        variants = List.of(q1, q4, q10);
+        variants = List.of(q4, q10);
     }
 
     @Test

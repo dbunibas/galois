@@ -82,16 +82,16 @@ public class TestEvaluationMovies {
                 .build();
         ExperimentVariant q9 = ExperimentVariant.builder()
                 .queryId("Q9")
-                .querySQL("SELECT r.reviewId, r.originalScore as score FROM reviews r WHERE r.filmTitle='ant_man_and_the_wasp_quantumania'")
-                .queryUDF("SELECT r.reviewId, udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText) as score FROM reviews r WHERE r.filmTitle='ant_man_and_the_wasp_quantumania'")
+                .querySQL("SELECT r.originalScore as score FROM reviews r WHERE r.filmTitle='ant_man_and_the_wasp_quantumania'")
+                .queryUDF("SELECT udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText) as score FROM reviews r WHERE r.filmTitle='ant_man_and_the_wasp_quantumania'")
                 .build();
         ExperimentVariant q10 = ExperimentVariant.builder()
                 .queryId("Q10")
-                .querySQL("SELECT r.filmTitle, AVG(r.originalScore) as movieScore FROM reviews r GROUP BY r.filmTitle")
+                .querySQL("SELECT m.id AS filmTitle, m.audienceScore AS movieScore FROM movies m")
                 .queryUDF("SELECT r.filmTitle, AVG(udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText)) as movieScore FROM reviews r GROUP BY r.filmTitle")
                 .build();   
 
-        variants = List.of(q4);
+        variants = List.of(q9);
     }
 
     @Test
