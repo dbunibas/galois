@@ -57,12 +57,12 @@ public class TestEvaluationMovies {
         ExperimentVariant q1 = ExperimentVariant.builder()
                 .queryId("Q1")
                 .querySQL("SELECT r.reviewid FROM reviews r WHERE r.scoresentiment = 'POSITIVE' LIMIT 5")
-                .queryUDF("SELECT r.reviewid FROM reviews r WHERE udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText) LIMIT 5")
+                .queryUDF("SELECT r.reviewid FROM reviews r WHERE udfilter('Determine if the following movie review is clearly positive, review: {1}', r.reviewText) LIMIT 5")
                 .build();
         ExperimentVariant q2 = ExperimentVariant.builder()
                 .queryId("Q2")
                 .querySQL("SELECT r.reviewid FROM reviews r WHERE r.filmTitle='taken_3' AND r.scoresentiment = 'POSITIVE' LIMIT 5")
-                .queryUDF("SELECT r.reviewid FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Is the sentiment of the review {1} clearly positive?', r.reviewText) LIMIT 5")
+                .queryUDF("SELECT r.reviewid FROM reviews r WHERE r.filmTitle='taken_3' AND udfilter('Determine if the following movie review is clearly positive, review: {1}', r.reviewText) LIMIT 5")
                 .build();
         ExperimentVariant q3 = ExperimentVariant.builder()
                 .queryId("Q3")
@@ -91,7 +91,7 @@ public class TestEvaluationMovies {
                 .queryUDF("SELECT r.filmTitle, AVG(udrank('From this review {1} select a score on how much did the reviewer like the movie based on provided rubrics. Rubrics: 5 (Very positive): Strong positive sentiment, indicating high satisfaction. 4 (Positive): Noticeably positive sentiment, indicating general satisfaction. 3 (Neutral): Expresses no clear positive or negative sentiment. May be factual or descriptive without emotional language. 2 (Negative): Noticeably negative sentiment, indicating some level of dissatisfaction but without strong anger or frustration. 1 (Very negative): Strong negative sentiment, indicating high dissatisfaction, frustration, or anger', r.reviewText)) as movieScore FROM reviews r GROUP BY r.filmTitle")
                 .build();   
 
-        variants = List.of(q9);
+        variants = List.of(q1,q2, q3, q4, q8, q9, q10);
     }
 
     @Test
