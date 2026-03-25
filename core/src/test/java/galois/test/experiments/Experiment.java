@@ -38,6 +38,9 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.util.*;
 
+import org.apache.commons.io.LineIterator;
+import speedy.model.database.TableAlias;
+
 @AllArgsConstructor
 @Data
 @Slf4j
@@ -401,7 +404,14 @@ public final class Experiment {
     }
 
     private String replaceHeadersWithTypes(File speedyFile, List<Attribute> attributes) throws IOException {
-        List<String> lines = FileUtils.readLines(speedyFile, "utf-8");
+//        List<String> lines = FileUtils.readLines(speedyFile, "utf-8");
+        List<String> lines = new ArrayList<>();
+        try (LineIterator it = FileUtils.lineIterator(speedyFile, "UTF-8")) {
+            while (it.hasNext()) {
+                String line = it.nextLine();
+                lines.add(line);
+            }
+        }
         String headers = lines.get(0);
         StringTokenizer tokenizer = new StringTokenizer(headers, ",");
         String textDelim = getTextDelim(headers);

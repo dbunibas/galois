@@ -56,3 +56,7 @@ core/src/test/resources/llm-bench/cache
 core/src/test/resources/recipes
 core/src/test/resources/vigili
 TestRunVigili.java
+
+## docker ##
+docker/data
+docker/chroma-data

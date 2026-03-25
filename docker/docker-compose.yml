@@ -22,15 +22,15 @@ services:
       - 8000:8000
     expose:
       - 8000
-  ollama:
-    image: ollama/ollama
-    ports:
-        - 11434:11434
-    volumes:
-        - ./ollama/ollama:/root/.ollama
-        - ./entrypoint.sh:/entrypoint.sh
-    container_name: ollama
-    pull_policy: always
-    tty: true
-    restart: always
-    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+#  ollama:
+#    image: ollama/ollama
+#    ports:
+#        - 11434:11434
+#    volumes:
+#        - ./ollama/ollama:/root/.ollama
+#        - ./entrypoint.sh:/entrypoint.sh
+#    container_name: ollama
+#    pull_policy: always
+#    tty: true
+#    restart: always
+#    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
