@@ -39,6 +39,7 @@ public class Constants {
     public static final String CACHE_DB_DRIVER = "org.postgresql.Driver";
     public static final String CACHE_DB_URI = "jdbc:postgresql:cache";
     public static final String CACHE_DB_USER = "pguser";
+    public static final String CACHE_DB_PASSWORD = "pguser";
 
     public static final String EXPORT_EXCEL_PATH = "~/test-results/";
 }
