@@ -70,7 +70,7 @@ public class DBCache implements ILLMCache {
             DBCacheEntry dbCacheEntry = new DBCacheEntry(
                     cacheKey,
                     getProvider(queryExecutor),
-                    Constants.LLM_MODEL,
+                    getLLMModel(queryExecutor),
                     firstPrompt,
                     prompt,
                     iteration,
@@ -88,7 +88,7 @@ public class DBCache implements ILLMCache {
     }
 
     private String getCacheKey(IQueryExecutor executor, String prompt, int iteration, String firstPrompt) {
-        String executorName = String.format("%s-%s", getProvider(executor), Constants.LLM_MODEL);
+        String executorName = String.format("%s-%s", getProvider(executor), getLLMModel(executor));
         String promptKey = prompt.equals(firstPrompt) ?
                 String.format("%s-iter:%d-%s", executorName, iteration, prompt) :
                 String.format("%s-fp:%s-iter:%d-%s", executorName, firstPrompt, iteration, prompt);
@@ -97,6 +97,14 @@ public class DBCache implements ILLMCache {
 
     private String getProvider(IQueryExecutor queryExecutor) {
         return queryExecutor == null ? "LLM-Similarity" : queryExecutor.getClass().getSimpleName();
+    }
+
+    private String getLLMModel(IQueryExecutor executor) {
+        String simpleName = executor.getClass().getSimpleName();
+        if (simpleName.contains("OpenAI")) return Constants.OPEN_AI_CHAT_MODEL_NAME;
+        if (simpleName.contains("Togetherai")) return Constants.TOGETHERAI_MODEL;
+        if (simpleName.contains("Gemini")) return GEMINI_CHAT_MODEL_NAME;
+        throw new CacheException("Cannot find model for simple name: " + simpleName);
     }
 }
 
