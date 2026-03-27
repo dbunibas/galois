@@ -1,5 +1,6 @@
 package galois.llm.query.utils.cache.db;
 
+import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.IQueryExecutor;
 import galois.llm.query.utils.cache.CacheEntry;
 import galois.llm.query.utils.cache.CacheException;
@@ -98,6 +99,8 @@ public class DBCache implements ILLMCache {
     }
 
     private String getLLMModel(IQueryExecutor executor) {
+        if (executor == null) return TogetherAIConstants.MODEL_LLAMA3_3_70B;
+
         String simpleName = executor.getClass().getSimpleName();
         if (simpleName.contains("OpenAI")) return Configuration.getInstance().getOpenaiModelName();
         if (simpleName.contains("Togetherai")) return Configuration.getInstance().getTogetheraiModel();

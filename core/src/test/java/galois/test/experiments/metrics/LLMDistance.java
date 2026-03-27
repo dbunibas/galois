@@ -23,6 +23,7 @@ import org.apache.commons.lang.math.NumberUtils;
 public class LLMDistance {
 
 //    private String modelName = TogetherAIConstants.MODEL_LLAMA3_1_8B;
+    // TODO: if this changes, change also the DBCache modelName for LLMDistance
     private String modelName = TogetherAIConstants.MODEL_LLAMA3_3_70B;
     private TogetherAIModel llmModel = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), modelName, true);
     private ObjectMapper objectMapper = Mapper.MAPPER;
