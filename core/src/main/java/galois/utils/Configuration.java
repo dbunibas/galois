@@ -83,6 +83,38 @@ public class Configuration {
         return path;
     }
 
+    public String getCacheDbDriver() {
+        String driver = props.getProperty("cache.dbDriver");
+        if (isCacheEnabled() && driver.isBlank()) {
+            throw new GaloisRuntimeException("Cache driver is undefined!");
+        }
+        return driver;
+    }
+
+    public String getCacheDbUri() {
+        String uri = props.getProperty("cache.dbUri");
+        if (isCacheEnabled() && uri.isBlank()) {
+            throw new GaloisRuntimeException("Cache uri is undefined!");
+        }
+        return uri;
+    }
+
+    public String getCacheDbUser() {
+        String user = props.getProperty("cache.dbUser");
+        if (isCacheEnabled() && user.isBlank()) {
+            throw new GaloisRuntimeException("Cache user is undefined!");
+        }
+        return user;
+    }
+
+    public String getCacheDbPassword() {
+        String password = props.getProperty("cache.dbPassword");
+        if (isCacheEnabled() && password.isBlank()) {
+            throw new GaloisRuntimeException("Cache password is undefined!");
+        }
+        return password;
+    }
+
     public boolean exportConfidence() {
         return false;
     }
