@@ -308,7 +308,7 @@ public class LLMDistance {
                 value = value.replace(",", ".");
                 Number number = NumberUtils.createNumber(value);
                 return number;
-            } catch (NumberFormatException internalNfe) {
+            } catch (Exception internalNfe) {
                 return null;
             }
         }

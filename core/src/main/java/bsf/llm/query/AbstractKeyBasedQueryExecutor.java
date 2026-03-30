@@ -18,6 +18,12 @@ import java.util.stream.Collectors;
 
 import static bsf.llm.query.utils.QueryUtils.*;
 import static bsf.utils.Mapper.toCleanJsonList;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 @Slf4j
 public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
@@ -25,6 +31,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     private List<AttributeRef> attributes = null;
     private boolean skipKeyRequest = false; // for DEBUG put it to true
     private boolean skipTupleRequest = false; // for DEBUG put it to true
+    // properties for GT experiment
+    private boolean gtExperiment = false; // in production use false
+    private String pathGT = "<PATH_GIT>/core/src/test/resources/llm-bench/sampled/";
 
     private AttributesOverride attributesOverride = null;
 
@@ -51,11 +60,17 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         ITable table = database.getTable(tableAlias.getTableName());
 
         Key primaryKey = database.getPrimaryKey(table.getName());
-        List<Map<String, Object>> keyValues = getKeyValues(table, primaryKey, chain);
+        List<Map<String, Object>> keyValues = null;
+        if (!gtExperiment) {
+            keyValues = getKeyValues(table, primaryKey, chain);
+        } else {
+            keyValues = loadKeysFromFile(database, table, primaryKey);
+        }
         BSFDebug.log("Parsed keys are:");
         BSFDebug.log(keyValues);
-        if (skipTupleRequest) return new ArrayList<>();
-
+        if (skipTupleRequest) {
+            return new ArrayList<>();
+        }
         List<Tuple> tuples = keyValues.stream().map(k -> generateTupleFromKey(table, tableAlias, k, primaryKey, chain)).filter(Objects::nonNull).toList();
         BSFDebug.log("LLMScan results:");
         BSFDebug.log(tuples);
@@ -71,10 +86,12 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     private List<Map<String, Object>> getKeyValues(ITable table, Key primaryKey, Chain<String, String> chain) {
 //        List<Map<String, Object>> keys = new ArrayList<>();
         Set<Map<String, Object>> keys = new HashSet<>();
-        if (skipKeyRequest) return getStaticKeys(table, primaryKey);
-        String schema = primaryKey.isCompositeKey() ?
-                generateJsonSchemaForCompositePrimaryKey(table, primaryKey) :
-                generateJsonSchemaForPrimaryKey(table);
+        if (skipKeyRequest) {
+            return getStaticKeys(table, primaryKey);
+        }
+        String schema = primaryKey.isCompositeKey()
+                ? generateJsonSchemaForCompositePrimaryKey(table, primaryKey)
+                : generateJsonSchemaForPrimaryKey(table);
 
         log.debug("Max Iteration Allowed: {}", getMaxIterations());
         for (int i = 0; i < getMaxIterations(); i++) {
@@ -90,10 +107,14 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
                 response = getResponse(chain, userMessage, false, i, getFirstPrompt().generate(table, primaryKey, getExpression(), schema));
                 callGetResponse = true;
                 log.debug("Response is: {}", response);
-                if (response == null || response.trim().isBlank()) return new ArrayList<>(keys); // avoid other requests
+                if (response == null || response.trim().isBlank()) {
+                    return new ArrayList<>(keys); // avoid other requests
+                }
                 List<Map<String, Object>> currentKeys = parseKeyResponse(response, table, primaryKey);
                 log.debug("Parsed keys are: {}", currentKeys);
-                if (currentKeys.isEmpty()) break; // avoid other requests
+                if (currentKeys.isEmpty()) {
+                    break; // avoid other requests
+                }
                 String cleanedResponse = toCleanJsonList(response, true);
                 log.debug("Cleaned response is : {}", cleanedResponse);
                 currentKeys = parseKeyResponse(cleanedResponse, table, primaryKey);
@@ -166,9 +187,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         }
 
         String keyAsString = getKeyAsString(keyValue, primaryKeyAttributes);
-        List<Attribute> attributeList = attributesOverride == null ?
-                new ArrayList<>(attributesQuery) :
-                AttributesOverrider.overrideAttributes(attributesOverride, attributesQuery);
+        List<Attribute> attributeList = attributesOverride == null
+                ? new ArrayList<>(attributesQuery)
+                : AttributesOverrider.overrideAttributes(attributesOverride, attributesQuery);
         return addValueFromAttributes(table, tableAlias, attributeList, tuple, keyAsString, chain);
     }
 
@@ -211,9 +232,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
     }
 
     protected Map<String, Object> getAttributesValues(ITable table, List<Attribute> attributesPrompt, String key, Chain<String, String> chain) {
-        String jsonSchema = attributesOverride == null ?
-                generateJsonSchemaFromAttributes(table, attributesPrompt) :
-                generateJsonSchemaFromAttributesUsingLinkedHashMap(table, attributesPrompt);
+        String jsonSchema = attributesOverride == null
+                ? generateJsonSchemaFromAttributes(table, attributesPrompt)
+                : generateJsonSchemaFromAttributesUsingLinkedHashMap(table, attributesPrompt);
         String prompt = getAttributesPrompt().generate(table, key, attributesPrompt, jsonSchema);
         log.debug("Attribute prompt is: {}", prompt);
         String response = "";
@@ -287,7 +308,9 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
             response = chain.execute(userMessage);
             double outputTokens = estimator.getTokens(response);
             long timeMillis = System.currentTimeMillis() - start;
-            if (!ignoreTokens) updateStats(inputTokens, outputTokens, timeMillis);
+            if (!ignoreTokens) {
+                updateStats(inputTokens, outputTokens, timeMillis);
+            }
 
             double baseInputTokensIncrement = LLMQueryStatManager.getInstance().getBaseLLMTokensInput() - baseInputTokens;
             double baseOutputTokensIncrement = LLMQueryStatManager.getInstance().getBaseLLMTokensOutput() - baseOutputTokens;
@@ -320,5 +343,25 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         queryStatManager.updateBaseLLMTokensOutput(outputTokens);
         queryStatManager.updateBaseTimeMs(timeMillis);
         queryStatManager.updateBaseLLMRequest(1);
+    }
+
+    private List<Map<String, Object>> loadKeysFromFile(IDatabase database, ITable table, Key primaryKey) {
+        Execution execution = Execution.getInstance();
+        String filePath = this.pathGT + execution.getCurrentDB() + "/" + execution.getCurrentDBId() + "/" + table.getName() + ".csv";
+        List<Map<String, Object>> keys = new ArrayList<>();
+        try (FileReader reader = new FileReader(Paths.get(filePath).toFile()); CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
+            for (CSVRecord record : csvParser) {
+                Map<String, Object> key = new HashMap<>();
+                for (AttributeRef attribute : primaryKey.getAttributes()) {
+                    String k = record.get(attribute.getName());
+                    key.put(attribute.getName(), k);
+                }
+//                System.out.println("Add: " + key.toString());
+                keys.add(key);
+            }
+        } catch (IOException e) {
+//            System.out.println(e);
+        }
+        return keys;
     }
 }

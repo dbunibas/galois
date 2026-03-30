@@ -1,0 +1,195 @@
+iata_code,icao_code,airport_name,standard_timezone,city,nation
+BWK,LDSB,Bol Airport (Brač Airport),UTC+01:00,Bol,Croatia
+MXD,YMWX,Marion Downs Airport,UTC+10:00,Marion Downs Station,Australia
+BTS,LZIB,M. R. Štefánik Airport,UTC+01:00,Bratislava,Slovakia
+LTQ,LFAT,Le Touquet – Côte d'Opale Airport,UTC+01:00,Le Touquet-Paris-Plage,France
+BJK,WAPK,Benjina Airport (Nangasuri Airport),UTC+09:00,Benjina,Indonesia
+ARG,KARG,Walnut Ridge Regional Airport,UTC−06:00,Walnut Ridge,United States
+MZU,VEMZ,Muzaffarpur Airport,UTC+05:30,Muzaffarpur,India
+BXR,OIKM,Bam Airport,UTC+03:30,Bam,Iran
+HOK,YHOO,Hooker Creek Airport,UTC+09:30,Lajamanu,Australia
+CLZ,SVCL,Calabozo Airport,UTC−04:00,Calabozo,Venezuela
+BPF,AGBT,Batuna Airport,UTC+11:00,Batuna,Solomon Islands
+LGF,KLGF,Laguna Army Airfield,UTC−07:00,Yuma Proving Ground,United States
+MST,EHBK,Maastricht Aachen Airport,UTC+01:00,Maastricht,Netherlands
+CMI,KCMI,University of Illinois Willard Airport,UTC−06:00,Champaign,United States
+FUL,KFUL,Fullerton Municipal Airport,UTC−08:00,Fullerton,United States
+KSQ,UTSL,Karshi Airport,UTC+05:00,Karshi,Uzbekistan
+KRY,ZWKM,Karamay Airport,UTC+06:00,Karamay,China
+KAT,NZKT,Kaitaia Airport,UTC+12:00,Kaitaia,New Zealand
+KLQ,WIPV,Keluang Airport,UTC+07:00,Keluang,Indonesia
+GDC,KGYH,Donaldson Center Airport (FAA: GYH),UTC−05:00,Greenville,United States
+DOU,SSDO,Dourados Airport (Francisco de Matos Pereira Airport),UTC−04:00,Dourados,Brazil
+AVB,LIPA,Aviano Air Base,UTC+01:00,Aviano,Italy
+APK,NTGD,Apataki Airport,UTC−10:00,Apataki,French Polynesia
+FXE,KFXE,Fort Lauderdale Executive Airport,UTC−05:00,Fort Lauderdale,United States
+FEJ,SNOU,Feijó Airport,UTC−05:00,Feijó,Brazil
+BGW,ORBI,Baghdad International Airport,UTC+03:00,Baghdad,Iraq
+MDE,SKRG,José María Córdova International Airport,UTC−05:00,Medellín,Colombia
+AUR,LFLW,Aurillac – Tronquières Airport,UTC+01:00,Aurillac,France
+IKP,YIKM,Inkerman Airport,UTC+10:00,Inkerman,Australia
+BZR,LFMU,Béziers Cap d'Agde Airport,UTC+01:00,Béziers,France
+AYP,SPHO,Coronel FAP Alfredo Mendívil Duarte Airport,UTC−05:00,Ayacucho,Peru
+LFB,FQLU,Lumbo Airport,UTC+02:00,Lumbo,Mozambique
+HJR,VAKJ,Civil Aerodrome Khajuraho,UTC+05:30,Khajuraho,India
+BZU,FZKJ,Buta Zega Airport,UTC+02:00,Buta,Democratic Republic of the Congo
+JBS,SSSB,São Borja Airport,UTC−03:00,São Borja,Brazil
+FDH,EDNY,Friedrichshafen Airport (Bodensee Airport),UTC+01:00,Friedrichshafen,Germany
+FAQ,AYFR,Frieda River Airport,UTC+10:00,Frieda River,Papua New Guinea
+EOZ,SVEZ,Elorza Airport,UTC−04:00,Elorza,Venezuela
+HRZ,SSHZ,Horizontina Airport,UTC−03:00,Horizontina,Brazil
+ADT,KADH,Ada Municipal Airport (FAA: ADH),UTC−06:00,Ada,United States
+BFN,FABL,Bloemfontein Airport,UTC+02:00,Bloemfontein,South Africa
+AMM,OJAI,Queen Alia International Airport,UTC+02:00,Amman,Jordan
+DSN,ZBDS,Ordos Ejin Horo Airport,UTC+08:00,Ordos,China
+BEX,EGUB,RAF Benson,UTC±00:00,Benson,England
+MCQ,LHMC,Miskolc Airport,UTC+01:00,Miskolc,Hungary
+HSB,KHSB,Harrisburg-Raleigh Airport,UTC−06:00,Harrisburg,United States
+GLI,YGLI,Glen Innes Airport,UTC+10:00,Glen Innes,Australia
+ELY,KELY,Ely Airport,UTC−08:00,Ely,United States
+MLZ,SUMO,Cerro Largo International Airport,UTC−03:00,Melo,Uruguay
+MHZ,EGUN,RAF Mildenhall,UTC±00:00,Mildenhall,United Kingdom
+IXR,VERC,Birsa Munda Airport,UTC+05:30,Ranchi,India
+HRS,FAHR,Harrismith Airport,UTC+02:00,Harrismith,South Africa
+FUE,GCFV,Fuerteventura Airport,UTC±00:00,Fuerteventura,Spain
+FLP,KFLP,Marion County Regional Airport,UTC−06:00,Flippin,United States
+DNB,YDBR,Dunbar Airport,UTC+10:00,Dunbar,Australia
+DUG,KDUG,Bisbee Douglas International Airport,UTC−07:00,Bisbee / Douglas,United States
+AFF,KAFF,United States Air Force Academy Airfield,UTC−07:00,Colorado Springs,United States
+BDU,ENDU,Bardufoss Airport,UTC+01:00,Bardufoss,Norway
+BCO,HABC,Baco Airport (Jinka Airport),UTC+03:00,Jinka,Ethiopia
+BLZ,FWCL,Chileka International Airport,UTC+02:00,Blantyre,Malawi
+LBR,SWLB,Lábrea Airport,UTC−04:00,Lábrea,Brazil
+KXK,UHKK,Komsomolsk-on-Amur Airport,UTC+10:00,Komsomolsk-on-Amur,Russia
+IRI,HTIR,Iringa Airport (Nduli Airport),UTC+03:00,Iringa,Tanzania
+GRB,KGRB,Austin Straubel International Airport,UTC−06:00,Green Bay,United States
+BDT,FZFD,Gbadolite Airport,UTC+01:00,Gbadolite,Democratic Republic of the Congo
+ADG,KADG,Lenawee County Airport,UTC−05:00,Adrian,United States
+JOG,WIIJ,Adisucipto International Airport,UTC+07:00,Yogyakarta,Indonesia
+CQF,LFAC,Calais–Dunkerque Airport,UTC+01:00,Calais / Dunkirk,France
+GOJ,UWGG,Nizhny Novgorod International Airport (Strigino Airport),UTC+03:00,Nizhny Novgorod,Russia
+LUB,SYLP,Lumid Pau Airport,UTC−04:00,Lumid Pau,Guyana
+ILR,DNIL,Ilorin International Airport,UTC+01:00,Ilorin,Nigeria
+JUJ,SASJ,Gobernador Horacio Guzmán International Airport,UTC−03:00,San Salvador de Jujuy,Argentina
+COS,KCOS,Colorado Springs Airport,UTC−07:00,Colorado Springs,United States
+FEC,SNJD,Feira de Santana Airport (Gov. João Durval Carneiro Airport),UTC−03:00,Feira de Santana,Brazil
+GBP,YGAM,Gamboola Airport,UTC+10:00,Gamboola,Australia
+LDE,LFBT,Tarbes–Lourdes–Pyrénées Airport,UTC+01:00,Tarbes / Lourdes,France
+JOT,KJOT,Joliet Regional Airport,UTC−06:00,Joliet,United States
+FIN,AYFI,Finschhafen Airport,UTC+10:00,Finschhafen,Papua New Guinea
+IND,KIND,Indianapolis International Airport,UTC−05:00,Indianapolis,United States
+LND,KLND,Hunt Field,UTC−07:00,Lander,United States
+LOW,KLKU,Louisa County Airport (Freeman Field) (FAA: LKU),UTC−05:00,Louisa,United States
+CMM,MGCR,Carmelita Airport,UTC−06:00,Carmelita,Guatemala
+CYF,PACK,Chefornak Airport (FAA: CFK),UTC−09:00,Chefornak,United States
+NNY,ZHNY,Nanyang Jiangying Airport,UTC+08:00,Nanyang,China
+LCM,SACC,La Cumbre Airport,UTC−03:00,La Cumbre,Argentina
+MYA,YMRY,Moruya Airport,UTC+10:00,Moruya,Australia
+ALS,KALS,San Luis Valley Regional Airport,UTC−07:00,Alamosa,United States
+NGB,ZSNB,Ningbo Lishe International Airport,UTC+08:00,Ningbo,China
+MNZ,KHEF,Manassas Regional Airport (FAA: HEF),UTC−05:00,Manassas,United States
+LUW,WAMW,Syukuran Aminuddin Amir Airport,UTC+08:00,Luwuk,Indonesia
+KRI,AYKK,Kikori Airport,UTC+10:00,Kikori,Papua New Guinea
+HHE,RJSH,JMSDF Hachinohe Air Base,UTC+09:00,Hachinohe,Japan
+BYU,EDQD,Bindlacher Berg Airport,UTC+01:00,Bayreuth,Germany
+KDC,DBBK,Kandi Airport,UTC+01:00,Kandi,Benin
+CKY,GUCY,Conakry International Airport (Gbessia Int'l Airport),UTC±00:00,Conakry,Guinea
+ADO,YAMK,Andamooka Airport,UTC+09:30,Andamooka,Australia
+BWU,YSBK,Bankstown Airport,UTC+10:00,Bankstown,Australia
+CYR,SUCA,Colonia Airport (Laguna de los Patos Intn'l Airport),UTC−03:00,Colonia del Sacramento,Uruguay
+MIH,YMIP,Mitchell Plateau Airport,UTC+08:00,Mitchell Plateau,Australia
+GSO,KGSO,Piedmont Triad International Airport,UTC−05:00,Greensboro,United States
+DBO,YSDU,Dubbo Regional Airport,UTC+10:00,Dubbo,Australia
+BWN,WBSB,Brunei International Airport,UTC+08:00,Bandar Seri Begawan,Brunei
+BKK,VTBS,Suvarnabhumi Airport,UTC+07:00,Bangkok,Thailand
+CET,LFOU,Cholet Le Pontreau Airport,UTC+01:00,Cholet,France
+GOC,AYGX,Gora Airport,UTC+10:00,Gora,Papua New Guinea
+HYS,KHYS,Hays Regional Airport,UTC−06:00,Hays,United States
+ADC,AYAN,Andakombe Airport,UTC+10:00,Andakombe,Papua New Guinea
+GDW,KGDW,Gladwin Zettel Memorial Airport,UTC−05:00,Gladwin,United States
+MPY,SOOA,Maripasoula Airport,UTC−03:00,Maripasoula,French Guiana
+CYB,MWCB,Charles Kirkconnell International Airport,UTC−05:00,Cayman Brac,British Overseas Territory of Cayman Islands
+HTW,KHTW,Lawrence County Airpark,UTC−05:00,Chesapeake / Huntington (WV),United States
+BJJ,KBJJ,Wayne County Airport,UTC−05:00,Wooster,United States
+BWX,WADY,Banyuwangi Airport,UTC+07:00,Banyuwangi,Indonesia
+CAA,MHGE,El Aguacate Airport,UTC−06:00,Catacamas,Honduras
+DER,AYDE,Derim Airport,UTC+10:00,Derim,Papua New Guinea
+KHR,ZMHH,Kharkhorin Airport,UTC+08:00,Kharkhorin,Mongolia
+MTR,SKMR,Los Garzones Airport,UTC−05:00,Montería,Colombia
+MNK,NGMA,Maiana Airport,UTC+12:00,Maiana,Kiribati
+ANG,LFBU,Angoulême – Cognac International Airport,UTC+01:00,Angoulême,France
+BVY,KBVY,Beverly Municipal Airport,UTC−05:00,Beverly,United States
+JGN,ZLJQ,Jiayuguan Airport,UTC+08:00,Jiayuguan,China
+ERH,GMFK,Moulay Ali Cherif Airport,UTC±00:00,Errachidia,Morocco
+LIH,PHLI,Lihue Airport,UTC−10:00,Lihue,United States
+FDK,KFDK,Frederick Municipal Airport,UTC−05:00,Frederick,United States
+CCZ,MYBC,Chub Cay International Airport,UTC−05:00,Chub Cay,Bahamas
+BJH,VNBG,Bajhang Airport,UTC+05:45,Bajhang,Nepal
+MOG,VYMS,Monghsat Airport,UTC+06:30,Mong Hsat (Monghsat),Myanmar
+LIW,VYLK,Loikaw Airport,UTC+06:30,Loikaw,Myanmar
+LOU,KLOU,Bowman Field,UTC−05:00,Louisville,United States
+MFJ,NFMO,Moala Airport,UTC+12:00,Moala Island,Fiji
+JGS,ZSJA,Jinggangshan Airport,UTC+08:00,Ji'an,China
+CUN,MMUN,Cancún International Airport,UTC−05:00,Cancún,Mexico
+LTL,FOOR,Lastourville Airport,UTC+01:00,Lastoursville,Gabon
+CHU,PACH,Chuathbaluk Airport (FAA: 9A3),UTC−09:00,Chuathbaluk,United States
+DCM,LFCK,Castres–Mazamet Airport,UTC+01:00,Castres,France
+HWK,YHAW,Wilpena Pound Airport,UTC+09:30,Hawker,Australia
+CJU,RKPC,Jeju International Airport,UTC+09:00,Jeju,South Korea
+CTA,LICC,Catania–Fontanarossa Airport,UTC+01:00,Catania,Italy
+GZO,AGGN,Nusatupe Airport,UTC+11:00,Gizo,Solomon Islands
+CPV,SBKG,Campina Grande Airport (Presidente João Suassuna Airport),UTC−03:00,Campina Grande,Brazil
+LIE,FZFA,Libenge Airport,UTC+01:00,Libenge,Democratic Republic of the Congo
+BCH,WPEC,Baucau Airport,UTC+09:00,Baucau,East Timor
+LHK,ZHGH,Laohekou Airport,UTC+08:00,Laohekou,China
+MEV,KMEV,Minden–Tahoe Airport,UTC−08:00,Minden,United States
+CGI,KCGI,Cape Girardeau Regional Airport,UTC−06:00,Cape Girardeau,United States
+MRZ,YMOR,Moree Airport,UTC+10:00,Moree,Australia
+MIN,YMPA,Minnipa Airport,UTC+09:30,Minnipa,Australia
+BTK,UIBB,Bratsk Airport,UTC+08:00,Bratsk,Russia
+BAZ,SWBC,Barcelos Airport,UTC−04:00,Barcelos,Brazil
+KRM,SYKR,Karanambo Airport,UTC−04:00,Karanambo,Guyana
+GMM,FCOG,Gamboma Airport,UTC+01:00,Gamboma,Republic of the Congo
+LPI,ESSL,Linköping/Saab Airport,UTC+01:00,Linköping,Sweden
+DNZ,LTAY,Denizli Çardak Airport,UTC+03:00,Denizli,Turkey
+ENB,YEEB,Eneabba Airport,UTC+08:00,Eneabba,Australia
+BVX,KBVX,Batesville Regional Airport,UTC−06:00,Batesville,United States
+KEF,BIKF,Keflavík International Airport,UTC±00:00,Reykjavík,Iceland
+GDO,SVGD,Guasdualito Airport (Vare Maria Airport),UTC−04:00,Guasdualito,Venezuela
+EGM,AGGS,Seghe Airport,UTC+11:00,Seghe,Solomon Islands
+IFU,VREI,Ifuru Airport,UTC+05:00,Ifuru,Maldives
+CNC,YCCT,Coconut Island Airport,UTC+10:00,Coconut (Poruma) Island,Australia
+GSJ,MGSJ,San José Airport,UTC−06:00,Puerto San José,Guatemala
+CUV,SVCG,Casigua El Cubo Airport,UTC−04:00,Casigua El Cubo,Venezuela
+AEL,KAEL,Albert Lea Municipal Airport,UTC−06:00,Albert Lea,United States
+CKM,KCKM,Fletcher Field,UTC−06:00,Clarksdale,United States
+BBO,HCMI,Berbera Airport,UTC+03:00,Berbera,Somalia
+KHC,UKFK,Kerch Airport (Voykovo Airport),UTC+03:00,Kerch,Ukraine
+LRU,KLRU,Las Cruces International Airport,UTC−07:00,Las Cruces,United States
+CPS,KCPS,St. Louis Downtown Airport,UTC−06:00,Cahokia (near St. Louis/MO),United States
+AKH,OEPS,Prince Sultan Air Base,UTC+03:00,Al-Kharj,Saudi Arabia
+RQA,ZWRQ,Ruoqiang Loulan Airport,UTC+08:00,Ruoqiang,China
+NBO,HKJK,Jomo Kenyatta International Airport,UTC+03:00,Nairobi,Kenya
+DFI,KDFI,Defiance Memorial Airport,UTC−05:00,Defiance,United States
+MPO,KMPO,Pocono Mountains Municipal Airport,UTC−05:00,Mount Pocono,United States
+DCN,YCIN,RAAF Base Curtin,UTC+08:00,Derby,Australia
+AEM,UHTG,Amgu Airport,UTC+10:00,Amgu,Russia
+MRG,YMBA,Mareeba Airfield,UTC+10:00,Mareeba,Australia
+IVC,NZNV,Invercargill Airport,UTC+12:00,Invercargill,New Zealand
+EUG,KEUG,Eugene Airport (Mahlon Sweet Airport),UTC−08:00,Eugene,United States
+MOM,GQNL,Letfotar Airport,UTC±00:00,Moudjeria,Mauritania
+LXS,LGLM,Lemnos International Airport,UTC+02:00,Lemnos (Limnos),Greece
+LGH,YLEC,Leigh Creek Airport,UTC+09:30,Leigh Creek,Australia
+ALJ,FAAB,Alexander Bay Airport,UTC+02:00,Alexander Bay,South Africa
+BNN,ENBN,"Brønnøysund Airport, Brønnøy",UTC+01:00,Brønnøysund,Norway
+KMA,AYKM,Kerema Airport,UTC+10:00,Kerema,Papua New Guinea
+AKR,DNAK,Akure Airport,UTC+01:00,Akure,Nigeria
+BIF,KBIF,Biggs Army Airfield,UTC−07:00,El Paso,United States
+HTL,KHTL,Roscommon County–Blodgett Memorial Airport,UTC−05:00,Houghton Lake,United States
+INQ,EIIR,Inisheer Aerodrome,UTC±00:00,Inisheer,Ireland
+LTR,EILT,Letterkenny Airfield,UTC±00:00,Letterkenny,Ireland
+AGA,GMAD,Agadir–Al Massira Airport,UTC+00:00,Agadir,Morocco
+HOA,HKHO,Hola Airport,UTC+03:00,Hola,Kenya
+GAY,VEGY,Gaya Airport (Bodhgaya Airport),UTC+05:30,Gaya,India
+LOO,DAUL,L'Mekrareg Airport (Laghouat Airport),UTC+01:00,Laghouat,Algeria
+MBR,GQNU,M'Bout Airport,UTC±00:00,M'Bout,Mauritania

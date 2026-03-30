@@ -1,0 +1,199 @@
+{
+    "name": "mondial_geo-{{QN}} llama3-key Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-key",
+            "maxIterations": 1
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "mondial_geo_sample",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "country",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "code",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "capital",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "REAL",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "desert",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "longitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "latitude",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "island",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "islands",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "height",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "type",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "longitude",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "latitude",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "continent",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "area",
+                            "type": "REAL",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_desert",
+                    "attributes": [
+                        {
+                            "name": "desert",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "geo_mountain",
+                    "attributes": [
+                        {
+                            "name": "mountain",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "country",
+                            "type": "STRING",
+                            "nullable": true
+                        },
+                        {
+                            "name": "province",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                },
+                {
+                    "tableName": "mountainonisland",
+                    "attributes": [
+                        {
+                            "name": "mountain",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "island",
+                            "type": "STRING",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/sampled/bird/mondial_geo"
+    }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "World1-{{QN}} Experiment-key",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key",
+      "maxIterations": 1
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "world_1_sample",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "country",
+          "attributes": [
+            {
+              "name": "code_3_letters",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "continent",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "region",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "surface_area_in_km2",
+              "type": "REAL",
+              "nullable": true
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/llm-bench/sampled/galois/world_1"
+  }
+}

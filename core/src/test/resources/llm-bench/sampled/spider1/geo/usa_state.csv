@@ -1,0 +1,46 @@
+state_name,area_squared_miles,country_name,capital
+indiana,36420.0,united states,indianapolis
+south carolina,32020.0,united states,columbia
+new mexico,121590.0,united states,santa fe
+virginia,42775.0,united states,richmond
+louisiana,52378.0,united states,baton rouge
+wisconsin,65496.0,united states,madison
+nebraska,77348.0,united states,lincoln
+montana,147040.0,united states,helena
+north carolina,53819.0,united states,raleigh
+maryland,12406.0,united states,annapolis
+illinois,57941.0,united states,springfield
+california,163695.0,united states,sacramento
+pennsylvania,46054.0,united states,harrisburg
+florida,65758.0,united states,tallahassee
+arkansas,53179.0,united states,little rock
+connecticut,5543.0,united states,hartford
+tennessee,42144.0,united states,nashville
+washington,71298.0,united states,olympia
+west virginia,24230.0,united states,charleston
+kansas,82278.0,united states,topeka
+georgia,59425.0,united states,atlanta
+kentucky,40408.0,united states,frankfort
+missouri,69707.0,united states,jefferson city
+ohio,44826.0,united states,columbus
+new york,54555.0,united states,albany
+alabama,52420.0,united states,montgomery
+vermont,9616.0,united states,montpelier
+nevada,110572.0,united states,carson city
+north dakota,70698.0,united states,bismarck
+colorado,104094.0,united states,denver
+new jersey,8723.0,united states,trenton
+idaho,83569.0,united states,boise
+oregon,98379.0,united states,salem
+alaska,665384.0,united states,juneau
+michigan,96714.0,united states,lansing
+arizona,113990.0,united states,phoenix
+utah,84897.0,united states,salt lake city
+oklahoma,69899.0,united states,oklahoma city
+mississippi,48432.0,united states,jackson
+south dakota,77116.0,united states,pierre
+hawaii,10932.0,united states,honolulu
+minnesota,86935.0,united states,st. paul
+maine,35380.0,united states,augusta
+wyoming,97813.0,united states,cheyenne
+massachusetts,10554.0,united states,boston

@@ -1,0 +1,54 @@
+{
+    "name": "web_search_engine-{{QN}} llama3-key Experiment",
+    "metrics": [
+        "CellPrecisionFilteredAttributes",
+        "CellSimilarityPrecisionFilteredAttributes",
+        "CellRecallFilteredAttributes",
+        "CellSimilarityRecallFilteredAttributes",
+        "CellF1ScoreFilteredAttributes",
+        "CellSimilarityF1ScoreFilteredAttributes",
+        "TupleCardinality",
+        "TupleConstraintFilteredAttributes",
+        "TupleSimilarityConstraintFilteredAttributes",
+        "TupleCellSimilarityFilteredAttributes"
+    ],
+    "dbms": "postgres",
+    "operatorsConfig": {
+        "scan": {
+            "queryExecutor": "togetherai-llama3-key",
+            "maxIterations": 1
+        }
+    },
+    "query": {
+        "sql": "{{QUERY_SQL}}",
+        "schema": {
+            "name": "web_search_engine_sample",
+            "schema": "target",
+            "username": "pguser",
+            "password": "pguser",
+            "tables": [
+                {
+                    "tableName": "web_search_engine",
+                    "attributes": [
+                        {
+                            "name": "name",
+                            "type": "STRING",
+                            "key": true
+                        },
+                        {
+                            "name": "released_year",
+                            "type": "INTEGER",
+                            "nullable": false
+                        },
+                        {
+                            "name": "is_active",
+                            "type": "BOOLEAN",
+                            "nullable": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "results": "/llm-bench/sampled/qatch/web_search_engine"
+    }
+}

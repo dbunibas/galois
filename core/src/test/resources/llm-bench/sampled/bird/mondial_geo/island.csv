@@ -1,0 +1,162 @@
+name,islands,area,height,type,longitude,latitude
+Borkum,Ostfriesische Inseln,31.0,6.0,,6.7,53.6
+Leyte,Phillipines,7368.0,,,124.9,11.0
+Rota,Mariana Islands,85.0,495.0,,145.2,15.15
+Little Cayman,Cayman Islands,20.0,,,-80.0,19.8
+Santa Rosa Island,Californian Channel Islands,215.0,484.0,,-120.1,34.0
+Southampton Island,Canadian Arctic Islands,41214.0,625.0,,-84.5,64.5
+Mauritius,,1860.0,828.0,volcanic,57.0,-20.0
+Saint Thomas,Lesser Antilles,31.0,,,-64.9,18.3
+Texel,Westfriesische Inseln,162.0,15.0,,4.8,53.1
+Maui,Hawaii Islands,1883.0,3055.0,,-156.3,20.7
+Guernsey,Channel Islands,194.0,,,-2.6,49.6
+Luzon,Phillipines,108172.0,2928.0,,121.0,16.1
+St. Martin,Lesser Antilles,87.0,411.0,,-63.1,18.1
+Uvea,Wallis Islands,90.0,,,-176.2,-13.16
+Molokai,Hawaii Islands,676.0,1512.0,,-157.0,21.1
+Martinique,Lesser Antilles,1128.0,1397.0,volcanic,-61.0,14.6
+Trinidad,Lesser Antilles,4827.0,940.0,,-61.35,10.4
+Fuerteventura,Canares,1660.0,807.0,volcanic,-14.0,28.4
+Hispaniola,Greater Antilles,76192.0,3098.0,,-70.7,19.0
+Stromboli,Lipari Islands,12.6,926.0,volcanic,15.15,38.8
+Dagoe,,965.0,,,22.7,58.8
+Grande-Terre,Lesser Antilles,589.0,,volcanic,-61.4,16.3
+Pemba,,984.0,,,39.7,-5.2
+Norderney,Ostfriesische Inseln,26.3,5.0,,7.9,53.7
+Usedom,,445.0,,,14.1,53.9
+San Clemente Island,Californian Channel Islands,147.0,599.0,,-118.5,33.0
+Langeland,,284.0,,,10.5,55.0
+Cuba,Greater Antilles,105806.0,1974.0,,-79.0,22.0
+Arran,Inner Hebrides,430.0,874.0,,-5.5,55.3
+Manitoulin,,2766.0,,,-82.2,45.75
+Barra,Outer Hebrides,91.0,,,-7.7,57.0
+Kos,Sporades,287.0,846.0,,27.1,36.8
+Batam,Sunda Islands,415.0,,,104.05,1.1
+Lavan,,76.0,,,53.1,26.5
+Palawan,Phillipines,11785.0,2085.0,,118.4,9.5
+Greenland,,2175600.0,,,-40.0,70.0
+South Andaman Island,Andaman Islands,1210.0,366.0,,92.5,11.4
+South Uist,Outer Hebrides,320.0,,,-7.2,57.2
+Anguilla,Lesser Antilles,91.0,65.0,,-64.0,18.0
+Grand Bermuda,Bermuda Islands,53.3,79.0,coral,-64.47,32.17
+Dominica,Lesser Antilles,746.0,1447.0,volcanic,-61.35,15.4
+Lipari,Lipari Islands,37.5,602.0,volcanic,14.95,38.5
+Graciosa,Azores,61.0,402.0,volcanic,-28.0,39.0
+Benbecula,Outer Hebrides,82.0,,,-7.3,57.45
+La Palma,Canares,708.0,2426.0,volcanic,-17.9,28.7
+Salina,Lipari Islands,26.8,962.0,volcanic,14.9,38.6
+Banks Island,Canadian Arctic Islands,70028.0,,,-122.1,72.85
+Saint Lucia,Lesser Antilles,616.0,950.0,volcanic,-60.5,14.0
+Oahu,Hawaii Islands,1557.0,1225.0,,-158.0,21.5
+Saint Vincent,Lesser Antilles,346.0,1300.0,volcanic,-61.3,13.25
+Honshu,Japan,230500.0,3776.0,volcanic,138.6,36.3
+Mull,Inner Hebrides,910.0,,,6.0,56.3
+New Guinea,,786000.0,4884.0,,142.0,-5.0
+Bahrain,,620.0,135.0,,50.5,26.0
+Nevis,Lesser Antilles,93.0,985.0,volcanic,-62.3,17.0
+Aruba,Lesser Antilles,193.0,188.0,,-70.02,12.31
+Tongatapu,Tonga Islands,260.0,65.0,coral,-175.15,-21.2
+South Ronaldsay,Orkney Islands,50.0,,,-3.1,58.6
+Bougainville,Solomon Islands,8800.0,2715.0,,155.25,-6.2
+Negros,Phillipines,13328.0,2435.0,,123.0,10.0
+Mindanao,Phillipines,95581.0,2954.0,,124.9,7.55
+Isla da Ometepe,,270.0,1700.0,,-85.6,11.5
+Ceram,Moluccan Islands,17100.0,3027.0,,128.0,-2.0
+Malta,Malta,246.0,252.0,,14.5,35.9
+Bali,Sunda Islands,5561.0,3142.0,volcanic,115.1,-8.4
+Santiago,Cape Verdes,991.0,1394.0,volcanic,-23.6,15.1
+Sulawesi,Sunda Islands,189216.0,3455.0,volcanic,120.3,-2.1
+Gran Canaria,Canares,1560.0,1949.0,volcanic,-15.6,28.0
+Oesel,,2714.0,54.0,,22.0,58.3
+Juist,Ostfriesische Inseln,16.4,3.0,,7.0,53.6
+Ikaria,Sporades,255.0,1037.0,,26.2,37.6
+Rhum,Inner Hebrides,104.0,810.0,volcanic,-6.3,57.0
+Vulcano,Lipari Islands,21.2,499.0,volcanic,15.0,38.4
+Guadalcanal,Solomon Islands,5358.0,2335.0,,160.2,-9.6
+Bangka,Sunda Islands,11942.0,700.0,,106.0,2.25
+Koror,Carolines,8.0,100.0,volcanic,134.5,7.3
+Saint Pierre,,26.0,,,-56.0,47.0
+Isabela,Galapagos,5436.0,1707.0,volcanic,-91.3,-1.0
+Helgoland,,1.7,61.3,,7.9,54.2
+Kyushu,Japan,35640.0,1758.0,volcanic,131.0,32.0
+Fogo,Cape Verdes,476.0,2829.0,volcanic,-24.4,17.95
+Prince of Wales Island,Canadian Arctic Islands,33339.0,,,-98.55,72.6
+Tasmania,,67800.0,1617.0,,145.0,-42.0
+Chios,Sporades,843.0,1297.0,,26.2,38.4
+Tortola,Lesser Antilles,55.0,521.0,volcanic,-64.37,18.27
+Kreta,,8331.0,2456.0,,25.0,37.0
+Fongafale,Ellice Islands,2.8,,atoll,179.1,-8.5
+Jamaica,Greater Antilles,10991.0,2256.0,,-77.3,18.1
+Male,Maldives,2.74,1.0,atoll,72.0,2.0
+Panarea,Lipari Islands,3.4,421.0,volcanic,15.05,38.65
+Borneo,Sunda Islands,743122.0,4101.0,,113.67,-0.2
+Tristan Da Cunha,,104.0,,volcanic,-12.3,-37.1
+Guam,Mariana Islands,541.0,,coral,144.7,13.4
+Te Waka-a-Maui (South Island),New Zealand,151757.0,3754.0,,170.4,-44.0
+Langeoog,Ostfriesische Inseln,20.0,5.0,,7.5,53.65
+Sri Lanka,,65610.0,,,80.0,7.0
+Nantucket,,125.0,,,-70.1,41.5
+West Falkland,Falkland Islands,4532.0,700.0,,-60.1,-51.8
+Panay,Phillipines,12297.0,2117.0,,122.5,11.15
+Lanzarote,Canares,846.0,671.0,volcanic,-13.6,29.0
+Terschelling,Westfriesische Inseln,88.0,,,5.3,53.4
+Grand Cayman,Cayman Islands,197.0,,,-81.23,19.18
+Krakatau,Sunda Islands,,813.0,volcanic,105.6,-6.1
+Ambon,Moluccan Islands,775.0,1225.0,,128.2,-3.7
+Kavaratti,Laccadives,6.0,2.0,,72.6,10.6
+Grenada,Lesser Antilles,344.0,840.0,volcanic,-62.0,12.0
+Rene Levasseur Island,,2020.0,952.0,,-68.7,51.4
+Saint Kitts,Lesser Antilles,164.0,1156.0,volcanic,-62.75,17.3
+Tutuila,Samoan Islands,135.0,,volcanic,-170.42,-14.16
+Isle of Wight,British Isles,381.0,,,-1.3,50.6
+Lampedusa,,20.0,113.0,volcanic,13.2,35.4
+Melville Island,,5800.0,,,131.0,-12.0
+Pellworm,Nordfriesische Inseln,37.4,2.0,,8.6,54.5
+Sardegna,,24090.0,1834.0,,9.0,40.0
+Great Britain,British Isles,229850.0,1344.0,,-1.5,53.0
+Linosa,,5.0,195.0,volcanic,13.85,35.85
+Bonaire,Lesser Antilles,288.0,,,-68.3,12.2
+Savaii,Samoan Islands,1707.0,1858.0,volcanic,-172.4,-13.6
+Saint Helena,,122.0,,volcanic,-5.44,-15.56
+Sumatra,Sunda Islands,473000.0,3805.0,,102.0,0.0
+Victoria Island,Canadian Arctic Islands,212291.0,,,-110.1,70.75
+Schiermonnikoog,Westfriesische Inseln,40.0,,,6.2,53.5
+Anglesey,British Isles,715.0,,,-4.4,53.3
+Lanai,Hawaii Islands,364.0,1027.0,,-157.0,20.5
+Fohr,Nordfriesische Inseln,82.0,13.0,,8.5,54.7
+Ponape,Micronesian Islands,336.0,782.0,volcanic,158.2,6.85
+Pico,Azores,442.0,2351.0,volcanic,-28.4,38.5
+Menorca,Baleares,760.0,358.0,,4.0,40.0
+Gozo,Malta,67.0,176.0,,14.3,36.05
+San Miguel Island,Californian Channel Islands,37.0,259.0,,-120.4,33.0
+Hokkaido,Japan,83456.0,2290.0,volcanic,143.0,43.3
+Paramuschir,Curiles,2042.0,1816.0,volcanic,155.75,50.5
+Aust-Vagoey,Lofotes,526.0,1146.0,,14.6,68.3
+Cayman Brac,Cayman Islands,30.0,,,-79.8,19.7
+Bohol,Phillipines,4117.0,,,124.2,9.9
+Samos,Sporades,478.0,1434.0,,26.8,37.7
+Olkhon,,730.0,1276.0,,107.4,53.15
+Falster,,514.0,,,12.0,54.8
+Isle of Man,British Isles,588.0,621.0,,-4.5,54.1
+Orkney Mainland,Orkney Islands,492.0,,,-3.1,59.0
+Prince Edward Island,,5660.0,142.0,,-63.4,46.3
+Corvo,Azores,17.5,718.0,volcanic,-31.1,39.7
+Shetland Mainland,Shetland Islands,970.0,449.0,,-1.3,60.3
+Pitcairn,Pitcairn Islands,4.5,347.0,volcanic,-130.05,-25.04
+Majuro,Marshall Islands,9.2,,atoll,171.4,7.1
+Bioko,,2017.0,3011.0,volcanic,8.7,3.5
+Viti Levu,Fiji Islands,10429.0,,volcanic,178.0,-17.8
+Martha s Vineyard,,232.0,,,-70.6,41.4
+Norfolk Island,,34.0,318.0,volcanic,168.0,-29.0
+Aland,Aland Islands,650.0,,,20.0,60.1
+Streymoy,Faroe Islands,373.0,789.0,,-7.0,62.0
+Jersey,Channel Islands,117.0,,,-2.1,49.2
+Vanua Levu,Fiji Islands,5500.0,,volcanic,179.25,-16.35
+Samosir,,852.0,,volcanic,98.85,2.6
+Java,Sunda Islands,126650.0,3676.0,,111.25,-7.5
+Cebu,Phillipines,5088.0,1000.0,,123.8,10.4
+Futuna,Futuna Islands,64.0,,,-178.1,-14.3
+Miquelon-Langlade,,205.0,240.0,,-56.3,47.1
+Rhodos,Sporades,1401.0,1215.0,,28.0,36.2
+North Uist,Outer Hebrides,303.0,,,-7.1,57.4
+Ascension,,91.0,,volcanic,-14.4,-7.9

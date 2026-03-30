@@ -1,0 +1,59 @@
+{
+  "name": "architecture-{{QN}} llama3-key Experiment",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key",
+      "maxIterations": 1
+    }
+  },
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "architecture_sample",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "bridge",
+          "attributes": [
+            {
+              "name": "name",
+              "type": "STRING",
+              "key": true
+            },
+            {
+              "name": "location",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "length_meters",
+              "type": "REAL",
+              "nullable": false
+            },
+            {
+              "name": "length_feet",
+              "type": "REAL",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/llm-bench/sampled/spider1/architecture"
+  }
+}

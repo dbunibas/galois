@@ -23,6 +23,7 @@ import bsf.test.experiments.ExperimentResults;
 import bsf.test.experiments.json.parser.ExperimentParser;
 import bsf.test.experiments.json.parser.OptimizersFactory;
 import bsf.test.experiments.metrics.IMetric;
+import bsf.llm.query.Execution;
 import bsf.test.model.ExpVariant;
 import bsf.utils.BSFDebug;
 import bsf.utils.Mapper;
@@ -179,6 +180,49 @@ public class TestRunner {
                 experiment.setOptimizers(null);
             } else if (queryExecutor instanceof IGaloisOriginalExecutor) {
                 log.debug("Galois original executor, setting optimizers to null!");
+                experiment.setOptimizers(null);
+            } else {
+                if (optimizer != null) {
+                    experiment.setOptimizers(List.of(optimizer));
+                }
+            }
+            BSFDebug.log("*** Executing experiment " + experiment.toString() + " with variant: " + variant.toString() + " ***");
+            metrics.clear();
+            metrics.addAll(experiment.getMetrics());
+            var expResults = experiment.executeSingle(optimizer);
+            log.debug("Results: {}", expResults);
+            for (String expKey : expResults.keySet()) {
+                queryResults.put(type + "-" + expKey, expResults.get(expKey));
+                exportResultAndConfidence(type, variant, expResults.get(expKey));
+            }
+            return expResults;
+        } catch (Exception ioe) {
+            log.error("Unable to execute experiment {}", path, ioe);
+//            throw new RuntimeException("Cannot run experiment: " + path, ioe);
+            return null;
+        }
+    }
+    
+    public Map<String, ExperimentResults> executeSingleSample(String dbName, String dbId, String path, String type, ExpVariant variant, List<IMetric> metrics, Map<String, Map<String, ExperimentResults>> results, IOptimizer optimizer) {
+        try {
+            log.info("*** Executing experiment {} with variant {} ***", path, variant.getQueryNum());
+            Map<String, ExperimentResults> queryResults = results.computeIfAbsent(variant.getQueryNum(), k -> new HashMap<>());
+            Experiment experiment = ExperimentParser.loadAndParseJSON(path);
+            experiment.setName(experiment.getName().replace("{{QN}}", variant.getQueryNum()));
+            experiment.getQuery().setSql(variant.getQuerySql());
+            log.debug("SQL query is {}", experiment.getQuery().getSql());
+            IQueryExecutor queryExecutor = experiment.getOperatorsConfiguration().getScan().getQueryExecutor();
+            if (queryExecutor instanceof INLQueryExectutor nlExecutor) {
+                nlExecutor.setNaturalLanguagePrompt(variant.getPrompt());
+                experiment.setOptimizers(null);
+            } else if (queryExecutor instanceof ISQLExecutor sqlExecutor) {
+                sqlExecutor.setSql(variant.getQuerySql());
+                experiment.setOptimizers(null);
+            } else if (queryExecutor instanceof IGaloisOriginalExecutor) {
+                log.debug("Galois original executor, setting optimizers to null!");
+                Execution execution = Execution.getInstance();
+                execution.setCurrentDB(dbName);
+                execution.setCurrentDBId(dbId);
                 experiment.setOptimizers(null);
             } else {
                 if (optimizer != null) {

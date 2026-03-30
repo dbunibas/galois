@@ -13,6 +13,7 @@ import queryexecutor.persistence.relational.AccessConfiguration;
 import java.nio.charset.StandardCharsets;
 
 import static bsf.Constants.*;
+import bsf.llm.models.togetherai.TogetherAIConstants;
 
 @Slf4j
 public class DBCache implements ILLMCache {
@@ -100,6 +101,8 @@ public class DBCache implements ILLMCache {
     }
 
     private String getLLMModel(IQueryExecutor executor) {
+//        if (executor == null) return Constants.TOGETHERAI_MODEL; // if null we use LLM-Similarity
+        if (executor == null) return TogetherAIConstants.MODEL_LLAMA3_70B; // if null we use LLM-Similarity
         String simpleName = executor.getClass().getSimpleName();
         if (simpleName.contains("OpenAI")) return Constants.OPEN_AI_CHAT_MODEL_NAME;
         if (simpleName.contains("Togetherai")) return Constants.TOGETHERAI_MODEL;

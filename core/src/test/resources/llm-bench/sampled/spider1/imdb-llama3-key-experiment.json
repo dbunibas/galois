@@ -1,0 +1,114 @@
+{
+  "name": "imdb-{{QN}} llama3-key Experiment",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key",
+      "maxIterations": 10
+    }
+  },
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "imdb_sample",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "actor",
+          "attributes": [
+            {
+              "name": "gender",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "key": true
+            },
+            {
+              "name": "nationality",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_city",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_year",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "director",
+          "attributes": [
+            {
+              "name": "gender",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "key": true
+            },
+            {
+              "name": "nationality",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_city",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "birth_year",
+              "type": "INTEGER",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "tableName": "movie",
+          "attributes": [
+            {
+              "name": "title",
+              "type": "STRING",
+              "key": true
+            },
+            {
+              "name": "release_year",
+              "type": "INTEGER",
+              "nullable": false
+            },
+            {
+              "name": "title_aka",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }  
+      ]
+    },
+    "results": "/llm-bench/sampled/spider1/imdb"
+  }
+}

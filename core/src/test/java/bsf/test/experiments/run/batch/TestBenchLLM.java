@@ -88,16 +88,20 @@ public class TestBenchLLM {
         log.info("Results\n{}", printMap(results));
 
     }
-
+    
     private void initVariants() {
+        initVariants(QUERIES_PATH);
+    }
+
+    private void initVariants(String filePath) {
         List<String> singleConditionOptimizers = List.of(
                 //                "AllConditionsPushdownOptimizer",
                 "AllConditionsPushdownOptimizer-WithFilter"
         );
         variants = new ArrayList<>();
         variantConfigs = new HashMap<>();
-        System.out.println("Open: " + QUERIES_PATH);
-        try (FileInputStream fis = new FileInputStream(new File(QUERIES_PATH)); Workbook workbook = new XSSFWorkbook(fis)) {
+        System.out.println("Open: " + filePath);
+        try (FileInputStream fis = new FileInputStream(new File(filePath)); Workbook workbook = new XSSFWorkbook(fis)) {
             Sheet sheet = workbook.getSheet("queries");
             if (sheet == null) {
                 System.out.println("Sheet 'queries' not found!");
@@ -107,11 +111,11 @@ public class TestBenchLLM {
                 Row row = sheet.getRow(i);
                 if (row != null) {
                     Cell q_idCell = row.getCell(0);
+                    Cell datasetCell = row.getCell(1);
                     Cell dbIdCell = row.getCell(2);
                     Cell queryCell = row.getCell(3);
                     Cell questionCell = row.getCell(4);
-                    Cell datasetCell = row.getCell(1);
-
+                    
                     String dbId = (dbIdCell != null) ? dbIdCell.toString() : "";
                     String query = (queryCell != null) ? queryCell.toString() : "";
                     String question = (questionCell != null) ? questionCell.toString() : "";
@@ -133,7 +137,7 @@ public class TestBenchLLM {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error in loading queries - File: " + QUERIES_PATH);
+            System.out.println("Error in loading queries - File: " + filePath);
             e.printStackTrace();
         }
     }
@@ -185,7 +189,27 @@ public class TestBenchLLM {
             exportExcel.export(fileName, dataset, metrics, results);
         }
         log.info("Results\n{}", printMap(results));
-
+    }
+    
+    @Test
+    public void testGTFromSample() {
+        List<IMetric> metrics = new ArrayList<>();
+        Map<String, Map<String, ExperimentResults>> results = new HashMap<>();
+        IOptimizer allConditionPushdownWithFilter = OptimizersFactory.getOptimizerByName("AllConditionsPushdownOptimizer-WithFilter"); //remove algebra true
+        String query_sample = "src/test/resources/llm-bench/sampled/querySample.xlsx";
+        initVariants(query_sample);
+        String fileName = exportExcel.getFileName(name);
+        for (ExpVariant variant : this.variants) {
+//            if (!variant.getQueryNum().equalsIgnoreCase("qatch_27")) continue;
+            VariantConfig vc = this.variantConfigs.get(variant.getQueryNum());
+            String dbID = vc.db_id;
+            String dataset = vc.dataset;
+            System.out.println(variant);
+            testRunner.executeSingleSample(dataset, dbID,  "/llm-bench/sampled/" + dataset + "/" + dbID + "-" + executorModel + "-key-experiment.json", "KEY", variant, metrics, results, allConditionPushdownWithFilter);
+            exportExcel.export(fileName, dataset, metrics, results);
+//            break;
+        }
+        log.info("Results\n{}", printMap(results));
     }
 
     @Test

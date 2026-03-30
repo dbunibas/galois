@@ -1,0 +1,136 @@
+{
+  "name": "geo-{{QN}} llama3-key Experiment",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key",
+      "maxIterations": 1,
+      "normalizationStrategy": "lowerCase"
+    }
+  },
+  "query": {
+    "sql": "{{QUERY_SQL}}",
+    "schema": {
+      "name": "geo_sample",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "usa_state",
+          "attributes": [
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "area_squared_miles",
+              "type": "REAL",
+              "nullable": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "capital",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "usa_city",
+          "attributes": [
+            {
+              "name": "city_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            }
+          ]
+        },
+        {
+          "tableName": "usa_lake",
+          "attributes": [
+            {
+              "name": "lake_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "area_squared_km",
+              "type": "REAL",
+              "nullable": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "tableName": "usa_mountain",
+          "attributes": [
+            {
+              "name": "mountain_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            },
+            {
+              "name": "mountain_altitude_in_meters",
+              "type": "INTEGER",
+              "nullable": true
+            },
+            {
+              "name": "country_name",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "state_name",
+              "type": "STRING",
+              "nullable": false,
+              "key": true
+            }
+          ]
+        }
+      ]
+    },
+    "results": "/llm-bench/sampled/spider1/geo"
+  }
+}

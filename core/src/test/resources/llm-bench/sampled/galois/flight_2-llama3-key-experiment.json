@@ -1,0 +1,55 @@
+{
+  "name": "Flight_2-{{QN}} Experiment-key",
+  "metrics": [
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
+    "TupleCardinality",
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
+  ],
+  "dbms": "postgres",
+  "operatorsConfig": {
+    "scan": {
+      "queryExecutor": "togetherai-llama3-key",
+      "maxIterations": 1,
+      "normalizationStrategy": "lowerCase"
+    }
+  },
+  "query": {
+    "sql": "{{QUERY-SQL}}",
+    "schema": {
+      "name": "flight_2_sample",
+      "schema": "target",
+      "username": "pguser",
+      "password": "pguser",
+      "tables": [
+        {
+          "tableName": "usa_airline_companies",
+          "attributes": [
+            {
+              "name": "airline",
+              "type": "STRING",
+              "key": true
+            },
+            {
+              "name": "call_sign",
+              "type": "STRING",
+              "nullable": false
+            },
+            {
+              "name": "country",
+              "type": "STRING",
+              "nullable": false
+            }
+          ]
+        }
+      ]
+  },
+    "results": "/llm-bench/sampled/galois/flight_2"
+  }
+}

@@ -1,0 +1,149 @@
+name,code,capital,province,area
+Morocco,MA,Rabat,Morocco,446550.0
+Benin,BEN,Porto-Novo,Benin,112620.0
+Tuvalu,TUV,Funafuti,Tuvalu,26.0
+Mongolia,MNG,Ulaanbaatar,Mongolia,1565000.0
+Angola,ANG,Luanda,Luanda,1246700.0
+Lebanon,RL,Beirut,Lebanon,10400.0
+Australia,AUS,Canberra,Australia Capital Territory,7686850.0
+Gambia,WAG,Banjul,Gambia,11300.0
+Lithuania,LT,Vilnius,Lithuania,65200.0
+Wallis and Futuna,WAFU,Mata-Utu,Wallis and Futuna,274.0
+Saudi Arabia,SA,Riyadh,Saudi Arabia,1960580.0
+New Caledonia,NCA,Noumea,New Caledonia,19060.0
+Cuba,C,Havana,Ciudad de la Habana,110860.0
+Saint Martin,SMAR,Marigot,Saint Martin,54.0
+Latvia,LV,Riga,Latvia,64100.0
+Eritrea,ER,Asmara,Eritrea,121320.0
+Bahrain,BRN,Manama,Bahrain,620.0
+China,TJ,Beijing,Beijing (munic.),9596960.0
+Honduras,HCA,Tegucigalpa,Francisco Morazan,112090.0
+Bhutan,BHT,Thimphu,Bhutan,47000.0
+Tunisia,TN,Tunis,Tunisia,163610.0
+Monaco,MC,Monaco,Monaco,1.9
+Netherlands,NL,Amsterdam,Noord Holland,37330.0
+Zambia,Z,Lusaka,Lusaka,752610.0
+Anguilla,AXA,The Valley,Anguilla,102.0
+Vietnam,VN,Hanoi,Vietnam,329560.0
+Niger,RN,Niamey,Niger,1267000.0
+Libya,LAR,Tripoli,Libya,1759540.0
+Guatemala,GCA,Guatemala City,Guatemala,108890.0
+Brunei,BRU,Bandar Seri Begawan,Brunei,5770.0
+Macedonia,MK,Skopje,Macedonia,25333.0
+Singapore,SGP,Singapore,Singapore,632.6
+Togo,RT,Lome,Togo,56790.0
+Bulgaria,BG,Sofia,Bulgaria,110910.0
+Gabon,G,Libreville,Gabon,267670.0
+France,F,Paris,Ile de France,547030.0
+Panama,PA,Panama City,Panama,78200.0
+Timor-Leste,TL,Dili,Timor-Leste,15007.0
+Malta,M,Valletta,Malta,320.0
+Man,GBM,Douglas,Man,588.0
+Guadeloupe,GUAD,Basse-Terre,Guadeloupe,1780.0
+Germany,D,Berlin,Berlin,356910.0
+Bermuda,BERM,Hamilton,Bermuda,53.3
+Iran,IR,Tehran,Tehran,1648000.0
+Seychelles,SY,Victoria,Seychelles,455.0
+Haiti,RH,Port-au-Prince,Haiti,27750.0
+Cocos Islands,COCO,West Island,Cocos Islands,14.0
+Montserrat,MNTS,Plymouth,Montserrat,102.0
+Swaziland,SD,Mbabane,Swaziland,17360.0
+Nigeria,WAN,Abuja,Nigeria,923770.0
+Saint Pierre and Miquelon,SPMI,Saint-Pierre,Saint Pierre and Miquelon,242.0
+Iraq,IRQ,Baghdad,Baghdad,437072.0
+Grenada,WG,Saint Georges,Grenada,344.0
+Guyana,GUY,Georgetown,Guyana,214970.0
+Russia,R,Moscow,Moskva,17075200.0
+Japan,J,Tokyo,Tokyo,377835.0
+Portugal,P,Lisbon,Lisbon,92080.0
+Finland,SF,Helsinki,Uusimaa,337030.0
+Equatorial Guinea,GQ,Malabo,Equatorial Guinea,28050.0
+Papua New Guinea,PNG,Port Moresby,Papua New Guinea,461690.0
+Montenegro,MNE,Podgorica,Montenegro,14026.0
+Mayotte,MAYO,Mamoutzou,Mayotte,374.0
+French Polynesia,FPOL,Papeete,French Polynesia,4167.0
+Holy See,V,Vatican City,Holy See,0.44
+Micronesia,FSM,Palikir,Micronesia,702.0
+Senegal,SN,Dakar,Dakar,196190.0
+Gaza Strip,GAZA,,,360.0
+Kazakstan,KAZ,Almaty,Almaty (munic.),2717300.0
+Yemen,YE,Sanaa,Yemen,527970.0
+Serbia,SRB,Belgrade,Serbia,77474.0
+Laos,LAO,Vientiane,Laos,236800.0
+Belize,BZ,Belmopan,Belize,22960.0
+Malaysia,MAL,Kuala Lumpur,Fed. Terr. of Kuala Lumpur,329750.0
+Dominica,WD,Roseau,Dominica,746.0
+Peru,PE,Lima,Lima,1285220.0
+Andorra,AND,Andorra la Vella,Andorra,450.0
+El Salvador,ES,San Salvador,El Salvador,21040.0
+Saint Lucia,WL,Castries,Saint Lucia,620.0
+North Korea,NOK,Pyongyang,North Korea,120540.0
+Iceland,IS,Reykjavik,Iceland,103000.0
+Liechtenstein,FL,Vaduz,Liechtenstein,160.0
+South Korea,ROK,Seoul,South Korea,98480.0
+Tajikistan,TAD,Dushanbe,Dushanbe (munic.),143100.0
+Niue,NIUE,Alofi,Niue,260.0
+Cameroon,CAM,Yaounde,Centre,475440.0
+Belgium,B,Brussels,Brabant,30510.0
+Cote dIvoire,CI,Yamoussoukro,Cote dIvoire,322460.0
+Belarus,BY,Minsk,Belarus,207600.0
+Cape Verde,CV,Praia,Cape Verde,4030.0
+Lesotho,LS,Maseru,Lesotho,30350.0
+Myanmar,MYA,Rangoon,Yangon,678500.0
+Argentina,RA,Buenos Aires,Distrito Federal,2766890.0
+Kenya,EAK,Nairobi,Nairobi,582650.0
+Nauru,NAU,Yaren,Nauru,21.0
+Saint Vincent and the Grenadines,WV,Kingstown,Saint Vincent and the Grenadines,389.0
+Georgia,GE,Tbilisi,Georgia,69700.0
+Costa Rica,CR,San Jose,San Jose,51100.0
+Saint Kitts and Nevis,KN,Basseterre,Saint Kitts and Nevis,269.0
+Norfolk Island,NORF,Kingston,Norfolk Island,34.6
+Guinea-Bissau,GNB,Bissau,Guinea-Bissau,36120.0
+Nicaragua,NIC,Managua,Nicaragua,129494.0
+Bahamas,BS,Nassau,Bahamas,13940.0
+Samoa,WS,Apia,Samoa,2860.0
+Puerto Rico,PR,San Juan,Puerto Rico,8870.0
+Philippines,RP,Manila,Philippines,299764.0
+Chile,RCH,Santiago,Chile,756950.0
+Austria,A,Vienna,Vienna,83850.0
+Antigua and Barbuda,AG,Saint Johns,Antigua and Barbuda,442.0
+Ghana,GH,Accra,Ghana,238540.0
+Djibouti,DJI,Djibouti,Djibouti,22000.0
+Cambodia,K,Phnom Penh,Cambodia,181040.0
+Oman,OM,Muscat,Oman,212460.0
+Northern Mariana Islands,NMIS,Saipan,Northern Mariana Islands,477.0
+Syria,SYR,Damascus,Syria,185180.0
+Italy,I,Rome,Lazio,301230.0
+Hungary,H,Budapest,Budapest (munic.),93030.0
+Reunion,REUN,Saint-Denis,Reunion,2510.0
+Paraguay,PY,Asuncion,Paraguay,406750.0
+Jamaica,JA,Kingston,Jamaica,10991.0
+Sri Lanka,CL,Colombo,Sri Lanka,65610.0
+Nepal,NEP,Kathmandu,Nepal,140800.0
+Falkland Islands,FALK,Stanley,Falkland Islands,12173.0
+Bolivia,BOL,La Paz,Bolivia,1098580.0
+Martinique,MART,Fort-de-France,Martinique,1128.0
+Poland,PL,Warsaw,Warszwaskie,312683.0
+Central African Republic,RCA,Bangui,Central African Republic,622980.0
+Canada,CDN,Ottawa,Ontario,9976140.0
+Azerbaijan,AZ,Baku,Azerbaijan,86600.0
+Christmas Island,XMAS,Flying Fish Cove,Christmas Island,135.0
+British Virgin Islands,BVIR,Road Town,British Virgin Islands,153.0
+Ukraine,UA,Kiev,Kyyivska,603700.0
+American Samoa,AMSA,Pago Pago,American Samoa,199.0
+Mexico,MEX,Mexico City,Distrito Federal,1972550.0
+Cayman Islands,CAYM,George Town,Cayman Islands,262.0
+Indonesia,RI,Jakarta,Indonesia,1919440.0
+Faroe Islands,FARX,Torshavn,Faroe Islands,1400.0
+Namibia,NAM,Windhoek,Namibia,825418.0
+Mozambique,MOC,Maputo,Maputo (munic.),801590.0
+West Bank,WEST,,,5860.0
+South Africa,RSA,Pretoria,Gauteng,1219910.0
+United Kingdom,GB,London,Greater London,244820.0
+Rwanda,RWA,Kigali,Rwanda,26340.0
+Fiji,FJI,Suva,Fiji,18270.0
+Czech Republic,CZ,Prague,Praha,78703.0
+Pakistan,PK,Islamabad,Pakistan,803940.0
+Cook Islands,COOK,Avarua,Cook Islands,240.0
+Marshall Islands,MH,Majuro,Marshall Islands,181.3
+Brazil,BR,Brasilia,Distrito Federal,8511960.0
