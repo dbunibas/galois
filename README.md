@@ -1,6 +1,6 @@
 # Beyond Single Facts
 
-### A Benchmark for Evaluating Relational Fact Retrieval from Large Language Models
+### An Empirical Study of Relational Factuality in LLMs
 
 ### Dataset
 
