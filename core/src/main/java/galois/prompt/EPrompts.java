@@ -69,7 +69,7 @@ public enum EPrompts {
     LIST_DIFFERENT_VALUES("List different values.", null, null, null, false, false),
     //    LIST_DIFFERENT_VALUES_JSON("List different values. Respond with JSON only.", null, null, null),
     LIST_DIFFERENT_VALUES_JSON("List more values if there are more, otherwise return an empty JSON. Respond with JSON only.", null, null, null, false, false),
-    LIST_DIFFERENT_VALUES_CSV("List more values if there are more, otherwise return an empty string. Respond with CSV only.", null, null, null, false, true),
+    LIST_DIFFERENT_VALUES_CSV("List more values if there are more, otherwise return an empty string. Respond with CSV only. The header of the CSV must list the attributes name.", null, null, null, false, true),
     //    LIST_MORE_NO_REPEAT("List more values. Don't repeat the previous values.", null, null, null),
 //    LIST_MORE_NO_REPEAT("List more values if there are more, otherwise return an empty response. Don't repeat the previous values.", null, null, null),
     LIST_MORE_NO_REPEAT("List more unique values if there are more, otherwise return an empty response. Don't repeat the previous values.", null, null, null, false, false),
