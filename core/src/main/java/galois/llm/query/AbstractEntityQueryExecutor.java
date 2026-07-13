@@ -100,7 +100,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     Logprobs probs = StoredProbsSingleton.getInstance().getLogprobs(userMessage);
                     DataProb probsParser = new DataProb();
                     cellProbs = probsParser.computeProbabilities(probs);
-                    iterator = Iterables.partition(cellProbs, attributesExecution.size()).iterator();
+                    iterator = Iterables.partition(cellProbs, attributesExecutionList.size()).iterator();
                 }
                 List<CellProb> cellsProbForTuple = null;
                 int initialTuples = tuples.size();
@@ -136,14 +136,14 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);
                     List<CellProb> cellProbs = null;
+                    Iterator<List<CellProb>> iterator = null;
                     if (llmProbThreshold != null) {
                         Logprobs probs = StoredProbsSingleton.getInstance().getLogprobs(userMessage);
                         DataProb probsParser = new DataProb();
                         cellProbs = probsParser.computeProbabilities(probs);
+                        iterator = Iterables.partition(cellProbs, attributesExecutionList.size()).iterator();
                     }
                     List<CellProb> cellsProbForTuple = null;
-                    // TODO: check for cellProbs NullPointerException
-                    Iterator<List<CellProb>> iterator = Iterables.partition(cellProbs, attributesExecution.size()).iterator();
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);
                         if (cellProbs != null && iterator.hasNext()) cellsProbForTuple = iterator.next();
