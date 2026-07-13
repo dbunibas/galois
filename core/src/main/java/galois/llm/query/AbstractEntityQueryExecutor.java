@@ -129,8 +129,9 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                 }
             } catch (Exception e) {
                 try {
-                    log.debug("Error with the response, try again with attention on JSON format");
-                    String response = getResponse(chain, EPrompts.ERROR_JSON_FORMAT.getTemplate(), i, true, generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema));
+                    log.debug("Error with the response, try again with attention on {} format", getFirstPrompt().isCsvBased() ? "CSV" : "JSON");
+                    String errorTemplate = getFirstPrompt().isCsvBased() ? EPrompts.ERROR_CSV_FORMAT.getTemplate() : EPrompts.ERROR_JSON_FORMAT.getTemplate();
+                    String response = getResponse(chain, errorTemplate, i, true, generateFirstPrompt(table, attributesExecutionList, getExpression(), jsonSchema));
                     log.debug("Response is: {}", response);
                     List<Map<String, Object>> parsedResponse = getFirstPrompt().getEntitiesParser().parse(response, table);
                     log.debug("Parsed response is: {}", parsedResponse);
@@ -141,6 +142,7 @@ public abstract class AbstractEntityQueryExecutor implements IQueryExecutor {
                         cellProbs = probsParser.computeProbabilities(probs);
                     }
                     List<CellProb> cellsProbForTuple = null;
+                    // TODO: check for cellProbs NullPointerException
                     Iterator<List<CellProb>> iterator = Iterables.partition(cellProbs, attributesExecution.size()).iterator();
                     for (Map<String, Object> map : parsedResponse) {
                         Tuple tuple = mapToTuple(map, tableAlias, attributesExecutionList);

@@ -4,6 +4,7 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.mock.MockCSVTableQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
 import galois.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
 import galois.llm.query.openai.*;
@@ -33,14 +34,17 @@ public class ScanConfigurationParser {
             Map.entry("togetherai-llama3-nl", ScanConfigurationParser::generateTogetheraiLlama3NLQueryExecutor),
             Map.entry("togetherai-llama3-sql", ScanConfigurationParser::generateTogetheraiLlama3SQLQueryExecutor),
             Map.entry("togetherai-llama3-table", ScanConfigurationParser::generateTogetheraiLlama3TableQueryExecutor),
+            Map.entry("togetherai-llama3-csv-table", ScanConfigurationParser::generateTogetheraiLlama3CSVTableQueryExecutor),
             Map.entry("togetherai-llama3-key", ScanConfigurationParser::generateTogetheraiLlama3KeyQueryExecutor),
             Map.entry("togetherai-llama3-key-scan", ScanConfigurationParser::generateTogetheraiLlama3KeyScanQueryExecutor),
             Map.entry("ollama-mistral-nl", ScanConfigurationParser::generateOllamaMistralNLQueryExecutor),
             Map.entry("open-ai-nl", ScanConfigurationParser::generateOpenAINLQueryExecutor),
             Map.entry("open-ai-sql", ScanConfigurationParser::generateOpenAISQLQueryExecutor),
             Map.entry("open-ai-table", ScanConfigurationParser::generateOpenAITableQueryExecutor),
+            Map.entry("open-ai-csv-table", ScanConfigurationParser::generateOpenAICSVTableQueryExecutor),
             Map.entry("open-ai-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor),
-            Map.entry("open-ai-key", ScanConfigurationParser::generateOpenAIKeyQueryExecutor)
+            Map.entry("open-ai-key", ScanConfigurationParser::generateOpenAIKeyQueryExecutor),
+            Map.entry("mock-csv-table", ScanConfigurationParser::generateMockCSVTableQueryExecutor)
     );
 
     public static ScanConfiguration parse(ScanConfigurationJSON json, Query query) {
@@ -117,9 +121,19 @@ public class ScanConfigurationParser {
         return new TogetheraiLlama3TableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
 
+    private static IQueryExecutor generateTogetheraiLlama3CSVTableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new TogetheraiLlama3CSVTableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+
     private static IQueryExecutor generateOpenAITableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAITableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+
+    private static IQueryExecutor generateOpenAICSVTableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new OpenAICSVTableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
 
     private static IQueryExecutor generateOllamaLlama3KeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
@@ -155,6 +169,11 @@ public class ScanConfigurationParser {
     private static IQueryExecutor generateOllamaMistralNLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OllamaMistralNLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt); //TODO: Handle content retriever
+    }
+
+    private static IQueryExecutor generateMockCSVTableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new MockCSVTableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
 
     @FunctionalInterface

@@ -5,6 +5,7 @@ import galois.prompt.parser.IEntitiesResponseParser;
 import galois.prompt.parser.IKeyResponseParser;
 import galois.prompt.parser.attributes.CommaAttributesParser;
 import galois.prompt.parser.attributes.PipeAttributesParser;
+import galois.prompt.parser.entities.CSVEntitiesParser;
 import galois.prompt.parser.entities.JSONEntitiesParser;
 import galois.prompt.parser.entities.MistralTableEntitiesParser;
 import galois.prompt.parser.key.CommaKeyParser;
@@ -30,48 +31,54 @@ import static galois.llm.query.utils.QueryUtils.*;
 public enum EPrompts {
     // Keys
 //    LIST_KEY_JSON("List the ${key} of some ${table}s.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
-    LIST_KEY_JSON("List the ${key} of ${table}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToListAndRemoveDuplicates, null, JSONEntitiesParser::parseAndRemoveDuplicates, true),
+    LIST_KEY_JSON("List the ${key} of ${table}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToListAndRemoveDuplicates, null, JSONEntitiesParser::parseAndRemoveDuplicates, true, false),
     //    LIST_KEY_JSON_CONDITION("List the ${key} of some ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, null),
 //    LIST_KEY_JSON_CONDITION("List the ${key} of ${table}s where ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToList, null, JSONEntitiesParser::parse),
-    LIST_KEY_JSON_CONDITION("List the ${key} of ${table} where the following condition holds: ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToListAndRemoveDuplicates, null, JSONEntitiesParser::parseAndRemoveDuplicates, true),
+    LIST_KEY_JSON_CONDITION("List the ${key} of ${table} where the following condition holds: ${condition}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", Mapper::fromJsonListToListAndRemoveDuplicates, null, JSONEntitiesParser::parseAndRemoveDuplicates, true, false),
 
-    LIST_KEY_PIPE("List the ${key} of some ${table}. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null, true),
-    LIST_KEY_PIPE_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null, true),
+    LIST_KEY_PIPE("List the ${key} of some ${table}. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null, true, false),
+    LIST_KEY_PIPE_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by | without any comments.", PipeKeyParser::parse, null, null, true, false),
 
-    LIST_KEY_COMMA("List the ${key} of some ${table}. Just report the values in a row separated by comma without any comments.", CommaKeyParser::parse, null, null, true),
-    LIST_KEY_COMMA_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by comma without any comments.", CommaKeyParser::parse, null, null, true),
+    LIST_KEY_COMMA("List the ${key} of some ${table}. Just report the values in a row separated by comma without any comments.", CommaKeyParser::parse, null, null, true, false),
+    LIST_KEY_COMMA_CONDITION("List the ${key} of some ${table}s where ${condition}. Just report the values in a row separated by comma without any comments.", CommaKeyParser::parse, null, null, true, false),
 
     // Attributes
-    ATTRIBUTES_PIPE("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by | without any additional comments.", null, PipeAttributesParser::parse, null, true),
-    ATTRIBUTES_COMMA("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by comma without any additional comments.", null, CommaAttributesParser::parse, null, true),
+    ATTRIBUTES_PIPE("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by | without any additional comments.", null, PipeAttributesParser::parse, null, true, false),
+    ATTRIBUTES_COMMA("List the ${attributes} of the ${table} ${key}.\nJust report the values in a row separated by comma without any additional comments.", null, CommaAttributesParser::parse, null, true, false),
     //    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null),
-    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only. Return all numerical attributes in valid numerical format. Don't use the comma in the numerical values. Use the dot for floating numbers.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null, true),
+    ATTRIBUTES_JSON("List the ${attributes} of the ${table} ${key}.\nRespond with JSON only. Return all numerical attributes in valid numerical format. Don't use the comma in the numerical values. Use the dot for floating numbers.\nUse the following JSON schema, but ignore the title:\n${jsonSchema}", null, (String response, List<Attribute> attributes) -> Mapper.fromJsonToMap(response), null, true, false),
     // TODO: Add attributes prompt with auto-generated example from the table attributes
 
     // Entities
-    FROM_TABLE_JSON("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parseAndRemoveDuplicates, true),
-    FROM_TABLE_JSON_CONDITION("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table} where ${condition}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parseAndRemoveDuplicates, true),
+    FROM_TABLE_JSON("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parseAndRemoveDuplicates, true, false),
+    FROM_TABLE_JSON_CONDITION("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table} where ${condition}.\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parseAndRemoveDuplicates, true, false),
 
-    FROM_TABLE_MISTRAL("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nInclude all the values that you know. Just report the table without any comment.", null, null, MistralTableEntitiesParser::parse, true),
+    FROM_TABLE_CSV("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nRespond with a CSV only. Don't add any comment.\nThe header of the CSV must list the attributes name.\nUse the following JSON schema for the types:\n${jsonSchema}", null, null, CSVEntitiesParser::parse, true, true),
+    FROM_TABLE_CSV_CONDITION("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table} where ${condition}.\nRespond with a CSV only. Don't add any comment.\nThe header of the CSV must list the attributes name.\nUse the following JSON schema for the types:\n${jsonSchema}", null, null, CSVEntitiesParser::parse, true, true),
+
+    FROM_TABLE_MISTRAL("Given the following query, populate the table with actual values.\nquery: select ${attributes} from ${table}.\nInclude all the values that you know. Just report the table without any comment.", null, null, MistralTableEntitiesParser::parse, true, false),
 
     //    FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nRespond with JSON only.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
-    FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nAssume you have access to a dataset with the following schema:\n${jsonSchema}\n\nRespond with a JSON object containing only the answer. Do not include explanations or comments.", null, null, JSONEntitiesParser::parse, true),
+    FROM_SQL_JSON("List the result of the SQL query:\n${sql}.\nAssume you have access to a dataset with the following schema:\n${jsonSchema}\n\nRespond with a JSON object containing only the answer. Do not include explanations or comments.", null, null, JSONEntitiesParser::parse, true, false),
 
     // Natural Language
 //    NATURAL_LANGUAGE_JSON("${prompt}\nRespond with JSON only. Don't add any comment.\nUse the following JSON schema:\n${jsonSchema}", null, null, JSONEntitiesParser::parse),
-    NATURAL_LANGUAGE_JSON("Question: ${prompt}\nAssume you have access to a dataset with the following schema:\n${jsonSchema}\n\nRespond with JSON only. Don't add any comment", null, null, JSONEntitiesParser::parse, true),
+    NATURAL_LANGUAGE_JSON("Question: ${prompt}\nAssume you have access to a dataset with the following schema:\n${jsonSchema}\n\nRespond with JSON only. Don't add any comment", null, null, JSONEntitiesParser::parse, true, false),
 
     // Iterative
-    LIST_DIFFERENT_VALUES("List different values.", null, null, null, false),
+    LIST_DIFFERENT_VALUES("List different values.", null, null, null, false, false),
     //    LIST_DIFFERENT_VALUES_JSON("List different values. Respond with JSON only.", null, null, null),
-    LIST_DIFFERENT_VALUES_JSON("List more values if there are more, otherwise return an empty JSON. Respond with JSON only.", null, null, null, false),
+    LIST_DIFFERENT_VALUES_JSON("List more values if there are more, otherwise return an empty JSON. Respond with JSON only.", null, null, null, false, false),
+    LIST_DIFFERENT_VALUES_CSV("List more values if there are more, otherwise return an empty string. Respond with CSV only.", null, null, null, false, true),
     //    LIST_MORE_NO_REPEAT("List more values. Don't repeat the previous values.", null, null, null),
 //    LIST_MORE_NO_REPEAT("List more values if there are more, otherwise return an empty response. Don't repeat the previous values.", null, null, null),
-    LIST_MORE_NO_REPEAT("List more unique values if there are more, otherwise return an empty response. Don't repeat the previous values.", null, null, null, false),
+    LIST_MORE_NO_REPEAT("List more unique values if there are more, otherwise return an empty response. Don't repeat the previous values.", null, null, null, false, false),
 
     // JSON Error correction
-    ERROR_JSON_FORMAT("Respond in an appropriate JSON format.", null, null, null, false),
-    ERROR_JSON_NUMBER_FORMAT("Respond in an appropriate JSON format for a numerical value. Do not use the thousands separator.", null, null, null, false),
+    ERROR_JSON_FORMAT("Respond in an appropriate JSON format.", null, null, null, false, false),
+    ERROR_JSON_NUMBER_FORMAT("Respond in an appropriate JSON format for a numerical value. Do not use the thousands separator.", null, null, null, false, false),
+
+    ERROR_CSV_FORMAT("Respond in an appropriate CSV format.", null, null, null, false, true),
     ;
 
     private final String template;
@@ -79,6 +86,7 @@ public enum EPrompts {
     private final IAttributesResponseParser attributesParser;
     private final IEntitiesResponseParser entitiesParser;
     private final boolean requiresExternalKnowledge;
+    private final boolean csvBased;
 
     public String generateUsingNL(String prompt, String jsonSchema) {
         return generate(null, null, null, null, prompt, null, jsonSchema);

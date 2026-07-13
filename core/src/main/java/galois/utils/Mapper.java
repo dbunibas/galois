@@ -2,9 +2,15 @@ package galois.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +25,8 @@ public class Mapper {
     };
     private static final TypeReference<List<String>> LIST_STRING_REF = new TypeReference<>() {
     };
+    private static final TypeReference<LinkedHashMap<String, Object>> CSV_ROW_REF = new TypeReference<>() {
+    };
 
     public static final ObjectMapper MAPPER = new ObjectMapper()
             .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
@@ -26,6 +34,15 @@ public class Mapper {
             .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
             .configure(JsonParser.Feature.ALLOW_NUMERIC_LEADING_ZEROS, true) //TODO: fix it with the corresponding not deprecated field 
             .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+
+    public static final CsvMapper CSV_MAPPER = new CsvMapper()
+            .configure(CsvParser.Feature.EMPTY_STRING_AS_NULL, true)
+            .configure(CsvParser.Feature.EMPTY_UNQUOTED_STRING_AS_NULL, true)
+            .configure(CsvParser.Feature.ALLOW_TRAILING_COMMA, true)
+            .configure(CsvParser.Feature.TRIM_SPACES, true)
+            .configure(CsvParser.Feature.ALLOW_COMMENTS, true)
+            .configure(CsvParser.Feature.SKIP_EMPTY_LINES, true);
+
 
     public static String asString(Object value) {
         return orElseThrow(
@@ -69,7 +86,30 @@ public class Mapper {
                 MapperException::new
         );
     }
-    
+
+    public static List<Map<String, Object>> fromCSVToListOfMaps(String value) {
+        return orElseThrow(
+                () -> value != null ? readCSVRows(toCleanCSV(value)) : null,
+                MapperException::new
+        );
+    }
+
+    private static List<Map<String, Object>> readCSVRows(String csv) throws IOException {
+        if (csv.isBlank()) return new ArrayList<>();
+        CsvSchema schema = CsvSchema.emptySchema().withHeader();
+        ObjectReader reader = CSV_MAPPER.readerFor(CSV_ROW_REF).with(schema);
+        try (MappingIterator<LinkedHashMap<String, Object>> rows = reader.readValues(csv)) {
+            return new ArrayList<>(rows.readAll());
+        }
+    }
+
+    public static String toCleanCSV(String response) {
+        response = cleaningReasoningResponse(response);
+        response = response.replaceAll("```csv", "");
+        response = response.replaceAll("```", "");
+        return response.trim();
+    }
+
     public static boolean isJSON(String response) {
         String responseList = "";
         if (response.contains("[")) responseList = toCleanJsonList(response, false);
@@ -86,7 +126,7 @@ public class Mapper {
 
     private static String cleaningReasoningResponse(String response) {
         if (response.contains("<think>") && response.contains("</think>")) {
-            String [] splits = response.split("</think>");
+            String[] splits = response.split("</think>");
             response = splits[splits.length - 1].trim();
         }
         return response;
@@ -96,12 +136,12 @@ public class Mapper {
         response = cleaningReasoningResponse(response);
         response = cleaningJsonProlog(response);
         response = removeEmptyJsonObjects(response);
-        if(!response.contains("[") && !response.contains("]") && isBetween(response, "{", "}")){ //Single object
+        if (!response.contains("[") && !response.contains("]") && isBetween(response, "{", "}")) { //Single object
             response = "[" + response + "]";
         }
         String cleanContent = getContentBetween(response, "[", "]");
         if (isBetween(cleanContent, "[", "]")) {
-            if(removeDuplicates) {
+            if (removeDuplicates) {
                 cleanContent = removeDuplicates(cleanContent);
             }
             return cleanContent;
@@ -113,11 +153,11 @@ public class Mapper {
             Pattern pattern = Pattern.compile("\"(.*?)\"");
             Matcher matcher = pattern.matcher(cleanContent);
             List<String> keys = new ArrayList<>();
-            while(matcher.find()) {
+            while (matcher.find()) {
                 keys.add(matcher.group(1));
             }
             for (String key : keys) {
-                substring += '"' + key + '"'+",\n";
+                substring += '"' + key + '"' + ",\n";
             }
             substring = substring.length() >= 3 ? substring.substring(0, substring.length() - 2) : "";
             substring = "[" + substring + "\n";
@@ -125,7 +165,7 @@ public class Mapper {
         }
         String jsonList = substring + "]";
         log.debug("Repaired json list: {}", jsonList);
-        if(removeDuplicates) {
+        if (removeDuplicates) {
             jsonList = removeDuplicates(jsonList);
         }
         return jsonList;
@@ -142,47 +182,51 @@ public class Mapper {
     }
 
     private static String removeDuplicates(String jsonList) {
-        if(jsonList == null || jsonList.isBlank()){
+        if (jsonList == null || jsonList.isBlank()) {
             return jsonList;
         }
-        if(!isBetween(jsonList, "[", "]")){
+        if (!isBetween(jsonList, "[", "]")) {
             return jsonList;
         }
-        if(jsonList.contains("{")){
+        if (jsonList.contains("{")) {
             return removeDuplicatesFromArrayOfObjects(jsonList);
-        }else{
+        } else {
             return removeDuplicatesFromArrayOfStrings(jsonList);
         }
     }
+
     private static String removeDuplicatesFromArrayOfStrings(String jsonList) {
-        try{
-            List<String> listWithDuplicates = MAPPER.readValue(jsonList, new TypeReference<>() {});
+        try {
+            List<String> listWithDuplicates = MAPPER.readValue(jsonList, new TypeReference<>() {
+            });
             Set<String> addedObject = new HashSet<>();
             List<String> listWithoutDuplicates = new ArrayList<>();
             for (String obj : listWithDuplicates) {
-                if(addedObject.contains(obj)) continue;
+                if (addedObject.contains(obj)) continue;
                 addedObject.add(obj);
                 listWithoutDuplicates.add(obj);
             }
             return MAPPER.writeValueAsString(listWithoutDuplicates);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.warn("Unable to remove duplicates from json list: {}", jsonList, e);
             return jsonList;
         }
     }
+
     private static String removeDuplicatesFromArrayOfObjects(String jsonList) {
-        try{
-            List<Map<String, Object>> listWithDuplicates = MAPPER.readValue(jsonList, new TypeReference<>() {});
+        try {
+            List<Map<String, Object>> listWithDuplicates = MAPPER.readValue(jsonList, new TypeReference<>() {
+            });
             Set<String> addedObject = new HashSet<>();
             List<Map<String, Object>> listWithoutDuplicates = new ArrayList<>();
             for (Map<String, Object> obj : listWithDuplicates) {
                 String objSign = obj.toString();
-                if(addedObject.contains(objSign)) continue;
+                if (addedObject.contains(objSign)) continue;
                 addedObject.add(objSign);
                 listWithoutDuplicates.add(obj);
             }
             return MAPPER.writeValueAsString(listWithoutDuplicates);
-        }catch (Exception e){
+        } catch (Exception e) {
             log.debug("Unable to remove duplicates from json list: {}", jsonList);
             return jsonList;
         }
