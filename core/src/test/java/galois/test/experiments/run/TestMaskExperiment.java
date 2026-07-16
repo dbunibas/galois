@@ -141,6 +141,19 @@ public class TestMaskExperiment {
         saveToCSV(results, "bird-university-country_name");
     }
 
+    @Test
+    public void testQatchWebSearchEngines() throws IOException {
+        String experimentPath = "/llm-bench/qatch/web_search_engine-llama3-table-experiment.json";
+        String databaseName = "qatch-web_search_engine";
+        String tableName = "web_search_engine";
+        String sql = "SELECT * FROM " + tableName;
+        String attribute = "is_active";
+
+        int limit = 10;
+        var results = executeExperimentForDataset(experimentPath, databaseName, tableName, sql, attribute, limit);
+        saveToCSV(results, "qatch-web_search_engine-is_active");
+    }
+
     private List<ExperimentResult> executeExperimentForDataset(String path, String databaseName, String tableName, String query, String attribute, int limit) throws IOException {
         List<ExperimentResult> results = new ArrayList<>();
         LLMDistance judge = new LLMDistance();
