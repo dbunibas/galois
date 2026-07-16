@@ -56,6 +56,8 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private boolean checkJSONResponseContent = false;
     private Map<String, String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
     private boolean useCache = false;
+
+    private Boolean reasoningEnabled = null;
     
 //    public TogetherAIModel(String toghetherAiAPI, String modelName) {
 //        this(toghetherAiAPI, modelName, false);
@@ -65,6 +67,13 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         this.toghetherAiAPI = toghetherAiAPI;
         this.modelName = modelName;
         this.streamMode = streamMode;
+    }
+
+    public TogetherAIModel(String toghetherAiAPI, String modelName, boolean streamMode, Boolean reasoningEnabled) {
+        this.toghetherAiAPI = toghetherAiAPI;
+        this.modelName = modelName;
+        this.streamMode = streamMode;
+        this.reasoningEnabled = reasoningEnabled;
     }
 
     @Override
@@ -336,6 +345,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + (streamMode ? "    \"stream_tokens\": true,\n" : "")
                 + (useSeed ? "    \"seed\": 42,\n" : "")
                 + (useLogProbs ? "    \"logprobs\": 1,\n" : "")
+                + (reasoningEnabled != null ? "    \"reasoning\": {\"enabled\": " + getReasoningEnabled().toString().toLowerCase() + "},\n" : "")
                 + "    \"messages\": [\n"
                 + "     {\n"
                 + "       \"role\": \"user\",\n"
@@ -367,6 +377,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + (streamMode ? "    \"stream_tokens\": true,\n" : "")
                 + (useSeed ? "    \"seed\": 42,\n" : "")
                 + (useLogProbs ? "    \"logprobs\": 1,\n" : "")
+                + (reasoningEnabled != null ? "    \"reasoning\": {\"enabled\": " + getReasoningEnabled().toString().toLowerCase() + "},\n" : "")
 //                + "    \"stream\": true,\n"
                 + "    \"messages\": {$MESSAGES$}\n"
                 + "}";

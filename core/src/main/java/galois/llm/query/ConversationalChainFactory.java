@@ -42,6 +42,11 @@ public class ConversationalChainFactory {
         return ConversationalChain.builder().chatLanguageModel(model).build();
     }
 
+    public static ConversationalChain buildTogetherAIConversationalChain(String apiKey, String modelName, Boolean reasoningEnabled) {
+        TogetherAIModel model = new TogetherAIModel(apiKey, modelName, TogetherAIConstants.STREAM_MODE, reasoningEnabled);
+        return ConversationalChain.builder().chatLanguageModel(model).build();
+    }
+
     public static ChatLanguageModel buildTogetherAiChatLanguageModel(String apiKey, String modelName) {
         return new TogetherAIModel(apiKey, modelName, TogetherAIConstants.STREAM_MODE);
     }

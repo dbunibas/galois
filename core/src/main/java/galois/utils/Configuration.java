@@ -33,6 +33,12 @@ public class Configuration {
         return props.getProperty("togetherai.model");
     }
 
+    public Boolean getTogetheraiReasoningEnabled() {
+        String prop = props.getProperty("togetherai.reasoning-enabled");
+        if (prop == null || prop.isBlank()) return null;
+        return Boolean.parseBoolean(prop);
+    }
+
     public int getTogetheraiWaitTimeMs() {
         String waitTime = props.getProperty("togetherai.wait-time-ms");
         try {
