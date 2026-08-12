@@ -49,7 +49,7 @@ public class TogetheraiLlama3TableQueryExecutor extends AbstractEntityQueryExecu
     @Override
     protected Chain<String, String> getConversationalChain() {
         if (contentRetriever == null) {
-            return buildTogetherAIConversationalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel());
+            return buildTogetherAIConversationalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), Configuration.getInstance().getTogetheraiReasoningEnabled());
         } else {
             return buildTogetherAIConversationalRetrivalChain(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), contentRetriever);
         }
