@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import galois.test.utils.LLMJudgeDBLogger;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.Cell;
 import speedy.model.database.IDatabase;
@@ -121,12 +122,15 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
                     }
                     log.debug("\tExpected Tuple: " + tupleExpected.toStringNoOID());
                     if (matchSimilarLLM(tupleActual, tupleExpected, expectedAttributes)) {
+                        logComparison("LLM", tupleActual, tupleExpected, true);
                         log.debug("\tMatch");
                         tp++;
                         matchedExpected.add(tupleExpected);
                         matchedActual.add(tupleActual);
                         matchedActualExpected.put(tupleActual, tupleExpected);
                         break;
+                    } else {
+                        logComparison("NO_LLM_MATCH", tupleActual, tupleExpected, false);
                     }
                 }
                 if (matchedActual.contains(tupleActual)) {
@@ -135,13 +139,16 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
                 if (expectedToCheck.size() > maxSorted) {
                     Tuple possibleMatch = askLLMSimilarTuple(tupleActual, expectedToCheck.subList(10, expectedToCheck.size()), expectedAttributes);
                     if (possibleMatch == null) continue;
-                     if (matchSimilarLLM(tupleActual, possibleMatch, expectedAttributes)) {
+                    if (matchSimilarLLM(tupleActual, possibleMatch, expectedAttributes)) {
+                        logComparison("LLM_CANDIDATE", tupleActual, possibleMatch, true);
                         log.debug("\tMatch");
                         tp++;
                         matchedExpected.add(possibleMatch);
                         matchedActual.add(tupleActual);
                         matchedActualExpected.put(tupleActual, possibleMatch);
                         break;
+                    } else {
+                        logComparison("NO_LLM_MATCH", tupleActual, possibleMatch, false);
                     }
                 }
             }
@@ -170,6 +177,10 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         if ((tp + fn) == 0) recall = 0;
         if ((precision + recall) == 0) return 0.0;
         return (2 * precision * recall) / (precision + recall);
+    }
+
+    private void logComparison(String stage, Tuple tupleActual, Tuple tupleExpected, boolean matched) {
+        LLMJudgeDBLogger.getInstance().logComparison(getName(), stage, tupleActual.toStringNoOID(), tupleExpected.toStringNoOID(), matched, null);
     }
 
     private String getAttributeLikelyBeKey(List<Tuple> expected) {
