@@ -58,7 +58,6 @@ public class TestMaskExperiment {
     public void testWholeDataset() {
         int limit = 10;
 
-        List<ExperimentResult> results = new ArrayList<>();
         List<ExperimentInstance> instances = List.of(
                 // Bird
                 new ExperimentInstance("/llm-bench/bird/address-llama3-table-experiment.json", "bird-address", "state", "abbreviation"),
@@ -67,14 +66,14 @@ public class TestMaskExperiment {
                 new ExperimentInstance("/llm-bench/bird/cookbook-llama3-table-experiment.json", "bird-cookbook", "ingredient", "category"),
                 new ExperimentInstance("/llm-bench/bird/disney-llama3-table-experiment.json", "bird-disney", "characters", "hero"),
                 new ExperimentInstance("/llm-bench/bird/mondial_geo-llama3-table-experiment.json", "bird-mondial_geo", "mountain", "height"),
-                new ExperimentInstance("/llm-bench/bird/movie-llama3-table-experiment.json", "bird-movie", "movie", "mpaa_rating"),
-                new ExperimentInstance("/llm-bench/bird/movies_4-llama3-table-experiment.json", "bird-movies_4", "movie", "budget"),
-                new ExperimentInstance("/llm-bench/bird/olympics-llama3-table-experiment.json", "bird-olympics", "noc_region", "noc"),
+                new ExperimentInstance("/llm-bench/bird/movie-llama3-table-experiment.json", "bird-movie", "actor", "date_of_birth"),
+                new ExperimentInstance("/llm-bench/bird/movies_4-llama3-table-experiment.json", "bird-movies_4", "person", "person_name", "SELECT T1.title, T2.job, T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id and T2.job = 'Director' ORDER BY T1.oid"),
+                new ExperimentInstance("/llm-bench/bird/olympics-llama3-table-experiment.json", "bird-olympics", "city", "city_name", "SELECT T3.games_year, T3.games_name, T3.season, T2.city_name FROM games_city AS T1 INNER JOIN city AS T2 ON T1.city_id = T2.id INNER JOIN games AS T3 ON T1.games_id = T3.id ORDER BY T2.oid"),
                 new ExperimentInstance("/llm-bench/bird/university-llama3-table-experiment.json", "bird-university", "university", "country_name", "SELECT university_name, country_name FROM university u JOIN country c ON u.country_id = c.id"),
                 new ExperimentInstance("/llm-bench/bird/world-llama3-table-experiment.json", "bird-world", "country", "continent"),
 
                 // Galois
-                new ExperimentInstance("/llm-bench/galois/flight_2-llama3-table-experiment.json", "galois-flight_2", "usa_airports", "airportcode"),
+                new ExperimentInstance("/llm-bench/galois/flight_2-llama3-table-experiment.json", "galois-flight_2", "usa_airline_companies", "call_sign"),
                 new ExperimentInstance("/llm-bench/galois/flight_4-llama3-table-experiment.json", "galois-flight_4", "airports", "country"),
                 new ExperimentInstance("/llm-bench/galois/movies-llama3-table-experiment.json", "galois-movies", "movie", "director"),
                 new ExperimentInstance("/llm-bench/galois/spider_geo-llama3-table-experiment.json", "galois-spider_geo", "usa_lake", "state_name"),
@@ -90,29 +89,30 @@ public class TestMaskExperiment {
 
                 // Spider1
                 new ExperimentInstance("/llm-bench/spider1/movie_1-llama3-table-experiment.json", "spider1-movie_1", "movie", "director"),
-                new ExperimentInstance("/llm-bench/spider1/architecture-llama3-table-experiment.json", "spider1-architecture", "architect", "gender"),
-                new ExperimentInstance("/llm-bench/spider1/geo-llama3-table-experiment.json", "spider1-geo", "usa_lake", "country_name"),
+                new ExperimentInstance("/llm-bench/spider1/architecture-llama3-table-experiment.json", "spider1-architecture", "bridge", "location"),
+                new ExperimentInstance("/llm-bench/spider1/geo-llama3-table-experiment.json", "spider1-geo", "usa_state", "capital"),
                 new ExperimentInstance("/llm-bench/spider1/academic-llama3-table-experiment.json", "spider1-academic", "academic_journal", "homepage"),
                 new ExperimentInstance("/llm-bench/spider1/imdb-llama3-table-experiment.json", "spider1-imdb", "director", "nationality")
         );
 
-        for (ExperimentInstance instance : instances) {
-            try {
-                var instanceResults = executeExperimentForDataset(
-                        instance.path(),
-                        instance.databaseName(),
-                        instance.tableName(),
-                        instance.query(),
-                        instance.attribute(),
-                        limit
-                );
-                results.addAll(instanceResults);
-            } catch (Exception ex) {
-                log.error("Cannot execute experiment for database {}! Skipping...", instance.databaseName(), ex);
-            }
-        }
-
+        List<ExperimentResult> results = executeInstances(instances, limit);
         saveToCSV(results, "masked-dataset");
+    }
+
+    @Test
+    public void testQatchHighLimit() {
+        int limit = 50;
+
+        List<ExperimentInstance> instances = List.of(
+                new ExperimentInstance("/llm-bench/qatch/nobel_prize-llama3-table-experiment.json", "qatch-nobel_prize", "nobel_prize", "nobel_prize_year"),
+                new ExperimentInstance("/llm-bench/qatch/chemical_element-llama3-table-experiment.json", "qatch-chemical_element", "chemical_element", "symbol"),
+                new ExperimentInstance("/llm-bench/qatch/web_search_engine-llama3-table-experiment.json", "qatch-web_search_engine", "web_search_engine", "is_active"),
+                new ExperimentInstance("/llm-bench/qatch/airport-llama3-table-experiment.json", "qatch-airport", "airport", "iata_code"),
+                new ExperimentInstance("/llm-bench/qatch/video_game_publisher-llama3-table-experiment.json", "qatch-video_game_publisher", "video_game_publisher", "nation")
+        );
+
+        List<ExperimentResult> results = executeInstances(instances, limit);
+        saveToCSV(results, "qatch-high-limit");
     }
 
     @Test
@@ -152,6 +152,52 @@ public class TestMaskExperiment {
         int limit = 10;
         var results = executeExperimentForDataset(experimentPath, databaseName, tableName, sql, attribute, limit);
         saveToCSV(results, "qatch-web_search_engine-is_active");
+    }
+
+    @Test
+    public void testBirdMovies4() throws IOException {
+        String experimentPath = "/llm-bench/bird/movies_4-llama3-table-experiment.json";
+        String databaseName = "bird-movies_4";
+        String tableName = "person";
+        String sql = "SELECT T1.title, T2.job, T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id and T2.job = 'Director' ORDER BY T1.oid";
+        String attribute = "person_name";
+
+        int limit = 10;
+        var results = executeExperimentForDataset(experimentPath, databaseName, tableName, sql, attribute, limit);
+        saveToCSV(results, "bird-movies_4-person_name");
+    }
+
+    @Test
+    public void testBirdOlympics() throws IOException {
+        String experimentPath = "/llm-bench/bird/olympics-llama3-table-experiment.json";
+        String databaseName = "bird-olympics";
+        String tableName = "city";
+        String sql = "SELECT T3.games_year, T3.games_name, T3.season, T2.city_name FROM games_city AS T1 INNER JOIN city AS T2 ON T1.city_id = T2.id INNER JOIN games AS T3 ON T1.games_id = T3.id ORDER BY T2.oid";
+        String attribute = "city_name";
+
+        int limit = 10;
+        var results = executeExperimentForDataset(experimentPath, databaseName, tableName, sql, attribute, limit);
+        saveToCSV(results, "bird-olympics-city_name");
+    }
+
+    private List<ExperimentResult> executeInstances(List<ExperimentInstance> instances, int limit) {
+        List<ExperimentResult> results = new ArrayList<>();
+        for (ExperimentInstance instance : instances) {
+            try {
+                var instanceResults = executeExperimentForDataset(
+                        instance.path(),
+                        instance.databaseName(),
+                        instance.tableName(),
+                        instance.query(),
+                        instance.attribute(),
+                        limit
+                );
+                results.addAll(instanceResults);
+            } catch (Exception ex) {
+                log.error("Cannot execute experiment for database {}! Skipping...", instance.databaseName(), ex);
+            }
+        }
+        return results;
     }
 
     private List<ExperimentResult> executeExperimentForDataset(String path, String databaseName, String tableName, String query, String attribute, int limit) throws IOException {
