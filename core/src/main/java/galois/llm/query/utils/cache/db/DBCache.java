@@ -86,15 +86,54 @@ public class DBCache implements ILLMCache {
         }
     }
 
+    public void updateCacheMigration(String prompt, int iteration, IQueryExecutor queryExecutor, String model, String firstPrompt, String response, double inputTokens, double outputTokens, long timeMillis, int baseLLMRequestsIncrement) {
+        try (DaoCache dao = new DaoCache()) {
+            dao.connect();
+            dao.updateEntry(getMigrationEntry(prompt, iteration, queryExecutor, model, firstPrompt, response, inputTokens, outputTokens, timeMillis, baseLLMRequestsIncrement));
+        } catch (Exception e) {
+            log.error("Cannot execute updateCache!", e);
+            throw new CacheException(e);
+        }
+    }
+
+    // Builds the entry of a cache of another model, e.g. a migrated one, to persist it in batches with DaoCache
+    public static DBCacheEntry getMigrationEntry(String prompt, int iteration, IQueryExecutor queryExecutor, String model, String firstPrompt, String response, double inputTokens, double outputTokens, long timeMillis, int baseLLMRequestsIncrement) {
+        DBCacheEntry dbCacheEntry = new DBCacheEntry(
+                null,
+                getProvider(queryExecutor),
+                model,
+                firstPrompt,
+                prompt,
+                iteration,
+                response,
+                inputTokens,
+                outputTokens,
+                timeMillis,
+                baseLLMRequestsIncrement
+        );
+        dbCacheEntry.setCacheKey(getCacheKey(dbCacheEntry));
+        return dbCacheEntry;
+    }
+
     private String getCacheKey(IQueryExecutor executor, String prompt, int iteration, String firstPrompt) {
-        String executorName = String.format("%s-%s", getProvider(executor), getLLMModel(executor));
+        return getCacheKey(getProvider(executor), getLLMModel(executor), prompt, iteration, firstPrompt);
+    }
+
+    // Recomputes the key of an already persisted entry, e.g. to migrate entries hashed with a different algorithm
+    public static String getCacheKey(DBCacheEntry entry) {
+        return getCacheKey(entry.getProvider(), entry.getModel(), entry.getPrompt(), entry.getIteration(), entry.getFirstPrompt());
+    }
+
+    private static String getCacheKey(String provider, String model, String prompt, int iteration, String firstPrompt) {
+        String executorName = String.format("%s-%s", provider, model);
         String promptKey = prompt.equals(firstPrompt) ?
                 String.format("%s-iter:%d-%s", executorName, iteration, prompt) :
                 String.format("%s-fp:%s-iter:%d-%s", executorName, firstPrompt, iteration, prompt);
-        return Hashing.crc32().hashString(promptKey, StandardCharsets.UTF_8).toString();
+        // SHA-256 fills the CHAR(64) key column and, unlike CRC-32, does not collide within caches of millions of entries
+        return Hashing.sha256().hashString(promptKey, StandardCharsets.UTF_8).toString();
     }
 
-    private String getProvider(IQueryExecutor queryExecutor) {
+    private static String getProvider(IQueryExecutor queryExecutor) {
         return queryExecutor == null ? "LLM-Similarity" : queryExecutor.getClass().getSimpleName();
     }
 

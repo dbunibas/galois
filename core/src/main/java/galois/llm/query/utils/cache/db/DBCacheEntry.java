@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DBCacheEntry {
+    // Length of a SHA-256 hash in hexadecimal form, i.e. the width of the cache key column
+    public static final int CACHE_KEY_LENGTH = 64;
+
     @DatabaseField(id = true, columnName = "cache_key", columnDefinition = "CHAR(64)")
     private String cacheKey;
 

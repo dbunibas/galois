@@ -253,7 +253,7 @@ public abstract class AbstractKeyBasedQueryExecutor implements IQueryExecutor {
         }
     }
 
-    private String getResponse(Chain<String, String> chain, String userMessage, boolean ignoreTokens, int iteration, String firstPrompt) {
+    protected String getResponse(Chain<String, String> chain, String userMessage, boolean ignoreTokens, int iteration, String firstPrompt) {
         String response = null;
         LLMCache llmCache = LLMCache.getInstance();
 

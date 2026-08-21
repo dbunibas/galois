@@ -10,6 +10,7 @@ import galois.llm.models.togetherai.ResponseTogetherAI;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.llm.query.utils.cache.CacheEntry;
 import galois.llm.query.utils.cache.LLMCache;
+import galois.test.utils.CacheHitCounter;
 import galois.utils.Configuration;
 import galois.utils.Mapper;
 import java.util.Map;
@@ -128,23 +129,18 @@ public class LLMDistance {
         if (llmCache.containsQuery(editedPrompt, 0, null, editedPrompt)) {
             //log.debug("Cache hit for {}, returning cached value!", editedPrompt);
             CacheEntry entry = llmCache.getResponse(editedPrompt, 0, null, editedPrompt);
+            CacheHitCounter.getInstance().addJudgeHit();
             response = entry.response();
         } else {
             String swappedEditedPrompt = promptCell.replace("$CELL_1$", actual).replace("$CELL_2$", expected); // check on the other side in the cache
             if (llmCache.containsQuery(swappedEditedPrompt, 0, null, swappedEditedPrompt)) {
                 //log.debug("Cache hit for {}, returning cached value!", swappedEditedPrompt);
                 CacheEntry entry = llmCache.getResponse(swappedEditedPrompt, 0, null, swappedEditedPrompt);
+                CacheHitCounter.getInstance().addJudgeHit();
                 response = entry.response();
             } else {
-                try {
-//                    TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
-                    TimeUnit.MILLISECONDS.sleep((long) 100);
 //                    log.error("compare using LLM: \n" + editedPrompt);
-                    response = llmModel.getModelResponse(editedPrompt);
-                    llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
-                } catch (Exception e) {
-                    log.error("Exception in making the request: {}", e);
-                }
+                response = getModelResponse(editedPrompt, 100);
             }
         }
         if (response == null || response.isBlank()) {
@@ -176,22 +172,17 @@ public class LLMDistance {
         if (llmCache.containsQuery(editedPrompt, 0, null, editedPrompt)) {
             //log.debug("Cache hit for {}, returning cached value!", editedPrompt);
             CacheEntry entry = llmCache.getResponse(editedPrompt, 0, null, editedPrompt);
+            CacheHitCounter.getInstance().addJudgeHit();
             response = entry.response();
         } else {
             String swappedEditedPrompt = promptTuple.replace("$TUPLE_A$", actual).replace("$TUPLE_B$", expected); // check on the other side in the cache
             if (llmCache.containsQuery(swappedEditedPrompt, 0, null, swappedEditedPrompt)) {
                 //log.debug("Cache hit for {}, returning cached value!", swappedEditedPrompt);
                 CacheEntry entry = llmCache.getResponse(swappedEditedPrompt, 0, null, swappedEditedPrompt);
+                CacheHitCounter.getInstance().addJudgeHit();
                 response = entry.response();
             } else {
-                try {
-//                    TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
-                    TimeUnit.MILLISECONDS.sleep((long) 100);
-                    response = llmModel.getModelResponse(editedPrompt);
-                    llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
-                } catch (Exception e) {
-                    log.error("Exception in making the request: {}", e);
-                }
+                response = getModelResponse(editedPrompt, 100);
             }
         }
         if (response == null || response.isBlank()) {
@@ -229,15 +220,10 @@ public class LLMDistance {
         if (llmCache.containsQuery(prompt, 0, null, prompt)) {
             //log.debug("Cache hit for {}, returning cached value!", editedPrompt);
             CacheEntry entry = llmCache.getResponse(prompt, 0, null, prompt);
+            CacheHitCounter.getInstance().addJudgeHit();
             response = entry.response();
         } else {
-            try {
-                TimeUnit.MILLISECONDS.sleep((long) Configuration.getInstance().getTogetheraiWaitTimeMs());
-                response = llmModel.getModelResponse(prompt);
-                llmCache.updateCache(prompt, 0, null, prompt, response, 0, 0, 0, 0);
-            } catch (Exception e) {
-                log.error("Exception in making the request: {}", e);
-            }
+            response = getModelResponse(prompt, Configuration.getInstance().getTogetheraiWaitTimeMs());
         }
         if (response == null || response.isBlank()) {
             return null;
@@ -267,15 +253,10 @@ public class LLMDistance {
         if (llmCache.containsQuery(editedPrompt, 0, null, editedPrompt)) {
             //log.debug("Cache hit for {}, returning cached value!", editedPrompt);
             CacheEntry entry = llmCache.getResponse(editedPrompt, 0, null, editedPrompt);
+            CacheHitCounter.getInstance().addJudgeHit();
             response = entry.response();
         } else {
-            try {
-                TimeUnit.MILLISECONDS.sleep((long) 100);
-                response = llmModel.getModelResponse(editedPrompt);
-                llmCache.updateCache(editedPrompt, 0, null, editedPrompt, response, 0, 0, 0, 0);
-            } catch (Exception e) {
-                log.error("Exception in making the request: {}", e);
-            }
+            response = getModelResponse(editedPrompt, 100);
         }
         if (response == null || response.isBlank()) {
             return -1;
@@ -292,6 +273,26 @@ public class LLMDistance {
 
         }
         return -1;
+    }
+
+    // Counts the request as a judge cache miss and, in cache only mode, gives up instead of querying the LLM
+    private String getModelResponse(String prompt, long waitTimeMs) {
+        CacheHitCounter counter = CacheHitCounter.getInstance();
+        counter.addJudgeMiss();
+        if (counter.isCacheOnly()) {
+            log.debug("Cache miss in cache only mode for the prompt: {}", prompt);
+            return null;
+        }
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(waitTimeMs);
+            String response = llmModel.getModelResponse(prompt);
+            LLMCache.getInstance().updateCache(prompt, 0, null, prompt, response, 0, 0, 0, 0);
+            return response;
+        } catch (Exception e) {
+            log.error("Exception in making the request: {}", e);
+            return null;
+        }
     }
 
     public Number getNumber(String value) {

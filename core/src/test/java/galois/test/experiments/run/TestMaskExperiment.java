@@ -40,9 +40,9 @@ import static java.util.Collections.shuffle;
 
 @Slf4j
 public class TestMaskExperiment {
-    private static final int RANDOM_SEED = 42;
+    static final int RANDOM_SEED = 42;
 
-    private static final PromptTemplate TEMPLATE = PromptTemplate.from("""
+    static final PromptTemplate TEMPLATE = PromptTemplate.from("""
             You're given the following tuple from the {{tableName}} table:
             
             {{maskedTuple}}
@@ -69,7 +69,7 @@ public class TestMaskExperiment {
                 new ExperimentInstance("/llm-bench/bird/movie-llama3-table-experiment.json", "bird-movie", "actor", "date_of_birth"),
                 new ExperimentInstance("/llm-bench/bird/movies_4-llama3-table-experiment.json", "bird-movies_4", "person", "person_name", "SELECT T1.title, T2.job, T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id and T2.job = 'Director' ORDER BY T1.oid"),
                 new ExperimentInstance("/llm-bench/bird/olympics-llama3-table-experiment.json", "bird-olympics", "city", "city_name", "SELECT T3.games_year, T3.games_name, T3.season, T2.city_name FROM games_city AS T1 INNER JOIN city AS T2 ON T1.city_id = T2.id INNER JOIN games AS T3 ON T1.games_id = T3.id ORDER BY T2.oid"),
-                new ExperimentInstance("/llm-bench/bird/university-llama3-table-experiment.json", "bird-university", "university", "country_name", "SELECT university_name, country_name FROM university u JOIN country c ON u.country_id = c.id"),
+                new ExperimentInstance("/llm-bench/bird/university-llama3-table-experiment.json", "bird-university", "university", "country_name", "SELECT u.oid, university_name, country_name FROM university u JOIN country c ON u.country_id = c.id"),
                 new ExperimentInstance("/llm-bench/bird/world-llama3-table-experiment.json", "bird-world", "country", "continent"),
 
                 // Galois
@@ -302,8 +302,8 @@ public class TestMaskExperiment {
         return results.subList(0, Math.min(limit, results.size()));
     }
 
-    private record ExperimentInstance(String path, String databaseName, String tableName, String attribute,
-                                      String query) {
+    record ExperimentInstance(String path, String databaseName, String tableName, String attribute,
+                              String query) {
         public ExperimentInstance(String path, String databaseName, String tableName, String attribute) {
             this(path, databaseName, tableName, attribute, "SELECT * from " + tableName);
         }
@@ -314,7 +314,7 @@ public class TestMaskExperiment {
     }
 
     // HACK: mock class, allows simple cache usage with the Togetherai model
-    private static final class MockMaskTogetheraiQueryExecutor implements IQueryExecutor {
+    static final class MockMaskTogetheraiQueryExecutor implements IQueryExecutor {
         @Override
         public List<Tuple> execute(IDatabase database, TableAlias tableAlias, Double llmProbThreshold) {
             return List.of();
