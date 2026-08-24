@@ -8,8 +8,7 @@ import galois.parser.ParserWhere;
 import galois.test.experiments.Experiment;
 import galois.test.experiments.Query;
 import galois.test.experiments.json.ExperimentJSON;
-import galois.test.experiments.metrics.IMetric;
-import galois.test.experiments.metrics.MetricFactory;
+import galois.test.experiments.metrics.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,7 +19,7 @@ public class ExperimentParser {
     public static Experiment loadAndParseJSON(String fileName) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         URL jsonResource = ExperimentParser.class.getResource(fileName);
-        if(jsonResource == null){
+        if (jsonResource == null) {
             throw new IllegalArgumentException("Unable to load file " + fileName);
         }
         ExperimentJSON experimentJSON = mapper.readValue(jsonResource, ExperimentJSON.class);
@@ -37,7 +36,16 @@ public class ExperimentParser {
     }
 
     private static List<IMetric> parseMetrics(List<String> metrics) {
-        return metrics.stream().map(MetricFactory::getMetricByName).toList();
+        List<IMetric> parsedMetrics = metrics.stream().map(MetricFactory::getMetricByName).toList();
+
+        if (parsedMetrics.stream().noneMatch(m -> m instanceof TupleCellSimilarityFilteredAttributes)) {
+            return parsedMetrics;
+        }
+
+        List<IMetric> allMetrics = new ArrayList<>(parsedMetrics);
+        allMetrics.add(new TupleCellSimilarityFilteredAttributesPrecision());
+        allMetrics.add(new TupleCellSimilarityFilteredAttributesRecall());
+        return allMetrics;
     }
 
     private static List<IOptimizer> parseOptimizers(List<String> optimizers, Query query) {
@@ -49,7 +57,7 @@ public class ExperimentParser {
 
         // TODO: Refactor by changing the OptimizersFactory signature
         for (String optimizer : optimizers) {
-            
+
             if (optimizer.equals("SingleConditionsOptimizerFactory")) {
                 ParserWhere parserWhere = new ParserWhere();
                 parserWhere.parseWhere(query.getSql());

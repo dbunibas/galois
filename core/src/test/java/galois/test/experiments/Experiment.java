@@ -256,7 +256,7 @@ public final class Experiment {
                     throw new IllegalStateException(ioe);
                 }
                 CSVFile fileToImport = new CSVFile(speedyFile.getAbsolutePath());
-                System.out.println("File to import: " + speedyFile.getAbsolutePath());
+                log.debug("File to import: {}", speedyFile.getAbsolutePath());
                 speedyFiles.add(speedyFile);
                 fileToImport.setHasHeader(true);
                 fileToImport.setSeparator(',');

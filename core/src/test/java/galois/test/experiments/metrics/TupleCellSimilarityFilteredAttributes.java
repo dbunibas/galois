@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import galois.test.utils.LLMJudgeDBLogger;
 import lombok.extern.slf4j.Slf4j;
 import speedy.model.database.Cell;
@@ -31,10 +32,21 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
 
     @Override
     public Double getScore(IDatabase database, List<Tuple> expected, List<Tuple> result) {
+        // HACK: precision and recall are tracked in a singleton instance, to report them without running the
+        // LLM judge again: see TupleCellSimilarityFilteredAttributesPrecision and TupleCellSimilarityFilteredAttributesRecall
+        TupleCellSimilarityCounter.getInstance().reset();
+        Double score = computeScore(database, expected, result);
+        TupleCellSimilarityCounter.getInstance().bindTo(expected, result);
+        return score;
+    }
+
+    private Double computeScore(IDatabase database, List<Tuple> expected, List<Tuple> result) {
         if (expected.isEmpty() && result.isEmpty()) {
+            TupleCellSimilarityCounter.getInstance().setScores(1.0, 1.0);
             return 1.0;
         }
         if (expected.isEmpty() || result.isEmpty()) {
+            // reset() already left both the precision and the recall to 0.0
             return 0.0;
         }
         List<String> expectedAttributes = getAttributeNames(expected.get(0));
@@ -55,12 +67,17 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             return computeScoreWithKey(key, expected, result);
         } */
     }
-    
+
     private Double computeScoreNoPartition(List<Tuple> expected, List<Tuple> result, List<String> expectedAttributes) {
         //if (true) return 0.0;
-        if (expected.size() < result.size()) return computeScoreNoPartition(result, expected, expectedAttributes); 
+        if (expected.size() < result.size()) {
+            Double score = computeScoreNoPartition(result, expected, expectedAttributes);
+            // the arguments have been swapped: so are the precision and the recall of this orientation
+            TupleCellSimilarityCounter.getInstance().swapScores();
+            return score;
+        }
         double tp = 0;
-        Map<Tuple,Tuple> matchedActualExpected = new HashMap<>();
+        Map<Tuple, Tuple> matchedActualExpected = new HashMap<>();
         Set<Tuple> matchedExpected = new HashSet<>();
         Set<Tuple> matchedActual = new HashSet<>();
         log.info("Actual: " + result.size());
@@ -173,8 +190,11 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         double fn = expected.size() - tp;
         double precision = tp / (tp + fp);
         double recall = tp / (tp + fn);
-        if ((tp + fp)== 0) precision = 0;
+        if ((tp + fp) == 0) precision = 0;
         if ((tp + fn) == 0) recall = 0;
+
+        TupleCellSimilarityCounter.getInstance().setScores(precision, recall);
+
         if ((precision + recall) == 0) return 0.0;
         return (2 * precision * recall) / (precision + recall);
     }
@@ -237,14 +257,14 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         }
         return partitions;
     }
-    
+
     private IValue getValueForAttr(Tuple tuple, String attribute) {
         for (Cell cell : tuple.getCells()) {
             if (cell.getAttribute().equalsIgnoreCase(attribute)) return cell.getValue();
         }
         return null;
     }
-   
+
     private boolean matchExact(Tuple tupleActual, Tuple tupleExpected) {
         if (tupleActual == null || tupleExpected == null) return false;
         if (tupleActual.getCells().isEmpty() || tupleExpected.getCells().isEmpty()) return false;
@@ -309,7 +329,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
 //        }
         return llmDistance.areTupleSimilar(linearizeTuple1(tupleActual, expectedAttributes), linearizeTuple1(tupleExpected, expectedAttributes));
     }
-    
+
     private List<Tuple> filterAttributes(List<Tuple> resultOriginal, List<String> expectedAttributes) {
         List<Tuple> result = new ArrayList<>();
         for (Tuple tuple : resultOriginal) {
@@ -342,7 +362,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         return toReturn;
     }
 
-    private List<Tuple> findPossibleMatchesWithDistance(String value, String attribute,  Map<String, List<Tuple>> resultPartition) {
+    private List<Tuple> findPossibleMatchesWithDistance(String value, String attribute, Map<String, List<Tuple>> resultPartition) {
         Set<String> candidateValues = resultPartition.keySet();
         String similarKeyValue = llmDistance.findSimilar(attribute, value, candidateValues);
         if (similarKeyValue == null || similarKeyValue.isEmpty()) return null;
@@ -364,7 +384,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             }
         }
     }
-    
+
     private String generateSignatureNormalizeCategorical(Tuple tuple, List<String> categoricalAttributes) {
         if (categoricalAttributes == null || categoricalAttributes.isEmpty()) return "";
         String signature = "";
@@ -374,19 +394,20 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             if (valueForAttr != null) {
                 value = valueForAttr.getPrimitiveValue().toString();
             }
-            signature += categoricalAttribute + "= "+ normalizer.normalize(value) + ", ";
+            signature += categoricalAttribute + "= " + normalizer.normalize(value) + ", ";
         }
         signature = signature.trim();
         return signature.substring(0, signature.length() - 1);
     }
-    
+
     private boolean checkNumericalAttributes(Tuple actual, Tuple expected, List<String> numericalAttributes) {
         for (String numericalAttribute : numericalAttributes) {
             IValue actualValue = getValueForAttr(actual, numericalAttribute);
             IValue expectedValue = getValueForAttr(expected, numericalAttribute);
             //log.error("Compare: " + actualValue + "---" + expectedValue);
             if (actualValue == null || expectedValue == null) return false;
-            if (!llmDistance.areCellSimilar(expectedValue.getPrimitiveValue().toString(), actualValue.getPrimitiveValue().toString(), "")) return false;
+            if (!llmDistance.areCellSimilar(expectedValue.getPrimitiveValue().toString(), actualValue.getPrimitiveValue().toString(), ""))
+                return false;
         }
         return true;
     }
@@ -417,7 +438,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
     private Tuple askLLMSimilarTuple(Tuple tupleActual, List<Tuple> expected, List<String> expectedAttributes) {
         String reference = linearizeTuple2(tupleActual, expectedAttributes);
         String listTuple = "";
-        for(int i = 0; i < expected.size(); i++) {
+        for (int i = 0; i < expected.size(); i++) {
             Tuple tuple = expected.get(i);
             String t = linearizeTupleWithPos(tuple, expectedAttributes, i);
             listTuple += t + "\n";
@@ -426,7 +447,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         if (pos == -1) return null;
         return expected.get(pos);
     }
-    
+
     private String linearizeTuple1(Tuple tuple, List<String> expectedAttributes) {
         Map<String, IValue> tupleMap = getTupleMap(tuple);
         String tupleString = "";
@@ -444,7 +465,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         }
         return tupleMap;
     }
-    
+
     private String linearizeTuple2(Tuple tuple, List<String> expectedAttributes) {
         Map<String, IValue> tupleMap = getTupleMap(tuple);
         String tupleString = "";
@@ -454,14 +475,14 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         }
         return tupleString;
     }
-    
+
     private String linearizeTupleWithPos(Tuple tuple, List<String> expectedAttributes, int pos) {
         String tupleString = linearizeTuple2(tuple, expectedAttributes);
         tupleString = "Index: " + pos + " - " + tupleString;
         return tupleString;
     }
-    
-    private class RankedTuple implements Comparable<RankedTuple>{
+
+    private class RankedTuple implements Comparable<RankedTuple> {
         private Tuple tuple;
         private Double score;
 
@@ -469,7 +490,7 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             this.tuple = tuple;
             this.score = score;
         }
-        
+
         @Override
         public int compareTo(RankedTuple o) {
             return this.score.compareTo(o.score);
