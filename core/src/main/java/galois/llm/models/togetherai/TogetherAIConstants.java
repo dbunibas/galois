@@ -15,6 +15,8 @@ public class TogetherAIConstants {
     public static final String MODEL_MISTRAL_0_3_7B = "mistralai/Mistral-7B-Instruct-v0.3";
     public static final String MODEL_GEMMA_2_9B = "google/gemma-2-9b-it";
     public static final String MODEL_KIMI_K2 = "moonshotai/Kimi-K2-Instruct-0905";
+    public static final String MODEL_GPT_OSS_120B = "openai/gpt-oss-120b";
+    public static final String MODEL_GLM_3_5_FLASH = "zai-org/GLM-5.3-Flash";
     public static final Integer MAX_TOKENS = 8194; // for other, for gemma 8194
 
     public static final String USER = "user";

@@ -56,6 +56,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
     private boolean checkJSONResponseContent = false;
     private Map<String, String> inMemoryCache = new HashMap<>(); // TODO: do we need to save it?
     private boolean useCache = false;
+    private List<String> stopSequences;
 
     private Boolean reasoningEnabled = null;
     
@@ -67,13 +68,23 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         this.toghetherAiAPI = toghetherAiAPI;
         this.modelName = modelName;
         this.streamMode = streamMode;
+        this.stopSequences = defaultStopSequences(modelName);
     }
 
     public TogetherAIModel(String toghetherAiAPI, String modelName, boolean streamMode, Boolean reasoningEnabled) {
-        this.toghetherAiAPI = toghetherAiAPI;
-        this.modelName = modelName;
-        this.streamMode = streamMode;
+        this(toghetherAiAPI, modelName, streamMode);
         this.reasoningEnabled = reasoningEnabled;
+    }
+
+    // "<|eot_id|>" is the Llama end-of-turn token: other model families either ignore it or, as with
+    // openai/gpt-oss-*, reject the request because their endpoint cannot match stop strings at all.
+    private static List<String> defaultStopSequences(String modelName) {
+        if (modelName != null && modelName.toLowerCase().contains("llama")) {
+            List<String> stop = new ArrayList<>();
+            stop.add("<|eot_id|>");
+            return stop;
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -330,6 +341,18 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
         return responseText;
     }
     
+    private String getStopForRequest() {
+        if (this.stopSequences == null || this.stopSequences.isEmpty()) {
+            return "";
+        }
+        try {
+            return "    \"stop\": " + objectMapper.writeValueAsString(this.stopSequences) + ",\n";
+        } catch (JsonProcessingException jpe) {
+            log.error("Error generating the stop sequences: " + jpe);
+            return "";
+        }
+    }
+
     public String getJsonForRequest(String message) {
         String jsonReturn = "{\n"
                 + "    \"model\": \"{$MODEL_NAME$}\",\n"
@@ -338,9 +361,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + "    \"top_p\": {$TOP_P$},\n"
                 + "    \"top_k\": 50,\n"
                 + "    \"repetition_penalty\": 1,\n"
-                + "    \"stop\": [\n"
-                + "        \"<|eot_id|>\"\n"
-                + "    ],\n"
+                + getStopForRequest()
                 + (streamMode ? "    \"stream\": true,\n" : "")
                 + (streamMode ? "    \"stream_tokens\": true,\n" : "")
                 + (useSeed ? "    \"seed\": 42,\n" : "")
@@ -370,9 +391,7 @@ public class TogetherAIModel implements IModel, ChatLanguageModel {
                 + "    \"top_p\": {$TOP_P$},\n"
                 + "    \"top_k\": 50,\n"
                 + "    \"repetition_penalty\": 1,\n"
-                + "    \"stop\": [\n"
-                + "        \"<|eot_id|>\"\n"
-                + "    ],\n"
+                + getStopForRequest()
                 + (streamMode ? "    \"stream\": true,\n" : "")
                 + (streamMode ? "    \"stream_tokens\": true,\n" : "")
                 + (useSeed ? "    \"seed\": 42,\n" : "")
