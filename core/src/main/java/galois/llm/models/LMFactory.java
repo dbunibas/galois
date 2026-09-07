@@ -14,6 +14,8 @@ public class LMFactory {
             model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), TogetherAIConstants.STREAM_MODE);
         } else if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI)) {
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
+        } else if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_LOCAL)) {
+            model = ConversationalChainFactory.buildLocalChatLanguageModel(Configuration.getInstance().getLocalBaseUrl(), Configuration.getInstance().getLocalModelName());
         } else {
             throw new IllegalArgumentException("Unknown provider " + Configuration.getInstance().getLLMProvider());
         }

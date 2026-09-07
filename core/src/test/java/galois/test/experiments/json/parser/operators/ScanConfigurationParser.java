@@ -4,6 +4,7 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import galois.llm.algebra.config.ScanConfiguration;
 import galois.llm.query.INLQueryExectutor;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.local.*;
 import galois.llm.query.mock.MockCSVTableQueryExecutor;
 import galois.llm.query.ollama.llama3.*;
 import galois.llm.query.ollama.mistral.OllamaMistralNLQueryExecutor;
@@ -44,6 +45,12 @@ public class ScanConfigurationParser {
             Map.entry("open-ai-csv-table", ScanConfigurationParser::generateOpenAICSVTableQueryExecutor),
             Map.entry("open-ai-key-scan", ScanConfigurationParser::generateOpenAIKeyScanQueryExecutor),
             Map.entry("open-ai-key", ScanConfigurationParser::generateOpenAIKeyQueryExecutor),
+            Map.entry("local-nl", ScanConfigurationParser::generateLocalNLQueryExecutor),
+            Map.entry("local-sql", ScanConfigurationParser::generateLocalSQLQueryExecutor),
+            Map.entry("local-table", ScanConfigurationParser::generateLocalTableQueryExecutor),
+            Map.entry("local-csv-table", ScanConfigurationParser::generateLocalCSVTableQueryExecutor),
+            Map.entry("local-key-scan", ScanConfigurationParser::generateLocalKeyScanQueryExecutor),
+            Map.entry("local-key", ScanConfigurationParser::generateLocalKeyQueryExecutor),
             Map.entry("mock-csv-table", ScanConfigurationParser::generateMockCSVTableQueryExecutor)
     );
 
@@ -164,6 +171,36 @@ public class ScanConfigurationParser {
     private static IQueryExecutor generateOpenAIKeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
         Map<String, EPrompts> promptsMap = computePromptsMap();
         return new OpenAIKeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+
+    private static IQueryExecutor generateLocalNLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new LocalNLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, prompt, contentRetriever);
+    }
+
+    private static IQueryExecutor generateLocalSQLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new LocalSQLQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, sql, contentRetriever);
+    }
+
+    private static IQueryExecutor generateLocalTableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new LocalTableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+
+    private static IQueryExecutor generateLocalCSVTableQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new LocalCSVTableQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+
+    private static IQueryExecutor generateLocalKeyScanQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new LocalKeyScanQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
+    }
+
+    private static IQueryExecutor generateLocalKeyQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {
+        Map<String, EPrompts> promptsMap = computePromptsMap();
+        return new LocalKeyQueryExecutor(promptsMap.get(firstPrompt), promptsMap.get(iterativePrompt), promptsMap.get(attributesPrompt), maxIterations > 0 ? maxIterations : 10, null, contentRetriever);
     }
 
     private static IQueryExecutor generateOllamaMistralNLQueryExecutor(String firstPrompt, String iterativePrompt, int maxIterations, String attributesPrompt, String prompt, String sql, ContentRetriever contentRetriever) {

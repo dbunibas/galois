@@ -14,6 +14,25 @@ openai.api-key=YOUR_API_KEY
 ## The model to use
 openai.model-name=gpt-4o-mini
 
+# Local model config (OpenAI-compatible endpoint, e.g. vLLM)
+## API key (most local servers ignore it, but it must not be empty)
+local.api-key=local
+## The model to use, as served by the local endpoint
+local.model-name=YOUR_MODEL
+## The base URL of the local endpoint
+local.base-url=http://localhost:8000/v1/
+## The sampling temperature (optional: leave empty to use the default model configuration)
+local.temperature=0.0
+## The maximum number of generated tokens (optional: leave empty to let the server fill the whole context window)
+local.max-tokens=4096
+## Enable or disable reasoning through the chat template (optional: leave empty to use the default model configuration)
+local.reasoning-enabled=false
+## Server side reasoning budget: none, low, medium, high (optional: leave empty to use the default model configuration)
+local.reasoning-effort=
+## Read the answer as a stream of server sent events: the answer is the same, but a long generation does not have to
+## fit in a single read timeout window (optional: leave empty to disable it)
+local.stream=false
+
 # Ollama config
 ## The model to use
 ollama.model=llama3.2:latest
@@ -25,7 +44,7 @@ ollama.url=http://127.0.0.1:11434
 chroma.url=http://localhost:8000
 
 # LLM provider
-## The provider to use: togetherai or openai
+## The provider to use: togetherai, openai or local
 llm-provider=togetherai
 
 # Cache configuration

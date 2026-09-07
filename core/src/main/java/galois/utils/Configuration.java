@@ -60,6 +60,56 @@ public class Configuration {
         return props.getProperty("openai.model-name");
     }
 
+    public String getLocalApiKey() {
+        return props.getProperty("local.api-key");
+    }
+
+    public String getLocalModelName() {
+        return props.getProperty("local.model-name");
+    }
+
+    public String getLocalBaseUrl() {
+        return props.getProperty("local.base-url");
+    }
+
+    public Double getLocalTemperature() {
+        String prop = props.getProperty("local.temperature");
+        if (prop == null || prop.isBlank()) return null;
+        try {
+            return Double.parseDouble(prop.trim());
+        } catch (NumberFormatException ex) {
+            throw new GaloisRuntimeException("Local temperature is not a number: " + prop);
+        }
+    }
+
+    public Integer getLocalMaxTokens() {
+        String prop = props.getProperty("local.max-tokens");
+        if (prop == null || prop.isBlank()) return null;
+        try {
+            return Integer.parseInt(prop.trim());
+        } catch (NumberFormatException ex) {
+            throw new GaloisRuntimeException("Local max tokens is not a number: " + prop);
+        }
+    }
+
+    public Boolean getLocalReasoningEnabled() {
+        String prop = props.getProperty("local.reasoning-enabled");
+        if (prop == null || prop.isBlank()) return null;
+        return Boolean.parseBoolean(prop);
+    }
+
+    public Boolean getLocalStream() {
+        String prop = props.getProperty("local.stream");
+        if (prop == null || prop.isBlank()) return null;
+        return Boolean.parseBoolean(prop);
+    }
+
+    public String getLocalReasoningEffort() {
+        String prop = props.getProperty("local.reasoning-effort");
+        if (prop == null || prop.isBlank()) return null;
+        return prop.trim();
+    }
+
     public String getOllamaUrl() {
         return props.getProperty("ollama.url");
     }

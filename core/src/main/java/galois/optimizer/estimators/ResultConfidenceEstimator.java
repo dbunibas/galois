@@ -35,6 +35,8 @@ public class ResultConfidenceEstimator {
         ChatLanguageModel model = new TogetherAIModel(Configuration.getInstance().getTogetheraiApiKey(), Configuration.getInstance().getTogetheraiModel(), TogetherAIConstants.STREAM_MODE);
         if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI))
             model = ConversationalChainFactory.buildOpenAIChatLanguageModel(Configuration.getInstance().getOpenaiApiKey(), Configuration.getInstance().getOpenaiModelName());
+        if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_LOCAL))
+            model = ConversationalChainFactory.buildLocalChatLanguageModel(Configuration.getInstance().getLocalBaseUrl(), Configuration.getInstance().getLocalModelName());
         String response = model.generate(prompt);
         log.trace("Confidence estimator prompt: {}\nResponse: {}", prompt, response);
         Map<String, Object> answerMap = Mapper.fromJsonToMap(response);

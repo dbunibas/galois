@@ -5,11 +5,13 @@ import dev.langchain4j.chain.ConversationalChain;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import dev.langchain4j.model.openai.OpenAiChatModel;
+import galois.llm.models.LocalChatModel;
 import galois.llm.models.TogetherAIModel;
 import galois.llm.models.togetherai.TogetherAIConstants;
 import galois.utils.Configuration;
 
 import java.time.Duration;
+import java.util.Map;
 
 public class ConversationalChainFactory {
 
@@ -61,6 +63,31 @@ public class ConversationalChainFactory {
                 .apiKey(apiKey)
                 .modelName(modelName)
                 .build();
+    }
+
+    public static ConversationalChain buildLocalConversationalChain(String baseUrl, String modelName) {
+        ChatLanguageModel model = buildLocalChatLanguageModel(baseUrl, modelName);
+        return ConversationalChain.builder().chatLanguageModel(model).build();
+    }
+
+    public static ChatLanguageModel buildLocalChatLanguageModel(String baseUrl, String modelName) {
+        return LocalChatModel.localBuilder()
+                .baseUrl(baseUrl)
+                .apiKey(Configuration.getInstance().getLocalApiKey())
+                .modelName(modelName)
+                .temperature(Configuration.getInstance().getLocalTemperature())
+                .maxTokens(Configuration.getInstance().getLocalMaxTokens())
+                .reasoningEffort(Configuration.getInstance().getLocalReasoningEffort())
+                .stream(Configuration.getInstance().getLocalStream())
+                .chatTemplateKwargs(buildLocalChatTemplateKwargs())
+                .build();
+    }
+
+    // Reasoning models render the thinking block through the chat template: switch it off unless the configuration asks for it
+    private static Map<String, Object> buildLocalChatTemplateKwargs() {
+        Boolean reasoningEnabled = Configuration.getInstance().getLocalReasoningEnabled();
+        if (reasoningEnabled == null) return null;
+        return Map.of("enable_thinking", reasoningEnabled);
     }
 
     private static ChatLanguageModel buildOllamaChatLangageModel(String modelName) {

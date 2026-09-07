@@ -12,6 +12,7 @@ import galois.utils.Configuration;
 
 import java.time.Duration;
 
+import static galois.llm.query.ConversationalChainFactory.buildLocalChatLanguageModel;
 import static galois.llm.query.ConversationalChainFactory.buildOpenAIChatLanguageModel;
 
 public class ConversationalRetrievalChainFactory {
@@ -60,6 +61,14 @@ public class ConversationalRetrievalChainFactory {
 
     public static Chain<String, String> buildOpenAIConversationalRetrievalChain(String apiKey, String modelName, ContentRetriever contentRetriever) {
         ChatLanguageModel model = buildOpenAIChatLanguageModel(apiKey, modelName);
+        return ConversationalRetrievalChain.builder()
+                .chatLanguageModel(model)
+                .contentRetriever(contentRetriever)
+                .build();
+    }
+
+    public static Chain<String, String> buildLocalConversationalRetrievalChain(String baseUrl, String modelName, ContentRetriever contentRetriever) {
+        ChatLanguageModel model = buildLocalChatLanguageModel(baseUrl, modelName);
         return ConversationalRetrievalChain.builder()
                 .chatLanguageModel(model)
                 .contentRetriever(contentRetriever)

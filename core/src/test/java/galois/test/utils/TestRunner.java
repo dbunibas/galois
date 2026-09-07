@@ -238,6 +238,8 @@ public class TestRunner {
         String modelName;
         if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI)) {
             modelName = Configuration.getInstance().getOpenaiModelName();
+        } else if (Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_LOCAL)) {
+            modelName = Configuration.getInstance().getLocalModelName();
         } else {
             modelName = Configuration.getInstance().getTogetheraiModel();
         }

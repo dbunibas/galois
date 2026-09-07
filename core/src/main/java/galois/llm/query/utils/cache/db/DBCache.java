@@ -143,6 +143,7 @@ public class DBCache implements ILLMCache {
         String simpleName = executor.getClass().getSimpleName();
         if (simpleName.contains("OpenAI")) return Configuration.getInstance().getOpenaiModelName();
         if (simpleName.contains("Togetherai")) return Configuration.getInstance().getTogetheraiModel();
+        if (simpleName.contains("Local")) return Configuration.getInstance().getLocalModelName();
         throw new CacheException("Cannot find model for simple name: " + simpleName);
     }
 }

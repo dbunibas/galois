@@ -5,6 +5,8 @@ import com.galois.sqlparser.SQLQueryParser;
 import galois.llm.algebra.LLMScan;
 import galois.llm.database.LLMDB;
 import galois.llm.query.IQueryExecutor;
+import galois.llm.query.local.LocalKeyScanQueryExecutor;
+import galois.llm.query.local.LocalTableQueryExecutor;
 import galois.llm.query.openai.OpenAIKeyScanQueryExecutor;
 import galois.llm.query.openai.OpenAITableQueryExecutor;
 import galois.llm.query.togetherai.llama3.TogetheraiLlama3KeyScanQueryExecutor;
@@ -94,6 +96,8 @@ public class Main {
                     useKeyScan ? new TogetheraiLlama3KeyScanQueryExecutor() : new TogetheraiLlama3TableQueryExecutor();
             case Constants.PROVIDER_OPENAI ->
                     useKeyScan ? new OpenAIKeyScanQueryExecutor() : new OpenAITableQueryExecutor();
+            case Constants.PROVIDER_LOCAL ->
+                    useKeyScan ? new LocalKeyScanQueryExecutor() : new LocalTableQueryExecutor();
             default -> throw new IllegalArgumentException("Unknown provider!");
         };
     }
