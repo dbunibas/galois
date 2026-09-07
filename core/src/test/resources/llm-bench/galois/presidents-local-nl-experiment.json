@@ -1,25 +1,27 @@
 {
-  "name": "Presidents-{{QN}} llama3-table Experiment",
+  "name": "Presidents-{{QN}} gpt-nl Experiment",
   "metrics": [
-    "CellPrecision",
-    "CellSimilarityPrecision",
-    "CellRecall",
-    "CellSimilarityRecall",
-    "CellF1Score",
-    "CellSimilarityF1Score",
+    "CellPrecisionFilteredAttributes",
+    "CellSimilarityPrecisionFilteredAttributes",
+    "CellRecallFilteredAttributes",
+    "CellSimilarityRecallFilteredAttributes",
+    "CellF1ScoreFilteredAttributes",
+    "CellSimilarityF1ScoreFilteredAttributes",
     "TupleCardinality",
-    "TupleConstraint",
-    "TupleSimilarityConstraint"
+    "TupleConstraintFilteredAttributes",
+    "TupleSimilarityConstraintFilteredAttributes",
+    "TupleCellSimilarityFilteredAttributes"
   ],
   "dbms": "postgres",
   "operatorsConfig": {
     "scan": {
-      "queryExecutor": "togetherai-llama3-table",
-      "maxIterations": 10
+      "queryExecutor": "local-nl",
+      "maxIterations": 100,
+      "naturalLanguagePrompt": "{{PROMPT}}"
     }
   },
   "query": {
-    "sql": "{{QUERY-SQL}}",
+    "sql": "{{QUERY_SQL}}",
     "schema": {
       "name": "all_president",
       "schema": "target",
@@ -53,7 +55,8 @@
             {
               "name": "party",
               "type": "STRING",
-              "nullable": false
+              "nullable": false,
+              "key": true
             },
             {
               "name": "country",
@@ -64,6 +67,6 @@
         }
       ]
     },
-    "results": "/presidents/presidents_data"
+    "results": "/llm-bench/galois/presidents"
   }
 }
