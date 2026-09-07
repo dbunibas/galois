@@ -63,4 +63,12 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    // org.gradle.jvmargs in gradle.properties only sizes the Gradle daemon: tests run in a
+    // forked worker JVM, which defaults to 512m unless configured here.
+    maxHeapSize = "8g"
+    jvmArgs(
+        "-XX:+HeapDumpOnOutOfMemoryError",
+        "-XX:HeapDumpPath=${layout.buildDirectory.get()}/heapdumps",
+        "-XX:+ExitOnOutOfMemoryError"
+    )
 }
