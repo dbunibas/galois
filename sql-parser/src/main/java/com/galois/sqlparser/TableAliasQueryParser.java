@@ -47,12 +47,17 @@ public class TableAliasQueryParser {
 
             // HACK: keeps track of multiple tables when ignoreTree is true in the query executor
             if (plainSelect.getJoins() != null && !plainSelect.getJoins().isEmpty()) {
-                if (plainSelect.getJoins().size() > 1) {
-                    throw new UnsupportedOperationException("Join with more than two tables are unsupported!");
+                for (net.sf.jsqlparser.statement.select.Join join : plainSelect.getJoins()) {
+                    TableAlias joinTableAlias = join.getFromItem().accept(fromParser, parseContext);
+                    parseContext.addTableAlias(joinTableAlias);
                 }
-                net.sf.jsqlparser.statement.select.Join firstJoin = plainSelect.getJoins().getFirst();
-                TableAlias joinRightTableAlias = firstJoin.getFromItem().accept(fromParser, parseContext);
-                parseContext.addTableAlias(joinRightTableAlias);
+//                if (plainSelect.getJoins().size() > 1) {
+//                    log.warn("Join with more than two tables are unsupported! {}", plainSelect.getJoins().size());
+//                    throw new UnsupportedOperationException("Join with more than two tables are unsupported!");
+//                }
+//                net.sf.jsqlparser.statement.select.Join firstJoin = plainSelect.getJoins().getFirst();
+//                TableAlias joinRightTableAlias = firstJoin.getFromItem().accept(fromParser, parseContext);
+//                parseContext.addTableAlias(joinRightTableAlias);
             }
 
             return tableAlias;
