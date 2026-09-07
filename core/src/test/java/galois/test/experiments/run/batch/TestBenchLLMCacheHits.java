@@ -92,6 +92,8 @@ public class TestBenchLLMCacheHits {
 
         try {
             for (ExpVariant variant : this.variants) {
+                if (!variant.getQueryNum().equals("qatch_7")) continue;
+
                 VariantConfig vc = this.variantConfigs.get(variant.getQueryNum());
                 String dbID = vc.db_id;
                 String dataset = vc.dataset;
@@ -101,7 +103,7 @@ public class TestBenchLLMCacheHits {
 
                 replay("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-nl-experiment.json", model + "-NL", variant, null);
                 replay("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-sql-experiment.json", model + "-SQL", variant, null);
-//                replay("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment.json", model + "-TABLE-OPTIMIZED", variant, allConditionPushdownWithFilter);
+                replay("/llm-bench/" + dataset + "/" + dbID + "-" + executorModel + "-table-experiment.json", model + "-TABLE-OPTIMIZED", variant, allConditionPushdownWithFilter);
             }
         } finally {
             CacheHitCounter.getInstance().setCacheOnly(false);
@@ -222,9 +224,10 @@ public class TestBenchLLMCacheHits {
     }
 
     private String getModelName() {
-        return Configuration.getInstance().getLLMProvider().equals(Constants.PROVIDER_OPENAI) ?
-                Configuration.getInstance().getOpenaiModelName() :
-                Configuration.getInstance().getTogetheraiModel();
+        String provider = Configuration.getInstance().getLLMProvider();
+        if (Constants.PROVIDER_OPENAI.equals(provider)) return Configuration.getInstance().getOpenaiModelName();
+        if (Constants.PROVIDER_LOCAL.equals(provider)) return Configuration.getInstance().getLocalModelName();
+        return Configuration.getInstance().getTogetheraiModel();
     }
 
     private void initVariants() {
