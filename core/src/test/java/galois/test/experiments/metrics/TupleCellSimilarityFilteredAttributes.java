@@ -9,8 +9,14 @@ import java.util.Map;
 import java.util.Set;
 
 import galois.test.utils.LLMJudgeDBLogger;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.select.Select;
+import speedy.model.database.AttributeRef;
 import speedy.model.database.Cell;
+import speedy.model.database.ConstantValue;
 import speedy.model.database.IDatabase;
 import speedy.model.database.IValue;
 import speedy.model.database.Key;
@@ -19,11 +25,18 @@ import speedy.model.database.Tuple;
 @Slf4j
 public class TupleCellSimilarityFilteredAttributes implements IMetric {
 
+    // Attribute added to both expected and actual tuples when the query has an ORDER BY clause: it holds
+    // the position of the tuple in the list, so that a wrong order is penalized as a non matching tuple
+    static final String RANK_ATTRIBUTE = "_rank";
+
     private CellNormalizer normalizer = new CellNormalizer();
     private EditDistance editDist = new EditDistance();
     private LLMDistance llmDistance = new LLMDistance();
     private double thresholdEditDistance = 0.1;
     private int maxSorted = 10;
+    // Set by the Experiment before computing the score: if null, the order of the tuples is not checked
+    @Setter
+    private String querySql = null;
 
     @Override
     public String getName() {
@@ -54,7 +67,15 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         log.debug("--- Get Score");
         log.debug("Result size: " + resultNotNull.size());
         log.debug("Expected size: " + expected.size());
-        return computeScoreNoPartition(expected, filterAttributes(resultNotNull, expectedAttributes), expectedAttributes);
+        List<Tuple> expectedToCompare = expected;
+        List<Tuple> resultToCompare = filterAttributes(resultNotNull, expectedAttributes);
+        if (hasOrderBy(querySql)) {
+            // filterAttributes returns copies of the tuples: the lists of the caller are left untouched
+            log.debug("Query with ORDER BY: adding the " + RANK_ATTRIBUTE + " attribute to check the order of the tuples");
+            expectedToCompare = addRank(filterAttributes(expected, expectedAttributes));
+            resultToCompare = addRank(resultToCompare);
+        }
+        return computeScoreNoPartition(expectedToCompare, resultToCompare, expectedAttributes);
         //return computeScoreWithAttrWithMoreDistinctValues(expected, filterAttributes(result, expectedAttributes));
 
         /*Set<Key> keysInDB = new HashSet<>();
@@ -352,6 +373,29 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
         return filtered;
     }
 
+    private boolean hasOrderBy(String sql) {
+        if (sql == null || sql.isBlank()) return false;
+        try {
+            Statement statement = CCJSqlParserUtil.parse(sql);
+            if (!(statement instanceof Select select)) return false;
+            return select.getOrderByElements() != null && !select.getOrderByElements().isEmpty();
+        } catch (Exception ex) {
+            log.warn("Unable to parse the query to check the ORDER BY clause: " + sql, ex);
+            return false;
+        }
+    }
+
+    // The rank is not added to the expected attributes: the LLM judge keeps comparing the tuples as before
+    private List<Tuple> addRank(List<Tuple> tuples) {
+        int rank = 0;
+        for (Tuple tuple : tuples) {
+            if (tuple == null || tuple.getCells().isEmpty()) continue;
+            AttributeRef rankRef = new AttributeRef(tuple.getCells().get(0).getAttributeRef().getTableAlias(), RANK_ATTRIBUTE);
+            tuple.addCell(new Cell(tuple.getOid(), rankRef, new ConstantValue(rank++)));
+        }
+        return tuples;
+    }
+
     private List<Tuple> removeNullTuples(List<Tuple> l) {
         List<Tuple> toReturn = new ArrayList<>();
         for (Tuple tuple : l) {
@@ -406,6 +450,12 @@ public class TupleCellSimilarityFilteredAttributes implements IMetric {
             IValue expectedValue = getValueForAttr(expected, numericalAttribute);
             //log.error("Compare: " + actualValue + "---" + expectedValue);
             if (actualValue == null || expectedValue == null) return false;
+            if (RANK_ATTRIBUTE.equals(numericalAttribute)) {
+                // the position of the tuple must match exactly: areCellSimilar tolerates a 10% difference
+                if (!expectedValue.getPrimitiveValue().toString().equals(actualValue.getPrimitiveValue().toString()))
+                    return false;
+                continue;
+            }
             if (!llmDistance.areCellSimilar(expectedValue.getPrimitiveValue().toString(), actualValue.getPrimitiveValue().toString(), ""))
                 return false;
         }

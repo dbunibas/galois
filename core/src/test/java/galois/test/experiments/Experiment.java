@@ -11,6 +11,7 @@ import galois.llm.query.LLMQueryStatManager;
 import galois.optimizer.IOptimizer;
 import galois.optimizer.LogicalPlanOptimizer;
 import galois.test.experiments.metrics.IMetric;
+import galois.test.experiments.metrics.TupleCellSimilarityFilteredAttributes;
 import galois.test.utils.TestUtils;
 import galois.utils.ExternalKnowledgeGenerator;
 import galois.utils.GaloisDebug;
@@ -299,6 +300,7 @@ public final class Experiment {
         List<Tuple> results = TestUtils.toTupleList(actual);
         log.info("Results size: " + results.size());
         log.info("Results: " + results);
+        bindSqlToMetrics();
         List<Double> scores = metrics
                 .stream()
                 //                .map(m -> m.getScore(query.getDatabase(), query.getResults(), results))
@@ -313,6 +315,7 @@ public final class Experiment {
     public ExperimentResults toExperimentResults(List<Tuple> results, List<Tuple> expectedResults, String optmizerName) {
         log.info("Results size: " + results.size());
         log.info("Results: " + results);
+        bindSqlToMetrics();
         List<Double> scores = metrics
                 .stream()
                 //                .map(m -> m.getScore(query.getDatabase(), query.getResults(), results))
@@ -322,6 +325,15 @@ public final class Experiment {
         // TODO [Stats]: Add stats to results
 //        return new ExperimentResults(name, metrics, query.getResults(), results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql());
         return new ExperimentResults(name, metrics, expectedResults, results, scores, operatorsConfiguration.getScan().getQueryExecutor().toString(), query.getSql(), optmizerName);
+    }
+
+    // TupleCellSimilarityFilteredAttributes needs the sql query to know whether the order of the tuples matters
+    private void bindSqlToMetrics() {
+        for (IMetric metric : metrics) {
+            if (metric instanceof TupleCellSimilarityFilteredAttributes tupleCellSimilarity) {
+                tupleCellSimilarity.setQuerySql(query.getSql());
+            }
+        }
     }
 
     public static void dropTable(DBMSDB database) {
